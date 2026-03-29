@@ -1,0 +1,182 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import { Icon } from 'astro-icon/components';
+
+const metadata = {
+  title: '患者さまの声・ご利用体験談｜かもめクリニック（大阪市）',
+  description:
+    '大阪市かもめクリニックをご利用いただいた患者さま・ご家族からの声。訪問診療・精神科・小児科の体験談をご紹介します。',
+  ignoreTitleTemplate: true,
+  robots: { index: false, follow: false },
+  openGraph: {
+    type: 'website',
+    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+  },
+};
+
+// JSON-LD: BreadcrumbList
+const jsonLdBreadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
+    { '@type': 'ListItem', position: 2, name: '患者さまの声・ご利用体験談', item: 'https://kamome-clinic.net/testimonials' },
+  ],
+};
+
+// ============================================================
+// 体験談データ
+// 追加するときは各カテゴリの items 配列にオブジェクトを追加してください。
+// published: false にすると非表示になります。
+// ============================================================
+type Testimonial = {
+  published: boolean;
+  author: string;       // 例: 'K.T.様（港区・70代男性のご家族）'
+  summary: string;      // カードに大きく表示する一言（40字以内推奨）
+  body: string;         // 体験談本文
+};
+
+type Category = {
+  id: string;
+  label: string;
+  icon: string;
+  color: string;         // Tailwind bg クラス（ヘッダー背景）
+  borderColor: string;   // Tailwind border クラス
+  items: Testimonial[];
+};
+
+const categories: Category[] = [
+  {
+    id: 'terminal',
+    label: 'ターミナルケア（看取り）',
+    icon: 'tabler:heart',
+    color: 'bg-rose-600',
+    borderColor: 'border-rose-100 dark:border-rose-900',
+    items: [
+      // ↓ ここに体験談を追加してください
+      // {
+      //   published: true,
+      //   author: '〇〇様（港区・80代男性のご家族）',
+      //   summary: '「最期まで自宅で」という父の願いを叶えられました',
+      //   body: '体験談本文をここに入力してください。',
+      // },
+    ],
+  },
+  {
+    id: 'psychiatry',
+    label: '精神科の訪問診療',
+    icon: 'tabler:brain',
+    color: 'bg-purple-600',
+    borderColor: 'border-purple-100 dark:border-purple-900',
+    items: [
+      // ↓ ここに体験談を追加してください
+      // {
+      //   published: true,
+      //   author: '〇〇様（住之江区・40代女性ご本人）',
+      //   summary: '外に出られなかった私でも、定期的に診てもらえています',
+      //   body: '体験談本文をここに入力してください。',
+      // },
+    ],
+  },
+  {
+    id: 'pediatrics',
+    label: '小児科の訪問診療',
+    icon: 'tabler:baby-carriage',
+    color: 'bg-green-600',
+    borderColor: 'border-green-100 dark:border-green-900',
+    items: [
+      // ↓ ここに体験談を追加してください
+      // {
+      //   published: true,
+      //   author: '〇〇様（西淀川区・医療ケア児のご家族）',
+      //   summary: 'NICU退院後の不安が、訪問診療で大きく和らぎました',
+      //   body: '体験談本文をここに入力してください。',
+      // },
+    ],
+  },
+];
+
+// published: true のみ表示
+const visibleCategories = categories.map((cat) => ({
+  ...cat,
+  items: cat.items.filter((t) => t.published),
+}));
+---
+
+<Layout metadata={metadata}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
+  </Fragment>
+
+  <Hero
+    tagline="患者さまの声"
+    image={{
+      src: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=2070&q=80',
+      alt: '患者さまの声イメージ',
+    }}
+  >
+    <Fragment slot="title">
+      患者さま・ご家族からの<br />
+      <span class="text-accent dark:text-white highlight">体験談</span>
+    </Fragment>
+    <Fragment slot="subtitle">
+      かもめクリニックの訪問診療をご利用いただいた患者さまやご家族から寄せられたお声をご紹介します。
+    </Fragment>
+  </Hero>
+
+  <!-- 体験談セクション -->
+  <section class="py-16 bg-white dark:bg-slate-900">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 space-y-16">
+
+      {visibleCategories.every((cat) => cat.items.length === 0) && (
+        <div class="text-center py-12">
+          <Icon name="tabler:heart" class="w-12 h-12 text-gray-200 dark:text-gray-700 mx-auto mb-4" />
+          <p class="text-gray-500 dark:text-gray-400 text-lg font-medium mb-2">体験談を準備中です</p>
+          <p class="text-gray-400 dark:text-gray-500 text-sm">患者さま・ご家族からの声を随時掲載してまいります。</p>
+        </div>
+      )}
+
+      {visibleCategories.filter((cat) => cat.items.length > 0).map((cat) => (
+        <div id={cat.id}>
+          <!-- カテゴリヘッダー -->
+          <div class={`inline-flex items-center gap-2 ${cat.color} text-white font-bold px-5 py-2 rounded-full mb-6 text-sm`}>
+            <Icon name={cat.icon} class="w-4 h-4" />
+            {cat.label}
+          </div>
+          <div class="grid sm:grid-cols-2 gap-5">
+            {cat.items.map((t) => (
+              <div class={`bg-white dark:bg-slate-800 rounded-2xl border ${cat.borderColor} p-6 flex flex-col gap-4 shadow-sm`}>
+                <p class="text-gray-400 dark:text-gray-500 text-2xl leading-none">"</p>
+                <p class="text-gray-900 dark:text-white font-bold text-lg leading-snug -mt-4">
+                  {t.summary}
+                </p>
+                <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed whitespace-pre-line">
+                  {t.body}
+                </p>
+                <p class="text-sm text-gray-400 dark:text-gray-500 mt-auto pt-4 border-t border-gray-100 dark:border-slate-700">
+                  {t.author}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+    </div>
+  </section>
+
+  <CallToAction
+    actions={[
+      { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
+      { variant: 'line', text: 'LINEで無料相談（@512ysmzx）', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+    ]}
+  >
+    <Fragment slot="title">訪問診療のご相談はこちら</Fragment>
+    <Fragment slot="subtitle">
+      受付：平日 9:00〜17:00　｜　LINE（@512ysmzx）は24時間受付<br />
+      患者さまご本人・ご家族・ケアマネジャー・医療機関の方、どなたでもご相談いただけます。
+    </Fragment>
+  </CallToAction>
+</Layout>

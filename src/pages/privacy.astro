@@ -1,0 +1,146 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+const metadata = {
+  title: 'プライバシーポリシー｜かもめクリニック',
+  description: 'かもめクリニックの個人情報保護方針（プライバシーポリシー）。患者さまの個人情報・医療情報の取り扱いについて説明しています。',
+  robots: { index: true, follow: true },
+};
+---
+
+<Layout metadata={metadata}>
+  <section class="py-16 md:py-20">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+
+      <!-- ページタイトル -->
+      <div class="mb-12 text-center">
+        <p class="text-sm font-semibold uppercase tracking-widest text-primary mb-2">Privacy Policy</p>
+        <h1 class="text-3xl md:text-4xl font-black text-heading">プライバシーポリシー</h1>
+        <p class="mt-4 text-muted text-base">個人情報保護方針</p>
+      </div>
+
+      <div class="prose prose-lg max-w-none" style="color: var(--aw-color-text-default); line-height: 1.9;">
+
+        <p>
+          医療法人社団 かもめクリニック（以下「当院」）は、患者さまをはじめとする皆さまの個人情報・医療情報を適切に保護することが、在宅医療を提供する医療機関としての重要な責務であると認識しています。以下の方針に基づき、個人情報の保護に努めます。
+        </p>
+
+        <!-- 1 -->
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgb(24 80 163 / 20%); color: var(--aw-color-text-heading);">
+          1. 個人情報の収集について
+        </h2>
+        <p>当院は、以下の目的のために必要な範囲で個人情報を収集します。</p>
+        <ul style="margin-left: 1.5rem; list-style-type: disc;">
+          <li>訪問診療・在宅医療サービスの提供</li>
+          <li>診療録・処方箋・各種医療書類の作成</li>
+          <li>診療費の請求・医療保険・介護保険への請求</li>
+          <li>医療相談（電話・LINE・メール等）への対応</li>
+          <li>採用選考・従業員管理</li>
+          <li>ウェブサイトからのお問い合わせへの対応</li>
+        </ul>
+
+        <!-- 2 -->
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgb(24 80 163 / 20%); color: var(--aw-color-text-heading);">
+          2. 個人情報の利用目的
+        </h2>
+        <p>収集した個人情報は、次の目的に使用します。</p>
+        <ul style="margin-left: 1.5rem; list-style-type: disc;">
+          <li>患者さまへの適切な医療・看護・介護サービスの提供</li>
+          <li>医療機関・介護施設・調剤薬局等との診療情報の共有（患者さまの同意のうえ）</li>
+          <li>医療費の請求および各種保険請求事務</li>
+          <li>地域医療連携・退院支援・ケアカンファレンスへの参加</li>
+          <li>当院が行う医療・看護・介護に関する実習・研修への協力（匿名化のうえ）</li>
+          <li>医療の質向上のための内部的な分析・統計（匿名加工情報として使用）</li>
+        </ul>
+
+        <!-- 3 -->
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgb(24 80 163 / 20%); color: var(--aw-color-text-heading);">
+          3. 個人情報の第三者への提供
+        </h2>
+        <p>
+          当院は、以下の場合を除き、患者さまの個人情報を事前の同意なく第三者に提供しません。
+        </p>
+        <ul style="margin-left: 1.5rem; list-style-type: disc;">
+          <li>法令に基づく開示が必要な場合（感染症法、児童虐待防止法、裁判所命令等）</li>
+          <li>生命・身体・財産の保護のために緊急かつやむを得ない場合</li>
+          <li>患者さまご本人の同意を得た場合（他院への紹介状、多職種連携等）</li>
+          <li>医療保険・介護保険の保険者への診療報酬請求</li>
+        </ul>
+
+        <!-- 4 -->
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgb(24 80 163 / 20%); color: var(--aw-color-text-heading);">
+          4. 個人情報の安全管理
+        </h2>
+        <p>
+          当院は、個人情報の漏洩・滅失・毀損の防止のため、以下の安全管理措置を講じます。
+        </p>
+        <ul style="margin-left: 1.5rem; list-style-type: disc;">
+          <li>個人情報保護責任者の設置および職員への定期的な教育・研修の実施</li>
+          <li>電子カルテ・情報システムへのアクセス制御および通信の暗号化</li>
+          <li>書類・媒体の施錠保管および廃棄時の適切な処理</li>
+          <li>外部委託先（システム会社・請求代行等）との機密保持契約の締結</li>
+        </ul>
+
+        <!-- 5 -->
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgb(24 80 163 / 20%); color: var(--aw-color-text-heading);">
+          5. 個人情報の開示・訂正・削除のご請求
+        </h2>
+        <p>
+          患者さまご本人（またはご家族・法定代理人）は、当院が保有するご自身の個人情報について、開示・訂正・利用停止・削除を請求することができます。ご請求の際は、本人確認書類をご持参のうえ、下記の窓口までお申し出ください。
+        </p>
+        <p>
+          なお、診療録等の医療情報の開示については、「診療情報の提供等に関する指針」（厚生労働省）に基づき対応いたします。
+        </p>
+
+        <!-- 6 -->
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgb(24 80 163 / 20%); color: var(--aw-color-text-heading);">
+          6. Cookieおよびアクセス解析について
+        </h2>
+        <p>
+          当院のウェブサイトでは、サービス改善・利用状況の把握のため、Google Analytics等のアクセス解析ツールを使用しています。これらのツールはCookieを通じて情報を収集しますが、個人を特定する情報は含まれません。Cookieの利用を希望されない場合は、ブラウザの設定で無効にすることができます。
+        </p>
+
+        <!-- 7 -->
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgb(24 80 163 / 20%); color: var(--aw-color-text-heading);">
+          7. プライバシーポリシーの改定
+        </h2>
+        <p>
+          本方針は、法令の改正・社会情勢の変化等に応じて適宜見直し・改定を行います。改定後の内容は、当ウェブサイト上に掲載した時点から効力を発するものとします。
+        </p>
+
+        <!-- 8 -->
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgb(24 80 163 / 20%); color: var(--aw-color-text-heading);">
+          8. お問い合わせ窓口
+        </h2>
+        <p>個人情報の取り扱いに関するご質問・ご相談・ご請求は、以下の窓口までご連絡ください。</p>
+
+        <div style="margin-top: 1.5rem; padding: 1.5rem 2rem; background: var(--aw-color-primary-tint); border-left: 4px solid var(--aw-color-primary); border-radius: 0 0.5rem 0.5rem 0;">
+          <p style="font-weight: 700; font-size: 1.05rem; margin-bottom: 0.75rem; color: var(--aw-color-text-heading);">医療法人社団 かもめクリニック</p>
+          <p style="margin: 0.2rem 0;">個人情報保護責任者：地域医療連携部</p>
+          <p style="margin: 0.2rem 0;">電話：<a href="tel:0643017871" style="color: var(--aw-color-primary); font-weight: 600;">06-4301-7871</a></p>
+          <p style="margin: 0.2rem 0;">FAX：06-4301-7872</p>
+          <p style="margin: 0.2rem 0;">メール：<a href="mailto:info@kamome-clinic.net" style="color: var(--aw-color-primary);">info@kamome-clinic.net</a></p>
+          <p style="margin: 0.2rem 0;">受付時間：平日 9:00〜17:00</p>
+        </div>
+
+        <p style="margin-top: 2.5rem; text-align: right; font-size: 0.9rem; color: var(--aw-color-text-muted);">
+          制定：2017年4月1日<br>
+          最終改定：2025年4月1日
+        </p>
+
+      </div>
+
+      <!-- 戻るリンク -->
+      <div class="mt-12 text-center">
+        <a
+          href="/"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-white"
+          style="background-color: var(--aw-color-primary);"
+        >
+          ← トップページへ戻る
+        </a>
+      </div>
+
+    </div>
+  </section>
+</Layout>

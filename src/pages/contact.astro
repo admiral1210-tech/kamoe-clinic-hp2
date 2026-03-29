@@ -1,0 +1,215 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import { Icon } from 'astro-icon/components';
+
+const metadata = {
+  title: 'お問い合わせ｜かもめクリニック（大阪市・訪問診療）',
+  description:
+    'かもめクリニックへのお問い合わせページ。訪問診療のご相談はお電話・LINE・Googleフォームで承ります。受付：平日9:00〜17:00。LINEは24時間受付。',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+
+  <!-- Hero -->
+  <section class="relative not-prose py-16 md:py-24 bg-blue-50 dark:bg-slate-900 border-b border-blue-100 dark:border-slate-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      <p class="text-sm font-semibold text-primary tracking-widest mb-2">お問い合わせ</p>
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+        訪問診療のご相談・<br class="sm:hidden" />お問い合わせ
+      </h1>
+      <p class="text-lg text-gray-600 dark:text-gray-300 max-w-xl mx-auto leading-relaxed">
+        患者さまご本人・ご家族・ケアマネジャー・医療機関の方など、<br class="hidden sm:inline" />
+        どなたでもお気軽にご連絡ください。
+      </p>
+    </div>
+  </section>
+
+  <!-- 連絡方法3択 -->
+  <section class="py-12 md:py-16 bg-white dark:bg-slate-900">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <p class="text-sm font-semibold text-primary tracking-widest mb-1">ご連絡方法</p>
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">3つの方法でご相談できます</h2>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-5">
+
+        <!-- 電話 -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl border-2 border-primary p-6 flex flex-col gap-4 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center shrink-0">
+              <Icon name="tabler:phone" class="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <p class="font-bold text-gray-900 dark:text-white text-lg">お電話</p>
+              <p class="text-sm text-primary font-semibold">受付：平日 9:00〜17:00</p>
+            </div>
+          </div>
+          <a href="tel:0643017871" class="block text-3xl font-black text-primary hover:underline leading-tight">
+            06-4301-7871
+          </a>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            「訪問診療の相談がしたい」とひと言お伝えいただければ、スタッフが丁寧にご対応します。
+          </p>
+          <a href="tel:0643017871" class="mt-auto inline-flex items-center justify-center gap-2 bg-primary text-white font-bold px-5 py-3 rounded-full hover:opacity-90 transition-opacity text-base">
+            <Icon name="tabler:phone" class="w-5 h-5" /> 電話をかける
+          </a>
+        </div>
+
+        <!-- LINE -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl border-2 border-[#06C755] p-6 flex flex-col gap-4 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style="background-color: #06C755;">
+              <Icon name="tabler:brand-line" class="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <p class="font-bold text-gray-900 dark:text-white text-lg">LINE</p>
+              <p class="text-sm font-semibold" style="color: #06C755;">24時間受付</p>
+            </div>
+          </div>
+          <p class="text-base font-bold text-gray-700 dark:text-gray-200">@512ysmzx</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            文章で相談したい方・夜間のご連絡におすすめです。<br />
+            返信は翌営業日以降になる場合があります。
+          </p>
+          <a href="https://line.me/R/ti/p/%40512ysmzx" target="_blank" rel="noopener noreferrer"
+            class="mt-auto inline-flex items-center justify-center gap-2 text-white font-bold px-5 py-3 rounded-full hover:opacity-90 transition-opacity text-base"
+            style="background-color: #06C755;">
+            <Icon name="tabler:brand-line" class="w-5 h-5" /> LINEで無料相談
+          </a>
+        </div>
+
+        <!-- フォーム -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl border-2 border-gray-200 dark:border-slate-600 p-6 flex flex-col gap-4 shadow-sm">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-full bg-gray-700 dark:bg-slate-600 flex items-center justify-center shrink-0">
+              <Icon name="tabler:clipboard-list" class="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <p class="font-bold text-gray-900 dark:text-white text-lg">お問い合わせフォーム</p>
+              <p class="text-sm text-gray-500 font-semibold">24時間受付</p>
+            </div>
+          </div>
+          <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+            Googleフォームが開きます。お名前・ご連絡先・ご相談内容をご記入の上、送信してください。
+          </p>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdXxuP8iRtCW8fNrVf6zLnPI97tqk2StxX4n7Ix6HEwqSIJ_Q/viewform" target="_blank" rel="noopener noreferrer"
+            class="mt-auto inline-flex items-center justify-center gap-2 bg-gray-700 dark:bg-slate-600 text-white font-bold px-5 py-3 rounded-full hover:opacity-90 transition-opacity text-base">
+            <Icon name="tabler:external-link" class="w-5 h-5" /> フォームを開く
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 受付時間・連絡先一覧 -->
+  <section class="py-12 bg-blue-50 dark:bg-slate-800 border-y border-blue-100 dark:border-slate-700">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-8">
+        <p class="text-sm font-semibold text-primary tracking-widest mb-1">受付時間・連絡先</p>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">クリニック連絡先</h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-5">
+
+        <!-- 本院 -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="bg-primary text-white text-xs font-bold px-2.5 py-1 rounded-full">本院</span>
+            <p class="font-bold text-gray-900 dark:text-white">かもめクリニック</p>
+          </div>
+          <dl class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+            <div class="flex gap-3">
+              <dt class="font-bold w-10 shrink-0">住所</dt>
+              <dd>〒552-0004 大阪市港区夕凪2丁目16-9<br />icrossAMポートビル 4F-B</dd>
+            </div>
+            <div class="flex gap-3 items-center">
+              <dt class="font-bold w-10 shrink-0">電話</dt>
+              <dd><a href="tel:0643017871" class="text-primary font-black text-xl hover:underline">06-4301-7871</a></dd>
+            </div>
+            <div class="flex gap-3">
+              <dt class="font-bold w-10 shrink-0">FAX</dt>
+              <dd>06-4301-7872</dd>
+            </div>
+            <div class="flex gap-3">
+              <dt class="font-bold w-10 shrink-0">受付</dt>
+              <dd>平日 9:00〜17:00</dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- 地域医療連携部 -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">医療・介護関係者</span>
+          </div>
+          <p class="font-bold text-gray-900 dark:text-white mb-2">地域医療連携部</p>
+          <dl class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+            <div class="flex gap-3 items-center">
+              <dt class="font-bold w-10 shrink-0">電話</dt>
+              <dd><a href="tel:0643017883" class="text-primary font-black text-xl hover:underline">06-4301-7883</a></dd>
+            </div>
+            <div class="flex gap-3">
+              <dt class="font-bold w-10 shrink-0">受付</dt>
+              <dd>平日 9:00〜17:00</dd>
+            </div>
+            <div class="flex gap-3">
+              <dt class="font-bold w-10 shrink-0">対応</dt>
+              <dd>病院・施設からの紹介・転院相談・連携のご依頼</dd>
+            </div>
+          </dl>
+        </div>
+
+      </div>
+
+      <!-- 緊急往診 -->
+      <div class="mt-5 bg-emerald-50 dark:bg-slate-900 rounded-xl border border-emerald-200 dark:border-slate-700 p-5 flex items-start gap-4">
+        <Icon name="tabler:ambulance" class="w-7 h-7 text-emerald-700 shrink-0 mt-0.5" />
+        <div>
+          <p class="font-bold text-emerald-800 dark:text-emerald-400 text-base mb-0.5">緊急往診（夜間・休日）</p>
+          <p class="text-sm text-gray-600 dark:text-gray-300">
+            既にかもめクリニックをご利用中の方は、訪問開始時にお知らせした<strong>担当医・緊急連絡先</strong>へご連絡ください。<br />
+            24時間365日対応しています。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- よくある質問 -->
+  <section class="py-12 bg-white dark:bg-slate-900">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-8">
+        <p class="text-sm font-semibold text-primary tracking-widest mb-1">よくあるご質問</p>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">お問い合わせ前に</h2>
+      </div>
+      <div class="space-y-3">
+        {[
+          { q: '初めての相談でも問題ありませんか？', a: 'はい、もちろんです。「うちの親は対象になる？」「費用はどのくらい？」など、漠然としたご相談でも丁寧にお答えします。紹介状がなくてもご相談いただけます。' },
+          { q: '夜間や休日に連絡できますか？', a: 'LINEとフォームは24時間受付しています。お電話の受付は平日9:00〜17:00です。すでにご利用中の方の夜間急変は、担当医の緊急連絡先にご連絡ください。' },
+          { q: '費用はどのくらいかかりますか？', a: '健康保険・介護保険が適用されます。後期高齢者（75歳以上・1割負担）は月2回の定期訪問で月額5,000〜8,000円が目安です。詳しくは<a href="/cost" class="text-primary underline">費用ページ</a>またはお電話でご確認ください。' },
+        ].map(({ q, a }) => (
+          <details class="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden group">
+            <summary class="flex items-start gap-3 p-5 cursor-pointer list-none select-none">
+              <span class="bg-primary/10 text-primary font-black text-sm w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">Q</span>
+              <span class="font-bold text-gray-900 dark:text-white flex-1 leading-snug">{q}</span>
+              <Icon name="tabler:plus" class="w-5 h-5 text-primary shrink-0 transition-transform group-open:rotate-45" />
+            </summary>
+            <div class="px-5 pb-5 pl-16">
+              <p class="text-gray-600 dark:text-gray-300 leading-relaxed text-sm">{a}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+      <div class="mt-6 text-center">
+        <a href="/#faq" class="inline-flex items-center gap-1 text-primary font-bold text-sm hover:underline">
+          <Icon name="tabler:arrow-right" class="w-4 h-4" /> よくある質問をもっと見る
+        </a>
+      </div>
+    </div>
+  </section>
+
+</Layout>

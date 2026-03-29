@@ -1,0 +1,294 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import { Icon } from 'astro-icon/components';
+
+const metadata = {
+  title: '在支診1認定クリニック｜急変・看取りまで24時間対応｜かもめクリニック',
+  description:
+    'かもめクリニックは機能強化型在宅療養支援診療所（在支診1）として、急変時の24時間緊急往診・連携病院への入院手配・在宅看取りまで一貫対応。ケアマネジャー・MSW・ご家族が安心して任せられる体制を整えています。',
+  ignoreTitleTemplate: true,
+  openGraph: {
+    type: 'article',
+    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+  },
+};
+
+const jsonLdBreadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
+    { '@type': 'ListItem', position: 2, name: '機能強化型在宅療養支援診療所（在支診1）とは', item: 'https://kamome-clinic.net/zaishin1' },
+  ],
+};
+
+const jsonLdFAQ = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: '夜中に急変した場合、本当に来てくれますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'はい。在支診1として24時間365日の緊急往診が義務付けられています。夜間・休日でも担当医に直接連絡でき、必要に応じて緊急往診します。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '在宅で最期まで診てもらえますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'はい。かもめクリニックはグループ全体で年間約100件の在宅看取りを行っています。ご本人・ご家族の意向を尊重しながら、最期まで一貫してサポートします。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '状態が悪化して入院が必要になった場合はどうなりますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '在支診1の要件として連携病院への入院手配体制を整えています。急変時はかもめクリニックが連携病院に連絡・調整を行い、スムーズな入院をサポートします。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '在支診1だと患者の費用は高くなりますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '在支診1の認定により診療報酬の点数は高くなりますが、患者さまの窓口負担（1〜3割）の計算方法は変わりません。高額療養費制度の適用もあり、月の自己負担に上限があります。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '担当医は毎回同じ先生ですか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '原則として担当医は固定しています。ただし夜間・休日の緊急往診は輪番制のため、別の医師が対応することがあります。その場合も診療情報は共有されており、継続的なケアが可能です。',
+      },
+    },
+  ],
+};
+
+const jsonLdSpeakable = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': 'https://kamome-clinic.net/zaishin1',
+  name: '在支診1認定クリニック｜急変・看取りまで24時間対応｜かもめクリニック',
+  speakable: { '@type': 'SpeakableSpecification', cssSelector: ['h1', 'h2'] },
+  url: 'https://kamome-clinic.net/zaishin1',
+};
+
+const benefits = [
+  {
+    icon: 'tabler:clock-24',
+    title: '夜中に電話したら、医師が来ます',
+    description: '在支診1として24時間365日の緊急往診が義務付けられています。「夜中に急に苦しくなった」「呼吸が変わった」——そのとき、翌朝まで待つ必要はありません。',
+    badge: '24時間緊急往診',
+  },
+  {
+    icon: 'tabler:building-hospital',
+    title: '入院が必要なら、調整します',
+    description: '状態が悪化して在宅での対応が難しくなった場合、連携病院への入院手配を当院が行います。ご家族やケアマネが病院を探し回る必要はありません。',
+    badge: '連携病院あり',
+  },
+  {
+    icon: 'tabler:heart',
+    title: '最期まで、同じクリニックが診ます',
+    description: '「入院させずに自宅で看取りたい」——その願いを、年間約100件の実績で支えてきました。ご本人・ご家族の意向に沿った看取りを、最後まで一緒に考えます。',
+    badge: '年間看取り約100件',
+  },
+  {
+    icon: 'tabler:stethoscope',
+    title: '医師が13名いるから、担当が変わっても安心',
+    description: '内科・精神科・小児科の常勤医師13名体制。担当医が不在でも、診療情報を共有した別の医師が対応します。「先生が来られない」リスクがありません。',
+    badge: '常勤医師13名',
+  },
+  {
+    icon: 'tabler:users',
+    title: 'ケアマネ・訪看と、密に連携します',
+    description: '在支診1として多職種連携が義務付けられています。ケアマネジャー・訪問看護師・薬剤師との情報共有・合同カンファレンスへの参加を積極的に行います。',
+    badge: '多職種連携',
+  },
+  {
+    icon: 'tabler:brain',
+    title: '精神疾患があっても、対応できます',
+    description: '大阪市内唯一の精神科専門医3名常勤体制。認知症のBPSD・うつ病・統合失調症など、精神科疾患を抱えた患者さまも、内科と一体的に診療します。',
+    badge: '精神科専門医3名',
+  },
+];
+---
+
+<Layout metadata={metadata}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdFAQ)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdSpeakable)} />
+  </Fragment>
+
+  <!-- ===== Hero ===== -->
+  <section class="relative py-20 bg-gradient-to-b from-blue-50 to-white dark:from-slate-900 dark:to-slate-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      <!-- 認定バッジ -->
+      <div class="inline-flex items-center gap-2 bg-blue-600 text-white text-xs font-bold px-4 py-1.5 rounded-full mb-6">
+        <Icon name="tabler:certificate" class="w-4 h-4" />
+        厚生労働省認定｜機能強化型在宅療養支援診療所（在支診1）
+      </div>
+      <h1 class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white leading-tight mb-6">
+        急変しても、<br class="sm:hidden" />看取りまで、<br />
+        <span class="text-blue-600 dark:text-blue-400">ずっと対応します。</span>
+      </h1>
+      <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-8 leading-relaxed">
+        在支診1とは、24時間緊急往診・入院手配体制・在宅看取り実績など、<br class="hidden sm:inline" />
+        厚生労働省の厳格な基準をすべて満たしたクリニックのみが取得できる最上位の認定です。<br />
+        <strong class="text-gray-900 dark:text-white">「認定を持っている」ことよりも、それが患者さまに何をもたらすか</strong>をお伝えします。
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a
+          href="tel:0643017871"
+          class="inline-flex items-center justify-center gap-2 bg-blue-600 text-white font-bold px-7 py-3.5 rounded-full hover:bg-blue-700 transition-colors"
+        >
+          <Icon name="tabler:phone" class="w-5 h-5" />
+          お電話でのご相談（06-4301-7871）
+        </a>
+        <a
+          href="https://line.me/R/ti/p/%40512ysmzx"
+          class="inline-flex items-center justify-center gap-2 bg-green-500 text-white font-bold px-7 py-3.5 rounded-full hover:bg-green-600 transition-colors"
+        >
+          <Icon name="tabler:brand-line" class="w-5 h-5" />
+          LINEで無料相談
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 6つの保証（ベネフィット） ===== -->
+  <section class="py-16 bg-white dark:bg-slate-900">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <p class="text-sm font-semibold text-blue-600 uppercase tracking-widest mb-2">在支診1だからできること</p>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+          患者さまに届く、6つの安心
+        </h2>
+        <p class="text-gray-500 dark:text-gray-400 mt-3 max-w-xl mx-auto">
+          在支診1の認定は「資格」ではなく「体制の証明」です。<br class="hidden sm:inline" />
+          その体制が患者さまの日常にどう働くかをお伝えします。
+        </p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {benefits.map(({ icon, title, description, badge }) => (
+          <div class="bg-blue-50 dark:bg-slate-800 rounded-2xl p-6 flex flex-col gap-3 border border-blue-100 dark:border-slate-700">
+            <div class="flex items-start justify-between gap-2">
+              <Icon name={icon} class="w-8 h-8 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+              <span class="text-xs font-bold text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/40 px-2.5 py-1 rounded-full whitespace-nowrap">{badge}</span>
+            </div>
+            <h3 class="font-bold text-gray-900 dark:text-white text-base leading-snug">{title}</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 在支診1あり vs なし ===== -->
+  <section class="py-14 bg-blue-50 dark:bg-slate-800 border-y border-blue-100 dark:border-slate-700">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-8">
+        <p class="text-sm font-semibold text-blue-600 uppercase tracking-widest mb-2">比較</p>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">在支診1あり・なしで何が変わるか</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr>
+              <th class="text-left p-3 text-gray-500 font-normal w-2/5">場面</th>
+              <th class="text-center p-3 font-bold text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/40 rounded-tl-lg w-[30%]">在支診1<br />（かもめクリニック）</th>
+              <th class="text-center p-3 font-normal text-gray-500 w-[30%]">在支診なし<br />（一般クリニック）</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-blue-100 dark:divide-slate-700">
+            {[
+              { scene: '夜中に急変したとき', yes: '緊急往診に対応（義務）', no: '翌日まで待つことも' },
+              { scene: '入院が必要になったとき', yes: '連携病院への入院手配', no: '家族・ケアマネが探す' },
+              { scene: '在宅で最期を迎えたいとき', yes: '看取りまで一貫対応', no: '対応できないことも' },
+              { scene: '担当医が不在のとき', yes: '他の常勤医が代替対応', no: 'つながらないリスク' },
+              { scene: 'ケアマネとの連携', yes: '多職種連携（義務）', no: 'クリニックによる' },
+            ].map(({ scene, yes, no }) => (
+              <tr class="bg-white dark:bg-slate-900">
+                <td class="p-3 text-gray-700 dark:text-gray-300 font-medium">{scene}</td>
+                <td class="p-3 text-center text-blue-700 dark:text-blue-300 font-bold bg-blue-50/60 dark:bg-blue-900/20">{yes}</td>
+                <td class="p-3 text-center text-gray-400">{no}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 実績数字 ===== -->
+  <Features2
+    tagline="かもめクリニックの実績"
+    title="在支診1を支える、数字と体制"
+    items={[
+      { title: '年間看取り　約100件', description: 'グループ全体で年間約100件。「最期は自宅で」という願いを、実績で支えています。', icon: 'tabler:heart' },
+      { title: '常勤医師　13名', description: '内科・精神科・小児科。複数科にわたる疾患にも一体的に対応できます。', icon: 'tabler:stethoscope' },
+      { title: '24時間365日対応', description: '夜間・休日の緊急往診も担当医への直接連絡で対応。翌日を待ちません。', icon: 'tabler:clock-24' },
+      { title: '約50施設に対応', description: '有料老人ホーム・グループホーム・特養など市内約50施設。', icon: 'tabler:building-community' },
+      { title: '精神科専門医　3名常勤', description: '大阪市内の訪問診療クリニックとして唯一の体制。内科と一体的に診療します。', icon: 'tabler:brain' },
+      { title: '開院2017年・5拠点', description: '大阪市内に5拠点。地域に根ざした在宅医療を積み重ねてきました。', icon: 'tabler:map-pin' },
+    ]}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-white dark:bg-transparent"></div>
+    </Fragment>
+  </Features2>
+
+  <!-- ===== FAQ ===== -->
+  <FAQs
+    id="faq"
+    title="よくある疑問にお答えします"
+    tagline="FAQ"
+    subtitle="ケアマネジャー・MSW・ご家族からよくいただく質問です。"
+    classes={{ container: 'max-w-4xl' }}
+    items={[
+      {
+        title: '夜中に急変した場合、本当に来てくれますか？',
+        description: 'はい。在支診1として24時間365日の緊急往診が義務付けられています。夜間・休日でも担当医に直接連絡でき、必要に応じて緊急往診します。「義務」ですので、断られることはありません。',
+      },
+      {
+        title: '在宅で最期まで診てもらえますか？',
+        description: 'はい。かもめクリニックはグループ全体で年間約100件の在宅看取りを行っています。ご本人・ご家族の意向を最優先に、最期まで一貫してサポートします。',
+      },
+      {
+        title: '状態が悪化して入院が必要になった場合はどうなりますか？',
+        description: '在支診1の要件として連携病院への入院手配体制を整えています。急変時はかもめクリニックが連携病院に連絡・調整を行い、スムーズな入院をサポートします。ご家族やケアマネが病院を探す必要はありません。',
+      },
+      {
+        title: '担当医は毎回同じ先生ですか？',
+        description: '原則として担当医は固定しています。ただし夜間・休日の緊急往診は輪番制のため、別の医師が対応することがあります。その場合も診療情報はグループ内で共有されており、継続的なケアが可能です。',
+      },
+      {
+        title: '在支診1だと患者の費用は高くなりますか？',
+        description: '在支診1の認定により診療報酬の点数は高くなりますが、患者さまの窓口負担（1〜3割）の計算方法は変わりません。高額療養費制度も適用されますので、月の自己負担には上限があります。詳しくは費用ページまたはお電話でご確認ください。',
+      },
+    ]}
+  />
+
+  <!-- ===== CTA ===== -->
+  <CallToAction
+    actions={[
+      { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
+      { variant: 'line', text: 'LINEで無料相談（@512ysmzx）', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+    ]}
+  >
+    <Fragment slot="title">まずは、お気軽にご相談ください</Fragment>
+    <Fragment slot="subtitle">
+      「この状態で在宅は無理かな」と思うケースでも、まずご相談ください。<br />
+      在支診1として、できる限りお引き受けします。<br />
+      受付：平日 9:00〜17:00　｜　LINE（@512ysmzx）は24時間受付
+    </Fragment>
+  </CallToAction>
+</Layout>

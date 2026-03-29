@@ -1,0 +1,163 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Content from '~/components/widgets/Content.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import { Icon } from 'astro-icon/components';
+
+const metadata = {
+  title: '院長プロフィール・木下啓太｜かもめクリニック（大阪市）',
+  description:
+    'かもめクリニック院長・木下啓太のプロフィール。大阪市港区を拠点に2017年開院。内科・在宅医療専門。在支診1認定・精神科専門医3名常勤体制を構築。訪問診療への想いをご紹介します。',
+  ignoreTitleTemplate: true,
+  openGraph: {
+    type: 'profile',
+    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+  },
+};
+
+// JSON-LD: BreadcrumbList
+const jsonLdBreadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
+    { '@type': 'ListItem', position: 2, name: '院長プロフィール', item: 'https://kamome-clinic.net/about/kinoshita' },
+  ],
+};
+
+// JSON-LD: Physician（院長）
+const jsonLdPhysician = {
+  '@context': 'https://schema.org',
+  '@type': 'Physician',
+  name: '木下 啓太',
+  jobTitle: '院長・理事長',
+  worksFor: {
+    '@type': 'MedicalClinic',
+    '@id': 'https://kamome-clinic.net/#clinic',
+    name: 'かもめクリニック',
+  },
+  medicalSpecialty: 'https://schema.org/InternalMedicine',
+  url: 'https://kamome-clinic.net/about/kinoshita',
+  description: 'かもめクリニック院長。2017年大阪市港区に開院。内科・在宅医療専門。機能強化型在宅療養支援診療所（在支診1）認定。',
+  alumniOf: { '@type': 'CollegeOrUniversity', name: '大阪医科大学（現：大阪医科薬科大学）' },
+};
+---
+
+<Layout metadata={metadata}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdPhysician)} />
+  </Fragment>
+
+  <Hero
+    tagline="院長プロフィール"
+  >
+    <Fragment slot="title">
+      院長・理事長<br />
+      <span class="text-accent dark:text-white highlight">木下 啓太</span>
+    </Fragment>
+    <Fragment slot="subtitle">
+      大阪市港区を拠点に2017年開院。内科・在宅医療を専門とし、<br class="hidden sm:inline" />
+      「住み慣れた場所で最後まで自分らしく生きる」を支える訪問診療を実践しています。
+    </Fragment>
+    <Fragment slot="image">
+      <div class="flex justify-center mt-8">
+        <img
+          src="/images/doctors/kinoshita.png"
+          alt="かもめクリニック 院長・木下啓太"
+          class="rounded-2xl shadow-xl object-contain"
+          style="max-height: 340px; width: auto;"
+        />
+      </div>
+    </Fragment>
+  </Hero>
+
+  <!-- プロフィールカード -->
+  <section class="py-14 bg-blue-50 dark:bg-slate-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-8 shadow-sm border border-blue-100 dark:border-slate-700">
+        <div class="flex flex-col sm:flex-row gap-6 items-start">
+          <div class="flex-1">
+            <h2 class="text-2xl font-black text-gray-900 dark:text-white mb-1">木下 啓太</h2>
+            <p class="text-blue-600 dark:text-blue-400 font-bold mb-4">院長・理事長 / 内科医</p>
+            <div class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+              <div class="flex gap-3">
+                <span class="font-bold w-24 shrink-0">専門領域</span>
+                <span>内科・在宅医療・緩和ケア</span>
+              </div>
+              <div class="flex gap-3">
+                <span class="font-bold w-24 shrink-0">資格</span>
+                <span>医師免許・内科専門医</span>
+              </div>
+              <div class="flex gap-3">
+                <span class="font-bold w-24 shrink-0">開院</span>
+                <span>2017年（大阪市港区）</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 院長メッセージ -->
+  <Content
+    tagline="院長メッセージ"
+    title="訪問診療への想い"
+    items={[
+      {
+        title: '「在宅で最期まで」を支える医療を',
+        description: '病院での治療が一段落した後も、多くの方が住み慣れた自宅や施設に戻り、そこでの生活を続けたいと願っています。かもめクリニックはその願いに応えるため、24時間365日対応の訪問診療体制を構築してきました。',
+      },
+      {
+        title: '精神科・小児科まで一体的に診る',
+        description: '内科に加え、精神科専門医3名・小児科専門医が常勤することで、複合的な疾患を持つ患者さまも1つのクリニックで対応できます。大阪市内でも類を見ない専門医の充実が、私たちの強みです。',
+      },
+      {
+        title: '地域に根ざした在宅医療グループへ',
+        description: '2017年の本院開設以来、大阪市内に複数の拠点を展開し、約50施設・多くのご自宅への訪問診療を継続してきました。これからも地域の在宅医療を支え続けるクリニックグループでありたいと考えています。',
+      },
+    ]}
+    image={{
+      src: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80',
+      alt: '院長メッセージイメージ',
+    }}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-white dark:bg-transparent"></div>
+    </Fragment>
+  </Content>
+
+  <!-- クリニックの実績 -->
+  <Features2
+    tagline="クリニックの実績"
+    title="2017年の開院から積み上げた実績"
+    items={[
+      { title: '2017年 大阪市港区に本院開設', description: '大阪市港区夕凪にかもめクリニック本院を開設。在宅療養支援診療所として地域の在宅医療をスタート。', icon: 'tabler:building-hospital' },
+      { title: '在支診1（最上位区分）認定', description: '機能強化型在宅療養支援診療所（在支診1）の認定を取得。24時間対応・看取り実績など厳格な要件をクリア。', icon: 'tabler:certificate' },
+      { title: '複数拠点への展開', description: '大阪市内に複数の拠点（第4院・第5院・第8院ほか）を開設し、西淀川区・住之江区など広域をカバー。', icon: 'tabler:map-2' },
+      { title: '年間看取り約100件', description: 'グループ全体で年間約100件の在宅看取りを実施。「最期まで住み慣れた場所で」という願いを支え続けています。', icon: 'tabler:heart' },
+      { title: '精神科専門医3名常勤体制', description: '大阪市内の訪問診療クリニックとして唯一、精神科専門医3名が常勤。精神疾患を持つ患者さまの在宅医療も専門対応。', icon: 'tabler:brain' },
+      { title: '常勤医師13名・約50施設対応', description: '内科・精神科・小児科あわせて常勤医師13名。有料老人ホーム・グループホーム・特養など約50施設に対応。', icon: 'tabler:users' },
+    ]}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Features2>
+
+  <CallToAction
+    actions={[
+      { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
+      { variant: 'line', text: 'LINEで無料相談（@512ysmzx）', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+    ]}
+  >
+    <Fragment slot="title">訪問診療のご相談はこちら</Fragment>
+    <Fragment slot="subtitle">
+      患者さまご本人・ご家族・ケアマネジャーの方など、どなたでもお気軽にご相談ください。<br />
+      受付：平日 9:00〜17:00　｜　LINE（@512ysmzx）は24時間受付
+    </Fragment>
+  </CallToAction>
+</Layout>

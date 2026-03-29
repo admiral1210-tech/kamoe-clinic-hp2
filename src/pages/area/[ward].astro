@@ -1,0 +1,303 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import { Icon } from 'astro-icon/components';
+import { getBranchFoundingDate } from '~/data/clinic-meta';
+
+export function getStaticPaths() {
+  return [
+    {
+      params: { ward: 'minato-ku' },
+      props: {
+        name: '港区',
+        name_kana: 'みなとく',
+        description: '大阪市港区の訪問診療はかもめクリニック（本院）が担当。港区・弁天町・朝潮橋エリアのご自宅・施設へ医師が訪問します。',
+        access: '本院：港区夕凪2丁目16-9 icrossAMポートビル4F-B',
+        tel: '06-4301-7871',
+        areas: ['港区全域', '弁天町', '朝潮橋', '磯路', '市岡', '波除', '福崎', '田中'],
+        branch: '本院',
+      },
+    },
+    {
+      params: { ward: 'nishiyodogawa-ku' },
+      props: {
+        name: '西淀川区',
+        name_kana: 'にしよどがわく',
+        description: '大阪市西淀川区の訪問診療はかもめクリニック第4院が担当。姫島・千舟・佃・大和田エリアのご自宅・施設へ医師が訪問します。',
+        access: '第4院：西淀川区柏里1丁目16-15',
+        tel: '06-7506-9565',
+        areas: ['西淀川区全域', '姫島', '千舟', '佃', '大和田', '御幣島', '福町', '柏里'],
+        branch: '第4院',
+      },
+    },
+    {
+      params: { ward: 'suminoe-ku' },
+      props: {
+        name: '住之江区',
+        name_kana: 'すみのえく',
+        description: '大阪市住之江区の訪問診療はかもめクリニック第5院・第8院が担当。北加賀屋・住之江公園・南港エリアのご自宅・施設へ医師が訪問します。',
+        access: '第5院：住之江区北加賀屋2-12-6 / 第8院：住吉区千躰2-2-39 ホリビル3階',
+        tel: '06-4301-7871',
+        areas: ['住之江区全域', '北加賀屋', '南港', '住之江公園', '千躰', '浜口', '粉浜'],
+        branch: '第5院・第8院',
+      },
+    },
+    {
+      params: { ward: 'taisho-ku' },
+      props: {
+        name: '大正区',
+        name_kana: 'たいしょうく',
+        description: '大阪市大正区の訪問診療はかもめクリニックが対応。大正区全域のご自宅・施設へ医師が訪問します。まずはご相談ください。',
+        access: '担当院：地域医療連携部（06-4301-7883）にご相談ください',
+        tel: '06-4301-7883',
+        areas: ['大正区全域', '泉尾', '三軒家', '南恩加島', '北恩加島', '平尾', '鶴町'],
+        branch: '担当院',
+      },
+    },
+    {
+      params: { ward: 'naniwa-ku' },
+      props: {
+        name: '浪速区',
+        name_kana: 'なにわく',
+        description: '大阪市浪速区の訪問診療はかもめクリニックが対応。難波・恵美須・桜川エリアのご自宅・施設へ医師が訪問します。',
+        access: '担当院：地域医療連携部（06-4301-7883）にご相談ください',
+        tel: '06-4301-7883',
+        areas: ['浪速区全域', '難波', '恵美須', '桜川', '幸町', '敷津'],
+        branch: '担当院',
+      },
+    },
+    {
+      params: { ward: 'sumiyoshi-ku' },
+      props: {
+        name: '住吉区',
+        name_kana: 'すみよしく',
+        description: '大阪市住吉区の訪問診療はかもめクリニックが対応。長居・我孫子・苅田・帝塚山エリアのご自宅・施設へ医師が訪問します。',
+        access: '担当院：地域医療連携部（06-4301-7883）にご相談ください',
+        tel: '06-4301-7883',
+        areas: ['住吉区全域', '長居', '我孫子', '苅田', '帝塚山', '杉本', '遠里小野', '墨江'],
+        branch: '担当院',
+      },
+    },
+    {
+      params: { ward: 'higashisumiyoshi-ku' },
+      props: {
+        name: '東住吉区',
+        name_kana: 'ひがしすみよしく',
+        description: '大阪市東住吉区の訪問診療はかもめクリニックが対応。針中野・駒川・今川・矢田エリアのご自宅・施設へ医師が訪問します。',
+        access: '担当院：地域医療連携部（06-4301-7883）にご相談ください',
+        tel: '06-4301-7883',
+        areas: ['東住吉区全域', '針中野', '駒川', '今川', '矢田', '湯里', '山坂', '鷹合'],
+        branch: '担当院',
+      },
+    },
+  ];
+}
+
+const { name, name_kana, description, access, tel, areas, branch } = Astro.props;
+
+// 担当支院の開院年マッピング（src/data/clinic-meta.ts で更新可能）
+const wardToBranchKey: Record<string, Parameters<typeof getBranchFoundingDate>[0]> = {
+  'minato-ku':       'main',
+  'nishiyodogawa-ku':'branch4',
+  'suminoe-ku':      'branch5',
+};
+const branchFoundingDate = wardToBranchKey[Astro.params.ward]
+  ? getBranchFoundingDate(wardToBranchKey[Astro.params.ward])
+  : undefined;
+
+const metadata = {
+  title: `${name}の訪問診療｜かもめクリニック（大阪市）`,
+  description,
+  ignoreTitleTemplate: true,
+  openGraph: {
+    type: 'website',
+    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+  },
+};
+
+// JSON-LD: BreadcrumbList
+const jsonLdBreadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
+    { '@type': 'ListItem', position: 2, name: `大阪市${name}の訪問診療`, item: `https://kamome-clinic.net/area/${Astro.params.ward}` },
+  ],
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalClinic',
+  name: `かもめクリニック（${name}担当）`,
+  description,
+  areaServed: { '@type': 'City', name: `大阪市${name}` },
+  telephone: tel,
+  ...(branchFoundingDate ? { foundingDate: branchFoundingDate } : {}),
+  parentOrganization: {
+    '@type': 'MedicalClinic',
+    '@id': 'https://kamome-clinic.net/#clinic',
+    name: 'かもめクリニック',
+  },
+};
+
+const jsonLdFaq = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: `${name}の訪問診療の費用はいくらですか？`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `健康保険・介護保険が適用されます。月2〜3回の定期訪問で、3割負担の方の目安は月額1万円前後です。75歳以上の後期高齢者は1割または2割負担でさらに軽減されます。生活保護の方は自己負担ゼロで受けられます。`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: `${name}でかもめクリニックに相談するにはどうすればよいですか？`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `お電話（${tel}）またはLINE（@512ysmzx）でご相談ください。受付は平日9:00〜17:00、LINEは24時間受付しています。患者さまご本人・ご家族・ケアマネジャー・医療機関の方、どなたでもご相談いただけます。`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: `${name}の老人ホーム・グループホームにも訪問診療は可能ですか？`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `はい。有料老人ホーム・グループホーム・特別養護老人ホームなど施設への訪問診療も行っています。大阪市全域で約50施設の実績があります。施設への新規導入をご検討の場合は地域医療連携部（06-4301-7883）までご相談ください。`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: `${name}で精神科・認知症の訪問診療も受けられますか？`,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `はい。かもめクリニックは精神科専門医3名が常勤する大阪市内唯一の訪問診療クリニックです。うつ病・統合失調症・認知症・BPSD（徘徊・暴言・妄想）など精神科疾患にも対応しています。内科と精神科を一体的に診療できます。`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '訪問診療を始めるにはどんな手続きが必要ですか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `まずはお電話またはLINEでご連絡ください。ご状況をお聞きした上で、初回訪問の日程を調整します。紹介状がなくても始められます。入院中の方は退院前からのご相談も可能です。`,
+      },
+    },
+  ],
+};
+---
+
+<Layout metadata={metadata}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdFaq)} />
+  </Fragment>
+
+  <Hero
+    tagline={`大阪市${name}の訪問診療`}
+    actions={[
+      { variant: 'primary', text: `TEL ${tel}`, href: `tel:${tel.replace(/-/g, '')}`, icon: 'tabler:phone' },
+      { variant: 'line', text: 'LINEで無料相談', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+    ]}
+    image={{
+      src: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=2070&q=80',
+      alt: `大阪市${name}の訪問診療イメージ`,
+    }}
+  >
+    <Fragment slot="title">
+      大阪市<span class="text-accent dark:text-white highlight">{name}</span>の<br />
+      訪問診療専門クリニック
+    </Fragment>
+    <Fragment slot="subtitle">
+      かもめクリニック{branch}が<strong>{name}全域</strong>を担当。<br class="hidden sm:inline" />
+      内科・精神科・小児科に対応し、ご自宅・老人ホーム・グループホームへ医師が定期訪問します。<br class="hidden sm:inline" />
+      <strong>在支診1認定・24時間365日対応。</strong>
+    </Fragment>
+  </Hero>
+
+  <!-- 担当エリア -->
+  <section class="py-12 bg-blue-50 dark:bg-slate-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-8">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{name}の訪問診療対応エリア</h2>
+        <p class="mt-2 text-gray-600 dark:text-gray-400">以下のエリアに対応しています。エリア外もお気軽にご相談ください。</p>
+      </div>
+      <div class="flex flex-wrap gap-3 justify-center">
+        {areas.map(area => (
+          <span class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 font-bold px-4 py-2 rounded-full text-sm">
+            <Icon name="tabler:map-pin" class="w-4 h-4 inline mr-1" />{area}
+          </span>
+        ))}
+      </div>
+      <div class="mt-6 bg-white dark:bg-slate-900 rounded-2xl p-5 border border-blue-100 dark:border-slate-700 text-center">
+        <p class="text-sm text-gray-500 mb-1">担当拠点</p>
+        <p class="font-bold text-gray-800 dark:text-white">{access}</p>
+      </div>
+    </div>
+  </section>
+
+  <Features2
+    tagline="選ばれる理由"
+    title={`${name}でかもめクリニックが選ばれる理由`}
+    items={[
+      { title: '在支診1認定（最上位区分）', description: '厚生労働省認定の機能強化型在宅療養支援診療所。24時間365日・看取り実績など厳しい基準をクリア。', icon: 'tabler:certificate' },
+      { title: '内科・精神科・小児科に対応', description: '1つのクリニックで内科疾患も精神科疾患も小児科疾患も診療可能。複数の専門医が連携します。', icon: 'tabler:stethoscope' },
+      { title: '精神科専門医3名常勤（大阪市内唯一）', description: '認知症・うつ病・統合失調症など精神疾患を持つ患者さまの在宅医療も専門医が対応。', icon: 'tabler:brain' },
+      { title: '24時間365日の緊急往診', description: '夜間・休日の急変時も担当医へ連絡できる体制。在支診1として365日対応を義務付けられています。', icon: 'tabler:clock-24' },
+      { title: '年間看取り約100件の実績', description: 'グループ全体で年間約100件の在宅看取り実績。最期まで住み慣れた場所で過ごせるよう支えます。', icon: 'tabler:heart' },
+      { title: '約50施設への訪問診療実績', description: `有料老人ホーム・グループホーム・特養など${name}を含む大阪市全域の約50施設に対応。`, icon: 'tabler:building-community' },
+    ]}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-white dark:bg-transparent"></div>
+    </Fragment>
+  </Features2>
+
+  <!-- よくある質問 -->
+  <FAQs
+    id="faq"
+    tagline="FAQ"
+    title={`${name}の訪問診療 よくあるご質問`}
+    classes={{ container: 'max-w-6xl' }}
+    items={[
+      {
+        title: `${name}の訪問診療の費用はいくらですか？`,
+        description: `健康保険・介護保険が適用されます。月2〜3回の定期訪問で、3割負担の方の目安は月額1万円前後です。75歳以上の後期高齢者は1割または2割負担でさらに軽減されます。生活保護の方は自己負担ゼロで受けられます。詳しくは費用・保険のページ（/cost）またはお電話でご確認ください。`,
+      },
+      {
+        title: `${name}でかもめクリニックに相談するにはどうすればよいですか？`,
+        description: `お電話（${tel}）またはLINE（@512ysmzx）でご相談ください。受付は平日9:00〜17:00、LINEは24時間受付しています。患者さまご本人・ご家族・ケアマネジャー・医療機関の方、どなたでもご相談いただけます。`,
+      },
+      {
+        title: `${name}の老人ホーム・グループホームにも訪問診療は可能ですか？`,
+        description: `はい。有料老人ホーム・グループホーム・特別養護老人ホームなど施設への訪問診療も行っています。大阪市全域で約50施設の実績があります。施設への新規導入をご検討の場合は地域医療連携部（06-4301-7883）までご相談ください。`,
+      },
+      {
+        title: `${name}で精神科・認知症の訪問診療も受けられますか？`,
+        description: `はい。かもめクリニックは精神科専門医3名が常勤する大阪市内唯一の訪問診療クリニックです。うつ病・統合失調症・認知症・BPSD（徘徊・暴言・妄想）など精神科疾患にも対応しています。内科と精神科を一体的に診療できます。`,
+      },
+      {
+        title: '訪問診療を始めるにはどんな手続きが必要ですか？',
+        description: `まずはお電話またはLINEでご連絡ください。ご状況をお聞きした上で、初回訪問の日程を調整します。紹介状がなくても始められます。入院中の方は退院前からのご相談も可能です。ケアマネジャー様からのご連絡もお待ちしています。`,
+      },
+    ]}
+  />
+
+  <CallToAction
+    actions={[
+      { variant: 'primary', text: `お電話でのご相談（${tel}）`, href: `tel:${tel.replace(/-/g, '')}`, icon: 'tabler:phone' },
+      { variant: 'line', text: 'LINEで無料相談（@512ysmzx）', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+    ]}
+  >
+    <Fragment slot="title">大阪市{name}の訪問診療のご相談</Fragment>
+    <Fragment slot="subtitle">
+      受付：平日 9:00〜17:00　｜　LINE（@512ysmzx）は24時間受付<br />
+      患者さまご本人・ご家族・ケアマネジャー・医療機関の方、どなたでもお気軽にご相談ください。
+    </Fragment>
+  </CallToAction>
+</Layout>

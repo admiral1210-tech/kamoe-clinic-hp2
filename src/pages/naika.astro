@@ -1,0 +1,224 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Features from '~/components/widgets/Features.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+
+const metadata = {
+  title: '内科の訪問診療｜大阪市｜かもめクリニック',
+  description:
+    '大阪市の内科訪問診療。慢性疾患（高血圧・糖尿病・心不全・COPD）の継続管理から緩和ケア・看取りまで対応。通院が困難な方のご自宅・施設へ医師が定期訪問。健康保険・介護保険適用。24時間365日の緊急往診。',
+  ignoreTitleTemplate: true,
+  openGraph: {
+    type: 'website',
+    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+  },
+};
+
+// JSON-LD: BreadcrumbList
+const jsonLdBreadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
+    { '@type': 'ListItem', position: 2, name: '内科の訪問診療', item: 'https://kamome-clinic.net/naika' },
+  ],
+};
+
+// JSON-LD: FAQPage
+const jsonLdFAQ = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: '内科の訪問診療はどんな病気に対応していますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '高血圧・糖尿病・心不全・慢性腎臓病・COPD・がんなど慢性疾患の継続管理が中心です。定期的な診察・採血・処方のほか、点滴・創傷処置・在宅酸素の管理なども行います。病状が安定している方も、進行した状態の方も対応しています。まずはお電話（06-4301-7871）またはLINEでご相談ください。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '採血や検査は自宅でできますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'はい。訪問時に採血・尿検査・心電図など基本的な検査を実施できます。検査結果は次回訪問時または電話でご説明します。精密検査が必要な場合は、連携医療機関への紹介も行います。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '末期がんの緩和ケアも対応できますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'はい。がんの末期・ターミナル期の在宅緩和ケアに対応しています。痛みのコントロール（医療用麻薬の管理含む）、倦怠感・呼吸困難への対処、ご家族への精神的サポートまで行います。かもめクリニックはグループ全体で年間約100件の在宅看取り実績があります。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '複数の慢性疾患があっても対応できますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'はい。高血圧・糖尿病・慢性腎臓病など複数の疾患を抱える方の「かかりつけ医」として、総合的に管理します。専門科が必要な場合は院内の精神科・小児科専門医と連携し、外部の病院への紹介も行います。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '訪問診療の費用はどのくらいかかりますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '健康保険・介護保険が適用されます。後期高齢者（75歳以上・1割負担）の場合、月2回の定期訪問で月額5,000〜8,000円が目安です（薬代・処置費用は別途）。生活保護の方は自己負担ゼロです。詳しくは費用・保険ページ（/cost）またはお電話（06-4301-7871）でご確認ください。',
+      },
+    },
+  ],
+};
+---
+
+<Layout metadata={metadata}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdFAQ)} />
+  </Fragment>
+
+  <!-- Hero -->
+  <Hero
+    tagline="内科 訪問診療｜大阪市"
+    actions={[
+      { variant: 'primary', text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
+      { variant: 'line', text: 'LINEで無料相談', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+    ]}
+    image={{
+      src: 'https://images.unsplash.com/photo-1559757175-0eb30cd8c063?auto=format&fit=crop&w=2070&q=80',
+      alt: '内科訪問診療のイメージ',
+    }}
+  >
+    <Fragment slot="title">
+      持病の管理も<br />
+      <span class="text-accent dark:text-white highlight">自宅</span>で<br />
+      続けられます
+    </Fragment>
+    <Fragment slot="subtitle">
+      <strong>高血圧・糖尿病・心不全・COPD</strong>などの慢性疾患を、ご自宅で継続管理します。<br class="hidden sm:inline" />
+      採血・処方・処置もすべて訪問時に完結。<strong>24時間365日の緊急往診</strong>にも対応しています。
+    </Fragment>
+  </Hero>
+
+  <!-- 対応する疾患・処置 -->
+  <Features
+    id="diseases"
+    tagline="対応疾患・処置"
+    title="こんな疾患・状態に対応しています"
+    subtitle="内科専門医が定期訪問し、処方・採血・処置までご自宅で完結します。"
+    items={[
+      {
+        title: '高血圧・脂質異常症・糖尿病',
+        description: '定期的な採血・血圧測定・処方管理を訪問時に実施。合併症（腎臓・目・足）の早期発見にも努めます。',
+        icon: 'tabler:activity',
+      },
+      {
+        title: '心不全・不整脈・虚血性心疾患',
+        description: '浮腫の管理・利尿剤調整・心電図測定など、心臓疾患の在宅管理を行います。急変時は24時間365日対応します。',
+        icon: 'tabler:heart-rate-monitor',
+      },
+      {
+        title: '慢性腎臓病・透析管理',
+        description: '院長は腎臓学会専門医・透析医学会専門医。慢性腎臓病の進行を抑える管理と、透析患者さまの在宅フォローを行います。',
+        icon: 'tabler:droplet',
+      },
+      {
+        title: 'COPD・気管支喘息・呼吸器疾患',
+        description: '在宅酸素療法の管理・吸入薬の指導・急性増悪時の対応を訪問診療で行います。',
+        icon: 'tabler:lungs',
+      },
+      {
+        title: 'がん・緩和ケア・ターミナルケア',
+        description: '末期がんの痛み・倦怠感・呼吸困難のコントロール。医療用麻薬の管理も行います。ご家族と一緒に最善の療養を考えます。',
+        icon: 'tabler:heart-handshake',
+      },
+      {
+        title: '在宅看取り（年間約100件実績）',
+        description: '住み慣れた場所での最期を希望する方とそのご家族を、グループ全体で年間約100件の看取り実績でしっかり支えます。',
+        icon: 'tabler:home-heart',
+      },
+    ]}
+  />
+
+  <!-- 対象者 -->
+  <Features2
+    id="target"
+    tagline="こんな方へ"
+    title="内科の訪問診療をご検討ください"
+    items={[
+      {
+        title: '通院が体力的につらくなってきた方',
+        description: '足腰が弱くなり電車・バスでの通院が難しくなった方。タクシーも家族の送迎も毎回は厳しい、という方に適しています。',
+        icon: 'tabler:wheelchair',
+      },
+      {
+        title: '退院後に在宅療養を続けている方',
+        description: '入院治療を終えてご自宅に戻ったものの、定期受診が困難な方。退院後の継続管理をしっかり行います。',
+        icon: 'tabler:bed',
+      },
+      {
+        title: '老人ホーム・グループホームに入居中の方',
+        description: '施設入居中でもかかりつけ医として定期訪問します。施設スタッフ・ケアマネジャーと連携して診療にあたります。',
+        icon: 'tabler:building',
+      },
+      {
+        title: '複数の慢性疾患を抱えている方',
+        description: '高血圧・糖尿病・腎臓病など複数の病気を1つのクリニックでまとめて管理します。かかりつけ医として総合的にサポートします。',
+        icon: 'tabler:clipboard-list',
+      },
+    ]}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Features2>
+
+  <!-- FAQ -->
+  <FAQs
+    id="faq"
+    title="内科訪問診療 よくある質問"
+    tagline="FAQ"
+    classes={{ container: 'max-w-6xl' }}
+    items={[
+      {
+        title: '内科の訪問診療はどんな病気に対応していますか？',
+        description: '高血圧・糖尿病・心不全・慢性腎臓病・COPD・がんなど慢性疾患の継続管理が中心です。定期的な診察・採血・処方のほか、点滴・創傷処置・在宅酸素の管理なども行います。病状が安定している方も、進行した状態の方も対応しています。まずはお電話（06-4301-7871）またはLINEでご相談ください。',
+      },
+      {
+        title: '採血や検査は自宅でできますか？',
+        description: '訪問時に採血・尿検査・心電図など基本的な検査を実施できます。検査結果は次回訪問時または電話でご説明します。精密検査が必要な場合は、連携医療機関への紹介も行います。',
+      },
+      {
+        title: '末期がんの緩和ケアも対応できますか？',
+        description: 'はい。がんの末期・ターミナル期の在宅緩和ケアに対応しています。痛みのコントロール（医療用麻薬の管理含む）、倦怠感・呼吸困難への対処まで行います。かもめクリニックはグループ全体で年間約100件の在宅看取り実績があります。',
+      },
+      {
+        title: '複数の慢性疾患があっても対応できますか？',
+        description: '高血圧・糖尿病・慢性腎臓病など複数の疾患を抱える方の「かかりつけ医」として総合的に管理します。専門科が必要な場合は院内の精神科・小児科専門医と連携します。',
+      },
+      {
+        title: '訪問診療の費用はどのくらいかかりますか？',
+        description: '健康保険・介護保険が適用されます。後期高齢者（75歳以上・1割負担）は月2回の定期訪問で月額5,000〜8,000円が目安（薬代・処置費用は別途）。生活保護の方は自己負担ゼロです。詳しくは費用・保険ページ（/cost）またはお電話（06-4301-7871）でご確認ください。',
+      },
+    ]}
+  />
+
+  <!-- CTA -->
+  <CallToAction
+    actions={[
+      { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
+      { variant: 'line', text: 'LINEで無料相談（@512ysmzx）', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+    ]}
+  >
+    <Fragment slot="title">内科の訪問診療のご相談</Fragment>
+    <Fragment slot="subtitle">
+      受付：平日 9:00〜17:00　｜　LINE（@512ysmzx）は24時間受付<br />
+      患者さまご本人・ご家族・ケアマネジャー・医療介護関係者の方、どなたでもお気軽にどうぞ。
+    </Fragment>
+  </CallToAction>
+</Layout>

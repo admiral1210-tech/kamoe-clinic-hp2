@@ -1,0 +1,372 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Features from '~/components/widgets/Features.astro';
+import Content from '~/components/widgets/Content.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import { Icon } from 'astro-icon/components';
+
+const metadata = {
+  title: '訪問診療の費用・料金・保険適用｜かもめクリニック（大阪市）',
+  description:
+    'かもめクリニックの訪問診療にかかる費用・料金の目安。健康保険・介護保険・後期高齢者医療・生活保護への対応、自己負担額の目安をわかりやすく解説します。',
+  ignoreTitleTemplate: true,
+  openGraph: {
+    type: 'website',
+    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+  },
+};
+
+// JSON-LD: BreadcrumbList
+const jsonLdBreadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
+    { '@type': 'ListItem', position: 2, name: '訪問診療の費用・保険', item: 'https://kamome-clinic.net/cost' },
+  ],
+};
+
+// JSON-LD: FAQPage
+const jsonLdFAQ = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: '訪問診療の費用はいくらかかりますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '健康保険・介護保険が適用されます。月2回の定期訪問を受けた場合、3割負担の方の目安は月額8,000〜15,000円程度です。75歳以上の後期高齢者は1割または2割負担となり、さらに軽減されます。生活保護の方は自己負担ゼロで受けられます。実際の費用はご状況によって異なりますので、詳しくはお電話（06-4301-7871）でご確認ください。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '介護保険は訪問診療に使えますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '訪問診療（医師の診察）は健康保険の対象です。介護保険は訪問介護・訪問看護・リハビリなど介護サービスに使用します。訪問診療と介護保険サービスは別々に組み合わせて利用できます。介護保険の申請がまだの方はケアマネジャーへのご相談をお勧めします。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '生活保護を受けていても訪問診療を受けられますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'はい。生活保護受給中の方は医療扶助が適用され、自己負担ゼロで訪問診療を受けられます。事前に福祉事務所への確認と医療券の取得が必要です。手続きについてはお電話（06-4301-7871）でご相談ください。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '訪問診療と往診の費用の違いはありますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '訪問診療は医師が計画的・定期的に自宅を訪問する診察です。往診は急変時などに臨時で訪問するものです。費用は訪問診療（定期）より緊急往診のほうが高くなる場合があります。かもめクリニックでは月2〜4回の定期訪問が基本で、緊急時は追加で往診対応しています。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '高額療養費制度は訪問診療にも使えますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'はい。健康保険が適用される訪問診療費は高額療養費制度の対象です。月の自己負担が一定額を超えた場合、超過分が払い戻されます。70歳以上の方は自己負担限度額が低く設定されています。詳しくはご加入の健康保険組合や協会けんぽにお問い合わせください。',
+      },
+    },
+  ],
+};
+
+// JSON-LD: Speakable
+const jsonLdSpeakable = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': 'https://kamome-clinic.net/cost',
+  name: '訪問診療の費用・料金・保険適用｜かもめクリニック',
+  speakable: {
+    '@type': 'SpeakableSpecification',
+    cssSelector: ['h1', 'h2'],
+  },
+  url: 'https://kamome-clinic.net/cost',
+};
+---
+
+<Layout metadata={metadata}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdFAQ)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdSpeakable)} />
+  </Fragment>
+
+  <Hero
+    tagline="費用・保険｜大阪市の訪問診療"
+    actions={[
+      { variant: 'primary', text: 'お電話でご確認（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
+      { variant: 'line', text: 'LINEで無料相談', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+    ]}
+    image={{
+      src: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=2070&q=80',
+      alt: '訪問診療費用・保険のイメージ',
+    }}
+  >
+    <Fragment slot="title">
+      訪問診療の<br />
+      <span class="text-accent dark:text-white highlight">費用・保険</span>について
+    </Fragment>
+    <Fragment slot="subtitle">
+      かもめクリニックの訪問診療は<strong>健康保険・介護保険が適用</strong>されます。<br class="hidden sm:inline" />
+      75歳以上の後期高齢者は1〜2割負担、生活保護の方は自己負担ゼロで受けられます。
+    </Fragment>
+  </Hero>
+
+  <!-- 保険の種類 -->
+  <Features
+    tagline="保険について"
+    title="訪問診療に適用できる保険制度"
+    subtitle="複数の制度が組み合わさることで、自己負担を軽減できます"
+    items={[
+      {
+        title: '健康保険（医療保険）',
+        description: '訪問診療の診察料・処方料・管理料などが健康保険の対象です。国民健康保険・社会保険・後期高齢者医療保険のいずれも適用されます。',
+        icon: 'tabler:heart-handshake',
+      },
+      {
+        title: '介護保険',
+        description: '訪問診療（医師診察）は医療保険の対象ですが、訪問看護・訪問リハビリなど介護サービスとの組み合わせが可能です。要介護認定を受けている方はケアマネジャーへご相談ください。',
+        icon: 'tabler:users',
+      },
+      {
+        title: '後期高齢者医療保険',
+        description: '75歳以上の方は自動的に後期高齢者医療保険に加入します。所得に応じて1割または2割負担となり、医療費の自己負担が軽減されます。',
+        icon: 'tabler:user-heart',
+      },
+      {
+        title: '高額療養費制度',
+        description: '1か月の医療費自己負担が一定額を超えた場合、超過分が払い戻される制度です。70歳以上は自己負担限度額が低く設定されています。加入保険に申請が必要です。',
+        icon: 'tabler:cash-banknote',
+      },
+      {
+        title: '生活保護（医療扶助）',
+        description: '生活保護受給中の方は医療扶助が適用され、自己負担ゼロで訪問診療を受けられます。事前に福祉事務所で医療券を取得する必要があります。',
+        icon: 'tabler:shield-check',
+      },
+      {
+        title: '障害者医療費助成',
+        description: '身体障害者手帳・精神障害者保健福祉手帳をお持ちの方は、自治体の医療費助成制度（マル障等）が適用される場合があります。お住まいの区役所にご確認ください。',
+        icon: 'tabler:accessible',
+      },
+    ]}
+  />
+
+  <!-- 医療費シミュレーション -->
+  <section id="simulator" class="py-16" style="background-color: rgb(253 248 241);">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <p class="text-sm font-semibold text-primary uppercase tracking-widest mb-1">Fee Simulation</p>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">医療費シミュレーション</h2>
+        <p class="mt-3 text-gray-600 dark:text-gray-300">4つの質問に答えるだけで、月々の自己負担の目安がわかります。</p>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-md p-6 md:p-8 border border-blue-100 dark:border-slate-700">
+        <div class="mb-6">
+          <p class="font-bold text-gray-800 dark:text-white mb-3 flex items-center gap-2 text-lg">
+            <span class="bg-primary text-white text-sm font-bold w-7 h-7 rounded-full flex items-center justify-center shrink-0">1</span>
+            保険の種類を教えてください
+          </p>
+          <div class="grid grid-cols-2 gap-2" id="fee-insurance">
+            {[
+              { v:'kouki', l:'後期高齢者医療', s:'75歳以上' },
+              { v:'korei', l:'高齢者医療', s:'70〜74歳' },
+              { v:'ippan', l:'一般医療保険', s:'70歳未満' },
+              { v:'seikatsu', l:'生活保護受給', s:'' },
+            ].map(({ v, l, s }) => (
+              <label class="fee-option cursor-pointer">
+                <input type="radio" name="insurance" value={v} class="sr-only" />
+                <div class="fee-btn border-2 border-gray-200 rounded-xl p-3 text-center font-medium text-gray-700 dark:text-gray-200 hover:border-primary transition-colors">
+                  {l}{s && <><br /><span class="text-sm font-normal text-gray-500">{s}</span></>}
+                </div>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div class="mb-6" id="step2-wrap" style="display:none">
+          <p class="font-bold text-gray-800 dark:text-white mb-3 flex items-center gap-2 text-lg">
+            <span class="bg-primary text-white text-sm font-bold w-7 h-7 rounded-full flex items-center justify-center shrink-0">2</span>
+            自己負担割合を選んでください
+          </p>
+          <p class="text-sm text-gray-500 mb-3">保険証に記載されています。</p>
+          <div class="flex gap-2" id="fee-ratio">
+            {['1割','2割','3割'].map(r => (
+              <label class="fee-option flex-1 cursor-pointer">
+                <input type="radio" name="ratio" value={r} class="sr-only" />
+                <div class="fee-btn border-2 border-gray-200 rounded-xl p-3 text-center font-bold text-gray-700 dark:text-gray-200 hover:border-primary transition-colors text-lg">{r}</div>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div class="mb-6" id="step3-wrap" style="display:none">
+          <p class="font-bold text-gray-800 dark:text-white mb-3 flex items-center gap-2 text-lg">
+            <span class="bg-primary text-white text-sm font-bold w-7 h-7 rounded-full flex items-center justify-center shrink-0">3</span>
+            お住まいの場所を選んでください
+          </p>
+          <div class="grid grid-cols-2 gap-2" id="fee-place">
+            {[
+              { v:'jitaku', l:'ご自宅', s:'一戸建て・マンションなど' },
+              { v:'gh', l:'グループホーム', s:'認知症の方の共同施設' },
+              { v:'tokuteishisetsu', l:'特定施設', s:'有料老人ホーム・サ高住など' },
+              { v:'kaigo', l:'介護老人施設', s:'特養・老健など' },
+            ].map(({ v, l, s }) => (
+              <label class="fee-option cursor-pointer">
+                <input type="radio" name="place" value={v} class="sr-only" />
+                <div class="fee-btn border-2 border-gray-200 rounded-xl p-3 text-center font-medium text-gray-700 dark:text-gray-200 hover:border-primary transition-colors">{l}<br /><span class="text-sm font-normal text-gray-500">{s}</span></div>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div class="mb-6" id="step4-wrap" style="display:none">
+          <p class="font-bold text-gray-800 dark:text-white mb-3 flex items-center gap-2 text-lg">
+            <span class="bg-primary text-white text-sm font-bold w-7 h-7 rounded-full flex items-center justify-center shrink-0">4</span>
+            診療の内容を選んでください
+          </p>
+          <div class="grid grid-cols-2 gap-2" id="fee-content">
+            {[
+              { v:'basic', l:'診察・処方のみ', s:'定期訪問とお薬の処方' },
+              { v:'psych', l:'精神科診療あり', s:'精神科専門医による加算' },
+              { v:'treat', l:'医療処置あり', s:'胃ろう・カテーテル等の管理' },
+              { v:'capd', l:'在宅透析・高度医療あり', s:'腹膜透析（CAPD）を実施中' },
+            ].map(({ v, l, s }) => (
+              <label class="fee-option cursor-pointer">
+                <input type="radio" name="content" value={v} class="sr-only" />
+                <div class="fee-btn border-2 border-gray-200 rounded-xl p-3 text-center font-medium text-gray-700 dark:text-gray-200 hover:border-primary transition-colors">{l}<br /><span class="text-sm font-normal text-gray-500">{s}</span></div>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div id="calc-btn-wrap" style="display:none">
+          <button id="fee-calc-btn" class="w-full bg-primary text-white font-bold py-4 rounded-xl hover:opacity-90 transition-opacity text-lg">月々の目安を計算する</button>
+        </div>
+        <div id="fee-result" class="mt-6 hidden">
+          <div class="bg-blue-50 dark:bg-slate-700 rounded-xl p-6 text-center border border-blue-200 dark:border-slate-600">
+            <p class="text-gray-600 dark:text-gray-300 mb-2">月々の自己負担目安（診療料のみ）</p>
+            <p class="text-5xl font-black text-primary mb-2" id="fee-amount">-</p>
+            <p class="text-sm text-gray-500">※ 薬代・処置・検査費用は別途加算されます</p>
+          </div>
+          <p class="mt-4 text-center text-gray-600 dark:text-gray-300">詳しくはお電話またはLINEでご説明します。
+            <a href="tel:0643017871" class="text-primary font-bold hover:underline inline-flex items-center gap-1">
+              <Icon name="tabler:phone" class="w-5 h-5" /> 06-4301-7871
+            </a>
+          </p>
+        </div>
+      </div>
+      <p class="text-center mt-4 text-sm text-gray-500">※ 上記はあくまでも目安です。実際の費用は保険の種類・加算・処置内容により異なります。</p>
+    </div>
+  </section>
+
+  <script>
+  (function () {
+    const table = {
+      kouki: { '1割': { jitaku:[5000,8000], gh:[3000,5000], tokuteishisetsu:[3000,5000], kaigo:[2000,4000] }, '2割': { jitaku:[10000,16000], gh:[6000,10000], tokuteishisetsu:[6000,10000], kaigo:[4000,8000] }, '3割': { jitaku:[15000,24000], gh:[9000,15000], tokuteishisetsu:[9000,15000], kaigo:[6000,12000] } },
+      korei: { '2割': { jitaku:[10000,16000], gh:[6000,10000], tokuteishisetsu:[6000,10000], kaigo:[4000,8000] }, '3割': { jitaku:[15000,24000], gh:[9000,15000], tokuteishisetsu:[9000,15000], kaigo:[6000,12000] } },
+      ippan: { '1割': { jitaku:[5000,8000], gh:[3000,5000], tokuteishisetsu:[3000,5000], kaigo:[2000,4000] }, '2割': { jitaku:[10000,16000], gh:[6000,10000], tokuteishisetsu:[6000,10000], kaigo:[4000,8000] }, '3割': { jitaku:[15000,24000], gh:[9000,15000], tokuteishisetsu:[9000,15000], kaigo:[6000,12000] } },
+      seikatsu: { '0割': { jitaku:[0,0], gh:[0,0], tokuteishisetsu:[0,0], kaigo:[0,0] } },
+    };
+    const contentAdd = { basic:[0,0], psych:[1500,3000], treat:[2000,5000], capd:[5000,10000] };
+    let step2shown=false, step3shown=false, step4shown=false, calcshown=false;
+    const getSelected = name => document.querySelector(`input[name="${name}"]:checked`)?.value;
+    function highlight(name) {
+      document.querySelectorAll(`input[name="${name}"]`).forEach(inp => {
+        const btn = inp.closest('label')?.querySelector('.fee-btn');
+        if (!btn) return;
+        inp.checked ? (btn.classList.add('border-primary','bg-blue-50'), btn.classList.remove('border-gray-200'))
+                    : (btn.classList.remove('border-primary','bg-blue-50'), btn.classList.add('border-gray-200'));
+      });
+    }
+    function updateSteps() {
+      const ins = getSelected('insurance'), ratio = getSelected('ratio'), place = getSelected('place'), content = getSelected('content');
+      if (ins && !step2shown) {
+        if (ins==='seikatsu') { document.getElementById('step3-wrap').style.display='block'; step3shown=true; }
+        else { document.getElementById('step2-wrap').style.display='block'; step2shown=true; }
+      }
+      if ((ratio||ins==='seikatsu') && !step3shown) { document.getElementById('step3-wrap').style.display='block'; step3shown=true; }
+      if (place && !step4shown) { document.getElementById('step4-wrap').style.display='block'; step4shown=true; }
+      if (content && !calcshown) { document.getElementById('calc-btn-wrap').style.display='block'; calcshown=true; }
+    }
+    document.querySelectorAll('input[type="radio"]').forEach(inp => { inp.addEventListener('change', function(){ highlight(this.name); updateSteps(); document.getElementById('fee-result').classList.add('hidden'); }); });
+    document.getElementById('fee-calc-btn')?.addEventListener('click', function(){
+      const ins=getSelected('insurance'), place=getSelected('place')||'jitaku', content=getSelected('content')||'basic';
+      let min, max;
+      if (ins==='seikatsu') { min=max=0; } else { const ratio=getSelected('ratio')||'3割'; const base=(table[ins]&&table[ins][ratio]&&table[ins][ratio][place])||[5000,8000]; const add=contentAdd[content]||[0,0]; min=base[0]+add[0]; max=base[1]+add[1]; }
+      const resultEl=document.getElementById('fee-result'), amountEl=document.getElementById('fee-amount');
+      amountEl.textContent=(min===0&&max===0)?'0円（全額公費）':`約 ${min.toLocaleString()}〜${max.toLocaleString()}円`;
+      resultEl.classList.remove('hidden');
+      resultEl.scrollIntoView({behavior:'smooth',block:'center'});
+    });
+  })();
+  </script>
+
+  <!-- 費用の流れ -->
+  <Content
+    tagline="費用の流れ"
+    title="訪問診療費用の支払い方法"
+    isReversed
+    items={[
+      { title: '毎月の請求書でお支払い', description: '当月の訪問診療費は翌月初旬に請求書をお届けします。銀行振込またはご来院でのお支払いが可能です。' },
+      { title: '処方箋は保険薬局でお受け取り', description: '処方薬は保険薬局でお受け取りください。調剤費は別途薬局にお支払いいただきます。往診時に持参することも可能です。' },
+      { title: '急変時の往診費用', description: '緊急往診（臨時往診）は定期訪問とは別に費用が発生する場合があります。夜間・休日加算が加わることがあります。' },
+      { title: '費用の不明点はご相談ください', description: '費用についてのご不明点・ご不安はお電話（06-4301-7871）またはLINEでいつでもご相談いただけます。' },
+    ]}
+    image={{
+      src: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1200&q=80',
+      alt: '費用の支払いイメージ',
+    }}
+  >
+    <Fragment slot="content">
+      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">費用についてのご不明点はお気軽に</h3>
+    </Fragment>
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Content>
+
+  <!-- FAQ -->
+  <FAQs
+    id="faq"
+    title="費用・保険に関するよくある質問"
+    tagline="FAQ"
+    classes={{ container: 'max-w-6xl' }}
+    items={[
+      {
+        title: '訪問診療の費用はいくらかかりますか？',
+        description: '健康保険・介護保険が適用されます。月2回の定期訪問を受けた場合、3割負担の方の目安は月額8,000〜15,000円程度です。75歳以上の後期高齢者は1〜2割負担となり、さらに軽減されます。実際の費用はご状況により異なりますのでお電話（06-4301-7871）でご確認ください。',
+      },
+      {
+        title: '介護保険は訪問診療に使えますか？',
+        description: '訪問診療（医師の診察）は健康保険の対象です。介護保険は訪問介護・訪問看護・リハビリなど介護サービスに使用します。訪問診療と介護保険サービスは別々に組み合わせて利用できます。要介護認定を受けている方はケアマネジャーにご相談ください。',
+      },
+      {
+        title: '生活保護を受けていても訪問診療を受けられますか？',
+        description: 'はい。生活保護受給中の方は医療扶助が適用され、自己負担ゼロで訪問診療を受けられます。事前に福祉事務所への確認と医療券の取得が必要です。手続きについてはお電話（06-4301-7871）でご相談ください。',
+      },
+      {
+        title: '高額療養費制度は訪問診療にも使えますか？',
+        description: 'はい。健康保険が適用される訪問診療費は高額療養費制度の対象です。月の自己負担が一定額を超えた場合、超過分が払い戻されます。70歳以上の方は自己負担限度額が低く設定されています。詳しくはご加入の健康保険組合や協会けんぽにお問い合わせください。',
+      },
+      {
+        title: '訪問診療と往診の費用の違いはありますか？',
+        description: '訪問診療は計画的・定期的な訪問、往診は急変時の臨時訪問です。緊急往診は夜間・休日加算が加わることがあります。かもめクリニックでは月2〜4回の定期訪問が基本で、緊急時は追加で往診に対応しています。費用の詳細はお電話でご案内します。',
+      },
+    ]}
+  />
+
+  <CallToAction
+    actions={[
+      { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
+      { variant: 'line', text: 'LINEで無料相談（@512ysmzx）', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+    ]}
+  >
+    <Fragment slot="title">費用・保険についてのご相談</Fragment>
+    <Fragment slot="subtitle">
+      費用についてのご不明点・ご不安は、いつでもお気軽にご相談ください。<br />
+      受付：平日 9:00〜17:00　｜　LINE（@512ysmzx）は24時間受付
+    </Fragment>
+  </CallToAction>
+</Layout>

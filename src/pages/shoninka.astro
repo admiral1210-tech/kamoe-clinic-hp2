@@ -1,0 +1,352 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Features from '~/components/widgets/Features.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import Content from '~/components/widgets/Content.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import Note from '~/components/widgets/Note.astro';
+
+const metadata = {
+  title: '小児科の訪問診療・医療ケア児対応｜大阪市｜かもめクリニック',
+  description:
+    '大阪市かもめクリニックの小児科訪問診療。医療ケア児（人工呼吸器・経管栄養・気管切開など）・NICU退院後フォロー・発達管理に対応。小児科専門医が在籍。24時間365日緊急往診可能。',
+  ignoreTitleTemplate: true,
+  openGraph: {
+    type: 'website',
+    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+  },
+};
+
+// JSON-LD: BreadcrumbList
+const jsonLdBreadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
+    { '@type': 'ListItem', position: 2, name: '小児科の訪問診療・医療ケア児対応', item: 'https://kamome-clinic.net/shoninka' },
+  ],
+};
+
+// JSON-LD: FAQPage
+const jsonLdFAQ = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: '子どもでも訪問診療は受けられますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'はい。かもめクリニックは小児科専門医が在籍し、医療的ケアが必要なお子さまを中心に小児訪問診療を行っています。人工呼吸器・経管栄養・気管切開・吸引など在宅で医療ケアが必要なお子さまをご自宅で診察します。大阪市全域に対応しており、まずはお電話（06-4301-7871）またはLINEでご相談ください。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '医療ケア児の訪問診療とはどのような診療ですか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '人工呼吸器・経管栄養・気管切開・吸引・酸素療法など、継続的な医療処置が必要なお子さまを対象に、小児科専門医が定期訪問します。状態評価・処方・機器管理のサポート・ご家族への介護指導まで一体的に支援します。訪問看護・リハビリ・栄養士など多職種と連携してお子さまの在宅生活を支えます。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'NICUから退院後すぐに訪問診療を開始できますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'はい。NICU退院前からの事前相談・退院後の在宅移行支援の実績があります（グループ全体で約10件）。退院に向けた準備段階からご相談いただけます。病院の地域医療連携部・NICU担当者様からのご連絡も地域医療連携部（06-4301-7883）でお待ちしています。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '発達障害・成長の遅れも訪問診療で診てもらえますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '定期訪問の中で体重・身長・発達の評価を継続的に行います。必要に応じて専門機関への紹介・連携も行います。外来への通院が困難なお子さまにも対応できます。精神科専門医も在籍しているため、発達障害に関連する精神科的サポートも一体的に提供できます。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '夜間に急変した場合はどうすればよいですか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'かもめクリニックは機能強化型在宅療養支援診療所（在支診1）として24時間365日の緊急往診に対応しています。医療ケア児は急変リスクが高いため、夜間・休日も担当医へ直接連絡できる体制を整えています。緊急時の対応方法は事前にご説明します。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'ご家族のケア負担を減らすサポートはありますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'はい。医師の訪問診療に加え、訪問看護・リハビリ・栄養士など多職種が連携してご家族の介護負担を軽減します。医療機器の管理方法の指導・福祉サービスの活用支援・ご家族のメンタルサポートも含めて対応します。ひとりで抱え込まず、まずはご相談ください。',
+      },
+    },
+  ],
+};
+
+// JSON-LD: MedicalClinic（小児科特化）
+const jsonLdPediatric = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalClinic',
+  '@id': 'https://kamome-clinic.net/#clinic',
+  name: 'かもめクリニック',
+  medicalSpecialty: 'https://schema.org/Pediatrics',
+  url: 'https://kamome-clinic.net/shoninka',
+  description: '大阪市の小児科訪問診療。医療ケア児（人工呼吸器・経管栄養・気管切開）・NICU退院後支援・発達管理に対応。小児科専門医在籍・24時間365日緊急往診。',
+  availableService: [
+    { '@type': 'MedicalTherapy', name: '医療ケア児訪問診療（人工呼吸器・経管栄養・気管切開）' },
+    { '@type': 'MedicalTherapy', name: 'NICU退院後在宅移行支援' },
+    { '@type': 'MedicalTherapy', name: '発達評価・成長管理（定期訪問）' },
+    { '@type': 'MedicalTherapy', name: '24時間緊急往診（在支診1認定）' },
+  ],
+  telephone: '06-4301-7871',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '夕凪2丁目16-9 icrossAMポートビル 4F-B',
+    addressLocality: '大阪市港区',
+    addressRegion: '大阪府',
+    postalCode: '552-0004',
+    addressCountry: 'JP',
+  },
+};
+
+// JSON-LD: MedicalCondition（対応疾患・状態）
+const jsonLdConditions = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '医療的ケア児（医療ケア児）',
+    alternateName: '人工呼吸器・経管栄養・気管切開を要する小児',
+    relevantSpecialty: 'https://schema.org/Pediatrics',
+    description: '人工呼吸器・経管栄養・気管切開・吸引・酸素療法など継続的な医療処置が必要な子どもの状態。在宅でのケアに対応。',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '早産・低出生体重児後遺症',
+    alternateName: 'NICU退院後管理が必要な状態',
+    relevantSpecialty: 'https://schema.org/Pediatrics',
+    description: 'NICU（新生児集中治療室）退院後に継続的な医療管理・発達フォローが必要な状態。',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '発達障害',
+    alternateName: '自閉スペクトラム症・注意欠如多動症（ADHD）・知的障害',
+    relevantSpecialty: 'https://schema.org/Pediatrics',
+    description: '発達の遅れや偏りがみられる状態。定期的な発達評価・成長管理・専門機関への連携に対応。',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '先天性心疾患',
+    relevantSpecialty: 'https://schema.org/Pediatrics',
+    description: '小児循環器専門医が在籍し、先天性心疾患を持つ子どもの在宅管理・定期評価に対応。',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '慢性肺疾患（新生児慢性肺疾患・気管支肺異形成症）',
+    relevantSpecialty: 'https://schema.org/Pediatrics',
+    description: '在宅酸素療法・人工呼吸器管理が必要な小児慢性肺疾患に対応。酸素流量の調整・SpO₂モニタリングを実施。',
+  },
+];
+
+// JSON-LD: Speakable
+const jsonLdSpeakable = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': 'https://kamome-clinic.net/shoninka',
+  name: '小児科の訪問診療・医療ケア児対応｜大阪市｜かもめクリニック',
+  speakable: {
+    '@type': 'SpeakableSpecification',
+    cssSelector: ['h1', 'h2', '.hero-subtitle'],
+  },
+  url: 'https://kamome-clinic.net/shoninka',
+};
+---
+
+<Layout metadata={metadata}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdFAQ)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdPediatric)} />
+    {jsonLdConditions.map(c => (
+      <script type="application/ld+json" set:html={JSON.stringify(c)} />
+    ))}
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdSpeakable)} />
+  </Fragment>
+
+  <!-- Hero -->
+  <Hero
+    tagline="小児科 訪問診療｜大阪市"
+    actions={[
+      { variant: 'primary', text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
+      { variant: 'line', text: 'LINEで無料相談', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+    ]}
+    image={{
+      src: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=2070&q=80',
+      alt: '小児科訪問診療イメージ',
+    }}
+  >
+    <Fragment slot="title">
+      医療ケアが必要な<br />
+      <span class="text-accent dark:text-white highlight">お子さま</span>を<br />
+      ご自宅で支えます
+    </Fragment>
+    <Fragment slot="subtitle">
+      <strong>小児科専門医が在籍</strong>し、人工呼吸器・経管栄養・気管切開など<br class="hidden sm:inline" />
+      <strong>医療的ケアが必要なお子さまの在宅診療</strong>を行います。<br class="hidden sm:inline" />
+      NICU退院後の在宅移行支援にも積極的に取り組んでいます。
+    </Fragment>
+  </Hero>
+
+  <!-- 在支診1 + 受付時間 -->
+  <Note
+    title="受付："
+    description="平日 9:00〜17:00　｜　緊急往診 24時間365日対応　｜　TEL：06-4301-7871　｜　機能強化型在宅療養支援診療所（在支診1）認定"
+  />
+
+  <!-- 強み4つ -->
+  <Features
+    id="features"
+    tagline="小児科訪問診療の特徴"
+    title="かもめクリニックの小児科訪問診療"
+    subtitle="医療的ケアが必要なお子さまとご家族を、ご自宅でしっかり支える体制を整えています。ご不安なことはお気軽にご相談ください。"
+    items={[
+      {
+        title: '小児科専門医が在宅訪問',
+        description: '小児科専門医・小児循環器専門医が在籍。定期的にご自宅へ訪問し、成長・発達・医療機器の管理・状態評価を継続的に行います。',
+        icon: 'tabler:stethoscope',
+      },
+      {
+        title: '医療ケア児に対応',
+        description: '人工呼吸器・経管栄養・気管切開・吸引・酸素療法・中心静脈栄養など、高度な医療的ケアが必要なお子さまの在宅診療に対応しています。',
+        icon: 'tabler:heart-rate-monitor',
+      },
+      {
+        title: 'NICU退院後の在宅移行支援',
+        description: 'NICU退院前からの事前相談に応じ、退院後すみやかに在宅診療をスタートできます。グループ全体での支援実績は約10件。病院との連携もスムーズに行います。',
+        icon: 'tabler:baby-carriage',
+      },
+      {
+        title: '24時間365日の緊急往診',
+        description: '医療ケア児は急変リスクが高く、夜間・休日の対応が不安というご家族も多くいらっしゃいます。在支診1として、緊急時も迅速に対応できる体制を整えています。',
+        icon: 'tabler:clock-24',
+      },
+    ]}
+  />
+
+  <!-- 対応できる医療ケアの詳細 -->
+  <Content
+    isReversed
+    tagline="対応内容"
+    title="在宅で対応できる医療ケア"
+    items={[
+      { title: '人工呼吸器管理', description: '在宅人工呼吸器（TPPV・NPPV）の設定確認・状態評価・トラブル時の対応。機器メーカー・看護師と連携してサポートします。' },
+      { title: '経管栄養（胃ろう・鼻腔栄養）', description: '胃ろうボタン・チューブの管理・交換・状態確認を定期訪問で行います。栄養量の調整もあわせて実施します。' },
+      { title: '気管切開の管理', description: '気管切開チューブの管理・吸引・緊急時の気道確保。ご家族への吸引指導も行います。' },
+      { title: '酸素療法・パルスオキシメーター管理', description: '在宅酸素療法（HOT）の管理・酸素流量の調整・SpO₂モニタリングの評価。' },
+    ]}
+    image={{
+      src: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200&q=80',
+      alt: '医療ケア対応イメージ',
+    }}
+  >
+    <Fragment slot="content">小児科専門医とともに看護師・リハビリ・栄養士など多職種が連携し、在宅での医療ケアを支えます。</Fragment>
+    <Fragment slot="bg"><div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div></Fragment>
+  </Content>
+
+  <!-- こんな方へ -->
+  <Features2
+    id="target"
+    tagline="こんな方へ"
+    title="小児科の訪問診療をご検討ください"
+    items={[
+      {
+        title: 'NICUから退院が近いお子さまがいる',
+        description: '退院前から在宅診療の準備を始めることができます。病院の担当者様とも連携し、スムーズな在宅移行をサポートします。',
+        icon: 'tabler:baby-carriage',
+      },
+      {
+        title: '人工呼吸器・経管栄養など医療ケアが必要',
+        description: '在宅での医療機器管理・状態確認・緊急対応まで、小児科専門医が定期的に訪問して支えます。',
+        icon: 'tabler:heart-rate-monitor',
+      },
+      {
+        title: '外来通院が体への負担になっている',
+        description: '移動・待ち時間がお子さまにとって大きな負担になっている場合、ご自宅での診療に切り替えることができます。',
+        icon: 'tabler:home-heart',
+      },
+      {
+        title: '発達・成長の定期フォローを続けたい',
+        description: '発達評価・体重・身長など成長の経過を定期的に確認します。必要に応じて専門医療機関への紹介も行います。',
+        icon: 'tabler:chart-line',
+      },
+      {
+        title: 'ご家族の介護負担を減らしたい',
+        description: '医師訪問に加え、訪問看護・リハビリ・福祉サービスと連携してご家族の負担軽減をサポートします。',
+        icon: 'tabler:users',
+      },
+      {
+        title: '夜間の急変が心配で不安が続いている',
+        description: '24時間365日の緊急往診体制で、夜間・休日の急変時もすぐに対応できます。在支診1として緊急時体制を整備しています。',
+        icon: 'tabler:clock-24',
+      },
+    ]}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Features2>
+
+  <!-- よくある質問 -->
+  <FAQs
+    id="faq"
+    tagline="FAQ"
+    title="よくあるご質問"
+    subtitle="小児科の訪問診療についてよく寄せられるご質問にお答えします。"
+    items={[
+      {
+        title: '子どもでも訪問診療は受けられますか？',
+        description: 'はい。かもめクリニックは小児科専門医が在籍し、医療的ケアが必要なお子さまを中心に小児訪問診療を行っています。人工呼吸器・経管栄養・気管切開・吸引など在宅で医療ケアが必要なお子さまをご自宅で診察します。大阪市全域に対応しています。',
+      },
+      {
+        title: '医療ケア児の訪問診療とはどのような診療ですか？',
+        description: '人工呼吸器・経管栄養・気管切開・吸引・酸素療法など、継続的な医療処置が必要なお子さまを対象に、小児科専門医が定期訪問します。状態評価・処方・機器管理のサポート・ご家族への介護指導まで一体的に支援し、多職種が連携してお子さまの在宅生活を支えます。',
+      },
+      {
+        title: 'NICUから退院後すぐに訪問診療を開始できますか？',
+        description: 'はい。NICU退院前からの事前相談・退院後の在宅移行支援の実績があります（グループ全体で約10件）。退院に向けた準備段階からご相談ください。病院の地域医療連携部・NICU担当者様からのご連絡もお待ちしています。地域医療連携部直通：06-4301-7883。',
+      },
+      {
+        title: '発達障害・成長の遅れも訪問診療で診てもらえますか？',
+        description: '定期訪問の中で体重・身長・発達の評価を継続的に行います。外来への通院が困難なお子さまにも対応できます。必要に応じて専門機関への紹介・連携も行います。精神科専門医も在籍しているため、発達障害に関連する精神科的サポートも提供できます。',
+      },
+      {
+        title: '夜間に急変した場合はどうすればよいですか？',
+        description: 'かもめクリニックは機能強化型在宅療養支援診療所（在支診1）として24時間365日の緊急往診に対応しています。医療ケア児は急変リスクが高いため、夜間・休日も担当医へ直接連絡できる体制を整えています。緊急時の連絡方法は事前に詳しくご説明します。',
+      },
+      {
+        title: 'ご家族のケア負担を減らすサポートはありますか？',
+        description: 'はい。医師の訪問診療に加え、訪問看護・リハビリ・栄養士など多職種と連携してご家族の介護負担を軽減します。医療機器管理の指導・福祉サービスの活用支援・ご家族のメンタルサポートも含めて対応します。ひとりで抱え込まず、まずはご相談ください。',
+      },
+    ]}
+  />
+
+  <!-- CTA -->
+  <CallToAction
+    actions={[
+      { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
+      { variant: 'line', text: 'LINEで無料相談（@512ysmzx）', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+    ]}
+  >
+    <Fragment slot="title">医療ケア児の訪問診療、まずはご相談ください</Fragment>
+    <Fragment slot="subtitle">
+      受付：平日 9:00〜17:00　｜　LINE（@512ysmzx）は24時間受付<br />
+      病院のNICU担当者・地域医療連携部の方からのご連絡もお待ちしています。<br class="hidden sm:inline" />
+      地域医療連携部 直通：<a href="tel:0643017883" class="underline font-bold">06-4301-7883</a>（平日 9:00〜17:00）
+    </Fragment>
+  </CallToAction>
+</Layout>

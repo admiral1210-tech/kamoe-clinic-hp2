@@ -1,0 +1,72 @@
+site:
+  name: かもめクリニック
+  site: 'https://kamome-clinic.net'
+  base: '/'
+  trailingSlash: false
+
+  googleSiteVerificationId: ''
+
+# Default SEO metadata
+metadata:
+  title:
+    default: かもめクリニック｜24時間対応 訪問診療 内科・精神科・小児科（大阪市）
+    template: '%s｜かもめクリニック'
+  description: 'かもめクリニックは大阪市を中心に展開する24時間365日対応の在宅療養支援診療所です。内科・精神科・小児科（医療ケア児対応）の訪問診療を行い、住み慣れた場所での療養生活をサポートします。'
+  robots:
+    index: true
+    follow: true
+  openGraph:
+    site_name: かもめクリニック
+    images:
+      - url: '~/assets/images/default.png'
+        width: 1200
+        height: 628
+    type: website
+  twitter:
+    handle: ''
+    site: ''
+    cardType: summary_large_image
+
+i18n:
+  language: ja
+  textDirection: ltr
+
+apps:
+  blog:
+    isEnabled: true
+    postsPerPage: 6
+
+    post:
+      isEnabled: true
+      permalink: '/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
+      robots:
+        index: true
+
+    list:
+      isEnabled: true
+      pathname: 'blog' # Blog main path, you can change this to "articles" (/articles)
+      robots:
+        index: true
+
+    category:
+      isEnabled: true
+      pathname: 'category' # Category main path /category/some-category, you can change this to "group" (/group/some-category)
+      robots:
+        index: true
+
+    tag:
+      isEnabled: true
+      pathname: 'tag' # Tag main path /tag/some-tag, you can change this to "topics" (/topics/some-category)
+      robots:
+        index: false
+
+    isRelatedPostsEnabled: true
+    relatedPostsCount: 4
+
+analytics:
+  vendors:
+    googleAnalytics:
+      id: null # or "G-XXXXXXXXXX"
+
+ui:
+  theme: 'light:only' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"

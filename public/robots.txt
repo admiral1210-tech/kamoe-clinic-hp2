@@ -1,0 +1,13 @@
+User-agent: *
+# テンプレートページ（英語デモコンテンツ）をクロール禁止
+Disallow: /homes/
+Disallow: /landing/
+Disallow: /services
+Disallow: /pricing
+Disallow: /contact
+# /about/kinoshita など実コンテンツを明示的に許可（Disallow /about より長いため優先）
+Allow: /about/
+# テンプレートの /about ページをクロール禁止
+Disallow: /about
+
+Sitemap: https://kamome-clinic.net/sitemap-index.xml

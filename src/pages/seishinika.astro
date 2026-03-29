@@ -1,0 +1,307 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Features from '~/components/widgets/Features.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import Content from '~/components/widgets/Content.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import { Icon } from 'astro-icon/components';
+
+const metadata = {
+  title: '精神科の訪問診療・オンライン診療｜大阪市｜かもめクリニック',
+  description:
+    '大阪市の精神科訪問診療。精神科専門医3名常勤（大阪市内唯一）。うつ病・統合失調症・認知症・引きこもり・双極性障害に対応。精神疾患は初診からオンライン診療可能。在支診1認定。',
+  ignoreTitleTemplate: true,
+  openGraph: {
+    type: 'website',
+    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+  },
+};
+
+// JSON-LD: BreadcrumbList
+const jsonLdBreadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
+    { '@type': 'ListItem', position: 2, name: '精神科の訪問診療・オンライン診療', item: 'https://kamome-clinic.net/seishinika' },
+  ],
+};
+
+// JSON-LD: FAQPage
+const jsonLdFAQ = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: '精神科の訪問診療は初診から受けられますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'はい。かもめクリニックでは精神疾患の方を初診からお受けしています。外出が困難な方・長期間通院を中断している方・ご家族が受診を勧めたい方など、幅広くご相談いただけます。2022年の法改正により精神疾患は初診からオンライン診療も可能です。まずはお電話（06-4301-7871）またはLINEでご相談ください。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '引きこもりの家族に精神科の訪問診療を頼めますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'はい、ご家族からのご相談も受け付けています。ご本人が外出を拒否している場合も、まずはご家族だけでご相談ください。状況を丁寧にお聞きした上で、訪問診療・オンライン診療・段階的なアプローチなど最適な方法を一緒に考えます。長期引きこもりの方へのご家族支援の経験も豊富です。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '認知症の訪問診療は精神科で受けられますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'はい。認知症（アルツハイマー型・レビー小体型・血管性認知症など）は精神科・内科の両面から診療します。BPSD（徘徊・暴言・妄想・夜間不眠など）への薬物調整も精神科専門医が対応します。認知症の進行を抑えながら、住み慣れたご自宅・施設での生活継続をサポートします。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'オンライン診療とはどういうものですか？精神科でも使えますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '2022年の法改正により、精神疾患は初診からオンライン診療が可能になりました。スマートフォンやパソコンのビデオ通話で医師の診察を受けられます。外出困難・交通手段がない・対面が不安という方に適しています。処方箋は薬局への直送も可能です。訪問診療への移行もいつでも対応できます。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '精神科の薬も処方してもらえますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'はい。向精神薬・睡眠薬・抗認知症薬・抗不安薬・気分安定薬など必要な処方を行います。定期訪問のたびに状態を丁寧に確認し、薬の種類・用量を適切に調整します。複数の薬を服用中の方の薬の整理・減薬についても精神科専門医がご相談に応じます。',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: '訪問診療の費用はどのくらいかかりますか？',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '健康保険・介護保険が適用され、月2〜3回の定期訪問で3割負担の方の目安は月額1万円前後です。75歳以上の後期高齢者は1割または2割負担でさらに軽減されます。生活保護の方は自己負担ゼロで受けられます。詳しくは費用・保険のページ（/cost）またはお電話（06-4301-7871）でご確認ください。',
+      },
+    },
+  ],
+};
+
+// JSON-LD: MedicalCondition（対応疾患）
+const jsonLdConditions = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: 'うつ病',
+    alternateName: '抑うつ状態・大うつ病性障害',
+    relevantSpecialty: 'https://schema.org/Psychiatry',
+    recognizingAuthority: { '@type': 'Organization', name: '日本精神神経学会' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '統合失調症',
+    relevantSpecialty: 'https://schema.org/Psychiatry',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '認知症',
+    alternateName: 'アルツハイマー型認知症・レビー小体型認知症・血管性認知症',
+    relevantSpecialty: 'https://schema.org/Psychiatry',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '双極性障害',
+    alternateName: '躁うつ病',
+    relevantSpecialty: 'https://schema.org/Psychiatry',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '発達障害',
+    alternateName: 'ADHD・ASD・自閉スペクトラム症・注意欠如多動症',
+    relevantSpecialty: 'https://schema.org/Psychiatry',
+  },
+];
+
+// JSON-LD: Speakable
+const jsonLdSpeakable = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': 'https://kamome-clinic.net/seishinika',
+  name: '精神科の訪問診療・オンライン診療｜大阪市｜かもめクリニック',
+  speakable: {
+    '@type': 'SpeakableSpecification',
+    cssSelector: ['h1', 'h2', '.hero-subtitle'],
+  },
+  url: 'https://kamome-clinic.net/seishinika',
+};
+---
+
+<Layout metadata={metadata}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdFAQ)} />
+    {jsonLdConditions.map(c => (
+      <script type="application/ld+json" set:html={JSON.stringify(c)} />
+    ))}
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdSpeakable)} />
+  </Fragment>
+
+  <!-- Hero -->
+  <Hero
+    tagline="精神科 訪問診療・オンライン診療｜大阪市"
+    actions={[
+      { variant: 'primary', text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
+      { variant: 'line', text: 'LINEで無料相談', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+    ]}
+    image={{
+      src: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=2070&q=80',
+      alt: '精神科訪問診療のイメージ',
+    }}
+  >
+    <Fragment slot="title">
+      外に出られなくても<br />
+      <span class="text-accent dark:text-white highlight">精神科</span>の<br />
+      診療を受けられます
+    </Fragment>
+    <Fragment slot="subtitle">
+      <span class="sm:hidden">
+        <strong>精神科専門医3名が常勤</strong>する、大阪市内唯一の体制です。<br />
+        外出困難な方・引きこもりの方・認知症の方のご自宅や施設へ専門医が伺います。<br />
+        <strong>初診からオンライン診療</strong>も可能です。
+      </span>
+      <span class="hidden sm:inline">
+        <strong>精神科専門医3名が常勤</strong>する、大阪市内唯一の訪問診療クリニックです。<br />
+        通院困難な方・引きこもりの方・認知症の方のご自宅や施設へ、専門医が直接伺います。<br />
+        <strong>精神疾患は初診からオンライン診療も可能</strong>です。
+      </span>
+    </Fragment>
+  </Hero>
+
+  <!-- 大阪市内唯一の強み -->
+  <section class="py-12 bg-purple-50 dark:bg-slate-800 border-y border-purple-100">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      <div class="inline-flex items-center gap-3 bg-white dark:bg-slate-900 rounded-2xl px-8 py-5 shadow-sm border border-purple-100 dark:border-purple-900">
+        <Icon name="tabler:certificate" class="w-10 h-10 text-purple-600 shrink-0" />
+        <div class="text-left">
+          <p class="font-black text-2xl text-gray-900 dark:text-white">精神科専門医3名常勤</p>
+          <p class="text-purple-700 dark:text-purple-400 font-bold">大阪市内の訪問診療クリニックとして唯一の体制</p>
+          <p class="text-sm text-gray-500 mt-1">精神保健指定医・医学博士・日本神経精神学会専門医</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 対応する疾患 -->
+  <Features
+    id="diseases"
+    tagline="対応疾患"
+    title="こんな疾患・状態に対応しています"
+    subtitle="専門医が継続的に診療。処方・調整・ご家族への指導も行います。"
+    items={[
+      { title: 'うつ病・抑うつ状態', description: '気力がわかない・外出できない・家族の支えで何とか生活している方に訪問診療は適しています。薬物療法と生活指導を継続的に行います。', icon: 'tabler:mood-sad' },
+      { title: '統合失調症', description: '長期にわたる通院が必要な方も、ご自宅で定期的な診療・処方・状態確認が可能です。再発予防と服薬管理をサポートします。', icon: 'tabler:brain' },
+      { title: '双極性障害', description: '薬で気分の波を安定させながら、在宅生活を継続できるようサポートします。躁状態・うつ状態の変動にも迅速に対応します。', icon: 'tabler:activity' },
+      { title: '認知症（BPSDを含む）', description: 'アルツハイマー型・レビー小体型・血管性認知症など。徘徊・暴言・妄想などBPSDへの薬物調整も精神科専門医が担当します。', icon: 'tabler:brain' },
+      { title: 'アルコール・薬物依存症', description: '依存症の継続治療・断酒支援を在宅で行います。専門医が丁寧に関わり、ご家族も含めてサポートします。', icon: 'tabler:droplet-off' },
+      { title: '引きこもり・社会不安', description: '外出への強い不安や恐怖がある方も、オンライン診療や訪問診療からスタートできます。ご家族のみのご相談も可能です。', icon: 'tabler:home' },
+      { title: 'PTSD・解離性障害', description: 'トラウマ体験による心の傷に、専門医が安全な環境（ご自宅）で継続的に関わります。焦らずゆっくり取り組めます。', icon: 'tabler:heart-handshake' },
+      { title: '発達障害（ADHD・ASD）', description: '診断・薬物療法・日常生活の工夫まで対応。成人の発達障害にも対応しており、職場・生活上の困り事を一緒に整理します。', icon: 'tabler:puzzle' },
+    ]}
+  />
+
+  <!-- オンライン診療 -->
+  <Content
+    id="online"
+    tagline="オンライン診療"
+    title="精神疾患は初診からオンライン診療が可能です"
+    isReversed
+    items={[
+      { title: '2022年法改正により初診から可能に', description: '従来は再診のみでしたが、精神疾患は初診からオンライン診療が認められています。まずは気軽に始めていただけます。' },
+      { title: 'スマホ・PCで受診できる', description: 'ビデオ通話で医師と対面診療。通院・外出不要で診察・処方が受けられます。処方箋は薬局への直送も可能です。' },
+      { title: 'こんな方に向いています', description: '外出恐怖のある方・交通手段がない方・対面が不安な方・遠方の親御さんを心配されている方などに適しています。' },
+      { title: '訪問診療への移行も可能', description: 'まずオンラインで診療を開始し、状況に応じて訪問診療に切り替えることもできます。柔軟に対応します。' },
+    ]}
+    image={{
+      src: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80',
+      alt: 'オンライン診療のイメージ',
+    }}
+  >
+    <Fragment slot="content">
+      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
+        自宅にいながら精神科医に相談できます
+      </h3>
+    </Fragment>
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-purple-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Content>
+
+  <!-- 対象者 -->
+  <Features2
+    id="target"
+    tagline="こんな方へ"
+    title="精神科の訪問診療をご検討ください"
+    items={[
+      { title: '外来受診をやめてしまった方', description: '通院が途切れ、薬も切れかけている方の治療再開を一緒に始めます。中断していた期間は問いません。', icon: 'tabler:refresh' },
+      { title: '認知症で外来受診が困難な方', description: '興奮・混乱・拒否が強くなり外来通院が難しくなった方をご自宅で診察します。施設入居中の方も対応します。', icon: 'tabler:user-heart' },
+      { title: '引きこもりのご家族を心配している方', description: 'ご本人が受診を拒否している場合も、まずご家族だけでご相談ください。状況に応じてアプローチします。', icon: 'tabler:users' },
+      { title: '精神科的問題を抱えた高齢者', description: '老年期うつ・認知症BPSD・夜間の問題行動など、施設入居中の方を含めて精神科専門医が対応します。', icon: 'tabler:building' },
+      { title: '精神科病院から退院し在宅療養中の方', description: '退院後に地域での生活を続けるためのサポートを、訪問診療で継続します。', icon: 'tabler:home' },
+      { title: '内科疾患と精神科治療が両方必要な方', description: '内科・精神科を同時に抱える方も、かもめクリニックなら1つのクリニックで一体的に対応できます。', icon: 'tabler:stethoscope' },
+    ]}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Features2>
+
+  <!-- FAQ -->
+  <FAQs
+    id="faq"
+    title="精神科訪問診療 よくある質問"
+    tagline="FAQ"
+    classes={{ container: 'max-w-6xl' }}
+    items={[
+      {
+        title: '精神科の訪問診療は初診から受けられますか？',
+        description: 'はい。初診からお受けしています。外出が困難な方・長期間通院を中断している方・ご家族が受診を勧めたい方など、幅広くご相談いただけます。2022年の法改正により精神疾患は初診からオンライン診療も可能になりました。お気軽にお電話（06-4301-7871）またはLINEでご相談ください。',
+      },
+      {
+        title: '引きこもりの家族に精神科の訪問診療を頼めますか？',
+        description: 'はい、ご家族からのご相談も受け付けています。ご本人が外出を拒否している場合も、まずはご家族だけでご相談ください。状況を丁寧にお聞きした上で、訪問診療・オンライン診療・段階的なアプローチなど最適な方法を一緒に考えます。',
+      },
+      {
+        title: '認知症の訪問診療は精神科で受けられますか？',
+        description: 'はい。認知症（アルツハイマー型・レビー小体型・血管性認知症など）は精神科・内科の両面から診療します。BPSD（徘徊・暴言・妄想・夜間不眠など）への薬物調整も精神科専門医が対応します。住み慣れたご自宅・施設での生活継続を継続的にサポートします。',
+      },
+      {
+        title: 'オンライン診療はどうやって受けますか？',
+        description: 'スマートフォンやパソコンのビデオ通話で医師の診察を受けます。予約後、指定のURLまたはアプリで接続するだけです。処方箋は薬局への直送も可能です。詳細はお電話（06-4301-7871）またはLINEでご案内します。',
+      },
+      {
+        title: '精神科の薬も処方してもらえますか？',
+        description: 'はい。向精神薬・睡眠薬・抗認知症薬・抗不安薬・気分安定薬など必要な処方を行います。定期訪問のたびに状態を丁寧に確認し、薬の種類・用量を適切に調整します。複数の薬を服用中の方の整理・減薬についてもご相談いただけます。',
+      },
+      {
+        title: '訪問診療の費用はどのくらいかかりますか？',
+        description: '健康保険・介護保険が適用され、月2〜3回の定期訪問で3割負担の方の目安は月額1万円前後です。75歳以上の後期高齢者は1割または2割負担になります。生活保護の方は自己負担ゼロです。詳しくは「費用・保険について」ページまたはお電話（06-4301-7871）でご確認ください。',
+      },
+    ]}
+  />
+
+  <!-- CTA -->
+  <CallToAction
+    actions={[
+      { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
+      { variant: 'line', text: 'LINEで無料相談（@512ysmzx）', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+    ]}
+  >
+    <Fragment slot="title">精神科の訪問診療・オンライン診療のご相談</Fragment>
+    <Fragment slot="subtitle">
+      受付：平日 9:00〜17:00　｜　LINE（@512ysmzx）は24時間受付<br />
+      ご家族からのご相談も歓迎しています。まずはお気軽にどうぞ。
+    </Fragment>
+  </CallToAction>
+</Layout>

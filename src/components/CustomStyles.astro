@@ -1,0 +1,199 @@
+---
+import '@fontsource-variable/inter';
+---
+
+<!-- Noto Sans JP (日本語フォント) – preload でLCP改善 -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<!-- 医師写真ドメインへのpreconnect（LCP改善） -->
+<link rel="preconnect" href="https://www.kamome-clinic.net" />
+<link rel="dns-prefetch" href="https://www.kamome-clinic.net" />
+<link
+  rel="preload" as="style"
+  href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+  rel="stylesheet"
+/>
+
+<style is:inline>
+  :root {
+    --aw-font-sans: 'Noto Sans JP', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+    --aw-font-serif: 'Noto Sans JP', ui-serif, serif;
+    --aw-font-heading: 'Noto Sans JP', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+    /* ───── かもめクリニック ロゴブルー ───── */
+    --aw-color-primary: rgb(24 80 163);
+    --aw-color-primary-tint: rgb(24 80 163 / 6%);
+    --aw-color-secondary: rgb(10 40 100);
+    --aw-color-accent: rgb(231 111 81);
+
+    /* ───── ブランドカラー（固定値） ───── */
+    --aw-color-line: #06C755;
+    --aw-color-line-hover: #05a847;
+    --aw-color-bg-header-dark: rgb(3 6 33 / 90%);
+
+    /* ───── テキスト ───── */
+    --aw-color-text-heading: rgb(10 25 55);
+    --aw-color-text-default: rgb(25 45 75);
+    --aw-color-text-muted: rgb(70 90 130);
+
+    /* ───── 背景（ウォームベージュ） ───── */
+    --aw-color-bg-page: rgb(253 248 241);
+    --aw-color-bg-page-dark: rgb(15 23 42);
+
+    ::selection {
+      background-color: rgb(24 80 163 / 15%);
+      color: rgb(10 25 55);
+    }
+  }
+
+  .dark {
+    --aw-font-sans: 'Noto Sans JP', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+    --aw-font-serif: 'Noto Sans JP', ui-serif, serif;
+    --aw-font-heading: 'Noto Sans JP', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+    --aw-color-primary: rgb(100 160 230);
+    --aw-color-primary-tint: rgb(100 160 230 / 10%);
+    --aw-color-secondary: rgb(140 190 255);
+    --aw-color-accent: rgb(251 146 60);
+
+    --aw-color-text-heading: rgb(241 245 249);
+    --aw-color-text-default: rgb(220 230 245);
+    --aw-color-text-muted: rgb(165 180 210);
+    --aw-color-bg-page: rgb(15 23 42);
+
+    ::selection {
+      background-color: rgb(100 160 230 / 30%);
+      color: rgb(241 245 249);
+    }
+  }
+
+  /* ───── ベースフォントサイズ ───── */
+  html { font-size: 20px; }
+  @media (max-width: 1024px) { html { font-size: 19px; } }
+  @media (max-width: 768px)  { html { font-size: 16px; } }
+  @media (max-width: 480px)  { html { font-size: 15px; } }
+
+  /* ───── 日本語フォント最適化 ───── */
+  body {
+    font-family: var(--aw-font-sans);
+    font-feature-settings: 'palt' 1;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    line-height: 2.0;
+    color: var(--aw-color-text-default);
+    background-color: var(--aw-color-bg-page);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: var(--aw-color-text-heading);
+  }
+
+  p {
+    line-height: 2.05;
+    letter-spacing: 0.02em;
+    font-size: 1rem;
+  }
+
+  /* ───── 浮動CTAボタン ───── */
+  @keyframes floatingCtaIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .floating-cta {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1rem;
+    z-index: 9998;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    /* ページ読み込み直後から即座表示 */
+    animation: floatingCtaIn 0.35s ease forwards;
+  }
+
+  /* View Transitions 対応：再アニメーション防止 */
+  .floating-cta.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .floating-cta a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.4rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 4px 20px rgb(0 0 0 / 22%);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none !important;
+    white-space: nowrap;
+  }
+
+  .floating-cta a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgb(0 0 0 / 30%);
+  }
+
+  .floating-cta-tel {
+    background-color: var(--aw-color-primary);
+    color: white !important;
+  }
+
+  .floating-cta-line {
+    background-color: var(--aw-color-line);
+    color: white !important;
+    padding: 0.7rem 1.2rem !important;
+    font-size: 0.95rem !important;
+  }
+
+  .floating-cta-mail {
+    background-color: white;
+    color: var(--aw-color-primary) !important;
+    border: 2px solid var(--aw-color-primary);
+    padding: 0.6rem 1rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  @media (max-width: 640px) {
+    /* モバイル：右下の縦積みをやめ、画面下部の固定バーに切り替え */
+    .floating-cta {
+      bottom: 0;
+      right: 0;
+      left: 0;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 0;
+      border-radius: 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.12);
+      box-shadow: 0 -4px 20px rgb(0 0 0 / 18%);
+      background: white;
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+    .floating-cta a {
+      flex: 1;
+      justify-content: center;
+      border-radius: 0;
+      padding: 1rem 0.5rem !important;
+      font-size: 0.95rem !important;
+      box-shadow: none;
+    }
+    .floating-cta a:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    /* フォームボタンはモバイル非表示 */
+    .floating-cta-mail { display: none !important; }
+    /* ボトムバー分のコンテンツ下余白（コンテンツが隠れない） */
+    body { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+  }
+</style>

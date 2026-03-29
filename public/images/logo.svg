@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" fill="none">
+  <!-- 背景なし・透過 -->
+  <!-- かもめアイコン（シンプルな鳥シルエット） -->
+  <path d="M20 30 Q28 18 36 26 Q44 18 52 30" stroke="#0ea5e9" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M24 32 Q36 42 48 32" stroke="#0ea5e9" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- テキスト -->
+  <text x="62" y="24" font-family="'Noto Sans JP', sans-serif" font-size="16" font-weight="700" fill="#1e293b">かもめクリニック</text>
+  <text x="62" y="44" font-family="'Noto Sans JP', sans-serif" font-size="10" font-weight="400" fill="#64748b">訪問診療専門｜大阪市</text>
+</svg>

@@ -103,6 +103,8 @@ export interface Widget {
   isDark?: boolean;
   bg?: string;
   classes?: Record<string, string | Record<string, string>>;
+  /** 付与する Tailwind scroll-margin クラス（例: scroll-mt-32）。未指定時は WidgetWrapper 既定。 */
+  scrollMarginClass?: string;
 }
 
 export interface Headline {

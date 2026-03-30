@@ -1,10 +1,10 @@
-import { getPermalink, getAsset } from './utils/permalinks';
+import { getPermalink } from './utils/permalinks';
 
 export const headerData = {
   links: [
     {
       text: '訪問診療について',
-      href: getPermalink('/#about'),
+      href: getPermalink('/houmon-shinryo'),
     },
     {
       text: '診療内容',
@@ -23,7 +23,7 @@ export const headerData = {
     {
       text: '診療エリア',
       links: [
-        { text: '対応エリア一覧', href: getPermalink('/#access') },
+        { text: '大阪市の対応エリア', href: getPermalink('/area-osaka') },
         { text: '港区', href: getPermalink('/area/minato-ku') },
         { text: '住之江区', href: getPermalink('/area/suminoe-ku') },
         { text: '西淀川区', href: getPermalink('/area/nishiyodogawa-ku') },
@@ -34,8 +34,9 @@ export const headerData = {
     {
       text: 'クリニック案内',
       links: [
-        { text: '診療時間', href: getPermalink('/#hours') },
-        { text: 'アクセス・クリニック情報', href: getPermalink('/#access') },
+        { text: 'よくあるご質問', href: getPermalink('/faq') },
+        { text: '診療時間', href: getPermalink('/about#hours') },
+        { text: 'アクセス・クリニック情報', href: getPermalink('/about#access') },
         { text: '医師紹介', href: getPermalink('/about#doctors') },
         { text: '院長プロフィール', href: getPermalink('/about/kinoshita') },
         {
@@ -61,7 +62,7 @@ export const footerData = {
     {
       title: '診療案内',
       links: [
-        { text: '訪問診療について', href: getPermalink('/#about') },
+        { text: '訪問診療とは・流れ', href: getPermalink('/houmon-shinryo') },
         { text: '診療内容（内科・精神科・小児科）', href: getPermalink('/#departments') },
         { text: '内科の訪問診療', href: getPermalink('/naika') },
         { text: '精神科の訪問診療・オンライン診療', href: getPermalink('/seishinika') },
@@ -70,13 +71,14 @@ export const footerData = {
         { text: '費用・保険について', href: getPermalink('/cost') },
         { text: '医療費助成・診断書', href: getPermalink('/joseikin') },
         { text: '在支診1（最上位認定）とは', href: getPermalink('/zaishin1') },
-        { text: '診療時間', href: getPermalink('/#hours') },
-        { text: 'よくあるご質問', href: getPermalink('/#faq') },
+        { text: '診療時間', href: getPermalink('/about#hours') },
+        { text: 'よくあるご質問', href: getPermalink('/faq') },
       ],
     },
     {
       title: '診療エリア',
       links: [
+        { text: '大阪市の対応エリア', href: getPermalink('/area-osaka') },
         { text: '港区', href: getPermalink('/area/minato-ku') },
         { text: '住之江区', href: getPermalink('/area/suminoe-ku') },
         { text: '西淀川区', href: getPermalink('/area/nishiyodogawa-ku') },
@@ -87,7 +89,7 @@ export const footerData = {
     {
       title: 'クリニック情報',
       links: [
-        { text: 'クリニック案内・アクセス', href: getPermalink('/#access') },
+        { text: 'クリニック案内・アクセス', href: getPermalink('/about#access') },
         { text: '院長プロフィール', href: getPermalink('/about/kinoshita') },
         { text: '患者さまの声・体験談', href: getPermalink('/testimonials') },
         { text: '第5院サイト', href: 'https://kamome-clinic5.net/' },
@@ -121,6 +123,6 @@ export const footerData = {
     { ariaLabel: 'LINE', icon: 'tabler:brand-line', href: 'https://line.me/R/ti/p/%40512ysmzx' },
   ],
   footNote: `
-    〒552-0004 大阪市港区夕凪2丁目16-9 icrossAMポートビル 4F-B　TEL：<a class="text-blue-600 underline dark:text-muted" href="tel:0643017871">06-4301-7871</a>
+    〒552-0004 大阪市港区夕凪2丁目16-9 icrossAMポートビル 4F-B TEL：<a class="text-blue-600 underline dark:text-muted" href="tel:0643017871">06-4301-7871</a>
   `,
 };

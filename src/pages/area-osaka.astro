@@ -1,0 +1,131 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import { Icon } from 'astro-icon/components';
+
+const metadata = {
+  title: '訪問診療の対応エリア（大阪市）｜かもめクリニック',
+  description:
+    '大阪市港区・西区・住之江区・西淀川区・住吉区・東住吉区ほか、訪問診療・緊急往診の対応エリアをご案内。5院体制で大阪市内を広くカバーします。地域医療連携部06-4301-7883。',
+  ignoreTitleTemplate: true,
+  openGraph: {
+    type: 'website',
+    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+  },
+};
+
+/** 区ページがあるものはスラッグへ。それ以外は相談電話へ誘導（静的ページ未作成の区） */
+const wardEntries: { name: string; slug: string | null }[] = [
+  { name: '港区', slug: 'minato-ku' },
+  { name: '西区', slug: null },
+  { name: '大正区', slug: 'taisho-ku' },
+  { name: '浪速区', slug: 'naniwa-ku' },
+  { name: '中央区', slug: null },
+  { name: '西淀川区', slug: 'nishiyodogawa-ku' },
+  { name: '此花区', slug: null },
+  { name: '淀川区', slug: null },
+  { name: '住之江区', slug: 'suminoe-ku' },
+  { name: '住吉区', slug: 'sumiyoshi-ku' },
+  { name: '東住吉区', slug: 'higashisumiyoshi-ku' },
+  { name: '西成区', slug: null },
+  { name: '阿倍野区', slug: null },
+];
+
+const jsonLdBreadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
+    { '@type': 'ListItem', position: 2, name: '大阪市の対応エリア', item: 'https://kamome-clinic.net/area-osaka' },
+  ],
+};
+
+const jsonLdWebPage = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalWebPage',
+  '@id': 'https://kamome-clinic.net/area-osaka',
+  name: '訪問診療の対応エリア（大阪市）｜かもめクリニック',
+  url: 'https://kamome-clinic.net/area-osaka',
+  description:
+    'かもめクリニックは大阪市内の港区・西区・大正区・浪速区・中央区・西淀川区・此花区・淀川区・住之江区・住吉区・東住吉区・西成区・阿倍野区などに訪問診療で対応しています。市内5院体制で広域をカバーします。',
+  isPartOf: { '@type': 'WebSite', '@id': 'https://kamome-clinic.net/#website' },
+  about: { '@type': 'MedicalClinic', '@id': 'https://kamome-clinic.net/#clinic', name: 'かもめクリニック' },
+};
+---
+
+<Layout metadata={metadata}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdWebPage)} />
+  </Fragment>
+
+  <section class="py-10 md:py-14 bg-blue-50 dark:bg-slate-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-8">
+        <p class="text-sm font-semibold text-primary tracking-widest mb-1">訪問診療エリア</p>
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">大阪市の対応エリア</h1>
+        <p class="text-center text-sm text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mt-4 leading-relaxed">
+          大阪市の港区・西区・大正区・浪速区・中央区・西淀川区・此花区・淀川区・住之江区・住吉区・東住吉区・西成区・阿倍野区などを中心に、<strong
+            >5院体制</strong
+          >で訪問診療・緊急往診に対応しています。
+        </p>
+      </div>
+
+      <div class="flex flex-wrap gap-2 justify-center mb-8">
+        {
+          wardEntries.map(({ name, slug }) =>
+            slug ? (
+              <a
+                href={`/area/${slug}`}
+                class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-slate-700 text-gray-800 dark:text-gray-200 hover:border-primary px-3 py-2 rounded-full text-sm font-medium transition-colors inline-flex items-center gap-1"
+              >
+                大阪市 {name}
+                <Icon name="tabler:arrow-right" class="w-3.5 h-3.5 text-primary" />
+              </a>
+            ) : (
+              <span class="bg-white/80 dark:bg-slate-900/80 border border-dashed border-blue-200 dark:border-slate-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-full text-sm font-medium inline-flex items-center gap-1">
+                大阪市 {name}
+                <span class="text-xs text-gray-500 dark:text-gray-500">（詳細はお電話）</span>
+              </span>
+            )
+          )
+        }
+      </div>
+
+      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-blue-100 dark:border-slate-700 p-6 text-center">
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          上記以外の区・エリア外のご相談も、まずはお気軽にどうぞ。担当拠点の確認は地域医療連携部が一括でお受けします。
+        </p>
+        <a
+          href="tel:0643017883"
+          class="inline-flex items-center gap-2 bg-primary text-white font-bold px-6 py-3 rounded-full hover:opacity-90 text-sm"
+        >
+          <Icon name="tabler:phone" class="w-4 h-4" /> エリア・連携のご相談 06-4301-7883
+        </a>
+        <p class="mt-4">
+          <a href="/houmon-shinryo" class="text-primary text-sm font-bold hover:underline">訪問診療とは・ご利用の流れ</a
+          >
+          <span class="text-gray-300 dark:text-gray-600 mx-2">|</span>
+          <a href="/about#access" class="text-primary text-sm font-bold hover:underline">各院のアクセス</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <CallToAction
+    actions={[
+      { variant: 'primary', text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
+      {
+        variant: 'line',
+        text: 'LINEで無料相談',
+        href: 'https://line.me/R/ti/p/%40512ysmzx',
+        icon: 'tabler:brand-line',
+      },
+    ]}
+  >
+    <Fragment slot="title">ご自宅・施設のエリアが心配な方へ</Fragment>
+    <Fragment slot="subtitle">
+      患者さま・ご家族からのお問い合わせは <strong>06-4301-7871</strong>（受付平日9:00〜17:00）。
+    </Fragment>
+  </CallToAction>
+</Layout>

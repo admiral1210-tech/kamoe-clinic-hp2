@@ -1,5 +1,4 @@
 ---
-import Features2 from '~/components/widgets/Features2.astro';
 import Stats from '~/components/widgets/Stats.astro';
 import Steps2 from '~/components/widgets/Steps2.astro';
 import Hero from '~/components/widgets/Hero.astro';
@@ -187,12 +186,30 @@ const doctors = [
 ];
 
 const branches = [
-  { name: 'かもめクリニック（本院）', area: '大阪市港区', address: '夕凪2丁目16-9 icrossAMポートビル4F-B', tel: '06-4301-7871', href: null },
+  {
+    name: 'かもめクリニック（本院）',
+    area: '大阪市港区',
+    address: '夕凪2丁目16-9 icrossAMポートビル4F-B',
+    tel: '06-4301-7871',
+    href: null,
+  },
   { name: 'かもめクリニック第2', area: '大阪市港区', address: '夕凪2丁目17-14', tel: '06-6556-9571', href: null },
   { name: 'かもめクリニック第3', area: '大阪市東住吉区', address: '駒川3丁目29-14', tel: '06-6115-6045', href: null },
   { name: 'かもめクリニック第4', area: '大阪市西淀川区', address: '柏里1丁目16-15', tel: '06-7506-9565', href: null },
-  { name: 'かもめクリニック第5', area: '大阪市住之江区', address: '北加賀屋2-12-6', tel: '06-6115-7018', href: 'https://kamome-clinic5.net/' },
-  { name: 'かもめクリニック第8', area: '大阪市住吉区', address: '千躰2-2-39 ホリビル3階', tel: '06-6629-8852', href: 'https://kamome-clinic7.net/' },
+  {
+    name: 'かもめクリニック第5',
+    area: '大阪市住之江区',
+    address: '北加賀屋2-12-6',
+    tel: '06-6115-7018',
+    href: 'https://kamome-clinic5.net/',
+  },
+  {
+    name: 'かもめクリニック第8',
+    area: '大阪市住吉区',
+    address: '千躰2-2-39 ホリビル3階',
+    tel: '06-6629-8852',
+    href: 'https://kamome-clinic7.net/',
+  },
 ];
 ---
 
@@ -239,9 +256,13 @@ const branches = [
         <p class="text-sm font-semibold text-primary tracking-widest mb-1">私たちの理念</p>
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">クリニックの理念</h2>
       </div>
-      <div class="bg-blue-50 dark:bg-slate-800 rounded-2xl p-8 md:p-10 mb-8 border border-blue-100 dark:border-slate-700">
+      <div
+        class="bg-blue-50 dark:bg-slate-800 rounded-2xl p-8 md:p-10 mb-8 border border-blue-100 dark:border-slate-700"
+      >
         <p class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white leading-relaxed text-center mb-4">
-          「住み慣れた場所で、<br class="hidden sm:inline" />最期まで自分らしく生きる」<br class="hidden sm:inline" />を支える医療
+          「住み慣れた場所で、<br class="hidden sm:inline" />最期まで自分らしく生きる」<br
+            class="hidden sm:inline"
+          />を支える医療
         </p>
         <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-center">
           通院が困難な患者さまとご家族が、<br class="hidden sm:inline" />
@@ -251,29 +272,199 @@ const branches = [
       </div>
 
       <div class="grid sm:grid-cols-3 gap-5">
-        {[
-          {
-            icon: 'tabler:clock-24',
-            title: '24時間365日の安心',
-            body: '厚生労働省が定める在宅医療最高水準クリニックとして、夜間・休日も緊急往診に対応。「いざというとき」の不安を取り除きます。',
-          },
-          {
-            icon: 'tabler:users',
-            title: '内科・精神科・小児科の連携',
-            body: '複合的な疾患を持つ患者さまも、1つのクリニックで一体的に対応できます。専門医チームが連携して診療にあたります。',
-          },
-          {
-            icon: 'tabler:map-pin',
-            title: '大阪市内5拠点の広域対応',
-            body: '港区・西淀川区・住之江区ほか市内広域に5院体制。担当エリアのご確認は地域医療連携部が一括対応します。',
-          },
-        ].map(({ icon, title, body }) => (
-          <div class="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-6 flex flex-col gap-3">
-            <Icon name={icon} class="w-8 h-8 text-primary" />
-            <p class="font-bold text-gray-900 dark:text-white">{title}</p>
-            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{body}</p>
+        {
+          [
+            {
+              icon: 'tabler:clock-24',
+              title: '24時間365日の安心',
+              body: '厚生労働省が定める在宅医療最高水準クリニックとして、夜間・休日も緊急往診に対応。「いざというとき」の不安を取り除きます。',
+            },
+            {
+              icon: 'tabler:users',
+              title: '内科・精神科・小児科の連携',
+              body: '複合的な疾患を持つ患者さまも、1つのクリニックで一体的に対応できます。専門医チームが連携して診療にあたります。',
+            },
+            {
+              icon: 'tabler:map-pin',
+              title: '大阪市内5拠点の広域対応',
+              body: '港区・西淀川区・住之江区ほか市内広域に5院体制。担当エリアのご確認は地域医療連携部が一括対応します。',
+            },
+          ].map(({ icon, title, body }) => (
+            <div class="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-6 flex flex-col gap-3">
+              <Icon name={icon} class="w-8 h-8 text-primary" />
+              <p class="font-bold text-gray-900 dark:text-white">{title}</p>
+              <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ご利用対象（トップからの深いリンク用） ===== -->
+  <section id="targets" class="py-16 bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-slate-800">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <p class="text-sm font-semibold text-primary tracking-widest mb-1">ご利用対象</p>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">こんな方がご利用いただけます</h2>
+        <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
+          上記以外でも、通院が困難であれば、どなたでもご利用いただけます。
+        </p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {
+          [
+            {
+              title: '通院困難な高齢者・障がいのある方',
+              body: '足腰が弱く通院が難しくなった方、寝たきりや車いすの方にも対応します。',
+              icon: 'tabler:wheelchair',
+            },
+            {
+              title: '外出困難な精神疾患の方',
+              body: 'うつ病・統合失調症・認知症など、精神科専門医がご自宅へ直接伺います。',
+              icon: 'tabler:home-shield',
+            },
+            {
+              title: '医療ケアが必要なお子さま',
+              body: '人工呼吸器・経管栄養など、医療的ケアが必要なお子さまのご自宅へ小児科専門医が訪問します。',
+              icon: 'tabler:baby-carriage',
+            },
+            {
+              title: '退院後・施設入居中の方',
+              body: '在宅療養中の方、老人ホーム・グループホームに入居中の方にも対応します。',
+              icon: 'tabler:bed',
+            },
+          ].map(({ title, body, icon }) => (
+            <div class="bg-blue-50 dark:bg-slate-800 rounded-xl border border-blue-100 dark:border-slate-700 p-5 flex gap-3">
+              <Icon name={icon} class="w-8 h-8 text-primary shrink-0 mt-0.5" />
+              <div>
+                <p class="font-bold text-gray-900 dark:text-white mb-1">{title}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{body}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <p class="text-center mt-8">
+        <a
+          href="/houmon-shinryo#targets"
+          class="text-primary text-sm font-bold hover:underline inline-flex items-center gap-1"
+        >
+          訪問診療の説明・流れとあわせて見る <Icon name="tabler:arrow-right" class="w-4 h-4" />
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== 診療時間（トップからの深いリンク用） ===== -->
+  <section id="hours" class="py-16 bg-blue-50 dark:bg-slate-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <p class="text-sm font-semibold text-primary tracking-widest mb-1">診療時間・休診日</p>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">診療時間</h2>
+        <p class="mt-4 text-sm text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
+          受付は月曜から金曜の9:00〜17:00です。土曜・日曜・祝日は休診ですが、緊急往診は365日24時間対応しています。
+        </p>
+      </div>
+      <div class="flex flex-col lg:flex-row gap-8 items-start">
+        <div class="w-full lg:w-2/3">
+          <div class="sm:hidden flex flex-col gap-3">
+            <div
+              class="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden"
+            >
+              <div class="bg-primary text-white font-bold px-4 py-2 text-sm">受付時間</div>
+              <div class="divide-y divide-gray-100 dark:divide-slate-700">
+                <div class="flex items-center justify-between px-4 py-3">
+                  <span class="text-gray-700 dark:text-gray-300 font-medium">月〜金</span>
+                  <span class="flex items-center gap-2">
+                    <span class="text-sm text-gray-500">9:00〜17:00</span>
+                    <span class="text-primary font-black text-xl">●</span>
+                  </span>
+                </div>
+                <div class="flex items-center justify-between px-4 py-3">
+                  <span class="text-gray-700 dark:text-gray-300 font-medium">土・日・祝</span>
+                  <span class="text-gray-400 text-xl font-bold">✕</span>
+                </div>
+              </div>
+            </div>
+            <div
+              class="bg-emerald-50 dark:bg-slate-900 rounded-xl border border-emerald-200 dark:border-slate-700 overflow-hidden"
+            >
+              <div class="bg-emerald-700 text-white font-bold px-4 py-2 text-sm">緊急往診</div>
+              <div class="flex items-center justify-between px-4 py-3">
+                <span class="text-gray-700 dark:text-gray-300 font-medium">毎日（365日）</span>
+                <span class="flex items-center gap-2">
+                  <span class="text-sm text-gray-500">24時間対応</span>
+                  <span class="text-emerald-700 font-black text-xl">24h</span>
+                </span>
+              </div>
+            </div>
           </div>
-        ))}
+          <div class="hidden sm:block overflow-x-auto">
+            <table class="w-full text-center border-collapse">
+              <thead>
+                <tr class="bg-primary text-white">
+                  <th class="p-3 text-left rounded-tl-lg"></th>
+                  {['月', '火', '水', '木', '金'].map((d) => <th class="p-4 text-lg">{d}</th>)}
+                  <th class="p-4 opacity-60 text-lg">土</th>
+                  <th class="p-4 opacity-60 text-lg rounded-tr-lg">日・祝</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-gray-200 dark:border-gray-700">
+                  <td class="p-4 text-left font-bold text-gray-700 dark:text-gray-300 bg-white dark:bg-slate-900">
+                    受付時間<br /><span class="text-sm font-normal text-gray-500">9:00〜17:00</span>
+                  </td>
+                  {
+                    ['●', '●', '●', '●', '●'].map((s) => (
+                      <td class="p-4 text-primary font-black text-2xl bg-white dark:bg-slate-900">{s}</td>
+                    ))
+                  }
+                  <td class="p-4 text-gray-400 bg-white dark:bg-slate-900 text-xl">✕</td>
+                  <td class="p-4 text-gray-400 bg-white dark:bg-slate-900 text-xl">✕</td>
+                </tr>
+                <tr>
+                  <td class="p-4 text-left font-bold text-gray-700 dark:text-gray-300 bg-white dark:bg-slate-900">
+                    緊急往診<br /><span class="text-sm font-normal text-gray-500">24時間対応</span>
+                  </td>
+                  {
+                    ['24h', '24h', '24h', '24h', '24h', '24h', '24h'].map((s) => (
+                      <td class="p-4 font-black text-emerald-700 bg-emerald-50 dark:bg-slate-900">{s}</td>
+                    ))
+                  }
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="w-full lg:w-1/3 flex flex-col gap-4">
+          <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-5 bg-white dark:bg-slate-900">
+            <p class="font-bold text-gray-800 dark:text-white mb-1 text-lg">休診日</p>
+            <p class="text-gray-700 dark:text-gray-300">
+              土曜日・日曜日<br /><span class="text-sm text-gray-500">※緊急往診は365日24時間対応</span>
+            </p>
+          </div>
+          <div class="rounded-xl border-2 border-primary p-5 bg-white dark:bg-slate-800">
+            <p class="font-bold text-gray-800 dark:text-white mb-2 text-lg">お電話・LINE・フォーム</p>
+            <a href="tel:0643017871" class="block text-3xl font-black text-primary mb-1 hover:underline">06-4301-7871</a
+            >
+            <a
+              href="https://line.me/R/ti/p/%40512ysmzx"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 font-bold px-3 py-1.5 rounded-lg underline underline-offset-2 hover:opacity-80 transition-opacity"
+              style="color:var(--aw-color-line); background-color: rgba(6,199,85,0.08);"
+            >
+              <Icon name="tabler:brand-line" class="w-5 h-5 shrink-0" /> LINE：@512ysmzx
+            </a>
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSdXxuP8iRtCW8fNrVf6zLnPI97tqk2StxX4n7Ix6HEwqSIJ_Q/viewform"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-primary hover:underline text-sm font-bold block mt-2">お問い合わせフォーム →</a
+            >
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -291,96 +482,107 @@ const branches = [
 
       {/* ───── タブ切替 ───── */}
       <div class="flex gap-2 mb-6 overflow-x-auto pb-1" id="doctor-tabs" role="tablist">
-        {[
-          { id: '内科',   label: '内科（9名）',   color: 'bg-blue-600'   },
-          { id: '精神科', label: '精神科（3名）', color: 'bg-purple-600' },
-          { id: '小児科', label: '小児科（1名）', color: 'bg-green-600'  },
-        ].map(({ id, label, color }, i) => (
-          <button
-            type="button"
-            role="tab"
-            data-tab={id}
-            aria-selected={i === 0 ? 'true' : 'false'}
-            class={`doctor-tab shrink-0 font-bold px-5 py-2.5 rounded-full text-sm transition-colors border-2 ${
-              i === 0
-                ? `${color} text-white border-transparent`
-                : 'bg-white dark:bg-slate-900 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-slate-600'
-            }`}
-          >
-            {label}
-          </button>
-        ))}
+        {
+          [
+            { id: '内科', label: '内科（9名）', color: 'bg-blue-600' },
+            { id: '精神科', label: '精神科（3名）', color: 'bg-purple-600' },
+            { id: '小児科', label: '小児科（1名）', color: 'bg-green-600' },
+          ].map(({ id, label, color }, i) => (
+            <button
+              type="button"
+              role="tab"
+              data-tab={id}
+              aria-selected={i === 0 ? 'true' : 'false'}
+              class={`doctor-tab shrink-0 font-bold px-5 py-2.5 rounded-full text-sm transition-colors border-2 ${
+                i === 0
+                  ? `${color} text-white border-transparent`
+                  : 'bg-white dark:bg-slate-900 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-slate-600'
+              }`}
+            >
+              {label}
+            </button>
+          ))
+        }
       </div>
 
       {/* ───── タブパネル ───── */}
-      {[
-        { dept: '内科',   panelColor: 'blue'   },
-        { dept: '精神科', panelColor: 'purple' },
-        { dept: '小児科', panelColor: 'green'  },
-      ].map(({ dept, panelColor }, i) => (
-        <div
-          id={`panel-${dept}`}
-          role="tabpanel"
-          class={`doctor-panel ${i !== 0 ? 'hidden' : ''}`}
-        >
-          <div class="grid sm:grid-cols-2 gap-5">
-            {doctors.filter(d => d.dept === dept).map(({ name, role, dept: d, color, badgeColor, certs, icon, image, message, href }) => (
-              <div class={`rounded-2xl border p-6 flex flex-col gap-4 ${color}`}>
-                <div class="flex items-start gap-4">
-                  {image ? (
-                    <img
-                      src={image}
-                      alt={`${name}の写真`}
-                      class="w-24 h-28 rounded-xl object-cover object-top shrink-0 shadow-md border-2 border-white dark:border-slate-600"
-                    />
-                  ) : (
-                    <div class="w-24 h-28 rounded-xl shrink-0 bg-gray-100 dark:bg-slate-700 flex flex-col items-center justify-center border-2 border-gray-200 dark:border-slate-500 text-center">
-                      <Icon name="tabler:user" class="w-8 h-8 text-gray-400 dark:text-gray-500" />
-                      <span class="text-sm text-gray-400 dark:text-gray-500 leading-tight mt-1">準備中</span>
+      {
+        [{ dept: '内科' }, { dept: '精神科' }, { dept: '小児科' }].map(({ dept }, i) => (
+          <div id={`panel-${dept}`} role="tabpanel" class={`doctor-panel ${i !== 0 ? 'hidden' : ''}`}>
+            <div class="grid sm:grid-cols-2 gap-5">
+              {doctors
+                .filter((d) => d.dept === dept)
+                .map(({ name, role, dept: d, color, badgeColor, certs, image, message, href }) => (
+                  <div class={`rounded-2xl border p-6 flex flex-col gap-4 ${color}`}>
+                    <div class="flex items-start gap-4">
+                      {image ? (
+                        <img
+                          src={image}
+                          alt={`${name}の写真`}
+                          class="w-24 h-28 rounded-xl object-cover object-top shrink-0 shadow-md border-2 border-white dark:border-slate-600"
+                        />
+                      ) : (
+                        <div class="w-24 h-28 rounded-xl shrink-0 bg-gray-100 dark:bg-slate-700 flex flex-col items-center justify-center border-2 border-gray-200 dark:border-slate-500 text-center">
+                          <Icon name="tabler:user" class="w-8 h-8 text-gray-400 dark:text-gray-500" />
+                          <span class="text-sm text-gray-400 dark:text-gray-500 leading-tight mt-1">準備中</span>
+                        </div>
+                      )}
+                      <div class="flex-1">
+                        <div class="flex items-center gap-2 flex-wrap mb-1">
+                          <h3 class="text-xl font-black text-gray-900 dark:text-white">{name}</h3>
+                          <span class={`text-white text-xs font-bold px-2 py-0.5 rounded-full ${badgeColor}`}>{d}</span>
+                        </div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">{role}</p>
+                      </div>
                     </div>
-                  )}
-                  <div class="flex-1">
-                    <div class="flex items-center gap-2 flex-wrap mb-1">
-                      <h3 class="text-xl font-black text-gray-900 dark:text-white">{name}</h3>
-                      <span class={`text-white text-xs font-bold px-2 py-0.5 rounded-full ${badgeColor}`}>{d}</span>
+                    <div class="flex flex-wrap gap-1.5">
+                      {certs.map((c) => (
+                        <span class="bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-sm text-gray-600 dark:text-gray-300 px-2.5 py-1 rounded-full">
+                          {c}
+                        </span>
+                      ))}
                     </div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">{role}</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 italic leading-relaxed border-l-4 border-primary/30 pl-3">
+                      「{message}」
+                    </p>
+                    {href && (
+                      <a
+                        href={href}
+                        class="mt-auto inline-flex items-center gap-1 text-primary text-sm font-bold hover:underline"
+                      >
+                        院長プロフィールを見る <Icon name="tabler:arrow-right" class="w-4 h-4" />
+                      </a>
+                    )}
                   </div>
-                </div>
-                <div class="flex flex-wrap gap-1.5">
-                  {certs.map((c) => (
-                    <span class="bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-sm text-gray-600 dark:text-gray-300 px-2.5 py-1 rounded-full">{c}</span>
-                  ))}
-                </div>
-                <p class="text-sm text-gray-600 dark:text-gray-300 italic leading-relaxed border-l-4 border-primary/30 pl-3">
-                  「{message}」
-                </p>
-                {href && (
-                  <a href={href} class="mt-auto inline-flex items-center gap-1 text-primary text-sm font-bold hover:underline">
-                    院長プロフィールを見る <Icon name="tabler:arrow-right" class="w-4 h-4" />
-                  </a>
-                )}
-              </div>
-            ))}
+                ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      }
 
-      <div class="mt-12 rounded-2xl border border-blue-100 dark:border-slate-600 bg-white dark:bg-slate-900 p-6 md:p-8 shadow-sm">
+      <div
+        class="mt-12 rounded-2xl border border-blue-100 dark:border-slate-600 bg-white dark:bg-slate-900 p-6 md:p-8 shadow-sm"
+      >
         <h3 class="text-xl font-bold text-gray-900 dark:text-white text-center mb-2">非常勤医師</h3>
         <p class="text-sm text-gray-600 dark:text-gray-400 text-center mb-6">
           常勤医師に加え、科別に以下の非常勤医師が診療に参加しています。
         </p>
         <ul class="grid sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
-          <li class="rounded-xl bg-blue-50 dark:bg-slate-800 border border-blue-100 dark:border-slate-600 py-5 px-4 text-center">
+          <li
+            class="rounded-xl bg-blue-50 dark:bg-slate-800 border border-blue-100 dark:border-slate-600 py-5 px-4 text-center"
+          >
             <p class="text-sm font-semibold text-gray-600 dark:text-gray-400">内科</p>
             <p class="text-2xl font-black text-blue-600 dark:text-blue-400 mt-1">4名</p>
           </li>
-          <li class="rounded-xl bg-amber-50 dark:bg-slate-800 border border-amber-100 dark:border-amber-900/30 py-5 px-4 text-center">
+          <li
+            class="rounded-xl bg-amber-50 dark:bg-slate-800 border border-amber-100 dark:border-amber-900/30 py-5 px-4 text-center"
+          >
             <p class="text-sm font-semibold text-gray-600 dark:text-gray-400">泌尿器科</p>
             <p class="text-2xl font-black text-amber-700 dark:text-amber-400 mt-1">1名</p>
           </li>
-          <li class="rounded-xl bg-purple-50 dark:bg-slate-800 border border-purple-100 dark:border-purple-900/30 py-5 px-4 text-center">
+          <li
+            class="rounded-xl bg-purple-50 dark:bg-slate-800 border border-purple-100 dark:border-purple-900/30 py-5 px-4 text-center"
+          >
             <p class="text-sm font-semibold text-gray-600 dark:text-gray-400">精神科</p>
             <p class="text-2xl font-black text-purple-600 dark:text-purple-400 mt-1">5名</p>
           </li>
@@ -395,12 +597,12 @@ const branches = [
 
   <script>
     function initDoctorTabs() {
-      const tabs   = document.querySelectorAll<HTMLButtonElement>('.doctor-tab');
+      const tabs = document.querySelectorAll<HTMLButtonElement>('.doctor-tab');
       const panels = document.querySelectorAll<HTMLElement>('.doctor-panel');
       const tabColors: Record<string, string> = {
-        '内科':   'bg-blue-600',
-        '精神科': 'bg-purple-600',
-        '小児科': 'bg-green-600',
+        内科: 'bg-blue-600',
+        精神科: 'bg-purple-600',
+        小児科: 'bg-green-600',
       };
       tabs.forEach((tab) => {
         tab.addEventListener('click', () => {
@@ -410,17 +612,39 @@ const branches = [
             const active = t === tab;
             t.setAttribute('aria-selected', String(active));
             t.className = t.className
-              .replace(/bg-\w+-600|text-white|border-transparent|bg-white dark:bg-slate-900 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-slate-600/g, '').trim();
+              .replace(
+                /bg-\w+-600|text-white|border-transparent|bg-white dark:bg-slate-900 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-slate-600/g,
+                ''
+              )
+              .trim();
             if (active) {
               t.classList.add(tabColors[dept] ?? 'bg-primary', 'text-white', 'border-transparent');
-              t.classList.remove('bg-white', 'dark:bg-slate-900', 'text-gray-600', 'dark:text-gray-300', 'border-gray-200', 'dark:border-slate-600');
+              t.classList.remove(
+                'bg-white',
+                'dark:bg-slate-900',
+                'text-gray-600',
+                'dark:text-gray-300',
+                'border-gray-200',
+                'dark:border-slate-600'
+              );
             } else {
-              t.classList.add('bg-white', 'dark:bg-slate-900', 'text-gray-600', 'dark:text-gray-300', 'border-gray-200', 'dark:border-slate-600');
+              t.classList.add(
+                'bg-white',
+                'dark:bg-slate-900',
+                'text-gray-600',
+                'dark:text-gray-300',
+                'border-gray-200',
+                'dark:border-slate-600'
+              );
               t.classList.remove(tabColors[dept] ?? 'bg-primary', 'text-white', 'border-transparent');
             }
           });
           panels.forEach((p) => {
-            p.id === `panel-${target}` ? p.classList.remove('hidden') : p.classList.add('hidden');
+            if (p.id === `panel-${target}`) {
+              p.classList.remove('hidden');
+            } else {
+              p.classList.add('hidden');
+            }
           });
         });
       });
@@ -436,19 +660,23 @@ const branches = [
     items={[
       {
         title: '2017年　大阪市港区に本院開設',
-        description: '大阪市港区夕凪に「かもめクリニック」本院を開設。厚生労働省が定める在宅医療の最高水準クリニック（機能強化型在宅療養支援診療所）として認定を受け、地域の在宅医療をスタート。',
+        description:
+          '大阪市港区夕凪に「かもめクリニック」本院を開設。厚生労働省が定める在宅医療の最高水準クリニック（機能強化型在宅療養支援診療所）として認定を受け、地域の在宅医療をスタート。',
       },
       {
         title: '精神科専門医3名常勤体制を構築',
-        description: '大阪市内の訪問診療クリニックとして唯一、精神科専門医を3名常勤配置。外出困難な精神疾患の患者さまにも専門的な在宅医療を提供。',
+        description:
+          '大阪市内の訪問診療クリニックとして唯一、精神科専門医を3名常勤配置。外出困難な精神疾患の患者さまにも専門的な在宅医療を提供。',
       },
       {
         title: '第4・第5・第8院など市内5院体制へ',
-        description: '西淀川区・住之江区ほかに拠点を拡大。大阪市内の広域をカバーし、多様な地域・施設へ対応できる体制を整備。',
+        description:
+          '西淀川区・住之江区ほかに拠点を拡大。大阪市内の広域をカバーし、多様な地域・施設へ対応できる体制を整備。',
       },
       {
         title: '常勤医師13名・年間看取り約100件',
-        description: '内科・精神科・小児科あわせて常勤医師13名。グループ全体で約50施設・年間約100件の在宅看取りを実施。',
+        description:
+          '内科・精神科・小児科あわせて常勤医師13名。グループ全体で約50施設・年間約100件の在宅看取りを実施。',
       },
     ]}
   />
@@ -459,33 +687,39 @@ const branches = [
       <div class="text-center mb-10">
         <p class="text-sm font-semibold text-primary tracking-widest mb-1">診療拠点</p>
         <h2 class="text-3xl font-bold text-gray-900 dark:text-white">大阪市内5院の診療拠点</h2>
-        <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">各拠点が連携し、大阪市内の広域に対応しています。担当エリアのご確認はお気軽に地域医療連携部（06-4301-7883）へご相談ください。</p>
+        <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
+          各拠点が連携し、大阪市内の広域に対応しています。担当エリアのご確認はお気軽に地域医療連携部（06-4301-7883）へご相談ください。
+        </p>
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {branches.map(({ name, area, address, tel, href }) => (
-          <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 p-5 flex flex-col gap-3">
-            <div class="flex items-start gap-2">
-              <Icon name="tabler:map-pin" class="w-5 h-5 text-primary shrink-0 mt-0.5" />
-              <p class="font-bold text-gray-900 dark:text-white">{name}</p>
+        {
+          branches.map(({ name, area, address, tel, href }) => (
+            <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 p-5 flex flex-col gap-3">
+              <div class="flex items-start gap-2">
+                <Icon name="tabler:map-pin" class="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                <p class="font-bold text-gray-900 dark:text-white">{name}</p>
+              </div>
+              <div class="text-sm text-gray-600 dark:text-gray-400 space-y-1 pl-7">
+                <p>{area}</p>
+                <p>{address}</p>
+                <a href={`tel:${tel.replace(/-/g, '')}`} class="text-primary font-bold hover:underline block">
+                  TEL: {tel}
+                </a>
+              </div>
+              {href && (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="mt-auto ml-7 inline-flex items-center gap-1.5 text-sm font-bold text-primary border border-primary rounded-full px-4 py-1.5 hover:bg-blue-50 transition-colors w-fit"
+                >
+                  <Icon name="tabler:external-link" class="w-3.5 h-3.5" />
+                  専用サイトを見る
+                </a>
+              )}
             </div>
-            <div class="text-sm text-gray-600 dark:text-gray-400 space-y-1 pl-7">
-              <p>{area}</p>
-              <p>{address}</p>
-              <a href={`tel:${tel.replace(/-/g, '')}`} class="text-primary font-bold hover:underline block">TEL: {tel}</a>
-            </div>
-            {href && (
-              <a
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="mt-auto ml-7 inline-flex items-center gap-1.5 text-sm font-bold text-primary border border-primary rounded-full px-4 py-1.5 hover:bg-blue-50 transition-colors w-fit"
-              >
-                <Icon name="tabler:external-link" class="w-3.5 h-3.5" />
-                専用サイトを見る
-              </a>
-            )}
-          </div>
-        ))}
+          ))
+        }
       </div>
     </div>
   </section>
@@ -496,14 +730,28 @@ const branches = [
       <p class="text-sm font-semibold text-primary tracking-widest mb-3">対応エリア</p>
       <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-5">主な対応エリア</h3>
       <div class="flex flex-wrap justify-center gap-2">
-        {['港区', '西淀川区', '住之江区', '住吉区', '西区', '大正区', '浪速区', '此花区', '淀川区', '西成区', '阿倍野区'].map((ward) => (
-          <a
-            href={`/area/${ward.replace('区', '')}`}
-            class="bg-blue-50 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-slate-700 border border-blue-100 dark:border-slate-700 text-primary font-bold px-4 py-2 rounded-full text-sm transition-colors"
-          >
-            大阪市{ward}
-          </a>
-        ))}
+        {
+          [
+            '港区',
+            '西淀川区',
+            '住之江区',
+            '住吉区',
+            '西区',
+            '大正区',
+            '浪速区',
+            '此花区',
+            '淀川区',
+            '西成区',
+            '阿倍野区',
+          ].map((ward) => (
+            <a
+              href={`/area/${ward.replace('区', '')}`}
+              class="bg-blue-50 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-slate-700 border border-blue-100 dark:border-slate-700 text-primary font-bold px-4 py-2 rounded-full text-sm transition-colors"
+            >
+              大阪市{ward}
+            </a>
+          ))
+        }
       </div>
       <p class="text-sm text-gray-500 dark:text-gray-400 mt-4">
         上記以外のエリアもご相談ください。地域医療連携部（06-4301-7883）が柔軟に対応します。
@@ -515,12 +763,17 @@ const branches = [
   <CallToAction
     actions={[
       { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
-      { variant: 'line', text: 'LINEで無料相談', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+      {
+        variant: 'line',
+        text: 'LINEで無料相談',
+        href: 'https://line.me/R/ti/p/%40512ysmzx',
+        icon: 'tabler:brand-line',
+      },
     ]}
   >
     <Fragment slot="title">訪問診療のご相談はこちら</Fragment>
     <Fragment slot="subtitle">
-      受付：平日 9:00〜17:00　｜　LINE（@512ysmzx）は24時間受付<br />
+      受付：平日 9:00〜17:00 | LINE（@512ysmzx）は24時間受付<br />
       患者さまご本人・ご家族・ケアマネジャー・医療介護関係者の方、どなたでもお気軽にどうぞ。
     </Fragment>
   </CallToAction>

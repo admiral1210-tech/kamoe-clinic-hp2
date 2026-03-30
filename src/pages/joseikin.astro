@@ -86,7 +86,12 @@ const jsonLdFAQ = {
     tagline="医療費助成・診断書｜大阪市の訪問診療"
     actions={[
       { variant: 'primary', text: 'お電話でご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
-      { variant: 'line', text: 'LINEで無料相談', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+      {
+        variant: 'line',
+        text: 'LINEで無料相談',
+        href: 'https://line.me/R/ti/p/%40512ysmzx',
+        icon: 'tabler:brand-line',
+      },
     ]}
     image={{
       src: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=2070&q=80',
@@ -145,20 +150,40 @@ const jsonLdFAQ = {
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">申請期限がある場合は余裕をもってご依頼ください</p>
       </div>
       <ol class="space-y-4">
-        {[
-          { step: '1', title: 'お電話・フォームでご相談', body: '必要な診断書の種類・申請先・期限をお知らせください。対応可否を確認のうえ、ご案内します。' },
-          { step: '2', title: '診断書作成依頼（書類をご準備）', body: '申請書類の書式は区役所・保健福祉センターで入手できます。書式が決まっている場合はお持ちください。' },
-          { step: '3', title: '医師が診断書を作成（1〜4週間）', body: '担当医が診察内容・経過をもとに作成します。種類によって作成期間が異なります。完成後にご連絡します。' },
-          { step: '4', title: '受け取り・申請窓口へ提出', body: '診断書をお受け取りいただき、区役所・保健福祉センター・年金機構などの窓口へ提出してください。' },
-        ].map(({ step, title, body }) => (
-          <li class="flex gap-4 bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 px-5 py-4">
-            <span class="bg-primary text-white font-black text-sm w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">{step}</span>
-            <div>
-              <p class="font-bold text-gray-900 dark:text-white mb-1">{title}</p>
-              <p class="text-sm text-gray-600 dark:text-gray-400">{body}</p>
-            </div>
-          </li>
-        ))}
+        {
+          [
+            {
+              step: '1',
+              title: 'お電話・フォームでご相談',
+              body: '必要な診断書の種類・申請先・期限をお知らせください。対応可否を確認のうえ、ご案内します。',
+            },
+            {
+              step: '2',
+              title: '診断書作成依頼（書類をご準備）',
+              body: '申請書類の書式は区役所・保健福祉センターで入手できます。書式が決まっている場合はお持ちください。',
+            },
+            {
+              step: '3',
+              title: '医師が診断書を作成（1〜4週間）',
+              body: '担当医が診察内容・経過をもとに作成します。種類によって作成期間が異なります。完成後にご連絡します。',
+            },
+            {
+              step: '4',
+              title: '受け取り・申請窓口へ提出',
+              body: '診断書をお受け取りいただき、区役所・保健福祉センター・年金機構などの窓口へ提出してください。',
+            },
+          ].map(({ step, title, body }) => (
+            <li class="flex gap-4 bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 px-5 py-4">
+              <span class="bg-primary text-white font-black text-sm w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                {step}
+              </span>
+              <div>
+                <p class="font-bold text-gray-900 dark:text-white mb-1">{title}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">{body}</p>
+              </div>
+            </li>
+          ))
+        }
       </ol>
       <p class="text-center mt-6 text-sm text-gray-500 dark:text-gray-400">
         ※ 診断書の文書料は別途費用がかかります。金額はお問い合わせください。
@@ -208,36 +233,38 @@ const jsonLdFAQ = {
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white">制度を利用する際のポイント</h2>
       </div>
       <div class="space-y-4">
-        {[
-          {
-            icon: 'tabler:calendar-check',
-            title: '申請期限・更新期限に注意',
-            body: '自立支援医療は2年ごと、難病医療費助成は年1回の更新が必要です。期限切れになると助成が一時停止となる場合があります。余裕をもって更新の診断書作成をご依頼ください。',
-          },
-          {
-            icon: 'tabler:building-community',
-            title: '申請窓口は区役所・保健福祉センター',
-            body: '多くの制度はお住まいの区の区役所・保健福祉センターが窓口です。書類の様式は窓口で取得できます。必要書類は制度によって異なりますので、事前に確認してからお越しください。',
-          },
-          {
-            icon: 'tabler:receipt',
-            title: '複数の制度を組み合わせることができます',
-            body: '高額療養費制度と自立支援医療、障害者医療費助成（マル障）など、複数の制度を組み合わせることで自己負担をさらに軽減できます。どの制度が使えるかわからない場合もご相談ください。',
-          },
-          {
-            icon: 'tabler:user-heart',
-            title: 'ケアマネジャー・福祉担当者との連携',
-            body: '各種申請の手続きが難しい場合は、担当ケアマネジャーや区役所の福祉担当者に相談することをお勧めします。かもめクリニックのスタッフが関係機関との連携をサポートします。',
-          },
-        ].map(({ icon, title, body }) => (
-          <div class="flex gap-4 bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 px-5 py-4">
-            <Icon name={icon} class="w-7 h-7 text-primary shrink-0 mt-0.5" />
-            <div>
-              <p class="font-bold text-gray-900 dark:text-white mb-1">{title}</p>
-              <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{body}</p>
+        {
+          [
+            {
+              icon: 'tabler:calendar-check',
+              title: '申請期限・更新期限に注意',
+              body: '自立支援医療は2年ごと、難病医療費助成は年1回の更新が必要です。期限切れになると助成が一時停止となる場合があります。余裕をもって更新の診断書作成をご依頼ください。',
+            },
+            {
+              icon: 'tabler:building-community',
+              title: '申請窓口は区役所・保健福祉センター',
+              body: '多くの制度はお住まいの区の区役所・保健福祉センターが窓口です。書類の様式は窓口で取得できます。必要書類は制度によって異なりますので、事前に確認してからお越しください。',
+            },
+            {
+              icon: 'tabler:receipt',
+              title: '複数の制度を組み合わせることができます',
+              body: '高額療養費制度と自立支援医療、障害者医療費助成（マル障）など、複数の制度を組み合わせることで自己負担をさらに軽減できます。どの制度が使えるかわからない場合もご相談ください。',
+            },
+            {
+              icon: 'tabler:user-heart',
+              title: 'ケアマネジャー・福祉担当者との連携',
+              body: '各種申請の手続きが難しい場合は、担当ケアマネジャーや区役所の福祉担当者に相談することをお勧めします。かもめクリニックのスタッフが関係機関との連携をサポートします。',
+            },
+          ].map(({ icon, title, body }) => (
+            <div class="flex gap-4 bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 px-5 py-4">
+              <Icon name={icon} class="w-7 h-7 text-primary shrink-0 mt-0.5" />
+              <div>
+                <p class="font-bold text-gray-900 dark:text-white mb-1">{title}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{body}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        }
       </div>
     </div>
   </section>
@@ -281,14 +308,19 @@ const jsonLdFAQ = {
   <CallToAction
     actions={[
       { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
-      { variant: 'line', text: 'LINEで無料相談（@512ysmzx）', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+      {
+        variant: 'line',
+        text: 'LINEで無料相談（@512ysmzx）',
+        href: 'https://line.me/R/ti/p/%40512ysmzx',
+        icon: 'tabler:brand-line',
+      },
     ]}
   >
     <Fragment slot="title">診断書・助成制度についてのご相談</Fragment>
     <Fragment slot="subtitle">
       「どの制度が使えるかわからない」「診断書が必要かどうかわからない」<br />
       そんな段階でも、お気軽にご連絡ください。<br />
-      受付：平日 9:00〜17:00　｜　LINE（@512ysmzx）は24時間受付
+      受付：平日 9:00〜17:00 | LINE（@512ysmzx）は24時間受付
     </Fragment>
   </CallToAction>
 </Layout>

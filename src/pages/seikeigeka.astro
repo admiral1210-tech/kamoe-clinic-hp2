@@ -87,10 +87,31 @@ const jsonLdFAQ = {
 
 // JSON-LD: MedicalCondition
 const jsonLdConditions = [
-  { '@context': 'https://schema.org', '@type': 'MedicalCondition', name: '変形性膝関節症', relevantSpecialty: 'https://schema.org/Orthopedic' },
-  { '@context': 'https://schema.org', '@type': 'MedicalCondition', name: '骨粗しょう症', alternateName: '大腿骨頸部骨折・脊椎圧迫骨折', relevantSpecialty: 'https://schema.org/Orthopedic' },
-  { '@context': 'https://schema.org', '@type': 'MedicalCondition', name: '腰部脊柱管狭窄症', relevantSpecialty: 'https://schema.org/Orthopedic' },
-  { '@context': 'https://schema.org', '@type': 'MedicalCondition', name: '変形性股関節症', relevantSpecialty: 'https://schema.org/Orthopedic' },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '変形性膝関節症',
+    relevantSpecialty: 'https://schema.org/Orthopedic',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '骨粗しょう症',
+    alternateName: '大腿骨頸部骨折・脊椎圧迫骨折',
+    relevantSpecialty: 'https://schema.org/Orthopedic',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '腰部脊柱管狭窄症',
+    relevantSpecialty: 'https://schema.org/Orthopedic',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '変形性股関節症',
+    relevantSpecialty: 'https://schema.org/Orthopedic',
+  },
 ];
 
 // JSON-LD: Speakable
@@ -108,7 +129,7 @@ const jsonLdSpeakable = {
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLdFAQ)} />
-    {jsonLdConditions.map(c => <script type="application/ld+json" set:html={JSON.stringify(c)} />)}
+    {jsonLdConditions.map((c) => <script type="application/ld+json" set:html={JSON.stringify(c)} />)}
     <script type="application/ld+json" set:html={JSON.stringify(jsonLdSpeakable)} />
   </Fragment>
 
@@ -117,7 +138,12 @@ const jsonLdSpeakable = {
     tagline="整形外科 訪問診療｜大阪市"
     actions={[
       { variant: 'primary', text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
-      { variant: 'line', text: 'LINEで無料相談', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+      {
+        variant: 'line',
+        text: 'LINEで無料相談',
+        href: 'https://line.me/R/ti/p/%40512ysmzx',
+        icon: 'tabler:brand-line',
+      },
     ]}
     image={{
       src: 'https://images.unsplash.com/photo-1530497610245-94d3c16cda28?auto=format&fit=crop&w=2070&q=80',
@@ -129,7 +155,9 @@ const jsonLdSpeakable = {
       <span class="text-accent dark:text-white highlight">ご自宅で</span>診ます
     </Fragment>
     <Fragment slot="subtitle">
-      <strong>関節注射・骨粗しょう症治療・骨折後フォロー</strong>をご自宅・施設で行います。<br class="hidden sm:inline" />
+      <strong>関節注射・骨粗しょう症治療・骨折後フォロー</strong>をご自宅・施設で行います。<br
+        class="hidden sm:inline"
+      />
       身体障害者手帳（肢体不自由）の診断書発行にも対応しています。<br class="hidden sm:inline" />
       通院が難しくなっても、整形外科の治療を継続できます。
     </Fragment>
@@ -139,7 +167,9 @@ const jsonLdSpeakable = {
   <section class="py-10 bg-orange-50 dark:bg-slate-800 border-y border-orange-100 dark:border-slate-700">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       <div class="grid sm:grid-cols-2 gap-4">
-        <div class="inline-flex items-center gap-3 bg-white dark:bg-slate-900 rounded-2xl px-6 py-5 shadow-sm border border-orange-100 dark:border-orange-900">
+        <div
+          class="inline-flex items-center gap-3 bg-white dark:bg-slate-900 rounded-2xl px-6 py-5 shadow-sm border border-orange-100 dark:border-orange-900"
+        >
           <Icon name="tabler:needle" class="w-10 h-10 text-orange-500 shrink-0" />
           <div>
             <p class="font-black text-lg text-gray-900 dark:text-white">関節注射に対応</p>
@@ -147,7 +177,9 @@ const jsonLdSpeakable = {
             <p class="text-xs text-gray-500 mt-0.5">膝・肩・手指・足首など</p>
           </div>
         </div>
-        <div class="inline-flex items-center gap-3 bg-white dark:bg-slate-900 rounded-2xl px-6 py-5 shadow-sm border border-orange-100 dark:border-orange-900">
+        <div
+          class="inline-flex items-center gap-3 bg-white dark:bg-slate-900 rounded-2xl px-6 py-5 shadow-sm border border-orange-100 dark:border-orange-900"
+        >
           <Icon name="tabler:file-certificate" class="w-10 h-10 text-orange-500 shrink-0" />
           <div>
             <p class="font-black text-lg text-gray-900 dark:text-white">身体障害者手帳の診断書を発行</p>
@@ -165,22 +197,26 @@ const jsonLdSpeakable = {
       <div class="text-center mb-8">
         <p class="text-sm font-semibold text-primary uppercase tracking-widest mb-1">Target</p>
         <h2 class="text-3xl font-bold text-gray-900 dark:text-white">こんな方にご利用いただいています</h2>
-        <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">「整形外科には通えないけれど、治療は続けたい」というご希望にお応えします。</p>
+        <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
+          「整形外科には通えないけれど、治療は続けたい」というご希望にお応えします。
+        </p>
       </div>
       <div class="grid sm:grid-cols-2 gap-3">
-        {[
-          { icon: 'tabler:wheelchair',      text: '膝・股関節の痛みで外出が困難な方' },
-          { icon: 'tabler:bone',            text: '骨折・手術後に退院してご自宅で療養中の方' },
-          { icon: 'tabler:activity',        text: '骨粗しょう症の治療・注射を継続したい方' },
-          { icon: 'tabler:body-scan',           text: '腰部脊柱管狭窄症・腰痛で歩行が難しい方' },
-          { icon: 'tabler:accessible',      text: '肢体不自由で身体障害者手帳の取得を考えている方' },
-          { icon: 'tabler:walk',            text: '転倒が怖い・転倒後にリハビリをしたい方' },
-        ].map(({ icon, text }) => (
-          <div class="bg-orange-50 dark:bg-slate-800 rounded-xl border border-orange-100 dark:border-slate-700 px-5 py-4 flex items-center gap-3">
-            <Icon name={icon} class="w-6 h-6 text-orange-500 shrink-0" />
-            <p class="text-gray-800 dark:text-gray-200 text-sm font-medium">{text}</p>
-          </div>
-        ))}
+        {
+          [
+            { icon: 'tabler:wheelchair', text: '膝・股関節の痛みで外出が困難な方' },
+            { icon: 'tabler:bone', text: '骨折・手術後に退院してご自宅で療養中の方' },
+            { icon: 'tabler:activity', text: '骨粗しょう症の治療・注射を継続したい方' },
+            { icon: 'tabler:body-scan', text: '腰部脊柱管狭窄症・腰痛で歩行が難しい方' },
+            { icon: 'tabler:accessible', text: '肢体不自由で身体障害者手帳の取得を考えている方' },
+            { icon: 'tabler:walk', text: '転倒が怖い・転倒後にリハビリをしたい方' },
+          ].map(({ icon, text }) => (
+            <div class="bg-orange-50 dark:bg-slate-800 rounded-xl border border-orange-100 dark:border-slate-700 px-5 py-4 flex items-center gap-3">
+              <Icon name={icon} class="w-6 h-6 text-orange-500 shrink-0" />
+              <p class="text-gray-800 dark:text-gray-200 text-sm font-medium">{text}</p>
+            </div>
+          ))
+        }
       </div>
     </div>
   </section>
@@ -194,32 +230,38 @@ const jsonLdSpeakable = {
     items={[
       {
         title: '変形性膝関節症',
-        description: '膝の軟骨がすり減り、痛みや腫れが生じる疾患。定期的なヒアルロン酸注射・鎮痛薬の調整・装具指導をご自宅で継続できます。通院の負担なく治療を続けられます。',
+        description:
+          '膝の軟骨がすり減り、痛みや腫れが生じる疾患。定期的なヒアルロン酸注射・鎮痛薬の調整・装具指導をご自宅で継続できます。通院の負担なく治療を続けられます。',
         icon: 'tabler:run',
       },
       {
         title: '変形性股関節症・変形性腰椎症',
-        description: '股関節・腰椎の変形による慢性疼痛。薬物療法の継続管理・日常生活動作のアドバイス・リハビリ指示書の発行により、自宅での生活の質を維持します。',
+        description:
+          '股関節・腰椎の変形による慢性疼痛。薬物療法の継続管理・日常生活動作のアドバイス・リハビリ指示書の発行により、自宅での生活の質を維持します。',
         icon: 'tabler:body-scan',
       },
       {
         title: '骨粗しょう症・圧迫骨折・大腿骨頸部骨折',
-        description: '骨密度の低下による骨折は在宅患者に非常に多い疾患です。骨粗しょう症治療薬の内服・注射（デノスマブ・テリパラチド等）管理、再骨折予防まで一貫して対応します。',
+        description:
+          '骨密度の低下による骨折は在宅患者に非常に多い疾患です。骨粗しょう症治療薬の内服・注射（デノスマブ・テリパラチド等）管理、再骨折予防まで一貫して対応します。',
         icon: 'tabler:bone',
       },
       {
         title: '腰部脊柱管狭窄症・腰椎椎間板ヘルニア',
-        description: '間欠性跛行・下肢しびれ・腰痛など。通院が困難な方を対象に、薬物療法（鎮痛薬・神経障害性疼痛薬）の継続調整を訪問で行い、歩行能力の維持をサポートします。',
+        description:
+          '間欠性跛行・下肢しびれ・腰痛など。通院が困難な方を対象に、薬物療法（鎮痛薬・神経障害性疼痛薬）の継続調整を訪問で行い、歩行能力の維持をサポートします。',
         icon: 'tabler:activity',
       },
       {
         title: '人工関節置換術後（膝・股関節）',
-        description: '疼痛管理・リハビリ進捗の確認・感染徴候の早期発見・次の受診タイミングの判断をご自宅で行います。術後も安心して在宅生活を続けられるよう支えます。',
+        description:
+          '疼痛管理・リハビリ進捗の確認・感染徴候の早期発見・次の受診タイミングの判断をご自宅で行います。術後も安心して在宅生活を続けられるよう支えます。',
         icon: 'tabler:heart-handshake',
       },
       {
         title: '肢体不自由（脳卒中後遺症・外傷後遺症）',
-        description: '脳卒中後の麻痺・骨折後の機能障害など肢体に不自由のある方。身体障害者手帳の取得に必要な診断書発行から、訪問リハビリの指示・補装具の処方まで対応します。',
+        description:
+          '脳卒中後の麻痺・骨折後の機能障害など肢体に不自由のある方。身体障害者手帳の取得に必要な診断書発行から、訪問リハビリの指示・補装具の処方まで対応します。',
         icon: 'tabler:accessible',
       },
     ]}
@@ -234,42 +276,50 @@ const jsonLdSpeakable = {
     items={[
       {
         title: '① 関節注射（ヒアルロン酸・ステロイド）',
-        description: '膝・肩・手指・足首などへの関節注射をご自宅で実施。痛みのコントロールを切らさず継続できます。注射の頻度・種類は状態に合わせて調整します。',
+        description:
+          '膝・肩・手指・足首などへの関節注射をご自宅で実施。痛みのコントロールを切らさず継続できます。注射の頻度・種類は状態に合わせて調整します。',
         icon: 'tabler:needle',
       },
       {
         title: '② 骨粗しょう症の薬物治療・注射管理',
-        description: 'ビスホスホネート内服・デノスマブ（6か月ごと皮下注射）・テリパラチドなど、骨粗しょう症治療薬の継続管理を訪問で行います。骨折予防に直結する重要な治療です。',
+        description:
+          'ビスホスホネート内服・デノスマブ（6か月ごと皮下注射）・テリパラチドなど、骨粗しょう症治療薬の継続管理を訪問で行います。骨折予防に直結する重要な治療です。',
         icon: 'tabler:bone',
       },
       {
         title: '③ 骨折後・術後の在宅フォロー',
-        description: '退院後の疼痛管理・創部確認・服薬調整・次の受診タイミングの判断まで担います。再骨折予防の生活指導も行い、ご家族の不安も軽減します。',
+        description:
+          '退院後の疼痛管理・創部確認・服薬調整・次の受診タイミングの判断まで担います。再骨折予防の生活指導も行い、ご家族の不安も軽減します。',
         icon: 'tabler:home-heart',
       },
       {
         title: '④ リハビリ指示書の作成',
-        description: '訪問リハビリ（PT・OT・ST）を利用するには医師の指示書が必要です。整形外科の専門知識をもとに、リハビリの目標・方法・禁忌事項を詳細に記載します。',
+        description:
+          '訪問リハビリ（PT・OT・ST）を利用するには医師の指示書が必要です。整形外科の専門知識をもとに、リハビリの目標・方法・禁忌事項を詳細に記載します。',
         icon: 'tabler:clipboard-list',
       },
       {
         title: '⑤ 補装具・介護用品の処方・意見書作成',
-        description: '短下肢装具・車椅子・コルセット・歩行補助具などの処方・意見書を作成。区役所の福祉用具申請をスムーズに進められるよう書類面でサポートします。',
+        description:
+          '短下肢装具・車椅子・コルセット・歩行補助具などの処方・意見書を作成。区役所の福祉用具申請をスムーズに進められるよう書類面でサポートします。',
         icon: 'tabler:wheelchair',
       },
       {
         title: '⑥ 転倒リスク評価と予防指導',
-        description: '転倒リスクの高い薬（降圧薬・睡眠薬など）の見直し、筋力・バランス評価、住環境改善の提言（手すり・段差・照明）、歩行器・杖の選択指導を行います。',
+        description:
+          '転倒リスクの高い薬（降圧薬・睡眠薬など）の見直し、筋力・バランス評価、住環境改善の提言（手すり・段差・照明）、歩行器・杖の選択指導を行います。',
         icon: 'tabler:shield-check',
       },
       {
         title: '⑦ 腰痛・神経障害性疼痛の薬物管理',
-        description: '脊柱管狭窄症・椎間板ヘルニアによる下肢しびれ・疼痛に対し、プレガバリン・デュロキセチン・NSAIDsなどを継続処方・調整。QOLの維持をサポートします。',
+        description:
+          '脊柱管狭窄症・椎間板ヘルニアによる下肢しびれ・疼痛に対し、プレガバリン・デュロキセチン・NSAIDsなどを継続処方・調整。QOLの維持をサポートします。',
         icon: 'tabler:pill',
       },
       {
         title: '⑧ 身体障害者手帳（肢体不自由）の診断書発行',
-        description: '指定医が訪問診察の中で診断書を作成。手帳取得により医療費助成（マル障）・福祉サービス・税の減免が受けられます。申請手続きのご案内も行います。',
+        description:
+          '指定医が訪問診察の中で診断書を作成。手帳取得により医療費助成（マル障）・福祉サービス・税の減免が受けられます。申請手続きのご案内も行います。',
         icon: 'tabler:file-certificate',
       },
     ]}
@@ -283,19 +333,23 @@ const jsonLdSpeakable = {
     items={[
       {
         title: '在宅患者の多くが骨粗しょう症を抱えている',
-        description: '75歳以上の女性の約半数が骨粗しょう症といわれています。特に大腿骨頸部骨折は「寝たきりの入口」となるため、在宅での継続治療が極めて重要です。',
+        description:
+          '75歳以上の女性の約半数が骨粗しょう症といわれています。特に大腿骨頸部骨折は「寝たきりの入口」となるため、在宅での継続治療が極めて重要です。',
       },
       {
         title: '通院しなくても注射治療を継続できる',
-        description: 'デノスマブ（6か月に1回の皮下注射）やテリパラチド（毎日または週1回の自己注射サポート）など、通院が難しくなっても訪問で対応します。',
+        description:
+          'デノスマブ（6か月に1回の皮下注射）やテリパラチド（毎日または週1回の自己注射サポート）など、通院が難しくなっても訪問で対応します。',
       },
       {
         title: '骨折後の再骨折リスクを下げる',
-        description: '一度骨折すると次の骨折リスクが2〜3倍になります。退院後の早期から骨粗しょう症治療を再開・継続することで再骨折を防ぎ、在宅生活を守ります。',
+        description:
+          '一度骨折すると次の骨折リスクが2〜3倍になります。退院後の早期から骨粗しょう症治療を再開・継続することで再骨折を防ぎ、在宅生活を守ります。',
       },
       {
         title: 'ご家族・ケアマネジャーとの連携',
-        description: '転倒・骨折のリスクを在宅チームと共有し、住環境整備・リハビリ・薬の見直しを連携して進めます。骨折予防は一人ではできない、チームの取り組みです。',
+        description:
+          '転倒・骨折のリスクを在宅チームと共有し、住環境整備・リハビリ・薬の見直しを連携して進めます。骨折予防は一人ではできない、チームの取り組みです。',
       },
     ]}
     image={{
@@ -304,7 +358,9 @@ const jsonLdSpeakable = {
     }}
   >
     <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">骨折を防ぐことが、在宅生活を守ること</h3>
+      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
+        骨折を防ぐことが、在宅生活を守ること
+      </h3>
     </Fragment>
     <Fragment slot="bg">
       <div class="absolute inset-0 bg-orange-50 dark:bg-transparent"></div>
@@ -355,13 +411,18 @@ const jsonLdSpeakable = {
   <CallToAction
     actions={[
       { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
-      { variant: 'line', text: 'LINEで無料相談（@512ysmzx）', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+      {
+        variant: 'line',
+        text: 'LINEで無料相談（@512ysmzx）',
+        href: 'https://line.me/R/ti/p/%40512ysmzx',
+        icon: 'tabler:brand-line',
+      },
     ]}
   >
     <Fragment slot="title">整形外科の訪問診療、まずはご相談ください</Fragment>
     <Fragment slot="subtitle">
       「膝の注射を続けたい」「骨粗しょう症の薬が切れそう」「骨折後の退院準備をしたい」——<br />
-      どの段階のご相談もお気軽にどうぞ。受付：平日 9:00〜17:00　｜　LINE は24時間受付
+      どの段階のご相談もお気軽にどうぞ。受付：平日 9:00〜17:00 | LINE は24時間受付
     </Fragment>
   </CallToAction>
 </Layout>

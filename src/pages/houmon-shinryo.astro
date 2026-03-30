@@ -1,0 +1,229 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import Steps from '~/components/widgets/Steps.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import { Icon } from 'astro-icon/components';
+
+const metadata = {
+  title: '訪問診療とは・ご利用の流れ｜かもめクリニック（大阪市）',
+  description:
+    '訪問診療の定義・往診との違い・対象となる方・保険適用の概要を解説。ご利用開始までの流れ（電話・LINE相談から定期訪問まで）をご案内します。',
+  ignoreTitleTemplate: true,
+  openGraph: {
+    type: 'website',
+    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+  },
+};
+
+const jsonLdBreadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
+    { '@type': 'ListItem', position: 2, name: '訪問診療とは', item: 'https://kamome-clinic.net/houmon-shinryo' },
+  ],
+};
+
+const jsonLdHowTo = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: '訪問診療のご利用開始までの流れ（かもめクリニック）',
+  description: '訪問診療を始めるまでの4ステップです。最短当日の開始を目指しています。',
+  totalTime: 'P7D',
+  step: [
+    {
+      '@type': 'HowToStep',
+      position: 1,
+      name: 'まずはご相談（電話・LINE・メール）',
+      text: 'TEL 06-4301-7871 またはLINE（@512ysmzx）で、患者さまの状態とお住まいをお知らせください。',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 2,
+      name: '担当エリア・状況の確認',
+      text: 'ご住所と病状を確認し、最寄り拠点の担当医を決めます。当日から翌営業日以内にご連絡します。',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 3,
+      name: '初回訪問・診療計画の説明',
+      text: '担当医が初回訪問し、診療計画・訪問スケジュール・緊急時の連絡方法をわかりやすくご説明します。',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 4,
+      name: '定期訪問診療スタート',
+      text: '月2回の定期訪問診療が始まります。急変時は24時間365日、担当医へ直接ご連絡いただけます。',
+    },
+  ],
+};
+
+const jsonLdWebPage = {
+  '@context': 'https://schema.org',
+  '@type': 'MedicalWebPage',
+  '@id': 'https://kamome-clinic.net/houmon-shinryo',
+  name: '訪問診療とは・ご利用の流れ｜かもめクリニック',
+  url: 'https://kamome-clinic.net/houmon-shinryo',
+  description:
+    '訪問診療は、医師がご自宅や入居施設へ定期的に伺う計画的な医療です。往診（急変時）とは異なります。大阪市のかもめクリニックでは健康保険・介護保険適用の訪問診療と24時間緊急往診に対応しています。',
+  isPartOf: { '@type': 'WebSite', '@id': 'https://kamome-clinic.net/#website' },
+  about: { '@type': 'MedicalClinic', '@id': 'https://kamome-clinic.net/#clinic', name: 'かもめクリニック' },
+};
+---
+
+<Layout metadata={metadata}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdHowTo)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdWebPage)} />
+  </Fragment>
+
+  <section id="about-houmon" class="py-8 md:py-14 bg-white dark:bg-slate-900">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-8">
+        <p class="text-sm font-semibold text-primary tracking-widest mb-1">訪問診療について</p>
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">訪問診療とは</h1>
+      </div>
+      <div class="bg-blue-50 dark:bg-slate-800 rounded-2xl p-6 md:p-8 mb-8 space-y-4">
+        <p class="text-lg md:text-xl text-gray-800 dark:text-gray-200 leading-relaxed">
+          <strong>訪問診療</strong
+          >とは、医師が患者さまのご自宅や入居施設へ定期的に伺い、診察・処方・血液検査・処置などを行う医療サービスです。
+        </p>
+        <p class="text-lg md:text-xl text-gray-800 dark:text-gray-200 leading-relaxed">
+          通院が困難な方が、住み慣れた場所で継続的な医療を受けられるようにすることを目的としています。健康保険・介護保険が適用されます。
+        </p>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-4 mb-8">
+        {
+          [
+            {
+              icon: 'tabler:calendar-repeat',
+              title: '定期訪問（月2回が基本）',
+              body: '医師が計画的に訪問し、診察・処方・検査を行います。基本は月2回の定期訪問で、病状の変化を継続的に把握し、悪化を未然に防ぎます。',
+            },
+            {
+              icon: 'tabler:shield-check',
+              title: '健康保険・介護保険が適用',
+              body: '後期高齢者（1割負担）では、月額5,000〜8,000円が目安です。生活保護の方は、自己負担ゼロで受けられます。',
+            },
+            {
+              icon: 'tabler:home-heart',
+              title: '往診との違い',
+              body: '「往診」は急変時の臨時対応、「訪問診療」は計画的で継続的な医療です。かもめクリニックは、どちらにも対応しています。',
+            },
+            {
+              icon: 'tabler:users',
+              title: '対象となる方',
+              body: '高齢・障がい・精神疾患、医療的ケアが必要なお子さまなど、外出や通院が困難な方が対象です。紹介状がなくても、まずご相談いただけます。',
+            },
+          ].map(({ icon, title, body }) => (
+            <div class="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-5 flex gap-4">
+              <Icon name={icon} class="w-8 h-8 text-primary shrink-0 mt-0.5" />
+              <div>
+                <p class="font-bold text-gray-900 dark:text-white mb-1">{title}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{body}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <div class="flex flex-wrap justify-center gap-3 text-sm">
+        <a href="/cost" class="inline-flex items-center gap-1 text-primary font-bold hover:underline">
+          <Icon name="tabler:arrow-right" class="w-4 h-4" /> 費用・保険について詳しく見る
+        </a>
+        <span class="text-gray-300 dark:text-gray-600">|</span>
+        <a href="/faq" class="inline-flex items-center gap-1 text-primary font-bold hover:underline">
+          <Icon name="tabler:arrow-right" class="w-4 h-4" /> よくあるご質問
+        </a>
+        <span class="text-gray-300 dark:text-gray-600">|</span>
+        <a href="/area-osaka" class="inline-flex items-center gap-1 text-primary font-bold hover:underline">
+          <Icon name="tabler:arrow-right" class="w-4 h-4" /> 対応エリア一覧
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Steps
+    id="flow"
+    title="ご利用の流れ"
+    subtitle="初めての方でも、お電話1本から訪問診療を始められます。紹介状がなくても、まずご相談ください。"
+    items={[
+      {
+        title: 'まずはお電話・LINEでご相談',
+        description:
+          'TEL <a href="tel:0643017871" class="text-primary underline">06-4301-7871</a> またはLINEで、患者さまの状態とお住まいをお知らせください。担当スタッフが丁寧にお答えします。',
+        icon: 'tabler:phone',
+      },
+      {
+        title: '担当エリア・担当医の確認',
+        description:
+          'ご住所と病状を確認し、最寄り拠点の担当医を決めます。当日から翌営業日以内に、こちらからご連絡します。',
+        icon: 'tabler:user-check',
+      },
+      {
+        title: '初回訪問・診療計画のご説明',
+        description: '担当医が初回訪問し、診療計画・訪問スケジュール・緊急時の連絡方法を、わかりやすくご説明します。',
+        icon: 'tabler:home-heart',
+      },
+      {
+        title: '定期訪問診療スタート',
+        description: '月2回の定期訪問診療が始まります。急変時は24時間365日、担当医へ直接ご連絡いただけます。',
+        icon: 'tabler:stethoscope',
+      },
+    ]}
+    classes={{ container: 'max-w-3xl' }}
+  />
+
+  <Features2
+    id="targets"
+    tagline="ご利用対象"
+    title="こんな方がご利用いただけます"
+    subtitle="上記以外でも、通院が困難であれば、どなたでもご利用いただけます。"
+    columns={4}
+    items={[
+      {
+        title: '通院困難な高齢者・障がいのある方',
+        description: '足腰が弱く通院が難しくなった方、寝たきりや車いすの方にも対応します。',
+        icon: 'tabler:wheelchair',
+      },
+      {
+        title: '外出困難な精神疾患の方',
+        description: 'うつ病・統合失調症・認知症など、精神科専門医がご自宅へ直接伺います。',
+        icon: 'tabler:home-shield',
+      },
+      {
+        title: '医療ケアが必要なお子さま',
+        description: '人工呼吸器・経管栄養など、医療的ケアが必要なお子さまのご自宅へ、小児科専門医が訪問します。',
+        icon: 'tabler:baby-carriage',
+      },
+      {
+        title: '退院後・施設入居中の方',
+        description: '病院を退院されたあとの在宅療養中の方、老人ホーム・グループホームに入居中の方にも対応します。',
+        icon: 'tabler:bed',
+      },
+    ]}
+  >
+    <Fragment slot="bg"><div class="absolute inset-0 bg-blue-50/50 dark:bg-transparent"></div></Fragment>
+  </Features2>
+  <div class="text-center -mt-4 pb-8 bg-white dark:bg-slate-900">
+    <a href="/about#targets" class="text-primary text-sm font-bold hover:underline inline-flex items-center gap-1">
+      クリニック紹介でもっと詳しく見る <Icon name="tabler:arrow-right" class="w-4 h-4" />
+    </a>
+  </div>
+
+  <CallToAction
+    actions={[
+      { variant: 'primary', text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
+      {
+        variant: 'line',
+        text: 'LINEで無料相談',
+        href: 'https://line.me/R/ti/p/%40512ysmzx',
+        icon: 'tabler:brand-line',
+      },
+    ]}
+  >
+    <Fragment slot="title">訪問診療のご相談はこちら</Fragment>
+    <Fragment slot="subtitle"> 受付は平日9:00〜17:00。緊急往診は24時間365日対応です。 </Fragment>
+  </CallToAction>
+</Layout>

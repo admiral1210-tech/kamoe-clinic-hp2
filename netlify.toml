@@ -2,6 +2,10 @@
   publish = "dist"
   command = "npm run build"
 
+[dev]
+  command = "npm run dev"
+  targetPort = 4321
+
 [build.environment]
   NODE_VERSION = "20"
 [build.processing.html]

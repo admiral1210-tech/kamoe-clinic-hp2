@@ -7,7 +7,8 @@ import Layout from '~/layouts/PageLayout.astro';
 
 const metadata = {
   title: '診療内容｜内科・精神科・小児科・ターミナルケア｜かもめクリニック',
-  description: 'かもめクリニックの診療内容。内科・精神科・小児科の訪問診療、ターミナルケア、24時間365日の緊急往診に対応。精神科専門医3名常勤は大阪市内の訪問診療クリニックとして唯一。',
+  description:
+    'かもめクリニックの診療内容。内科・精神科・小児科の訪問診療、ターミナルケア、24時間365日の緊急往診に対応。精神科専門医3名常勤は大阪市内の訪問診療クリニックとして唯一。',
 };
 ---
 
@@ -20,7 +21,12 @@ const metadata = {
     subtitle="ご自宅・施設へ医師が定期的に伺い、診察・処方・各種検査を行う<strong>訪問診療専門クリニック</strong>です。内科・精神科・小児科に対応し、<strong>24時間365日の緊急往診</strong>で在宅生活をしっかり支えます。"
     actions={[
       { variant: 'primary', text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
-      { variant: 'line', text: 'LINEで無料相談', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+      {
+        variant: 'line',
+        text: 'LINEで無料相談',
+        href: 'https://line.me/R/ti/p/%40512ysmzx',
+        icon: 'tabler:brand-line',
+      },
     ]}
     image={{
       src: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1740&q=80',
@@ -37,32 +43,38 @@ const metadata = {
     items={[
       {
         title: '内科（一般訪問診療）',
-        description: '高血圧・糖尿病・心不全・COPD・慢性腎臓病などの生活習慣病や慢性疾患の管理。点滴・褥瘡処置・カテーテル管理なども対応します。',
+        description:
+          '高血圧・糖尿病・心不全・COPD・慢性腎臓病などの生活習慣病や慢性疾患の管理。点滴・褥瘡処置・カテーテル管理なども対応します。',
         icon: 'tabler:stethoscope',
       },
       {
         title: '精神科（大阪市内唯一）',
-        description: '精神科専門医3名が常勤する、大阪市内唯一の体制です。うつ病・統合失調症・認知症・依存症・発達障がいなど、幅広い精神科疾患に対応します。',
+        description:
+          '精神科専門医3名が常勤する、大阪市内唯一の体制です。うつ病・統合失調症・認知症・依存症・発達障がいなど、幅広い精神科疾患に対応します。',
         icon: 'tabler:brain',
       },
       {
         title: '小児科（医療的ケア児）',
-        description: '医療的ケアが必要なお子さまや、障がいのある子どもの訪問診療に対応。学校・保育所・自宅など生活の場へ伺います。',
+        description:
+          '医療的ケアが必要なお子さまや、障がいのある子どもの訪問診療に対応。学校・保育所・自宅など生活の場へ伺います。',
         icon: 'tabler:baby-carriage',
       },
       {
         title: 'ターミナルケア（在宅看取り）',
-        description: 'グループ全体で年間約100件の在宅看取りを実施。ご本人の想いを最優先に、ご家族への丁寧なサポートと多職種連携で最期まで支えます。',
+        description:
+          'グループ全体で年間約100件の在宅看取りを実施。ご本人の想いを最優先に、ご家族への丁寧なサポートと多職種連携で最期まで支えます。',
         icon: 'tabler:heart-handshake',
       },
       {
         title: '緊急往診（24時間365日）',
-        description: '機能強化型在宅療養支援診療所（在支診1）として、夜間・休日・年末年始を問わず急変時に迅速対応。安心して任せられるかかりつけ医として寄り添います。',
+        description:
+          '機能強化型在宅療養支援診療所（在支診1）として、夜間・休日・年末年始を問わず急変時に迅速対応。安心して任せられるかかりつけ医として寄り添います。',
         icon: 'tabler:ambulance',
       },
       {
         title: '施設・グループホーム対応',
-        description: '対応施設50以上。有料老人ホーム・グループホーム・サービス付き高齢者向け住宅など、各種施設への定期訪問に対応しています。',
+        description:
+          '対応施設50以上。有料老人ホーム・グループホーム・サービス付き高齢者向け住宅など、各種施設への定期訪問に対応しています。',
         icon: 'tabler:building-community',
       },
     ]}
@@ -138,7 +150,9 @@ const metadata = {
   >
     <Fragment slot="content">
       <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">ターミナルケア・在宅看取り</h3>
-      <p class="text-muted">グループ全体で年間約100件の在宅看取りを実施。ご本人・ご家族への丁寧なケアと、関係各所との連携を大切にしています。</p>
+      <p class="text-muted">
+        グループ全体で年間約100件の在宅看取りを実施。ご本人・ご家族への丁寧なケアと、関係各所との連携を大切にしています。
+      </p>
     </Fragment>
   </Content>
 
@@ -160,6 +174,6 @@ const metadata = {
       },
     ]}
     title="まずはお気軽にご相談ください"
-    subtitle="紹介状がなくてもご相談いただけます。受付：平日 9:00〜17:00　｜　緊急往診は24時間365日対応"
+    subtitle="紹介状がなくてもご相談いただけます。受付：平日 9:00〜17:00 | 緊急往診は24時間365日対応"
   />
 </Layout>

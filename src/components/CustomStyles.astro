@@ -9,13 +9,11 @@ import '@fontsource-variable/inter';
 <link rel="preconnect" href="https://www.kamome-clinic.net" />
 <link rel="dns-prefetch" href="https://www.kamome-clinic.net" />
 <link
-  rel="preload" as="style"
+  rel="preload"
+  as="style"
   href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap"
 />
-<link
-  href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
-  rel="stylesheet"
-/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet" />
 
 <style is:inline>
   :root {
@@ -30,7 +28,7 @@ import '@fontsource-variable/inter';
     --aw-color-accent: rgb(231 111 81);
 
     /* ───── ブランドカラー（固定値） ───── */
-    --aw-color-line: #06C755;
+    --aw-color-line: #06c755;
     --aw-color-line-hover: #05a847;
     --aw-color-bg-header-dark: rgb(3 6 33 / 90%);
 
@@ -71,10 +69,24 @@ import '@fontsource-variable/inter';
   }
 
   /* ───── ベースフォントサイズ ───── */
-  html { font-size: 20px; }
-  @media (max-width: 1024px) { html { font-size: 19px; } }
-  @media (max-width: 768px)  { html { font-size: 16px; } }
-  @media (max-width: 480px)  { html { font-size: 15px; } }
+  html {
+    font-size: 20px;
+  }
+  @media (max-width: 1024px) {
+    html {
+      font-size: 19px;
+    }
+  }
+  @media (max-width: 768px) {
+    html {
+      font-size: 16px;
+    }
+  }
+  @media (max-width: 480px) {
+    html {
+      font-size: 15px;
+    }
+  }
 
   /* ───── 日本語フォント最適化 ───── */
   body {
@@ -82,12 +94,17 @@ import '@fontsource-variable/inter';
     font-feature-settings: 'palt' 1;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    line-height: 2.0;
+    line-height: 2;
     color: var(--aw-color-text-default);
     background-color: var(--aw-color-bg-page);
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-weight: 700;
     line-height: 1.4;
     letter-spacing: -0.01em;
@@ -102,8 +119,14 @@ import '@fontsource-variable/inter';
 
   /* ───── 浮動CTAボタン ───── */
   @keyframes floatingCtaIn {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .floating-cta {
@@ -134,7 +157,9 @@ import '@fontsource-variable/inter';
     font-weight: 700;
     font-size: 1rem;
     box-shadow: 0 4px 20px rgb(0 0 0 / 22%);
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
     text-decoration: none !important;
     white-space: nowrap;
   }
@@ -192,8 +217,12 @@ import '@fontsource-variable/inter';
       box-shadow: none;
     }
     /* フォームボタンはモバイル非表示 */
-    .floating-cta-mail { display: none !important; }
+    .floating-cta-mail {
+      display: none !important;
+    }
     /* ボトムバー分のコンテンツ下余白（コンテンツが隠れない） */
-    body { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+    body {
+      padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    }
   }
 </style>

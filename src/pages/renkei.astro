@@ -31,72 +31,85 @@ const strengths = [
   {
     icon: 'tabler:brain',
     title: '精神科専門医3名常勤（大阪市内唯一）',
-    description: 'うつ病・統合失調症・双極性障害・認知症・依存症など精神疾患を抱える患者さまも専門医が対応。外来通院が困難なケースに強みがあります。',
+    description:
+      'うつ病・統合失調症・双極性障害・認知症・依存症など精神疾患を抱える患者さまも専門医が対応。外来通院が困難なケースに強みがあります。',
   },
   {
     icon: 'tabler:clock-24',
     title: '24時間365日の緊急往診体制',
-    description: '在支診1として夜間・休日も緊急往診に対応。急変時の受け皿として、担当ケアマネ・施設スタッフへの迅速な連絡体制を整えています。',
+    description:
+      '在支診1として夜間・休日も緊急往診に対応。急変時の受け皿として、担当ケアマネ・施設スタッフへの迅速な連絡体制を整えています。',
   },
   {
     icon: 'tabler:map-pin',
     title: '大阪市内5院・広域対応',
-    description: '港区・西淀川区・住之江区ほか市内に5拠点。対応エリアの確認は地域医療連携部が一括で行います。エリア外でもまずご相談ください。',
+    description:
+      '港区・西淀川区・住之江区ほか市内に5拠点。対応エリアの確認は地域医療連携部が一括で行います。エリア外でもまずご相談ください。',
   },
   {
     icon: 'tabler:building-hospital',
     title: '約50施設への訪問実績',
-    description: '有料老人ホーム・グループホーム・特別養護老人ホーム・サービス付き高齢者向け住宅など約50施設に対応。施設担当医としての連携も可能です。',
+    description:
+      '有料老人ホーム・グループホーム・特別養護老人ホーム・サービス付き高齢者向け住宅など約50施設に対応。施設担当医としての連携も可能です。',
   },
   {
     icon: 'tabler:baby-carriage',
     title: '医療ケア児・NICU退院後支援',
-    description: '小児科専門医・小児循環器専門医が在籍。人工呼吸器・経管栄養・気管切開など医療的ケアが必要なお子さまの在宅移行を支援します。',
+    description:
+      '小児科専門医・小児循環器専門医が在籍。人工呼吸器・経管栄養・気管切開など医療的ケアが必要なお子さまの在宅移行を支援します。',
   },
   {
     icon: 'tabler:heart',
     title: 'ご本人の意向を最優先に、看取りまで寄り添います',
-    description: '終末期のご本人・ご家族への丁寧なケアと関係各所との連携を大切にしています。グループ全体で年間約100件の在宅看取りを実施しています。',
+    description:
+      '終末期のご本人・ご家族への丁寧なケアと関係各所との連携を大切にしています。グループ全体で年間約100件の在宅看取りを実施しています。',
   },
 ];
 
 const targets = [
-  { icon: 'tabler:wheelchair',      text: '通院困難な高齢者・障がいのある方' },
-  { icon: 'tabler:home-shield',     text: '外出困難な精神疾患の方（うつ病・統合失調症・認知症など）' },
-  { icon: 'tabler:baby-carriage',   text: '医療的ケアが必要なお子さま（NICU退院後含む）' },
-  { icon: 'tabler:bed',             text: '退院後に在宅療養に移行される方' },
-  { icon: 'tabler:building-store',  text: '施設入居中で定期的な医師の往診が必要な方' },
-  { icon: 'tabler:stethoscope',     text: '緩和ケア・看取りを希望される方とそのご家族' },
+  { icon: 'tabler:wheelchair', text: '通院困難な高齢者・障がいのある方' },
+  { icon: 'tabler:home-shield', text: '外出困難な精神疾患の方（うつ病・統合失調症・認知症など）' },
+  { icon: 'tabler:baby-carriage', text: '医療的ケアが必要なお子さま（NICU退院後含む）' },
+  { icon: 'tabler:bed', text: '退院後に在宅療養に移行される方' },
+  { icon: 'tabler:building-store', text: '施設入居中で定期的な医師の往診が必要な方' },
+  { icon: 'tabler:stethoscope', text: '緩和ケア・看取りを希望される方とそのご家族' },
 ];
 
 const faqs = [
   {
     title: '紹介状は必要ですか？',
-    description: '紹介状がなくてもご相談いただけます。お電話またはFAX・フォームでご連絡いただければ、地域医療連携部が患者さまの状況を確認し、担当拠点・担当医を調整します。',
+    description:
+      '紹介状がなくてもご相談いただけます。お電話またはFAX・フォームでご連絡いただければ、地域医療連携部が患者さまの状況を確認し、担当拠点・担当医を調整します。',
   },
   {
     title: '訪問開始までどれくらいかかりますか？',
-    description: 'ご連絡後、最短当日の訪問開始を目指しています。患者さまの状態・エリアを確認次第、速やかにご連絡します。',
+    description:
+      'ご連絡後、最短当日の訪問開始を目指しています。患者さまの状態・エリアを確認次第、速やかにご連絡します。',
   },
   {
     title: '精神科疾患の患者さまも受け入れ可能ですか？',
-    description: 'はい。精神科専門医3名が常勤しており、大阪市内の訪問診療クリニックとして唯一の体制です。通院困難な精神疾患の患者さまはぜひご相談ください。',
+    description:
+      'はい。精神科専門医3名が常勤しており、大阪市内の訪問診療クリニックとして唯一の体制です。通院困難な精神疾患の患者さまはぜひご相談ください。',
   },
   {
     title: '施設に定期的に来てもらうことはできますか？',
-    description: 'はい。有料老人ホーム・グループホームなどに施設担当医として定期訪問することが可能です。施設スタッフとの連携を大切にしています。',
+    description:
+      'はい。有料老人ホーム・グループホームなどに施設担当医として定期訪問することが可能です。施設スタッフとの連携を大切にしています。',
   },
   {
     title: '急変時・夜間の対応はどうなっていますか？',
-    description: '在支診1として24時間365日の緊急往診に対応しています。急変時は担当医への直接連絡体制があり、翌日を待たずに対応します。訪問開始時に緊急連絡先・対応手順を詳しくご説明します。',
+    description:
+      '在支診1として24時間365日の緊急往診に対応しています。急変時は担当医への直接連絡体制があり、翌日を待たずに対応します。訪問開始時に緊急連絡先・対応手順を詳しくご説明します。',
   },
   {
     title: '大阪市外のエリアも対応可能ですか？',
-    description: '現在は大阪市内を中心に対応しています。市外のご相談も地域医療連携部（06-4301-7883）が柔軟に対応しますので、まずはお問い合わせください。',
+    description:
+      '現在は大阪市内を中心に対応しています。市外のご相談も地域医療連携部（06-4301-7883）が柔軟に対応しますので、まずはお問い合わせください。',
   },
   {
     title: '医療ケア児の在宅移行支援は可能ですか？',
-    description: '対応しています。小児科専門医・小児循環器専門医が在籍し、退院前からのご相談も可能です。NICU退院後の在宅移行支援実績もあります。',
+    description:
+      '対応しています。小児科専門医・小児循環器専門医が在籍し、退院前からのご相談も可能です。NICU退院後の在宅移行支援実績もあります。',
   },
 ];
 ---
@@ -170,15 +183,19 @@ const faqs = [
       <div class="text-center mb-8">
         <p class="text-sm font-semibold text-primary uppercase tracking-widest mb-1">Targets</p>
         <h2 class="text-3xl font-bold text-gray-900 dark:text-white">受け入れ可能な患者さまの例</h2>
-        <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">他院・他事業所で断られたケースもお気軽にご相談ください。</p>
+        <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
+          他院・他事業所で断られたケースもお気軽にご相談ください。
+        </p>
       </div>
       <div class="grid sm:grid-cols-2 gap-3">
-        {targets.map(({ icon, text }) => (
-          <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 px-5 py-4 flex items-center gap-3">
-            <Icon name={icon} class="w-6 h-6 text-primary shrink-0" />
-            <p class="text-gray-800 dark:text-gray-200 text-sm font-medium">{text}</p>
-          </div>
-        ))}
+        {
+          targets.map(({ icon, text }) => (
+            <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 px-5 py-4 flex items-center gap-3">
+              <Icon name={icon} class="w-6 h-6 text-primary shrink-0" />
+              <p class="text-gray-800 dark:text-gray-200 text-sm font-medium">{text}</p>
+            </div>
+          ))
+        }
       </div>
     </div>
   </section>
@@ -190,22 +207,26 @@ const faqs = [
     items={[
       {
         title: 'STEP 1　地域医療連携部へご連絡',
-        description: 'TEL 06-4301-7883（平日9:00〜17:00）またはFAX・フォームから患者さまの基本情報（住所・状態・診療科）をお伝えください。紹介状がなくてもご相談いただけます。',
+        description:
+          'TEL 06-4301-7883（平日9:00〜17:00）またはFAX・フォームから患者さまの基本情報（住所・状態・診療科）をお伝えください。紹介状がなくてもご相談いただけます。',
         icon: 'tabler:phone',
       },
       {
         title: 'STEP 2　担当エリア・拠点の確認',
-        description: '患者さまのご住所・状態を確認し、5院のうち最適な拠点と担当医を決定します。対応可否を速やかにご連絡します。',
+        description:
+          '患者さまのご住所・状態を確認し、5院のうち最適な拠点と担当医を決定します。対応可否を速やかにご連絡します。',
         icon: 'tabler:map-search',
       },
       {
         title: 'STEP 3　患者さま・ご家族への説明',
-        description: 'ご本人・ご家族に訪問診療の内容・費用・スケジュールをご説明します。担当ケアマネジャーとの情報共有も行います。',
+        description:
+          'ご本人・ご家族に訪問診療の内容・費用・スケジュールをご説明します。担当ケアマネジャーとの情報共有も行います。',
         icon: 'tabler:users',
       },
       {
         title: 'STEP 4　初回訪問・訪問診療スタート',
-        description: '担当医が初回訪問し、診療計画・訪問スケジュール・緊急時の連絡方法をご説明。月2回の定期訪問診療がスタートします。',
+        description:
+          '担当医が初回訪問し、診療計画・訪問スケジュール・緊急時の連絡方法をご説明。月2回の定期訪問診療がスタートします。',
         icon: 'tabler:home-heart',
       },
     ]}
@@ -216,20 +237,17 @@ const faqs = [
   />
 
   <!-- ===== よくある質問 ===== -->
-  <FAQs
-    title="よくある質問（医療・介護関係者の方へ）"
-    tagline="FAQ"
-    items={faqs}
-    columns={1}
-  />
+  <FAQs title="よくある質問（医療・介護関係者の方へ）" tagline="FAQ" items={faqs} columns={1} />
 
   <!-- ===== 地域医療連携部 連絡先 ===== -->
   <section class="py-14 bg-blue-50 dark:bg-slate-800 border-t border-blue-100 dark:border-slate-700">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       <div class="text-center mb-8">
         <p class="text-sm font-semibold text-primary uppercase tracking-widest mb-1">Contact</p>
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">地域医療連携部　連絡先・担当スタッフ</h2>
-        <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">すべてのエリアを一括して承ります。新規のご相談やご不明な点はお気軽にご連絡ください。</p>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">地域医療連携部 連絡先・担当スタッフ</h2>
+        <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
+          すべてのエリアを一括して承ります。新規のご相談やご不明な点はお気軽にご連絡ください。
+        </p>
       </div>
 
       <!-- 相談書フォーム（メインCTA） -->
@@ -248,7 +266,9 @@ const faqs = [
           </div>
         </div>
         <div class="shrink-0">
-          <span class="inline-flex items-center gap-2 bg-white text-primary font-bold px-6 py-3 rounded-full text-sm group-hover:shadow-md transition-shadow">
+          <span
+            class="inline-flex items-center gap-2 bg-white text-primary font-bold px-6 py-3 rounded-full text-sm group-hover:shadow-md transition-shadow"
+          >
             <Icon name="tabler:external-link" class="w-4 h-4" />
             フォームを開く
           </span>
@@ -266,13 +286,20 @@ const faqs = [
         <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 p-6 text-center">
           <Icon name="tabler:phone" class="w-8 h-8 text-gray-400 mx-auto mb-3" />
           <p class="font-bold text-gray-900 dark:text-white mb-1">一般受付</p>
-          <a href="tel:0643017871" class="text-2xl font-black text-gray-700 dark:text-gray-300 hover:underline block">06-4301-7871</a>
+          <a href="tel:0643017871" class="text-2xl font-black text-gray-700 dark:text-gray-300 hover:underline block"
+            >06-4301-7871</a
+          >
           <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">平日 9:00〜17:00</p>
         </div>
         <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 p-6 text-center">
           <Icon name="tabler:clipboard-list" class="w-8 h-8 text-primary mx-auto mb-3" />
           <p class="font-bold text-gray-900 dark:text-white mb-1">オンラインフォーム</p>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdXxuP8iRtCW8fNrVf6zLnPI97tqk2StxX4n7Ix6HEwqSIJ_Q/viewform" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-primary hover:underline block mt-2">フォームを開く →</a>
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSdXxuP8iRtCW8fNrVf6zLnPI97tqk2StxX4n7Ix6HEwqSIJ_Q/viewform"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm font-bold text-primary hover:underline block mt-2">フォームを開く →</a
+          >
           <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">24時間受付</p>
         </div>
       </div>
@@ -284,50 +311,54 @@ const faqs = [
           <h3 class="font-bold text-gray-900 dark:text-white">担当スタッフ</h3>
         </div>
         <div class="grid sm:grid-cols-3 gap-5">
-
           <!-- スタッフカード：今井 淳也 -->
-          <div class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 flex flex-col items-center text-center gap-3">
+          <div
+            class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 flex flex-col items-center text-center gap-3"
+          >
             <!-- 顔写真プレースホルダー -->
-            <div class="w-24 h-24 rounded-full bg-gray-100 dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-600 flex items-center justify-center overflow-hidden shrink-0">
+            <div
+              class="w-24 h-24 rounded-full bg-gray-100 dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-600 flex items-center justify-center overflow-hidden shrink-0"
+            >
               <Icon name="tabler:user" class="w-12 h-12 text-gray-400 dark:text-slate-500" />
             </div>
             <div>
               <p class="font-bold text-lg text-gray-900 dark:text-white leading-tight">今井 淳也</p>
               <p class="text-xs text-primary font-semibold mt-0.5">医療経営士</p>
             </div>
-            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-              （コメントを準備中です）
-            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">（コメントを準備中です）</p>
           </div>
 
           <!-- スタッフカード：藤原 淳子 -->
-          <div class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 flex flex-col items-center text-center gap-3">
-            <div class="w-24 h-24 rounded-full bg-gray-100 dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-600 flex items-center justify-center overflow-hidden shrink-0">
+          <div
+            class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 flex flex-col items-center text-center gap-3"
+          >
+            <div
+              class="w-24 h-24 rounded-full bg-gray-100 dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-600 flex items-center justify-center overflow-hidden shrink-0"
+            >
               <Icon name="tabler:user" class="w-12 h-12 text-gray-400 dark:text-slate-500" />
             </div>
             <div>
               <p class="font-bold text-lg text-gray-900 dark:text-white leading-tight">藤原 淳子</p>
               <p class="text-xs text-primary font-semibold mt-0.5">精神保健福祉士</p>
             </div>
-            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-              （コメントを準備中です）
-            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">（コメントを準備中です）</p>
           </div>
 
           <!-- スタッフカード：武富 涼馬 -->
-          <div class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 flex flex-col items-center text-center gap-3">
-            <div class="w-24 h-24 rounded-full bg-gray-100 dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-600 flex items-center justify-center overflow-hidden shrink-0">
+          <div
+            class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 flex flex-col items-center text-center gap-3"
+          >
+            <div
+              class="w-24 h-24 rounded-full bg-gray-100 dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-600 flex items-center justify-center overflow-hidden shrink-0"
+            >
               <Icon name="tabler:user" class="w-12 h-12 text-gray-400 dark:text-slate-500" />
             </div>
             <div>
               <p class="font-bold text-lg text-gray-900 dark:text-white leading-tight">武富 涼馬</p>
               <p class="text-xs text-primary font-semibold mt-0.5">連携担当</p>
             </div>
-            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-              （コメントを準備中です）
-            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">（コメントを準備中です）</p>
           </div>
-
         </div>
       </div>
     </div>
@@ -336,8 +367,18 @@ const faqs = [
   <!-- ===== CTA ===== -->
   <CallToAction
     actions={[
-      { variant: 'primary', text: '地域医療連携部に電話する（06-4301-7883）', href: 'tel:0643017883', icon: 'tabler:phone' },
-      { variant: 'secondary', text: 'フォームでお問い合わせ', href: 'https://docs.google.com/forms/d/e/1FAIpQLSdXxuP8iRtCW8fNrVf6zLnPI97tqk2StxX4n7Ix6HEwqSIJ_Q/viewform', icon: 'tabler:clipboard-list' },
+      {
+        variant: 'primary',
+        text: '地域医療連携部に電話する（06-4301-7883）',
+        href: 'tel:0643017883',
+        icon: 'tabler:phone',
+      },
+      {
+        variant: 'secondary',
+        text: 'フォームでお問い合わせ',
+        href: 'https://docs.google.com/forms/d/e/1FAIpQLSdXxuP8iRtCW8fNrVf6zLnPI97tqk2StxX4n7Ix6HEwqSIJ_Q/viewform',
+        icon: 'tabler:clipboard-list',
+      },
     ]}
   >
     <Fragment slot="title">まずはお気軽にご相談ください</Fragment>

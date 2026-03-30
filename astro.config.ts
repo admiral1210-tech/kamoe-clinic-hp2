@@ -43,7 +43,7 @@ export default defineConfig({
         // 外部公式ブログへ転送のみ（検索エンジンは転送元より先URLを正とするのが望ましい）
         if (path === '/blog') return false;
         if (excludePaths.includes(path)) return false;
-        if (excludePrefixes.some(prefix => path.startsWith(prefix))) return false;
+        if (excludePrefixes.some((prefix) => path.startsWith(prefix))) return false;
         return true;
       },
     }),

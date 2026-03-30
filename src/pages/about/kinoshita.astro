@@ -4,7 +4,6 @@ import Hero from '~/components/widgets/Hero.astro';
 import Content from '~/components/widgets/Content.astro';
 import Features2 from '~/components/widgets/Features2.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
-import { Icon } from 'astro-icon/components';
 
 const metadata = {
   title: '院長プロフィール・木下啓太｜かもめクリニック（大阪市）',
@@ -40,7 +39,8 @@ const jsonLdPhysician = {
   },
   medicalSpecialty: 'https://schema.org/InternalMedicine',
   url: 'https://kamome-clinic.net/about/kinoshita',
-  description: 'かもめクリニック院長。2017年大阪市港区に開院。内科・在宅医療専門。機能強化型在宅療養支援診療所（在支診1）認定。',
+  description:
+    'かもめクリニック院長。2017年大阪市港区に開院。内科・在宅医療専門。機能強化型在宅療養支援診療所（在支診1）認定。',
   alumniOf: { '@type': 'CollegeOrUniversity', name: '大阪医科大学（現：大阪医科薬科大学）' },
 };
 ---
@@ -51,9 +51,7 @@ const jsonLdPhysician = {
     <script type="application/ld+json" set:html={JSON.stringify(jsonLdPhysician)} />
   </Fragment>
 
-  <Hero
-    tagline="院長プロフィール"
-  >
+  <Hero tagline="院長プロフィール">
     <Fragment slot="title">
       院長・理事長<br />
       <span class="text-accent dark:text-white highlight">木下 啓太</span>
@@ -109,15 +107,18 @@ const jsonLdPhysician = {
     items={[
       {
         title: '「在宅で最期まで」を支える医療を',
-        description: '病院での治療が一段落した後も、多くの方が住み慣れた自宅や施設に戻り、そこでの生活を続けたいと願っています。かもめクリニックはその願いに応えるため、24時間365日対応の訪問診療体制を構築してきました。',
+        description:
+          '病院での治療が一段落した後も、多くの方が住み慣れた自宅や施設に戻り、そこでの生活を続けたいと願っています。かもめクリニックはその願いに応えるため、24時間365日対応の訪問診療体制を構築してきました。',
       },
       {
         title: '精神科・小児科まで一体的に診る',
-        description: '内科に加え、精神科専門医3名・小児科専門医が常勤することで、複合的な疾患を持つ患者さまも1つのクリニックで対応できます。大阪市内でも類を見ない専門医の充実が、私たちの強みです。',
+        description:
+          '内科に加え、精神科専門医3名・小児科専門医が常勤することで、複合的な疾患を持つ患者さまも1つのクリニックで対応できます。大阪市内でも類を見ない専門医の充実が、私たちの強みです。',
       },
       {
         title: '地域に根ざした在宅医療グループへ',
-        description: '2017年の本院開設以来、大阪市内に複数の拠点を展開し、約50施設・多くのご自宅への訪問診療を継続してきました。これからも地域の在宅医療を支え続けるクリニックグループでありたいと考えています。',
+        description:
+          '2017年の本院開設以来、大阪市内に複数の拠点を展開し、約50施設・多くのご自宅への訪問診療を継続してきました。これからも地域の在宅医療を支え続けるクリニックグループでありたいと考えています。',
       },
     ]}
     image={{
@@ -135,12 +136,40 @@ const jsonLdPhysician = {
     tagline="クリニックの実績"
     title="2017年の開院から積み上げた実績"
     items={[
-      { title: '2017年 大阪市港区に本院開設', description: '大阪市港区夕凪にかもめクリニック本院を開設。在宅療養支援診療所として地域の在宅医療をスタート。', icon: 'tabler:building-hospital' },
-      { title: '在支診1（最上位区分）認定', description: '機能強化型在宅療養支援診療所（在支診1）の認定を取得。24時間対応・看取り実績など厳格な要件をクリア。', icon: 'tabler:certificate' },
-      { title: '複数拠点への展開', description: '大阪市内に複数の拠点（第4院・第5院・第8院ほか）を開設し、西淀川区・住之江区など広域をカバー。', icon: 'tabler:map-2' },
-      { title: '年間看取り約100件', description: 'グループ全体で年間約100件の在宅看取りを実施。「最期まで住み慣れた場所で」という願いを支え続けています。', icon: 'tabler:heart' },
-      { title: '精神科専門医3名常勤体制', description: '大阪市内の訪問診療クリニックとして唯一、精神科専門医3名が常勤。精神疾患を持つ患者さまの在宅医療も専門対応。', icon: 'tabler:brain' },
-      { title: '常勤医師13名・約50施設対応', description: '内科・精神科・小児科あわせて常勤医師13名。有料老人ホーム・グループホーム・特養など約50施設に対応。', icon: 'tabler:users' },
+      {
+        title: '2017年 大阪市港区に本院開設',
+        description: '大阪市港区夕凪にかもめクリニック本院を開設。在宅療養支援診療所として地域の在宅医療をスタート。',
+        icon: 'tabler:building-hospital',
+      },
+      {
+        title: '在支診1（最上位区分）認定',
+        description:
+          '機能強化型在宅療養支援診療所（在支診1）の認定を取得。24時間対応・看取り実績など厳格な要件をクリア。',
+        icon: 'tabler:certificate',
+      },
+      {
+        title: '複数拠点への展開',
+        description: '大阪市内に複数の拠点（第4院・第5院・第8院ほか）を開設し、西淀川区・住之江区など広域をカバー。',
+        icon: 'tabler:map-2',
+      },
+      {
+        title: '年間看取り約100件',
+        description:
+          'グループ全体で年間約100件の在宅看取りを実施。「最期まで住み慣れた場所で」という願いを支え続けています。',
+        icon: 'tabler:heart',
+      },
+      {
+        title: '精神科専門医3名常勤体制',
+        description:
+          '大阪市内の訪問診療クリニックとして唯一、精神科専門医3名が常勤。精神疾患を持つ患者さまの在宅医療も専門対応。',
+        icon: 'tabler:brain',
+      },
+      {
+        title: '常勤医師13名・約50施設対応',
+        description:
+          '内科・精神科・小児科あわせて常勤医師13名。有料老人ホーム・グループホーム・特養など約50施設に対応。',
+        icon: 'tabler:users',
+      },
     ]}
   >
     <Fragment slot="bg">
@@ -151,13 +180,18 @@ const jsonLdPhysician = {
   <CallToAction
     actions={[
       { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
-      { variant: 'line', text: 'LINEで無料相談（@512ysmzx）', href: 'https://line.me/R/ti/p/%40512ysmzx', icon: 'tabler:brand-line' },
+      {
+        variant: 'line',
+        text: 'LINEで無料相談（@512ysmzx）',
+        href: 'https://line.me/R/ti/p/%40512ysmzx',
+        icon: 'tabler:brand-line',
+      },
     ]}
   >
     <Fragment slot="title">訪問診療のご相談はこちら</Fragment>
     <Fragment slot="subtitle">
       患者さまご本人・ご家族・ケアマネジャーの方など、どなたでもお気軽にご相談ください。<br />
-      受付：平日 9:00〜17:00　｜　LINE（@512ysmzx）は24時間受付
+      受付：平日 9:00〜17:00 | LINE（@512ysmzx）は24時間受付
     </Fragment>
   </CallToAction>
 </Layout>

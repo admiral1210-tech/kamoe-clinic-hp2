@@ -18,8 +18,8 @@
 //    例: ratingValue: 4.8, reviewCount: 32
 // ===========================================================================
 export const googleReview = {
-  ratingValue: null as number | null,  // TODO: 例 → 4.8
-  reviewCount: null as number | null,  // TODO: 例 → 32
+  ratingValue: null as number | null, // TODO: 例 → 4.8
+  reviewCount: null as number | null, // TODO: 例 → 32
 };
 
 // ===========================================================================
@@ -31,9 +31,9 @@ export const googleReview = {
 //    例: totalPatients: '約5,000名', totalVisits: '約3万件'
 // ===========================================================================
 export const cumulativeStats = {
-  totalPatients: null as string | null,  // TODO: 例 → '約5,000名'（開院以来の延べ患者数）
-  totalVisits: null as string | null,    // TODO: 例 → '約3万件'（開院以来の累計診察件数）
-  yearsInOperation: 9,                   // 2017年開院・確定値
+  totalPatients: null as string | null, // TODO: 例 → '約5,000名'（開院以来の延べ患者数）
+  totalVisits: null as string | null, // TODO: 例 → '約3万件'（開院以来の累計診察件数）
+  yearsInOperation: 9, // 2017年開院・確定値
 };
 
 // ===========================================================================
@@ -45,11 +45,11 @@ export const cumulativeStats = {
 //    例: total: 52, nurses: 20, adminStaff: 10
 // ===========================================================================
 export const staffCount = {
-  doctors: 13,                          // 常勤医師数・確定値
-  nurses: null as number | null,        // TODO: 例 → 20（常勤・非常勤合計）
-  adminStaff: null as number | null,    // TODO: 例 → 10（事務・コーディネーター）
-  other: null as number | null,         // TODO: その他スタッフ数
-  total: null as number | null,         // TODO: 例 → 52（全スタッフ合計）
+  doctors: 13, // 常勤医師数・確定値
+  nurses: null as number | null, // TODO: 例 → 20（常勤・非常勤合計）
+  adminStaff: null as number | null, // TODO: 例 → 10（事務・コーディネーター）
+  other: null as number | null, // TODO: その他スタッフ数
+  total: null as number | null, // TODO: 例 → 52（全スタッフ合計）
 };
 
 // ===========================================================================
@@ -61,12 +61,12 @@ export const staffCount = {
 //    例: branch2: 2018
 // ===========================================================================
 export const branchFoundingYears = {
-  main:     2017,                        // 本院（港区）・確定値
-  branch2:  null as number | null,       // TODO: 第2院（港区夕凪）
-  branch3:  null as number | null,       // TODO: 第3院
-  branch4:  null as number | null,       // TODO: 第4院（西淀川区）
-  branch5:  null as number | null,       // TODO: 第5院（住之江区）
-  branch8:  null as number | null,       // TODO: 第8院（住之江区）
+  main: 2017, // 本院（港区）・確定値
+  branch2: null as number | null, // TODO: 第2院（港区夕凪）
+  branch3: null as number | null, // TODO: 第3院
+  branch4: null as number | null, // TODO: 第4院（西淀川区）
+  branch5: null as number | null, // TODO: 第5院（住之江区）
+  branch8: null as number | null, // TODO: 第8院（住之江区）
 };
 
 // ===========================================================================
@@ -100,7 +100,9 @@ export function buildNumberOfEmployees() {
       `常勤医師${staffCount.doctors}名`,
       staffCount.nurses !== null ? `看護師${staffCount.nurses}名` : null,
       staffCount.adminStaff !== null ? `事務・コーディネーター${staffCount.adminStaff}名` : null,
-    ].filter(Boolean).join('・');
+    ]
+      .filter(Boolean)
+      .join('・');
     return {
       '@type': 'QuantitativeValue',
       value: staffCount.total,

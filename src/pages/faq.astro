@@ -1,6 +1,7 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
+import FaqAccordionList from '~/components/ui/FaqAccordionList.astro';
 import { Icon } from 'astro-icon/components';
 import { CLINIC_GENERAL_FAQ, buildClinicGeneralFaqJsonLd } from '~/data/faq-general';
 
@@ -56,27 +57,9 @@ const jsonLdWebPage = {
         </p>
       </div>
 
-      <div class="space-y-3">
-        {
-          CLINIC_GENERAL_FAQ.map(({ q, answerHtml }) => (
-            <details class="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden group">
-              <summary class="flex items-start gap-3 p-5 cursor-pointer list-none select-none">
-                <span class="bg-primary/10 text-primary font-black text-sm w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-1">
-                  Q
-                </span>
-                <span class="font-bold text-gray-900 dark:text-white text-lg flex-1 leading-snug">{q}</span>
-                <Icon
-                  name="tabler:plus"
-                  class="w-6 h-6 text-primary shrink-0 transition-transform group-open:rotate-45 mt-0.5"
-                />
-              </summary>
-              <div class="px-5 pb-5 pl-16 prose prose-sm dark:prose-invert max-w-none">
-                <p class="text-gray-700 dark:text-gray-300 text-base leading-relaxed" set:html={answerHtml} />
-              </div>
-            </details>
-          ))
-        }
-      </div>
+      <FaqAccordionList
+        items={CLINIC_GENERAL_FAQ.map(({ q, answerHtml }) => ({ title: q, description: answerHtml }))}
+      />
 
       <div
         class="mt-10 bg-blue-50 dark:bg-slate-800 rounded-2xl p-6 text-center border border-blue-100 dark:border-slate-700"

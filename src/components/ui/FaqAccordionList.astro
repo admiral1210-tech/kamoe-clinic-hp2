@@ -1,0 +1,49 @@
+---
+import { Icon } from 'astro-icon/components';
+import { twMerge } from 'tailwind-merge';
+
+interface FaqAccordionItem {
+  title?: string;
+  description?: string;
+}
+
+interface Props {
+  items?: FaqAccordionItem[];
+  /** 親の max-width など（例: max-w-4xl mx-auto） */
+  class?: string;
+}
+
+const { items = [], class: className } = Astro.props;
+const list = items.filter((i) => i.title?.trim());
+---
+
+{
+  list.length > 0 && (
+    <div class={twMerge('space-y-3', className)}>
+      {list.map((item) => (
+        <details class="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden group">
+          <summary class="flex items-start gap-3 p-4 md:p-5 cursor-pointer list-none select-none">
+            <span class="bg-primary/10 text-primary font-black text-sm w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-1">
+              Q
+            </span>
+            <span class="font-bold text-gray-900 dark:text-white text-base md:text-lg flex-1 leading-snug">
+              {item.title}
+            </span>
+            <Icon
+              name="tabler:plus"
+              class="w-6 h-6 text-primary shrink-0 transition-transform group-open:rotate-45 mt-0.5"
+            />
+          </summary>
+          <div class="px-4 pb-4 md:px-5 md:pb-5 pl-14 md:pl-16">
+            {item.description && (
+              <div
+                class="text-gray-700 dark:text-gray-300 text-base leading-relaxed [&_a]:text-primary [&_a]:underline [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0"
+                set:html={item.description}
+              />
+            )}
+          </div>
+        </details>
+      ))}
+    </div>
+  )
+}

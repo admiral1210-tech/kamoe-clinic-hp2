@@ -4,6 +4,7 @@ import Hero from '~/components/widgets/Hero.astro';
 import Features from '~/components/widgets/Features.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 import { Icon } from 'astro-icon/components';
+import FaqAccordionList from '~/components/ui/FaqAccordionList.astro';
 import {
   buildAggregateRating,
   buildNumberOfEmployees,
@@ -288,7 +289,7 @@ const jsonLdSpeakable = {
   </Hero>
 
   <!-- 在支診1 + 受付時間 ノート -->
-  <!-- 受付・連絡先バー -->
+  <!-- 受付・連絡先バー ＋ よく使うページ（テキストリンク・#purpose-links は JSON-LD 用に維持） -->
   <section class="bg-blue-50 dark:bg-slate-800 border-b border-blue-100 dark:border-slate-700 not-prose">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 py-4">
       <!-- モバイル：縦並び / デスクトップ：横並び -->
@@ -317,50 +318,45 @@ const jsonLdSpeakable = {
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- 目的別ガイド（SEOハブ） -->
-  <section
-    id="purpose-links"
-    class="py-4 bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 not-prose"
-    aria-label="目的別のご案内"
-  >
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-      <div class="flex flex-wrap justify-center gap-2 sm:gap-3 text-sm">
-        <a
-          href="/houmon-shinryo"
-          class="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-blue-50/80 dark:bg-slate-800 px-4 py-2 font-bold text-primary hover:bg-blue-100 dark:hover:bg-slate-700"
+    <div
+      id="purpose-links"
+      class="border-t border-blue-100 dark:border-slate-700 px-4 sm:px-6 py-2.5"
+      aria-label="よく使うページへのリンク"
+    >
+      <nav
+        class="max-w-5xl mx-auto flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs sm:text-sm text-gray-600 dark:text-gray-400"
+        aria-label="よく使うページ"
+      >
+        <a href="/houmon-shinryo" class="hover:text-primary dark:hover:text-blue-300 underline-offset-2 hover:underline"
+          >訪問診療とは・流れ</a
         >
-          <Icon name="tabler:home-heart" class="w-4 h-4" /> 訪問診療とは・流れ
-        </a>
-        <a
-          href="/cost"
-          class="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-blue-50/80 dark:bg-slate-800 px-4 py-2 font-bold text-primary hover:bg-blue-100 dark:hover:bg-slate-700"
+        <span class="text-blue-200 dark:text-slate-600 select-none" aria-hidden="true">·</span>
+        <a href="/cost" class="hover:text-primary dark:hover:text-blue-300 underline-offset-2 hover:underline"
+          >費用・保険</a
         >
-          <Icon name="tabler:calculator" class="w-4 h-4" /> 費用・保険
-        </a>
-        <a
-          href="/area-osaka"
-          class="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-blue-50/80 dark:bg-slate-800 px-4 py-2 font-bold text-primary hover:bg-blue-100 dark:hover:bg-slate-700"
+        <span class="text-blue-200 dark:text-slate-600 select-none" aria-hidden="true">·</span>
+        <a href="/area-osaka" class="hover:text-primary dark:hover:text-blue-300 underline-offset-2 hover:underline"
+          >対応エリア</a
         >
-          <Icon name="tabler:map-pin" class="w-4 h-4" /> 対応エリア
-        </a>
-        <a
-          href="/faq"
-          class="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-blue-50/80 dark:bg-slate-800 px-4 py-2 font-bold text-primary hover:bg-blue-100 dark:hover:bg-slate-700"
+        <span class="text-blue-200 dark:text-slate-600 select-none" aria-hidden="true">·</span>
+        <a href="/faq" class="hover:text-primary dark:hover:text-blue-300 underline-offset-2 hover:underline"
+          >よくある質問</a
         >
-          <Icon name="tabler:messages" class="w-4 h-4" /> よくある質問
-        </a>
-      </div>
+      </nav>
     </div>
   </section>
 
   <!-- ページ内目次（追従：ヘッダー高さ分ずらして重なりを防止） -->
   <nav
     class="sticky z-30 top-[4.5rem] md:top-[4.75rem] border-b border-gray-200/80 dark:border-slate-700 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md not-prose shadow-sm"
-    aria-label="このページの主な見出し"
+    aria-label="このページの目次"
   >
-    <div class="max-w-5xl mx-auto px-3 sm:px-6 py-2">
+    <div class="max-w-5xl mx-auto px-3 sm:px-6 pt-2 pb-1.5">
+      <p
+        class="text-center text-[10px] sm:text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wide mb-1.5"
+      >
+        このページの目次
+      </p>
       <ul class="flex flex-wrap justify-center gap-x-1 gap-y-1 sm:gap-x-2 text-xs sm:text-sm">
         <li>
           <a
@@ -719,64 +715,87 @@ const jsonLdSpeakable = {
     </div>
   </section>
 
-  <!-- 診療時間（要約 → 表はクリニック紹介ページ） -->
-  <section id="hours" class="py-6 md:py-10 bg-blue-50 dark:bg-slate-800">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-      <p class="text-sm font-semibold text-primary tracking-widest mb-1">診療時間</p>
-      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-3">受付・緊急往診</h2>
-      <p class="text-gray-600 dark:text-gray-300 text-sm md:text-base leading-relaxed mb-5">
-        <strong>受付</strong>：月〜金 9:00〜17:00（土日祝は休診）／ <strong>緊急往診</strong>：365日24時間対応
-      </p>
-      <a
-        href="/about#hours"
-        class="inline-flex items-center gap-2 border-2 border-primary text-primary font-bold px-5 py-2.5 rounded-full text-sm hover:bg-white dark:hover:bg-slate-900"
-      >
-        <Icon name="tabler:calendar" class="w-4 h-4" /> 週表・連絡先の詳細を見る
-      </a>
-    </div>
-  </section>
+  <!-- 診療時間・アクセス・対応エリア（横並びカード） -->
+  <section
+    class="py-8 md:py-12 bg-blue-50 dark:bg-slate-800 border-y border-blue-100 dark:border-slate-700"
+    aria-label="診療時間・アクセス・対応エリア"
+  >
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 lg:gap-8 items-stretch">
+        <article
+          id="hours"
+          class="scroll-mt-32 flex flex-col rounded-2xl border border-gray-200/80 dark:border-slate-600 bg-white dark:bg-slate-900 p-5 md:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] dark:shadow-none text-center md:text-left"
+        >
+          <div class="mx-auto md:mx-0 mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <Icon name="tabler:calendar" class="w-6 h-6" />
+          </div>
+          <p class="text-sm font-semibold text-primary tracking-widest mb-1">診療時間</p>
+          <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
+            受付・緊急往診
+          </h2>
+          <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed flex-1 mb-5">
+            <strong>受付</strong>：月〜金 9:00〜17:00（土日祝は休診）／ <strong>緊急往診</strong>：365日24時間対応
+          </p>
+          <a
+            href="/about#hours"
+            class="mt-auto inline-flex w-full items-center justify-center gap-2 border-2 border-primary text-primary font-bold px-4 py-2.5 rounded-full text-sm hover:bg-blue-50 dark:hover:bg-slate-800 transition-colors"
+          >
+            <Icon name="tabler:calendar" class="w-4 h-4 shrink-0" /> 週表・連絡先の詳細
+          </a>
+        </article>
 
-  <!-- クリニック案内（要約） -->
-  <section id="access" class="py-6 md:py-10" style="background-color: rgb(253 248 241);">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-      <p class="text-sm font-semibold text-primary tracking-widest mb-1">アクセス</p>
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">本院・各院の所在地</h2>
-      <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
-        本院：〒552-0004 大阪市港区夕凪2丁目16-9 TEL <a
-          href="tel:0643017871"
-          class="text-primary font-black hover:underline">06-4301-7871</a
+        <article
+          id="access"
+          class="scroll-mt-32 flex flex-col rounded-2xl border border-gray-200/80 dark:border-slate-600 bg-white dark:bg-slate-900 p-5 md:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] dark:shadow-none text-center md:text-left"
         >
-      </p>
-      <a
-        href="/about#access"
-        class="inline-flex items-center gap-2 bg-primary text-white font-bold px-5 py-2.5 rounded-full text-sm hover:opacity-90"
-      >
-        <Icon name="tabler:map" class="w-4 h-4" /> 地図・第2・4・5・8院を見る
-      </a>
-    </div>
-  </section>
+          <div class="mx-auto md:mx-0 mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <Icon name="tabler:map" class="w-6 h-6" />
+          </div>
+          <p class="text-sm font-semibold text-primary tracking-widest mb-1">アクセス</p>
+          <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
+            本院・各院の所在地
+          </h2>
+          <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed flex-1 mb-5">
+            本院：〒552-0004 大阪市港区夕凪2丁目16-9 TEL{' '}
+            <a href="tel:0643017871" class="text-primary font-black hover:underline whitespace-nowrap">06-4301-7871</a>
+          </p>
+          <a
+            href="/about#access"
+            class="mt-auto inline-flex w-full items-center justify-center gap-2 bg-primary text-white font-bold px-4 py-2.5 rounded-full text-sm hover:opacity-90 transition-opacity"
+          >
+            <Icon name="tabler:map" class="w-4 h-4 shrink-0" /> 地図・各院を見る
+          </a>
+        </article>
 
-  <!-- 対応エリア（ハブへ） -->
-  <section id="area" class="py-6 md:py-10 bg-blue-50 dark:bg-slate-800">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-      <p class="text-sm font-semibold text-primary tracking-widest mb-1">対応エリア</p>
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">大阪市内を5院でカバー</h2>
-      <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-5">
-        港区・西区・大正区・浪速区・中央区・西淀川区・此花区・淀川区・住之江区・住吉区・東住吉区・西成区・阿倍野区などに対応。区ごとの案内・ご相談は下記からどうぞ。
-      </p>
-      <div class="flex flex-wrap justify-center gap-3">
-        <a
-          href="/area-osaka"
-          class="inline-flex items-center gap-2 border-2 border-primary text-primary font-bold px-5 py-2.5 rounded-full text-sm hover:bg-white dark:hover:bg-slate-900"
+        <article
+          id="area"
+          class="scroll-mt-32 flex flex-col rounded-2xl border border-gray-200/80 dark:border-slate-600 bg-white dark:bg-slate-900 p-5 md:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] dark:shadow-none text-center md:text-left"
         >
-          <Icon name="tabler:map-pin" class="w-4 h-4" /> 対応エリア一覧ページへ
-        </a>
-        <a
-          href="tel:0643017883"
-          class="inline-flex items-center gap-2 bg-primary text-white font-bold px-5 py-2.5 rounded-full text-sm hover:opacity-90"
-        >
-          <Icon name="tabler:phone" class="w-4 h-4" /> 06-4301-7883
-        </a>
+          <div class="mx-auto md:mx-0 mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <Icon name="tabler:map-pin" class="w-6 h-6" />
+          </div>
+          <p class="text-sm font-semibold text-primary tracking-widest mb-1">対応エリア</p>
+          <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
+            大阪市内を5院でカバー
+          </h2>
+          <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed flex-1 mb-5">
+            港区・西区・大正区・浪速区・中央区・西淀川区・此花区・淀川区・住之江区・住吉区・東住吉区・西成区・阿倍野区などに対応。区ごとの案内・ご相談は下記からどうぞ。
+          </p>
+          <div class="mt-auto flex flex-col gap-2">
+            <a
+              href="/area-osaka"
+              class="inline-flex w-full items-center justify-center gap-2 border-2 border-primary text-primary font-bold px-4 py-2.5 rounded-full text-sm hover:bg-blue-50 dark:hover:bg-slate-800 transition-colors"
+            >
+              <Icon name="tabler:map-pin" class="w-4 h-4 shrink-0" /> 対応エリア一覧
+            </a>
+            <a
+              href="tel:0643017883"
+              class="inline-flex w-full items-center justify-center gap-2 bg-primary text-white font-bold px-4 py-2.5 rounded-full text-sm hover:opacity-90 transition-opacity"
+            >
+              <Icon name="tabler:phone" class="w-4 h-4 shrink-0" /> 06-4301-7883
+            </a>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -792,29 +811,12 @@ const jsonLdSpeakable = {
         </p>
       </div>
 
-      <div class="space-y-3">
-        {
-          CLINIC_GENERAL_FAQ.slice(0, CLINIC_GENERAL_FAQ_PREVIEW_COUNT).map(({ q, answerHtml }) => (
-            <details class="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden group">
-              <summary class="flex items-start gap-3 p-4 md:p-5 cursor-pointer list-none select-none">
-                <span class="bg-primary/10 text-primary font-black text-sm w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-1">
-                  Q
-                </span>
-                <span class="font-bold text-gray-900 dark:text-white text-base md:text-lg flex-1 leading-snug">
-                  {q}
-                </span>
-                <Icon
-                  name="tabler:plus"
-                  class="w-6 h-6 text-primary shrink-0 transition-transform group-open:rotate-45 mt-0.5"
-                />
-              </summary>
-              <div class="px-4 pb-4 md:px-5 md:pb-5 pl-14 md:pl-16">
-                <p class="text-gray-700 dark:text-gray-300 text-base leading-relaxed" set:html={answerHtml} />
-              </div>
-            </details>
-          ))
-        }
-      </div>
+      <FaqAccordionList
+        items={CLINIC_GENERAL_FAQ.slice(0, CLINIC_GENERAL_FAQ_PREVIEW_COUNT).map(({ q, answerHtml }) => ({
+          title: q,
+          description: answerHtml,
+        }))}
+      />
 
       <div class="mt-6 text-center">
         <a

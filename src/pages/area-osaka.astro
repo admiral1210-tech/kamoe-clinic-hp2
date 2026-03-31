@@ -2,34 +2,18 @@
 import Layout from '~/layouts/PageLayout.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 import { Icon } from 'astro-icon/components';
+import { OSAKA_CITY_WARDS } from '~/data/osaka-wards';
 
 const metadata = {
   title: '訪問診療の対応エリア（大阪市）｜かもめクリニック',
   description:
-    '大阪市港区・西区・住之江区・西淀川区・住吉区・東住吉区ほか、訪問診療・緊急往診の対応エリアをご案内。5院体制で大阪市内を広くカバーします。地域医療連携部06-4301-7883。',
+    '大阪市24区全域で訪問診療・緊急往診に対応。5院体制で市内をカバーします。区ごとの案内ページ・地域医療連携部（06-4301-7883）をご利用ください。',
   ignoreTitleTemplate: true,
   openGraph: {
     type: 'website',
     images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
   },
 };
-
-/** 区ページがあるものはスラッグへ。それ以外は相談電話へ誘導（静的ページ未作成の区） */
-const wardEntries: { name: string; slug: string | null }[] = [
-  { name: '港区', slug: 'minato-ku' },
-  { name: '西区', slug: null },
-  { name: '大正区', slug: 'taisho-ku' },
-  { name: '浪速区', slug: 'naniwa-ku' },
-  { name: '中央区', slug: null },
-  { name: '西淀川区', slug: 'nishiyodogawa-ku' },
-  { name: '此花区', slug: null },
-  { name: '淀川区', slug: null },
-  { name: '住之江区', slug: 'suminoe-ku' },
-  { name: '住吉区', slug: 'sumiyoshi-ku' },
-  { name: '東住吉区', slug: 'higashisumiyoshi-ku' },
-  { name: '西成区', slug: null },
-  { name: '阿倍野区', slug: null },
-];
 
 const jsonLdBreadcrumb = {
   '@context': 'https://schema.org',
@@ -47,7 +31,7 @@ const jsonLdWebPage = {
   name: '訪問診療の対応エリア（大阪市）｜かもめクリニック',
   url: 'https://kamome-clinic.net/area-osaka',
   description:
-    'かもめクリニックは大阪市内の港区・西区・大正区・浪速区・中央区・西淀川区・此花区・淀川区・住之江区・住吉区・東住吉区・西成区・阿倍野区などに訪問診療で対応しています。市内5院体制で広域をカバーします。',
+    'かもめクリニックは大阪市24区全域で訪問診療・緊急往診に対応しています。市内5院体制でカバーし、詳細は地域医療連携部（06-4301-7883）までお問い合わせください。',
   isPartOf: { '@type': 'WebSite', '@id': 'https://kamome-clinic.net/#website' },
   about: { '@type': 'MedicalClinic', '@id': 'https://kamome-clinic.net/#clinic', name: 'かもめクリニック' },
 };
@@ -60,31 +44,30 @@ const jsonLdWebPage = {
   </Fragment>
 
   <section class="py-10 md:py-14 bg-blue-50 dark:bg-slate-800">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
       <div class="text-center mb-8">
         <p class="text-sm font-semibold text-primary tracking-widest mb-1">訪問診療エリア</p>
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">大阪市の対応エリア</h1>
         <p class="text-center text-sm text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mt-4 leading-relaxed">
-          大阪市の港区・西区・大正区・浪速区・中央区・西淀川区・此花区・淀川区・住之江区・住吉区・東住吉区・西成区・阿倍野区などを中心に、<strong
-            >5院体制</strong
-          >で訪問診療・緊急往診に対応しています。
+          <strong>訪問診療</strong>および<strong>緊急往診</strong>の対象エリアは、大阪市の<strong>24区すべて</strong>です。<strong>5院体制</strong>で市内全域をカバーしています。区ごとに紹介ページのある区はリンクからご覧ください。
         </p>
       </div>
 
-      <div class="flex flex-wrap gap-2 justify-center mb-8">
+      <p class="text-center text-xs text-gray-500 dark:text-gray-400 mb-3">大阪市24区（市の区並び順）</p>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 mb-8">
         {
-          wardEntries.map(({ name, slug }) =>
+          OSAKA_CITY_WARDS.map(({ name, slug }) =>
             slug ? (
               <a
                 href={`/area/${slug}`}
-                class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-slate-700 text-gray-800 dark:text-gray-200 hover:border-primary px-3 py-2 rounded-full text-sm font-medium transition-colors inline-flex items-center gap-1"
+                class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-slate-700 text-gray-800 dark:text-gray-200 hover:border-primary px-3 py-2.5 rounded-full text-sm font-medium transition-colors inline-flex items-center justify-center gap-1 text-center"
               >
-                大阪市 {name}
-                <Icon name="tabler:arrow-right" class="w-3.5 h-3.5 text-primary" />
+                {name}
+                <Icon name="tabler:arrow-right" class="w-3.5 h-3.5 shrink-0 text-primary" />
               </a>
             ) : (
-              <span class="bg-white/80 dark:bg-slate-900/80 border border-dashed border-blue-200 dark:border-slate-600 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-full text-sm font-medium inline-flex items-center gap-1">
-                大阪市 {name}
+              <span class="bg-white/80 dark:bg-slate-900/80 border border-dashed border-blue-200 dark:border-slate-600 text-gray-700 dark:text-gray-300 px-3 py-2.5 rounded-full text-sm font-medium inline-flex flex-col sm:flex-row items-center justify-center gap-0.5 text-center leading-tight">
+                <span>{name}</span>
                 <span class="text-xs text-gray-500 dark:text-gray-500">（詳細はお電話）</span>
               </span>
             )
@@ -94,7 +77,7 @@ const jsonLdWebPage = {
 
       <div class="bg-white dark:bg-slate-900 rounded-2xl border border-blue-100 dark:border-slate-700 p-6 text-center">
         <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-          上記以外の区・エリア外のご相談も、まずはお気軽にどうぞ。担当拠点の確認は地域医療連携部が一括でお受けします。
+          大阪市外のご相談や、担当院の調整なども地域医療連携部がお受けします。まずはお気軽にどうぞ。
         </p>
         <a
           href="tel:0643017883"

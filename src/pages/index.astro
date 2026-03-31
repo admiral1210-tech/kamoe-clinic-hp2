@@ -137,14 +137,21 @@ const jsonLdClinic = {
 
 // ===== JSON-LD: 各支院 LocalBusiness =====
 const jsonLdBranches = [
-  { name: 'かもめクリニック第2', street: '夕凪2丁目17-14', tel: '+81-6-6556-9571', bid: 'branch2' as const },
-  { name: 'かもめクリニック第3', street: '東住吉区駒川3丁目29-14', tel: '+81-6-6115-6045', bid: 'branch3' as const },
-  { name: 'かもめクリニック第4', street: '西淀川区柏里1丁目16-15', tel: '+81-6-7506-9565', bid: 'branch4' as const },
-  { name: 'かもめクリニック第5', street: '住之江区北加賀屋2-12-6', tel: '+81-6-6115-7018', bid: 'branch5' as const },
+  { name: 'かもめクリニック第2', street: '夕凪2丁目17-14', tel: '+81-6-6556-9571', fax: null, bid: 'branch2' as const },
+  {
+    name: 'かもめクリニック第3',
+    street: '東住吉区駒川3丁目29-14',
+    tel: '+81-6-6115-6045',
+    fax: '+81-6-6115-6046',
+    bid: 'branch3' as const,
+  },
+  { name: 'かもめクリニック第4', street: '西淀川区柏里1丁目16-15', tel: '+81-6-7506-9565', fax: null, bid: 'branch4' as const },
+  { name: 'かもめクリニック第5', street: '住之江区北加賀屋2-12-6', tel: '+81-6-6115-7018', fax: null, bid: 'branch5' as const },
   {
     name: 'かもめクリニック第8',
     street: '住吉区千躰2-2-39 ホリビル3階',
     tel: '+81-6-6629-8852',
+    fax: null,
     bid: 'branch8' as const,
   },
 ].map((b) => ({
@@ -165,6 +172,7 @@ const jsonLdBranches = [
     addressCountry: 'JP',
   },
   telephone: b.tel,
+  ...(b.fax ? { faxNumber: b.fax } : {}),
   ...(getBranchFoundingDate(b.bid) ? { foundingDate: getBranchFoundingDate(b.bid) } : {}),
 }));
 
@@ -739,10 +747,10 @@ const jsonLdSpeakable = {
           </div>
           <p class="text-sm font-semibold text-primary tracking-widest mb-1">対応エリア</p>
           <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
-            大阪市内を5院でカバー
+            大阪市24区全域を5院でカバー
           </h2>
           <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed flex-1 mb-5">
-            港区・西区・大正区・浪速区・中央区・西淀川区・此花区・淀川区・住之江区・住吉区・東住吉区・西成区・阿倍野区などに対応。区ごとの案内・ご相談は下記からどうぞ。
+            訪問診療・緊急往診の対象は大阪市の24区すべてです。区ごとの案内・ご相談は下記からどうぞ。
           </p>
           <div class="mt-auto flex flex-col gap-2">
             <a

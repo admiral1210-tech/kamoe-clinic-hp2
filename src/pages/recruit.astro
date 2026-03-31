@@ -102,7 +102,7 @@ const metadata = {
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">募集職種</h2>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-6">
+      <div class="grid md:grid-cols-3 gap-6">
         <!-- 医師 -->
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
           <div class="bg-primary px-6 py-4">
@@ -135,7 +135,7 @@ const metadata = {
         <!-- 看護師 -->
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
           <div class="bg-teal-600 px-6 py-4">
-            <h3 class="text-white font-bold text-lg">看護師・准看護師</h3>
+            <h3 class="text-white font-bold text-lg">看護師</h3>
           </div>
           <div class="p-6 space-y-3 text-sm text-gray-700 dark:text-gray-300">
             <div class="flex gap-2">
@@ -152,19 +152,25 @@ const metadata = {
             </div>
             <div class="flex gap-2">
               <span class="font-semibold w-20 shrink-0 text-gray-500">必須資格</span>
-              <span>看護師・准看護師免許（訪問看護経験不問）</span>
+              <span>看護師免許（訪問看護経験不問）</span>
             </div>
             <div class="flex gap-2">
               <span class="font-semibold w-20 shrink-0 text-gray-500">給与</span>
               <span>経験・スキルに応じて応相談</span>
             </div>
+            <a
+              href="/recruit#nurse-fulltime"
+              class="inline-flex items-center justify-center mt-2 rounded-full bg-teal-600 px-4 py-2 text-sm font-bold text-white hover:opacity-90 transition-opacity"
+            >
+              詳細はこちら
+            </a>
           </div>
         </div>
 
         <!-- 医療事務 -->
         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
           <div class="bg-slate-600 px-6 py-4">
-            <h3 class="text-white font-bold text-lg">医療事務・コーディネーター</h3>
+            <h3 class="text-white font-bold text-lg">医療事務</h3>
           </div>
           <div class="p-6 space-y-3 text-sm text-gray-700 dark:text-gray-300">
             <div class="flex gap-2">
@@ -196,7 +202,7 @@ const metadata = {
       </p>
 
       <!-- 看護師 詳細募集要項 -->
-      <div class="mt-12 rounded-2xl border-2 border-teal-500/40 overflow-hidden">
+      <div id="nurse-fulltime" class="mt-12 rounded-2xl border-2 border-teal-500/40 overflow-hidden scroll-mt-28">
         <div class="bg-teal-600 px-6 py-4 flex items-center gap-3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -261,9 +267,7 @@ const metadata = {
               </div>
               <div class="flex gap-3 border-b border-gray-100 dark:border-slate-700 pb-3">
                 <span class="font-semibold text-gray-500 w-24 shrink-0">必須資格</span>
-                <span class="text-gray-800 dark:text-gray-200"
-                  >看護師・准看護師免許<br />普通自動車免許（AT限定可）</span
-                >
+                <span class="text-gray-800 dark:text-gray-200">看護師免許<br />普通自動車免許（AT限定可）</span>
               </div>
               <div class="flex gap-3 border-b border-gray-100 dark:border-slate-700 pb-3">
                 <span class="font-semibold text-gray-500 w-24 shrink-0">勤務先</span>
@@ -278,7 +282,7 @@ const metadata = {
           <div class="mt-6 bg-teal-50 dark:bg-teal-900/20 rounded-xl p-4">
             <p class="text-sm font-semibold text-teal-800 dark:text-teal-300 mb-2">求める人物像</p>
             <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
-              <li>・看護師免許をお持ちの方（准看護師可）</li>
+              <li>・看護師免許をお持ちの方</li>
               <li>・「丁寧さ」「確実さ」を大切にできる方</li>
               <li>・患者さまのお話にじっくり耳を傾けられる方</li>
               <li>・運転に抵抗がない方（安全運転第一）</li>
@@ -286,13 +290,6 @@ const metadata = {
                 ・訪問診療の経験は問いません。ブランクがある方も丁寧に指導します。
               </li>
             </ul>
-          </div>
-          <div class="mt-4 text-center">
-            <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">
-              採用担当へのお問い合わせ（LINE ID）：<span class="font-bold text-gray-700 dark:text-gray-200"
-                >nakamura@kamome-clinic</span
-              >
-            </p>
           </div>
         </div>
       </div>
@@ -403,8 +400,7 @@ const metadata = {
       },
       {
         title: '夜間・休日対応はありますか？',
-        description:
-          '緊急往診はオンコール制で対応しています。夜間・休日のオンコールはチームで分担しており、月に数回程度です。手当も支給されます。',
+        description: '医師の場合、夜間・休日対応は当番制を敷いております。月に２〜３回程度です。',
       },
       {
         title: '転職活動中で在職中でも相談できますか？',

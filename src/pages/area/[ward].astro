@@ -41,11 +41,17 @@ export function getStaticPaths() {
         name: '住之江区',
         name_kana: 'すみのえく',
         description:
-          '大阪市住之江区の訪問診療はかもめクリニック第5院・第8院が担当。北加賀屋・住之江公園・南港エリアのご自宅・施設へ医師が訪問します。',
-        access: '第5院：住之江区北加賀屋2-12-6 / 第8院：住吉区千躰2-2-39 ホリビル3階',
+          '大阪市住之江区の訪問診療はかもめクリニック第5院が担当。北加賀屋・住之江公園・南港エリアのご自宅・施設へ医師が訪問します。',
+        accessSites: [
+          {
+            label: '第5院',
+            detail: '住之江区北加賀屋2-12-6',
+            href: 'https://kamome-clinic5.net/',
+          },
+        ],
         tel: '06-4301-7871',
         areas: ['住之江区全域', '北加賀屋', '南港', '住之江公園', '千躰', '浜口', '粉浜'],
-        branch: '第5院・第8院',
+        branch: '第5院',
       },
     },
     {
@@ -81,10 +87,17 @@ export function getStaticPaths() {
         name_kana: 'すみよしく',
         description:
           '大阪市住吉区の訪問診療はかもめクリニックが対応。長居・我孫子・苅田・帝塚山エリアのご自宅・施設へ医師が訪問します。',
+        accessSites: [
+          {
+            label: '第8院',
+            detail: '住吉区千躰2-2-39 ホリビル3階',
+            href: 'https://kamome-clinic7.net/',
+          },
+        ],
         access: '担当院：地域医療連携部（06-4301-7883）にご相談ください',
         tel: '06-4301-7883',
         areas: ['住吉区全域', '長居', '我孫子', '苅田', '帝塚山', '杉本', '遠里小野', '墨江'],
-        branch: '担当院',
+        branch: '第8院',
       },
     },
     {
@@ -103,7 +116,15 @@ export function getStaticPaths() {
   ];
 }
 
-const { name, description, access, tel, areas, branch } = Astro.props;
+const { name, description, access, tel, areas, branch, accessSites } = Astro.props as {
+  name: string;
+  description: string;
+  access?: string;
+  tel: string;
+  areas: string[];
+  branch: string;
+  accessSites?: { label: string; detail: string; href: string }[];
+};
 
 // 担当支院の開院年マッピング（src/data/clinic-meta.ts で更新可能）
 const wardToBranchKey: Record<string, Parameters<typeof getBranchFoundingDate>[0]> = {
@@ -262,7 +283,30 @@ const jsonLdFaq = {
         class="mt-6 bg-white dark:bg-slate-900 rounded-2xl p-5 border border-blue-100 dark:border-slate-700 text-center"
       >
         <p class="text-sm text-gray-500 mb-1">担当拠点</p>
-        <p class="font-bold text-gray-800 dark:text-white">{access}</p>
+        {
+          accessSites?.length ? (
+            <div class="space-y-2">
+              {
+                accessSites.map((site) => (
+                  <p class="font-bold text-gray-800 dark:text-white">
+                    <a
+                      href={site.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-primary hover:underline inline-flex items-center justify-center gap-1 flex-wrap"
+                    >
+                      {site.label}：{site.detail}
+                      <Icon name="tabler:external-link" class="w-4 h-4 shrink-0 opacity-80" />
+                    </a>
+                  </p>
+                ))
+              }
+              {access ? <p class="text-sm font-normal text-gray-700 dark:text-gray-300 mt-2 leading-relaxed">{access}</p> : null}
+            </div>
+          ) : (
+            <p class="font-bold text-gray-800 dark:text-white">{access}</p>
+          )
+        }
       </div>
     </div>
   </section>

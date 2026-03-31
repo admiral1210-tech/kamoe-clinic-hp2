@@ -4,6 +4,7 @@ import Hero from '~/components/widgets/Hero.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 import Layout from '~/layouts/PageLayout.astro';
 import { Icon } from 'astro-icon/components';
+import { OSAKA_CITY_WARDS } from '~/data/osaka-wards';
 
 const metadata = {
   title: 'クリニック紹介・医師紹介｜かもめクリニック（大阪市）',
@@ -190,16 +191,25 @@ const branches = [
     area: '大阪市港区',
     address: '夕凪2丁目16-9 icrossAMポートビル4F-B',
     tel: '06-4301-7871',
+    fax: null,
     href: null,
   },
-  { name: 'かもめクリニック第2', area: '大阪市港区', address: '夕凪2丁目17-14', tel: '06-6556-9571', href: null },
-  { name: 'かもめクリニック第3', area: '大阪市東住吉区', address: '駒川3丁目29-14', tel: '06-6115-6045', href: null },
-  { name: 'かもめクリニック第4', area: '大阪市西淀川区', address: '柏里1丁目16-15', tel: '06-7506-9565', href: null },
+  { name: 'かもめクリニック第2', area: '大阪市港区', address: '夕凪2丁目17-14', tel: '06-6556-9571', fax: null, href: null },
+  {
+    name: 'かもめクリニック第3',
+    area: '大阪市東住吉区',
+    address: '〒546-0043 大阪市東住吉区駒川3丁目29-14',
+    tel: '06-6115-6045',
+    fax: '06-6115-6046',
+    href: null,
+  },
+  { name: 'かもめクリニック第4', area: '大阪市西淀川区', address: '柏里1丁目16-15', tel: '06-7506-9565', fax: null, href: null },
   {
     name: 'かもめクリニック第5',
     area: '大阪市住之江区',
     address: '北加賀屋2-12-6',
     tel: '06-6115-7018',
+    fax: null,
     href: 'https://kamome-clinic5.net/',
   },
   {
@@ -207,6 +217,7 @@ const branches = [
     area: '大阪市住吉区',
     address: '千躰2-2-39 ホリビル3階',
     tel: '06-6629-8852',
+    fax: null,
     href: 'https://kamome-clinic7.net/',
   },
 ];
@@ -636,7 +647,7 @@ const branches = [
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {
-          branches.map(({ name, area, address, tel, href }) => (
+          branches.map(({ name, area, address, tel, fax, href }) => (
             <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 p-5 flex flex-col gap-3">
               <div class="flex items-start gap-2">
                 <Icon name="tabler:map-pin" class="w-5 h-5 text-primary shrink-0 mt-0.5" />
@@ -648,6 +659,7 @@ const branches = [
                 <a href={`tel:${tel.replace(/-/g, '')}`} class="text-primary font-bold hover:underline block">
                   TEL: {tel}
                 </a>
+                {fax && <p>FAX: {fax}</p>}
               </div>
               {href && (
                 <a
@@ -669,35 +681,34 @@ const branches = [
 
   <!-- ===== 対応エリア ===== -->
   <section class="py-10 bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-slate-800">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center">
       <p class="text-sm font-semibold text-primary tracking-widest mb-3">対応エリア</p>
-      <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-5">主な対応エリア</h3>
-      <div class="flex flex-wrap justify-center gap-2">
+      <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">大阪市24区（訪問診療・緊急往診）</h3>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-5 max-w-2xl mx-auto leading-relaxed">
+        対象エリアは大阪市全域です。紹介ページのある区はリンクからご覧ください。
+      </p>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
         {
-          [
-            '港区',
-            '西淀川区',
-            '住之江区',
-            '住吉区',
-            '西区',
-            '大正区',
-            '浪速区',
-            '此花区',
-            '淀川区',
-            '西成区',
-            '阿倍野区',
-          ].map((ward) => (
-            <a
-              href={`/area/${ward.replace('区', '')}`}
-              class="bg-blue-50 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-slate-700 border border-blue-100 dark:border-slate-700 text-primary font-bold px-4 py-2 rounded-full text-sm transition-colors"
-            >
-              大阪市{ward}
-            </a>
-          ))
+          OSAKA_CITY_WARDS.map(({ name, slug }) =>
+            slug ? (
+              <a
+                href={`/area/${slug}`}
+                class="bg-blue-50 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-slate-700 border border-blue-100 dark:border-slate-700 text-primary font-bold px-3 py-2.5 rounded-full text-sm transition-colors inline-flex items-center justify-center gap-1"
+              >
+                大阪市{name}
+                <Icon name="tabler:arrow-right" class="w-3.5 h-3.5 shrink-0" />
+              </a>
+            ) : (
+              <span class="bg-slate-50 dark:bg-slate-800/80 border border-dashed border-blue-100 dark:border-slate-600 text-gray-700 dark:text-gray-300 px-3 py-2.5 rounded-full text-sm inline-flex flex-col sm:flex-row items-center justify-center gap-0.5 leading-tight">
+                <span>大阪市{name}</span>
+                <span class="text-xs text-gray-500 dark:text-gray-500">（詳細はお電話）</span>
+              </span>
+            )
+          )
         }
       </div>
       <p class="text-sm text-gray-500 dark:text-gray-400 mt-4">
-        上記以外のエリアもご相談ください。地域医療連携部（06-4301-7883）が柔軟に対応します。
+        大阪市外のご相談も、地域医療連携部（06-4301-7883）へお問い合わせください。
       </p>
     </div>
   </section>

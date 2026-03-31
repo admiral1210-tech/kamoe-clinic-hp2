@@ -13,7 +13,7 @@ import {
   googleReview,
 } from '~/data/clinic-meta';
 import { CLINIC_GENERAL_FAQ, CLINIC_GENERAL_FAQ_PREVIEW_COUNT } from '~/data/faq-general';
-import { OLD_BLOG_URL } from '~/data/site-policy';
+import { NEW_BLOG_URL } from '~/data/site-policy';
 
 const metadata = {
   title: 'かもめクリニック｜大阪市の訪問診療 内科・精神科・小児科｜2017年開院',
@@ -528,34 +528,35 @@ const jsonLdSpeakable = {
       <div
         class="rounded-3xl bg-primary text-white p-6 md:p-8 shadow-[0_12px_36px_rgba(37,99,235,0.35)] border border-blue-400/40"
       >
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5 md:gap-6">
           <div class="flex-1">
             <p class="text-xs sm:text-sm font-semibold tracking-[0.16em] text-blue-100 mb-2">医療・介護関係者の方へ</p>
-            <h2 class="text-2xl md:text-3xl font-black leading-tight mb-3">紹介・連携のご相談はこちら</h2>
+            <h2 class="text-xl sm:text-2xl md:text-3xl font-black leading-tight mb-3">紹介・連携のご相談はこちら</h2>
             <p class="text-sm md:text-base text-blue-50 leading-relaxed">
               紹介の流れ、訪問診療相談書（PDF）、オンライン相談の案内を専用ページにまとめています。地域医療連携部が迅速に対応します。
             </p>
           </div>
-          <div class="shrink-0 flex flex-col sm:flex-row gap-3">
+          <div class="flex flex-col gap-3 md:shrink-0">
             <a
               href="https://docs.google.com/forms/d/e/1FAIpQLSdXxuP8iRtCW8fNrVf6zLnPI97tqk2StxX4n7Ix6HEwqSIJ_Q/viewform"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center justify-center gap-2 bg-white text-primary font-black px-6 py-3 rounded-full text-sm md:text-base hover:opacity-90 transition-opacity whitespace-nowrap"
+              class="inline-flex items-center justify-center gap-2 bg-white text-primary font-black px-5 py-3 rounded-full text-sm hover:opacity-90 transition-opacity"
             >
-              <Icon name="tabler:clipboard-list" class="w-5 h-5" /> オンライン相談フォーム
+              <Icon name="tabler:clipboard-list" class="w-5 h-5 shrink-0" /> オンライン相談フォーム
             </a>
             <a
               href="tel:0643017883"
-              class="inline-flex items-center justify-center gap-2 border-2 border-white text-white font-black px-6 py-3 rounded-full text-sm md:text-base hover:bg-white/10 transition-colors whitespace-nowrap"
+              class="inline-flex items-center justify-center gap-2 border-2 border-white text-white font-black px-5 py-3 rounded-full text-sm hover:bg-white/10 transition-colors"
             >
-              <Icon name="tabler:phone" class="w-5 h-5" /> 地域医療連携部：06-4301-7883
+              <Icon name="tabler:phone" class="w-5 h-5 shrink-0" />
+              <span>地域医療連携部<br class="sm:hidden" /><span class="hidden sm:inline">：</span><span class="sm:hidden">　</span>06-4301-7883</span>
             </a>
             <a
               href="/renkei"
-              class="inline-flex items-center justify-center gap-2 border-2 border-white text-white font-black px-6 py-3 rounded-full text-sm md:text-base hover:bg-white/10 transition-colors whitespace-nowrap"
+              class="inline-flex items-center justify-center gap-1.5 text-blue-100 text-sm font-semibold hover:text-white hover:underline transition-colors"
             >
-              <Icon name="tabler:building-hospital" class="w-5 h-5" /> 専用ページを見る
+              <Icon name="tabler:building-hospital" class="w-4 h-4 shrink-0" /> 専用ページを見る <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
             </a>
           </div>
         </div>
@@ -961,7 +962,7 @@ const jsonLdSpeakable = {
           </p>
         </div>
         <a
-          href="/blog"
+          href={NEW_BLOG_URL}
           class="shrink-0 inline-flex items-center gap-1.5 border-2 border-amber-500 text-amber-700 dark:text-amber-400 font-bold px-4 py-2 rounded-full text-sm hover:bg-amber-100 dark:hover:bg-amber-800/40 transition-colors whitespace-nowrap"
           aria-label="お知らせ・ブログを読む"
         >

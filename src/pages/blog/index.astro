@@ -3,128 +3,15 @@ import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 import { Icon } from 'astro-icon/components';
+import { fetchPosts } from '~/utils/blog';
+import { getPermalink } from '~/utils/permalinks';
+import { OLD_BLOG_URL, MIGRATION_START } from '~/data/site-policy';
+import Note from '~/components/widgets/Note.astro';
 
-const WP_BLOG_BASE = 'https://www.kamome-clinic.net/blog';
-const WP_REST = `${WP_BLOG_BASE}/index.php?rest_route=`;
-
-type WPPost = {
-  id: number;
-  date: string;
-  link: string;
-  title: { rendered: string };
-  excerpt: { rendered: string };
-  categories: number[];
-};
-
-type WPCategory = { id: number; name: string };
-
-type ArchiveMonth = {
-  year: number;
-  month: number;
-  count: number;
-  /** WordPress 標準の月別アーカイブ（`?m=YYYYMM`） */
-  archiveUrl: string;
-};
-
-function stripTags(html: string): string {
-  return html
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&#8230;|\[…\]/g, '…')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function decodeBasicEntities(text: string): string {
-  return text
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#039;/g, "'");
-}
-
-/** ビルド時に全記事のメタだけ取得（ページネーション）。件数上限で打ち切り */
-async function fetchAllPostsMeta(maxPages: number): Promise<WPPost[]> {
-  const all: WPPost[] = [];
-  for (let page = 1; page <= maxPages; page++) {
-    const url = `${WP_REST}/wp/v2/posts&per_page=100&page=${page}&orderby=date&order=desc&_fields=id,date,link,title,excerpt,categories`;
-    const res = await fetch(url);
-    if (!res.ok) {
-      if (page === 1) throw new Error(`posts ${res.status}`);
-      break;
-    }
-    const batch = (await res.json()) as WPPost[];
-    if (!Array.isArray(batch) || batch.length === 0) break;
-    all.push(...batch);
-    if (batch.length < 100) break;
-  }
-  return all;
-}
-
-function buildArchiveMonths(postsForArchive: WPPost[], blogBase: string): ArchiveMonth[] {
-  const keyToCount = new Map<string, { year: number; month: number; count: number }>();
-  for (const p of postsForArchive) {
-    const d = new Date(p.date);
-    if (Number.isNaN(d.getTime())) continue;
-    const year = d.getFullYear();
-    const month = d.getMonth() + 1;
-    const key = `${year}-${month}`;
-    const cur = keyToCount.get(key);
-    if (cur) cur.count += 1;
-    else keyToCount.set(key, { year, month, count: 1 });
-  }
-  const rows: ArchiveMonth[] = [];
-  for (const { year, month, count } of keyToCount.values()) {
-    const yyyymm = `${year}${String(month).padStart(2, '0')}`;
-    rows.push({
-      year,
-      month,
-      count,
-      archiveUrl: `${blogBase}/?m=${yyyymm}`,
-    });
-  }
-  rows.sort((a, b) => (a.year !== b.year ? b.year - a.year : b.month - a.month));
-  return rows;
-}
-
-function groupArchiveByYear(months: ArchiveMonth[]): { year: number; months: ArchiveMonth[] }[] {
-  const map = new Map<number, ArchiveMonth[]>();
-  for (const m of months) {
-    const list = map.get(m.year) ?? [];
-    list.push(m);
-    map.set(m.year, list);
-  }
-  const years = [...map.keys()].sort((a, b) => b - a);
-  return years.map((year) => ({ year, months: map.get(year) ?? [] }));
-}
-
-let posts: WPPost[] = [];
-let categoryById: Record<number, string> = {};
-let archiveByYear: { year: number; months: ArchiveMonth[] }[] = [];
-let loadError: string | null = null;
-
-const LIST_LIMIT = 30;
-const ARCHIVE_FETCH_MAX_PAGES = 50;
-
-try {
-  const [allMeta, catsRes] = await Promise.all([
-    fetchAllPostsMeta(ARCHIVE_FETCH_MAX_PAGES),
-    fetch(`${WP_REST}/wp/v2/categories&per_page=100&_fields=id,name`),
-  ]);
-  if (!catsRes.ok) throw new Error(`categories ${catsRes.status}`);
-  const cats = (await catsRes.json()) as WPCategory[];
-  if (!Array.isArray(cats)) throw new Error('invalid JSON');
-  posts = allMeta.slice(0, LIST_LIMIT);
-  archiveByYear = groupArchiveByYear(buildArchiveMonths(allMeta, WP_BLOG_BASE));
-  for (const c of cats) categoryById[c.id] = c.name;
-} catch (e) {
-  console.warn('[blog] WordPress の取得に失敗しました:', e);
-  loadError = e instanceof Error ? e.message : String(e);
-}
+const posts = await fetchPosts();
 
 const metadata = {
-  title: '公式ブログ（お知らせ）｜かもめクリニック（大阪市）',
+  title: 'お知らせ・ブログ｜かもめクリニック（大阪市）',
   description:
     'かもめクリニックのお知らせ・ブログ記事一覧。診療体制・休診・採用・地域連携などの最新情報を掲載しています。',
   ignoreTitleTemplate: true,
@@ -139,7 +26,7 @@ const jsonLdBreadcrumb = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
-    { '@type': 'ListItem', position: 2, name: '公式ブログ', item: 'https://kamome-clinic.net/blog' },
+    { '@type': 'ListItem', position: 2, name: 'お知らせ・ブログ', item: 'https://kamome-clinic.net/blog' },
   ],
 };
 ---
@@ -150,194 +37,100 @@ const jsonLdBreadcrumb = {
   </Fragment>
 
   <Hero
-    tagline="お知らせ"
+    tagline="お知らせ・ブログ"
     image={{
       src: 'https://www.kamome-clinic.net/images/top/slider02.jpg',
       alt: 'かもめクリニック',
     }}
   >
-    <Fragment slot="title">公式ブログ</Fragment>
+    <Fragment slot="title">お知らせ・ブログ</Fragment>
     <Fragment slot="subtitle">
-      かもめクリニックのお知らせ・ブログです。記事本文は従来どおり
-      <a
-        href={WP_BLOG_BASE}
-        class="text-primary underline font-semibold hover:opacity-90"
-        target="_blank"
-        rel="noopener noreferrer">公式サイトのブログ</a
-      >
-      でご覧いただけます。
+      院長コラム・スタッフ記事・診療体制のお知らせなど、かもめクリニックの最新情報をお届けします。
     </Fragment>
   </Hero>
 
+  <Note
+    icon="tabler:archive"
+    title={`${MIGRATION_START}以前の過去記事について`}
+    description={`過去の記事は<a href="${OLD_BLOG_URL}" target="_blank" rel="noopener noreferrer" class="underline font-semibold hover:text-primary-700">旧サイトのブログ（アーカイブ）</a>でご覧いただけます。新しいお知らせ・情報発信はこのページで掲載しています。`}
+  />
+
   <section class="py-12 md:py-16 bg-white dark:bg-slate-900">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="lg:grid lg:grid-cols-[1fr_minmax(0,17rem)] lg:gap-10 xl:gap-12 lg:items-start">
-        <div class="min-w-0">
-          {
-            loadError && (
-              <div class="rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-800 p-5 mb-8 text-amber-900 dark:text-amber-100">
-                <p class="font-bold mb-2">記事一覧を自動取得できませんでした</p>
-                <p class="text-sm opacity-90 mb-3">
-                  ビルド時に WordPress
-                  からデータを読み込めなかった可能性があります。お手数ですが、下記から直接ご覧ください。
-                </p>
-                <a
-                  href={WP_BLOG_BASE}
-                  class="inline-flex items-center gap-2 text-sm font-bold text-primary underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {WP_BLOG_BASE}/ <Icon name="tabler:external-link" class="w-4 h-4" />
-                </a>
-              </div>
-            )
-          }
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
 
-          {
-            !loadError && posts.length === 0 && (
-              <p class="text-center text-gray-600 dark:text-gray-400">表示できる記事がありません。</p>
-            )
-          }
-
-          <ul class="flex flex-col gap-6">
-            {
-              posts.map((post) => {
-                const title = decodeBasicEntities(stripTags(post.title.rendered));
-                const excerpt = decodeBasicEntities(stripTags(post.excerpt.rendered));
-                const d = new Date(post.date);
-                const dateStr = d.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
-                const catNames = post.categories.map((id) => categoryById[id]).filter(Boolean);
-                return (
-                  <li>
-                    <article class="rounded-2xl border border-gray-100 dark:border-slate-700 bg-blue-50/40 dark:bg-slate-800/50 p-6 shadow-sm hover:border-primary/30 transition-colors">
-                      <time class="text-sm text-gray-500 dark:text-gray-400 block mb-2" datetime={post.date}>
-                        {dateStr}
-                      </time>
-                      {catNames.length > 0 && (
-                        <ul class="flex flex-wrap gap-2 mb-3">
-                          {catNames.map((name) => (
-                            <li>
-                              <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-gray-600 dark:text-gray-300">
-                                {name}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                      <h2 class="text-xl font-bold text-gray-900 dark:text-white leading-snug mb-3">
-                        <a
-                          href={post.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="hover:text-primary transition-colors inline-flex items-start gap-1"
-                        >
-                          {title}
-                          <Icon
-                            name="tabler:external-link"
-                            class="w-5 h-5 shrink-0 text-primary mt-0.5"
-                            aria-hidden="true"
-                          />
-                        </a>
-                      </h2>
-                      {excerpt && (
-                        <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-4">{excerpt}</p>
-                      )}
-                      <a
-                        href={post.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="inline-flex items-center gap-1 mt-4 text-sm font-bold text-primary hover:underline"
-                      >
-                        記事を読む
-                        <Icon name="tabler:arrow-right" class="w-4 h-4" />
-                      </a>
-                    </article>
-                  </li>
-                );
-              })
-            }
-          </ul>
-
-          <div class="mt-12 text-center">
-            <a
-              href={`${WP_BLOG_BASE}/`}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center gap-2 border-2 border-primary text-primary font-bold px-6 py-3 rounded-full hover:bg-primary hover:text-white transition-colors"
-            >
-              すべての記事・アーカイブ（公式ブログ）
-              <Icon name="tabler:external-link" class="w-5 h-5" />
+      {posts.length === 0 ? (
+        <div class="text-center py-16">
+          <Icon name="tabler:news-off" class="w-12 h-12 mx-auto text-gray-300 dark:text-slate-600 mb-4" aria-hidden="true" />
+          <p class="text-gray-500 dark:text-gray-400 text-lg">現在、掲載できる記事がありません。</p>
+          <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">
+            過去の記事は
+            <a href={OLD_BLOG_URL} target="_blank" rel="noopener noreferrer" class="text-primary underline">
+              旧サイトのブログ
             </a>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-4">
-              一覧はビルド時点の最新 {LIST_LIMIT} 件です。右のアーカイブは取得できた範囲の月別まとめです。ページ送り・検索は公式ブログをご利用ください。
-            </p>
-          </div>
+            でご覧いただけます。
+          </p>
         </div>
+      ) : (
+        <ul class="flex flex-col gap-6">
+          {posts.map((post) => {
+            const postUrl = getPermalink(post.permalink, 'post');
+            const dateStr = post.publishDate.toLocaleDateString('ja-JP', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            });
+            return (
+              <li>
+                <article class="rounded-2xl border border-gray-100 dark:border-slate-700 bg-blue-50/40 dark:bg-slate-800/50 p-6 shadow-sm hover:border-primary/30 transition-colors">
+                  <time
+                    class="text-sm text-gray-500 dark:text-gray-400 block mb-2"
+                    datetime={post.publishDate.toISOString()}
+                  >
+                    {dateStr}
+                  </time>
+                  {post.category && (
+                    <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-gray-600 dark:text-gray-300 inline-block mb-3">
+                      {post.category.title}
+                    </span>
+                  )}
+                  <h2 class="text-xl font-bold text-gray-900 dark:text-white leading-snug mb-3">
+                    <a href={postUrl} class="hover:text-primary transition-colors">
+                      {post.title}
+                    </a>
+                  </h2>
+                  {post.excerpt && (
+                    <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-3">
+                      {post.excerpt}
+                    </p>
+                  )}
+                  <a
+                    href={postUrl}
+                    class="inline-flex items-center gap-1 mt-4 text-sm font-bold text-primary hover:underline"
+                  >
+                    記事を読む
+                    <Icon name="tabler:arrow-right" class="w-4 h-4" />
+                  </a>
+                </article>
+              </li>
+            );
+          })}
+        </ul>
+      )}
 
-        <aside
-          class="mt-12 lg:mt-0 lg:sticky lg:top-24 rounded-2xl border border-gray-100 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/40 p-5 shadow-sm"
-          aria-label="月別アーカイブ"
-        >
-          <h2
-            class="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wide mb-4 flex items-center gap-2"
+      <div class="mt-12 text-center border-t border-gray-100 dark:border-slate-700 pt-10">
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          2024年以前の過去記事は
+          <a
+            href={OLD_BLOG_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary underline font-semibold"
           >
-            <Icon name="tabler:calendar-month" class="w-5 h-5 text-primary shrink-0" aria-hidden="true" />
-            アーカイブ
-          </h2>
-          {
-            loadError ? (
-              <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                取得できなかったため表示できません。
-                <a
-                  href={WP_BLOG_BASE}
-                  class="text-primary font-semibold underline mt-2 inline-block"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  公式ブログで開く
-                </a>
-              </p>
-            ) : archiveByYear.length === 0 ? (
-              <p class="text-xs text-gray-600 dark:text-gray-400">アーカイブ情報がありません。</p>
-            ) : (
-              <nav class="max-h-[min(70vh,32rem)] overflow-y-auto pr-1 -mr-1 space-y-5">
-                {archiveByYear.map(({ year, months }) => (
-                  <div>
-                    <p class="text-xs font-bold text-gray-500 dark:text-gray-400 mb-2">{year}年</p>
-                    <ul class="space-y-1.5 border-l-2 border-primary/25 pl-3">
-                      {months.map((m) => (
-                        <li>
-                          <a
-                            href={m.archiveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="text-sm text-gray-800 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors inline-flex items-center gap-1 flex-wrap"
-                          >
-                            {m.month}月
-                            <span class="text-xs text-gray-500 dark:text-gray-400 font-normal">（{m.count}件）</span>
-                            <Icon
-                              name="tabler:external-link"
-                              class="w-3.5 h-3.5 shrink-0 opacity-70"
-                              aria-hidden="true"
-                            />
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </nav>
-            )
-          }
-          {
-            !loadError && archiveByYear.length > 0 && (
-              <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-4 leading-relaxed border-t border-gray-200 dark:border-slate-600 pt-3">
-                月のリンクは公式ブログの月別一覧へ移動します。記事が {ARCHIVE_FETCH_MAX_PAGES * 100}{' '}
-                件を超える場合は先頭の取得分のみ反映されます。
-              </p>
-            )
-          }
-        </aside>
+            旧サイトのブログ
+            <Icon name="tabler:external-link" class="w-3.5 h-3.5 inline-block align-text-top ml-0.5" />
+          </a>
+          でご覧いただけます。
+        </p>
       </div>
     </div>
   </section>

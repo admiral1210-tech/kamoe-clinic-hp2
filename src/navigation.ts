@@ -1,4 +1,5 @@
 import { getPermalink } from './utils/permalinks';
+import { OLD_BLOG_URL } from '~/data/site-policy';
 
 export const headerData = {
   links: [
@@ -40,7 +41,11 @@ export const headerData = {
         { text: '医師紹介', href: getPermalink('/about#doctors') },
         { text: '院長プロフィール', href: getPermalink('/about/kinoshita') },
         {
-          text: '公式ブログ',
+          text: 'お知らせ・ブログ',
+          href: getPermalink('/blog'),
+        },
+        {
+          text: '旧ブログ（過去記事）',
           href: 'https://www.kamome-clinic.net/blog/',
         },
       ],
@@ -94,6 +99,7 @@ export const footerData = {
         { text: '患者さまの声・体験談', href: getPermalink('/testimonials') },
         { text: '第5院サイト', href: 'https://kamome-clinic5.net/' },
         { text: '第8院サイト', href: 'https://kamome-clinic7.net/' },
+        { text: '過去のブログ記事（2025年3月以前）', href: OLD_BLOG_URL },
       ],
     },
     {
@@ -117,6 +123,7 @@ export const footerData = {
   secondaryLinks: [
     { text: 'プライバシーポリシー', href: getPermalink('/privacy') },
     { text: 'お問い合わせ', href: getPermalink('/#contact') },
+    { text: '旧ブログ（過去記事）', href: 'https://www.kamome-clinic.net/blog/' },
   ],
   socialLinks: [
     { ariaLabel: 'Instagram', icon: 'tabler:brand-instagram', href: 'https://www.instagram.com/kamomeclinic/' },

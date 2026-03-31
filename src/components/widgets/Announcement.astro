@@ -1,23 +1,34 @@
 ---
-
+const NEW_BLOG_PATH = '/blog';
+const ANNOUNCEMENT_TEXT = '院長コラム・お知らせ・スタッフブログを新HPで発信中';
 ---
 
+<!--
+  全ページ上部バー
+  役割：新HPブログ（お知らせ・院長コラム）への導線
+  表示：PC/タブレット以上（md:flex）。モバイルでは非表示（帯域節約）。
+-->
 <div
-  class="dark text-muted text-sm bg-black dark:bg-transparent dark:border-b dark:border-slate-800 dark:text-slate-400 hidden md:flex gap-1 overflow-hidden px-3 py-2 relative text-ellipsis whitespace-nowrap"
+  class="hidden md:flex items-center justify-center gap-2 overflow-hidden px-4 py-2 text-sm
+         bg-blue-700 text-white"
+  role="banner"
+  aria-label="お知らせ・ブログのご案内"
 >
   <span
-    class="dark:bg-slate-700 bg-white/40 dark:text-slate-300 font-semibold px-1 py-0.5 text-xs mr-0.5 rtl:mr-0 rtl:ml-0.5 inline-block"
-    >NEW</span
+    class="inline-block bg-white/20 text-white font-semibold text-xs px-2 py-0.5 rounded shrink-0"
   >
-  <a href="https://astro.build/blog/astro-5120/" class="text-muted hover:underline dark:text-slate-400 font-medium"
-    >Astro v5.12 is now available! »</a
-  >
+    お知らせ
+  </span>
+
+  <span class="truncate">
+    {ANNOUNCEMENT_TEXT}
+  </span>
+
   <a
-    target="_blank"
-    rel="noopener"
-    class="ltr:ml-auto rtl:mr-auto w-[5.6rem] h-[1.25rem] ml-auto bg-contain inline-block bg-[url(https://img.shields.io/github/stars/arthelokyo/astrowind.svg?style=social&label=Stars&maxAge=86400)]"
-    title="If you like AstroWind, give us a star."
-    href="https://github.com/arthelokyo/astrowind"
+    href={NEW_BLOG_PATH}
+    class="shrink-0 underline underline-offset-2 font-bold hover:text-blue-100 transition-colors whitespace-nowrap"
+    aria-label="お知らせ・ブログを読む"
   >
+    ブログを読む&nbsp;»
   </a>
 </div>

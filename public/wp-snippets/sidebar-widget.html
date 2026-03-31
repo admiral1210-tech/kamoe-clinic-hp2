@@ -1,0 +1,97 @@
+<!--
+  旧ブログ 導線②：サイドバー / フッターウィジェット
+  ─────────────────────────────────────────────────────────
+  設置方法（WordPress）:
+    外観 > ウィジェット > サイドバーまたはフッターエリアに
+    「カスタムHTML」ウィジェットを追加し、以下のコードを貼り付けてください。
+
+  役割:
+    記事を読んでいる利用者に、診療案内・費用・アクセスといった
+    実務的な情報が新HPにあることを詳細に伝え、新HPへ誘導します。
+
+  案内文（詳細文）:
+    「公式ホームページが新しくなりました。訪問診療の流れ・費用・診療内容・
+     対応エリア・医師紹介など、正確で詳しいクリニック情報は新しい公式サイト
+     (kamome-clinic.net) でご確認ください。」
+  ─────────────────────────────────────────────────────────
+-->
+<div id="kamoe-new-hp-widget" style="
+  background: #eff6ff;
+  border: 2px solid #bfdbfe;
+  border-radius: 12px;
+  padding: 18px 16px;
+  font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #1e3a5f;
+  margin-bottom: 20px;
+">
+  <!-- ラベル -->
+  <p style="
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #1d4ed8;
+    margin: 0 0 8px;
+    text-transform: uppercase;
+  ">
+    ▶ 公式サイトのご案内
+  </p>
+
+  <!-- 見出し -->
+  <p style="
+    font-size: 15px;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0 0 8px;
+    line-height: 1.4;
+  ">
+    公式ホームページを<br>リニューアルしました
+  </p>
+
+  <!-- 詳細文 -->
+  <p style="margin: 0 0 14px; color: #374151;">
+    訪問診療の流れ・費用・診療内容・対応エリア・医師紹介など、正確で詳しいクリニック情報は新しい公式サイト（kamome-clinic.net）でご確認ください。ご不明な点はお電話またはLINEでお気軽にどうぞ。
+  </p>
+
+  <!-- 新HPへのリンクボタン -->
+  <a
+    href="https://kamome-clinic.net"
+    target="_blank"
+    rel="noopener noreferrer"
+    style="
+      display: block;
+      background: #1d4ed8;
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      text-align: center;
+      padding: 10px 12px;
+      border-radius: 999px;
+      text-decoration: none;
+      margin-bottom: 8px;
+    "
+    aria-label="かもめクリニック 新公式サイトを開く"
+  >
+    新公式サイトを見る
+  </a>
+
+  <!-- 電話リンク -->
+  <a
+    href="tel:0643017871"
+    style="
+      display: block;
+      border: 2px solid #1d4ed8;
+      color: #1d4ed8;
+      font-weight: 700;
+      font-size: 13px;
+      text-align: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      text-decoration: none;
+    "
+    aria-label="かもめクリニックに電話する"
+  >
+    &#128222;&nbsp;06-4301-7871
+  </a>
+</div>

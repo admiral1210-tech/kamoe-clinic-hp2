@@ -1,0 +1,61 @@
+<!--
+  旧ブログ 導線①：ヘッダー直下バナー
+  ─────────────────────────────────────────────────────────
+  設置方法（WordPress）:
+    外観 > テーマエディター > header.php の <body> 直後、または
+    プラグイン「Insert Headers and Footers」の「ヘッダー」欄に貼り付けてください。
+
+  役割:
+    旧ブログを訪れた利用者に、新しい公式HPの存在を知らせ、
+    診療案内・費用・アクセス情報へ誘導します。
+
+  案内文（短文）:
+    「公式ホームページをリニューアルしました。診療案内・費用・アクセスは新サイトへ」
+  ─────────────────────────────────────────────────────────
+-->
+<div id="kamoe-new-hp-banner" style="
+  background: #1d4ed8;
+  color: #fff;
+  font-size: 13px;
+  font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  line-height: 1.5;
+  position: relative;
+  z-index: 9999;
+">
+  <span style="
+    background: rgba(255,255,255,0.2);
+    font-weight: 700;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  ">
+    新サイト
+  </span>
+
+  <span style="text-align: center;">
+    公式ホームページをリニューアルしました。診療案内・費用・アクセスは新サイトへ
+  </span>
+
+  <a
+    href="https://kamome-clinic.net"
+    target="_blank"
+    rel="noopener noreferrer"
+    style="
+      color: #fff;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      white-space: nowrap;
+    "
+    aria-label="かもめクリニック 新公式サイトを開く"
+  >
+    新公式サイトを見る&nbsp;»
+  </a>
+</div>

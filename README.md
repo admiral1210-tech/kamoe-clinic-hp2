@@ -1,302 +1,131 @@
-# 🚀 AstroWind
+# かもめクリニック 公式サイト
 
-<img src="https://raw.githubusercontent.com/arthelokyo/.github/main/resources/astrowind/lighthouse-score.png" align="right"
-     alt="AstroWind Lighthouse Score" width="100" height="358">
+大阪市を中心に展開する24時間365日対応の在宅療養支援診療所「かもめクリニック」の公式ウェブサイトです。
+内科・精神科・小児科（医療ケア児対応）の訪問診療情報を提供しています。
 
-🌟 _Most *starred* & *forked* Astro theme in 2022, 2023 & 2024_. 🌟
+**本番サイト:** [https://kamome-clinic.net](https://kamome-clinic.net)
 
-**AstroWind** is a free and open-source template to make your website using **[Astro 5.0](https://astro.build/) + [Tailwind CSS](https://tailwindcss.com/)**. Ready to start a new project and designed taking into account web best practices.
+![Astro](https://img.shields.io/badge/Astro-5.x-FF5D01?style=flat-square&logo=astro&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-nginx%3Aalpine-2496ED?style=flat-square&logo=docker&logoColor=white)
 
-- ✅ **Production-ready** scores in **PageSpeed Insights** reports.
-- ✅ Integration with **Tailwind CSS** supporting **Dark mode** and **_RTL_**.
-- ✅ **Fast and SEO friendly blog** with automatic **RSS feed**, **MDX** support, **Categories & Tags**, **Social Share**, ...
-- ✅ **Image Optimization** (using new **Astro Assets** and **Unpic** for Universal image CDN).
-- ✅ Generation of **project sitemap** based on your routes.
-- ✅ **Open Graph tags** for social media sharing.
-- ✅ **Analytics** built-in Google Analytics, and Splitbee integration.
+---
 
-<br>
+## 技術スタック
 
-![AstroWind Theme Screenshot](https://raw.githubusercontent.com/arthelokyo/.github/main/resources/astrowind/screenshot-astrowind-1.0.png)
+| 区分 | 技術 |
+|------|------|
+| フレームワーク | [Astro 5](https://astro.build/)（ベース：[AstroWind](https://github.com/arthelokyo/astrowind)） |
+| スタイル | [Tailwind CSS 3](https://tailwindcss.com/) |
+| 言語 | TypeScript 5 |
+| コンテンツ | MDX（`@astrojs/mdx`）、ブログ・お知らせ記事管理 |
+| CMS | [Decap CMS](https://decapcms.org/)（`/admin` から操作） |
+| SEO | `@astrolib/seo`、Sitemap（`@astrojs/sitemap`）、RSS |
+| Web サーバー | nginx（`nginx/nginx.conf`）、Docker コンテナで静的配信 |
+| Node バージョン | `^18.17.1 \|\| ^20.3.0 \|\| >= 21.0.0` |
 
-[![arthelokyo](https://custom-icon-badges.demolab.com/badge/made%20by%20-arthelokyo-556bf2?style=flat-square&logo=arthelokyo&logoColor=white&labelColor=101827)](https://github.com/arthelokyo)
-[![License](https://img.shields.io/github/license/arthelokyo/astrowind?style=flat-square&color=dddddd&labelColor=000000)](https://github.com/arthelokyo/astrowind/blob/main/LICENSE.md)
-[![Maintained](https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg?style=flat-square)](https://github.com/arthelokyo)
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/arthelokyo/astrowind#contributing)
-[![Known Vulnerabilities](https://snyk.io/test/github/arthelokyo/astrowind/badge.svg?style=flat-square)](https://snyk.io/test/github/arthelokyo/astrowind)
-[![Stars](https://img.shields.io/github/stars/arthelokyo/astrowind.svg?style=social&label=stars&maxAge=86400&color=ff69b4)](https://github.com/arthelokyo/astrowind)
-[![Forks](https://img.shields.io/github/forks/arthelokyo/astrowind.svg?style=social&label=forks&maxAge=86400&color=ff69b4)](https://github.com/arthelokyo/astrowind)
+---
 
-<br>
-
-<details open>
-<summary>Table of Contents</summary>
-
-- [Demo](#demo)
-- [Upcoming: AstroWind 2.0 – We Need Your Vision!](#-upcoming-astrowind-20--we-need-your-vision)
-- [TL;DR](#tldr)
-- [Getting started](#getting-started)
-  - [Project structure](#project-structure)
-  - [Commands](#commands)
-  - [Configuration](#configuration)
-  - [Deploy](#deploy)
-- [Frequently Asked Questions](#frequently-asked-questions)
-- [Related Projects](#related-projects)
-- [Contributing](#contributing)
-- [Acknowledgements](#acknowledgements)
-- [License](#license)
-
-</details>
-
-<br>
-
-## Demo
-
-📌 [https://astrowind.vercel.app/](https://astrowind.vercel.app/)
-
-<br>
-
-## 🔔 Upcoming: AstroWind 2.0 – We Need Your Vision!
-
-We're embarking on an exciting journey with **AstroWind 2.0**, and we want you to be a part of it! We're currently taking the first steps in developing this new version and your insights are invaluable. Join the discussion and share your feedback, ideas, and suggestions to help shape the future of **AstroWind**. Let's make **AstroWind 2.0** even better, together!
-
-[Share Your Feedback in Our Discussion!](https://github.com/arthelokyo/astrowind/discussions/392)
-
-<br>
-
-## TL;DR
-
-```shell
-npm create astro@latest -- --template arthelokyo/astrowind
-```
-
-## Getting started
-
-**AstroWind** tries to give you quick access to creating a website using [Astro 5.0](https://astro.build/) + [Tailwind CSS](https://tailwindcss.com/). It's a free theme which focuses on simplicity, good practices and high performance.
-
-Very little vanilla javascript is used only to provide basic functionality so that each developer decides which framework (React, Vue, Svelte, Solid JS...) to use and how to approach their goals.
-
-In this version the template supports all the options in the `output` configuration, `static`, `hybrid` and `server`, but the blog only works with `prerender = true`. We are working on the next version and aim to make it fully compatible with SSR.
-
-### Project structure
-
-Inside **AstroWind** template, you'll see the following folders and files:
+## ディレクトリ構造（ルーティング）
 
 ```
 /
-├── public/
-│   ├── _headers
-│   └── robots.txt
 ├── src/
-│   ├── assets/
-│   │   ├── favicons/
-│   │   ├── images/
-│   │   └── styles/
-│   │       └── tailwind.css
-│   ├── components/
-│   │   ├── blog/
-│   │   ├── common/
-│   │   ├── ui/
-│   │   ├── widgets/
-│   │   │   ├── Header.astro
-│   │   │   └── ...
-│   │   ├── CustomStyles.astro
-│   │   ├── Favicons.astro
-│   │   └── Logo.astro
-│   ├── content/
-│   │   ├── post/
-│   │   │   ├── post-slug-1.md
-│   │   │   ├── post-slug-2.mdx
-│   │   │   └── ...
-│   │   └-- config.ts
-│   ├── layouts/
-│   │   ├── Layout.astro
-│   │   ├── MarkdownLayout.astro
-│   │   └── PageLayout.astro
-│   ├── pages/
-│   │   ├── [...blog]/
-│   │   │   ├── [category]/
-│   │   │   ├── [tag]/
-│   │   │   ├── [...page].astro
-│   │   │   └── index.astro
-│   │   ├── index.astro
-│   │   ├── 404.astro
-│   │   ├-- rss.xml.ts
-│   │   └── ...
-│   ├── utils/
-│   ├── config.yaml
-│   └── navigation.js
-├── package.json
+│   ├── pages/                  # ルーティング（ファイル名がそのままURLになる）
+│   │   ├── index.astro         # / トップページ
+│   │   ├── naika.astro         # /naika 内科
+│   │   ├── seishinika.astro    # /seishinika 精神科
+│   │   ├── shoninka.astro      # /shoninka 小児科
+│   │   ├── houmon-shinryo.astro # /houmon-shinryo 訪問診療
+│   │   ├── area-osaka.astro    # /area-osaka 対応エリア
+│   │   └── [...blog]/          # /blog/* ブログ一覧・カテゴリ・タグ
+│   ├── data/                   # クリニック固有データ（管理者が更新する設定ファイル）
+│   │   ├── clinic-meta.ts      # Googleレビュー評価・患者数など JSON-LD 用データ
+│   │   ├── faq-general.ts      # よくある質問データ
+│   │   ├── osaka-wards.ts      # 対応エリア（大阪市各区）データ
+│   │   └── site-policy.ts      # サイトポリシー関連データ
+│   ├── components/             # UI コンポーネント（widgets / ui / blog / common）
+│   ├── layouts/                # ページレイアウト
+│   ├── assets/                 # 画像・スタイル（ビルド時に最適化）
+│   ├── content/                # コンテンツコレクション定義（config.ts）
+│   ├── utils/                  # ユーティリティ関数
+│   ├── config.yaml             # サイト全体設定（サイト名・URL・SEO・テーマ）
+│   └── navigation.ts           # ヘッダー・フッターナビゲーション定義
+├── public/
+│   ├── decapcms/               # Decap CMS 設定（config.yml・index.html）
+│   ├── images/                 # 静的画像アセット
+│   └── robots.txt
+├── .github/workflows/actions.yaml  # CI/CD（Node 18/20/22 マトリクス）
+├── nginx/nginx.conf                # Docker 本番環境用 nginx 設定
+├── Dockerfile                      # マルチステージビルド（node → nginx:alpine）
+├── docker-compose.yml
+├── netlify.toml                    # Netlify デプロイ設定
+├── vercel.json                     # Vercel Clean URL・キャッシュヘッダー設定
 ├── astro.config.ts
-└── ...
+├── tailwind.config.js
+└── package.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+---
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## CI/CD 方針
 
-Any static assets, like images, can be placed in the `public/` directory if they do not require any transformation or in the `assets/` directory if they are imported directly.
+GitHub Actions（`.github/workflows/actions.yaml`）により `main` ブランチへの push・PR で自動実行。
 
-[![Edit AstroWind on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://githubbox.com/arthelokyo/astrowind/tree/main) [![Open in Gitpod](https://svgshare.com/i/xdi.svg)](https://gitpod.io/?on=gitpod#https://github.com/arthelokyo/astrowind) [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/arthelokyo/astrowind)
+| ジョブ | 内容 |
+|--------|------|
+| `build` | Node 18 / 20 / 22 マトリクスでビルド互換性を確認 |
+| `check` | Node 22 で型チェック + ESLint + Prettier を一括検証 |
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file `README.md`. Update `src/config.yaml` and contents. Have fun!
+---
 
-<br>
+## ブランチ方針
 
-### Commands
+| ブランチ名 | 用途 |
+|-----------|------|
+| `main` | 本番リリース（直接 push 禁止） |
+| `feature/*` | 新機能・ページ追加 |
+| `fix/*` | バグ修正・コンテンツ修正 |
+| `hotfix/*` | 本番障害の緊急対応 |
 
-All commands are run from the root of the project, from a terminal:
+マージ条件：CI 全ジョブ green。コミット規約は [Conventional Commits](https://www.conventionalcommits.org/ja/) に準拠。
 
-| Command             | Action                                             |
-| :------------------ | :------------------------------------------------- |
-| `npm install`       | Installs dependencies                              |
-| `npm run dev`       | Starts local dev server at `localhost:4321`        |
-| `npm run build`     | Build your production site to `./dist/`            |
-| `npm run preview`   | Preview your build locally, before deploying       |
-| `npm run check`     | Check your project for errors                      |
-| `npm run fix`       | Run Eslint and format codes with Prettier          |
-| `npm run astro ...` | Run CLI commands like `astro add`, `astro preview` |
+---
 
-<br>
+## パフォーマンス目標
 
-### Configuration
+Lighthouse（本番環境・モバイル計測）:
 
-Basic configuration file: `./src/config.yaml`
+| Performance | Accessibility | Best Practices | SEO |
+|:-----------:|:-------------:|:--------------:|:---:|
+| 90 以上 | 100 | 100 | 100 |
 
-```yaml
-site:
-  name: 'Example'
-  site: 'https://example.com'
-  base: '/' # Change this if you need to deploy to Github Pages, for example
-  trailingSlash: false # Generate permalinks with or without "/" at the end
+主な最適化：静的生成（`output: 'static'`）・`astro-compress`・WebP 変換・`Cache-Control: immutable`。
 
-  googleSiteVerificationId: false # Or some value,
+---
 
-# Default SEO metadata
-metadata:
-  title:
-    default: 'Example'
-    template: '%s — Example'
-  description: 'This is the default meta description of Example website'
-  robots:
-    index: true
-    follow: true
-  openGraph:
-    site_name: 'Example'
-    images:
-      - url: '~/assets/images/default.png'
-        width: 1200
-        height: 628
-    type: website
-  twitter:
-    handle: '@twitter_user'
-    site: '@twitter_user'
-    cardType: summary_large_image
+## 旧ブログ活用ポリシー
 
-i18n:
-  language: en
-  textDirection: ltr
+新HP（`kamome-clinic.net`）を公式情報の発信元とし、旧ブログ（`www.kamome-clinic.net/blog`）は過去記事アーカイブとして案内します。新規投稿・最新情報は新HP側で継続して発信します。
 
-apps:
-  blog:
-    isEnabled: true # If the blog will be enabled
-    postsPerPage: 6 # Number of posts per page
+### 案内文（新HP → 旧ブログ）
 
-    post:
-      isEnabled: true
-      permalink: '/blog/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
-      robots:
-        index: true
+- 短文: `旧ブログ（過去記事）はこちら`
+- 詳細文: `過去に公開した記事は旧ブログ（www.kamome-clinic.net/blog）で引き続きご覧いただけます。最新のお知らせ・診療案内は新しい公式ホームページ（kamome-clinic.net）をご確認ください。`
 
-    list:
-      isEnabled: true
-      pathname: 'blog' # Blog main path, you can change this to "articles" (/articles)
-      robots:
-        index: true
+### 導線設置位置（確定）
 
-    category:
-      isEnabled: true
-      pathname: 'category' # Category main path /category/some-category, you can change this to "group" (/group/some-category)
-      robots:
-        index: true
+- 新HP側（2箇所）:
+  - ヘッダー「クリニック案内」配下
+  - フッター `secondaryLinks`
+- 旧ブログ側（2箇所）:
+  - ヘッダーバナー
+  - サイドバー/フッターウィジェット
 
-    tag:
-      isEnabled: true
-      pathname: 'tag' # Tag main path /tag/some-tag, you can change this to "topics" (/topics/some-category)
-      robots:
-        index: false
+---
 
-    isRelatedPostsEnabled: true # If a widget with related posts is to be displayed below each post
-    relatedPostsCount: 4 # Number of related posts to display
+## ライセンス
 
-analytics:
-  vendors:
-    googleAnalytics:
-      id: null # or "G-XXXXXXXXXX"
-
-ui:
-  theme: 'system' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"
-```
-
-<br>
-
-#### Customize Design
-
-To customize Font families, Colors or more Elements refer to the following files:
-
-- `src/components/CustomStyles.astro`
-- `src/assets/styles/tailwind.css`
-
-### Deploy
-
-#### Deploy to production (manual)
-
-You can create an optimized production build with:
-
-```shell
-npm run build
-```
-
-Now, your website is ready to be deployed. All generated files are located at
-`dist` folder, which you can deploy the folder to any hosting service you
-prefer.
-
-#### Deploy to Netlify
-
-Clone this repository on your own GitHub account and deploy it to Netlify:
-
-[![Netlify Deploy button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/arthelokyo/astrowind)
-
-#### Deploy to Vercel
-
-Clone this repository on your own GitHub account and deploy to Vercel:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Farthelokyo%2Fastrowind)
-
-<br>
-
-## Frequently Asked Questions
-
-- Why?
--
--
-
-<br>
-
-## Related projects
-
-- [TailNext](https://tailnext.vercel.app/) - Free template using Next.js 14 and Tailwind CSS with the new App Router.
-- [Qwind](https://qwind.pages.dev/) - Free template to make your website using Qwik + Tailwind CSS.
-
-## Contributing
-
-If you have any ideas, suggestions or find any bugs, feel free to open a discussion, an issue or create a pull request.
-That would be very useful for all of us and we would be happy to listen and take action.
-
-## Acknowledgements
-
-Initially created by **Arthelokyo** and maintained by a community of [contributors](https://github.com/arthelokyo/astrowind/graphs/contributors).
-
-## License
-
-**AstroWind** is licensed under the MIT license — see the [LICENSE](./LICENSE.md) file for details.
+ベーステンプレート [AstroWind](https://github.com/arthelokyo/astrowind) は [MIT ライセンス](LICENSE.md)。
+クリニック固有のコンテンツ・画像・ブランド素材の著作権はかもめクリニックに帰属します。無断転載・二次利用を禁じます。

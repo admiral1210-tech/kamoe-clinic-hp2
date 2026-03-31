@@ -13,6 +13,7 @@ import {
   googleReview,
 } from '~/data/clinic-meta';
 import { CLINIC_GENERAL_FAQ, CLINIC_GENERAL_FAQ_PREVIEW_COUNT } from '~/data/faq-general';
+import { OLD_BLOG_URL } from '~/data/site-policy';
 
 const metadata = {
   title: 'かもめクリニック｜大阪市の訪問診療 内科・精神科・小児科｜2017年開院',
@@ -521,6 +522,43 @@ const jsonLdSpeakable = {
     ]}
   />
 
+  <!-- 医療・介護関係者の方へ（強調セクション） -->
+  <section id="medical-pro" class="scroll-mt-32 py-8 md:py-10 bg-white dark:bg-slate-900">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div
+        class="rounded-3xl bg-primary text-white p-6 md:p-8 shadow-[0_12px_36px_rgba(37,99,235,0.35)] border border-blue-400/40"
+      >
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div class="flex-1">
+            <p class="text-xs sm:text-sm font-semibold tracking-[0.16em] text-blue-100 mb-2">医療・介護関係者の方へ</p>
+            <h2 class="text-2xl md:text-3xl font-black leading-tight mb-3">紹介・連携のご相談はこちら</h2>
+            <p class="text-sm md:text-base text-blue-50 leading-relaxed">
+              紹介の流れ、訪問診療相談書（PDF）、オンライン相談の案内を専用ページにまとめています。地域医療連携部が迅速に対応します。
+            </p>
+            <p class="mt-3 text-sm md:text-base">
+              地域医療連携部：
+              <a href="tel:0643017883" class="font-black underline underline-offset-2 hover:opacity-90">06-4301-7883</a>
+            </p>
+          </div>
+          <div class="shrink-0 flex flex-col sm:flex-row gap-3">
+            <a
+              href="/renkei"
+              class="inline-flex items-center justify-center gap-2 bg-white text-primary font-black px-6 py-3 rounded-full text-sm md:text-base hover:opacity-90 transition-opacity whitespace-nowrap"
+            >
+              <Icon name="tabler:building-hospital" class="w-5 h-5" /> 専用ページを見る
+            </a>
+            <a
+              href="tel:0643017883"
+              class="inline-flex items-center justify-center gap-2 border-2 border-white text-white font-black px-6 py-3 rounded-full text-sm md:text-base hover:bg-white/10 transition-colors whitespace-nowrap"
+            >
+              <Icon name="tabler:phone" class="w-5 h-5" /> 06-4301-7883
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ご利用の流れ・保険と費用・ご利用対象（3列グリッド） -->
   <section
     id="first-visit"
@@ -579,18 +617,12 @@ const jsonLdSpeakable = {
               >医療ケア児</strong
             >、<strong>施設入居・在宅療養中</strong>の方など。上記以外でも、通院が困難であればまずご相談ください。
           </p>
-          <div class="flex flex-wrap justify-center gap-x-2 gap-y-1 text-sm mt-auto">
-            <a
-              href="/houmon-shinryo#targets"
-              class="inline-flex items-center gap-1 text-primary font-bold hover:underline"
-            >
-              <Icon name="tabler:arrow-right" class="w-4 h-4" /> 対象の詳細
-            </a>
-            <span class="text-gray-300 dark:text-gray-600">|</span>
-            <a href="/about#targets" class="inline-flex items-center gap-1 text-primary font-bold hover:underline">
-              一覧（紹介ページ）
-            </a>
-          </div>
+          <a
+            href="/houmon-shinryo#targets"
+            class="inline-flex items-center justify-center gap-2 bg-primary text-white font-bold px-5 py-2.5 rounded-full text-sm hover:opacity-90 mt-auto"
+          >
+            <Icon name="tabler:arrow-right" class="w-4 h-4" /> 対象の詳細
+          </a>
         </div>
       </div>
     </div>
@@ -908,31 +940,31 @@ const jsonLdSpeakable = {
         <a href="/testimonials" class="font-bold text-primary hover:underline">患者さまの声・体験談</a>
       </div>
 
-      <div id="medical-pro" class="scroll-mt-32">
+      <div
+        class="flex flex-col sm:flex-row items-start sm:items-center gap-4 rounded-2xl border border-amber-200 dark:border-amber-800/50 bg-amber-50 dark:bg-amber-900/20 px-5 py-4"
+        role="complementary"
+        aria-label="お知らせ・ブログのご案内"
+      >
         <div
-          class="bg-white dark:bg-slate-800 rounded-2xl border border-blue-100 dark:border-slate-700 shadow-sm flex flex-col sm:flex-row items-center gap-4 p-5 md:p-6"
+          class="shrink-0 bg-amber-500 text-white text-xs font-black px-3 py-1.5 rounded-lg leading-tight text-center"
         >
-          <Icon name="tabler:building-hospital" class="w-10 h-10 text-primary shrink-0" />
-          <div class="flex-1 text-center sm:text-left">
-            <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 tracking-widest mb-0.5">
-              医療・介護関係者の方へ
-            </p>
-            <p class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
-              連携・相談書・オンライン訪問診療相談は <a href="/renkei" class="text-primary font-bold hover:underline"
-                >専用ページ</a
-              >
-              へ。地域医療連携部 <a href="tel:0643017883" class="text-primary font-bold hover:underline">06-4301-7883</a
-              >
-            </p>
-          </div>
-          <a
-            href="/renkei"
-            class="shrink-0 inline-flex items-center gap-2 bg-primary text-white font-bold px-4 py-2.5 rounded-full text-sm hover:opacity-90 whitespace-nowrap"
-          >
-            詳細へ <Icon name="tabler:arrow-right" class="w-4 h-4" />
-          </a>
+          お知らせ<br />ブログ
         </div>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-gray-900 dark:text-white text-sm mb-0.5">院長コラム・お知らせ・スタッフ記事を発信中</p>
+          <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+            診療体制・休診・採用情報や、院長・スタッフによるコラム、地域の医療情報などを随時発信しています。
+          </p>
+        </div>
+        <a
+          href="/blog"
+          class="shrink-0 inline-flex items-center gap-1.5 border-2 border-amber-500 text-amber-700 dark:text-amber-400 font-bold px-4 py-2 rounded-full text-sm hover:bg-amber-100 dark:hover:bg-amber-800/40 transition-colors whitespace-nowrap"
+          aria-label="お知らせ・ブログを読む"
+        >
+          <Icon name="tabler:news" class="w-4 h-4" /> ブログを見る
+        </a>
       </div>
+
     </div>
   </section>
 

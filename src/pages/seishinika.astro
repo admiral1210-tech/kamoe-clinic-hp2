@@ -6,7 +6,6 @@ import Features2 from '~/components/widgets/Features2.astro';
 import Content from '~/components/widgets/Content.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
-import { Icon } from 'astro-icon/components';
 
 const metadata = {
   title: '精神科の訪問診療・オンライン診療｜大阪市｜かもめクリニック',
@@ -154,6 +153,8 @@ const jsonLdSpeakable = {
   <!-- Hero -->
   <Hero
     tagline="精神科 訪問診療・オンライン診療｜大阪市"
+    titleClass="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight mb-5 md:mb-8 font-heading text-gray-900 dark:text-gray-100 intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
+    subtitleClass="hero-subtitle text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-gray-800 dark:text-slate-100 leading-relaxed mb-8 intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
     actions={[
       { variant: 'primary', text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
       {
@@ -174,34 +175,24 @@ const jsonLdSpeakable = {
       診療を受けられます
     </Fragment>
     <Fragment slot="subtitle">
-      <span class="sm:hidden">
-        <strong>精神科専門医3名が常勤</strong>する、大阪市内唯一の体制です。<br />
-        外出困難な方・引きこもりの方・認知症の方のご自宅や施設へ専門医が伺います。<br />
-        <strong>初診からオンライン診療</strong>も可能です。
+      <span class="block mb-3 sm:mb-4 text-purple-800 dark:text-purple-200 font-bold text-lg sm:text-xl md:text-2xl leading-snug">
+        精神科専門医3名常勤｜大阪市内の訪問診療クリニックとして唯一の体制
       </span>
-      <span class="hidden sm:inline">
-        <strong>精神科専門医3名が常勤</strong>する、大阪市内唯一の訪問診療クリニックです。<br />
-        通院困難な方・引きこもりの方・認知症の方のご自宅や施設へ、専門医が直接伺います。<br />
-        <strong>精神疾患は初診からオンライン診療も可能</strong>です。
+      <span class="block mb-3 sm:mb-4 font-semibold text-gray-800 dark:text-slate-200">
+        <span class="sm:hidden">
+          外出困難な方・引きこもりの方・認知症の方のご自宅や施設へ専門医が伺います。<br />
+          <strong class="text-gray-900 dark:text-white">初診からオンライン診療</strong>も可能です。
+        </span>
+        <span class="hidden sm:inline">
+          通院困難な方・引きこもりの方・認知症の方のご自宅や施設へ、専門医が直接伺います。<br />
+          <strong class="text-gray-900 dark:text-white">精神疾患は初診からオンライン診療も可能</strong>です。
+        </span>
+      </span>
+      <span class="block text-sm sm:text-base md:text-lg font-medium text-purple-700 dark:text-purple-300">
+        精神保健指定医・医学博士・日本神経精神学会専門医が在籍
       </span>
     </Fragment>
   </Hero>
-
-  <!-- 大阪市内唯一の強み -->
-  <section class="py-12 bg-purple-50 dark:bg-slate-800 border-y border-purple-100">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-      <div
-        class="inline-flex items-center gap-3 bg-white dark:bg-slate-900 rounded-2xl px-8 py-5 shadow-sm border border-purple-100 dark:border-purple-900"
-      >
-        <Icon name="tabler:certificate" class="w-10 h-10 text-purple-600 shrink-0" />
-        <div class="text-left">
-          <p class="font-black text-2xl text-gray-900 dark:text-white">精神科専門医3名常勤</p>
-          <p class="text-purple-700 dark:text-purple-400 font-bold">大阪市内の訪問診療クリニックとして唯一の体制</p>
-          <p class="text-sm text-gray-500 mt-1">精神保健指定医・医学博士・日本神経精神学会専門医</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- 対応する疾患 -->
   <Features

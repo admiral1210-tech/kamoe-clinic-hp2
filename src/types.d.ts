@@ -219,6 +219,10 @@ export interface Hero extends Omit<Headline, 'classes'>, Omit<Widget, 'isDark' |
   content?: string;
   actions?: string | CallToAction[];
   image?: string | unknown;
+  /** 省略時は既定の見出しスタイル（ページごとに上書き可） */
+  titleClass?: string;
+  /** 省略時は既定のリード文スタイル */
+  subtitleClass?: string;
 }
 
 export interface Team extends Omit<Headline, 'classes'>, Widget {

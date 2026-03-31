@@ -1,6 +1,5 @@
 ---
 import Stats from '~/components/widgets/Stats.astro';
-import Steps2 from '~/components/widgets/Steps2.astro';
 import Hero from '~/components/widgets/Hero.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 import Layout from '~/layouts/PageLayout.astro';
@@ -269,34 +268,6 @@ const branches = [
           住み慣れた自宅や施設で安心して医療を受け続けられるよう、<br class="hidden sm:inline" />
           大阪市内の在宅医療を支え続けています。
         </p>
-      </div>
-
-      <div class="grid sm:grid-cols-3 gap-5">
-        {
-          [
-            {
-              icon: 'tabler:clock-24',
-              title: '24時間365日の安心',
-              body: '厚生労働省が定める在宅医療最高水準クリニックとして、夜間・休日も緊急往診に対応。「いざというとき」の不安を取り除きます。',
-            },
-            {
-              icon: 'tabler:users',
-              title: '内科・精神科・小児科の連携',
-              body: '複合的な疾患を持つ患者さまも、1つのクリニックで一体的に対応できます。専門医チームが連携して診療にあたります。',
-            },
-            {
-              icon: 'tabler:map-pin',
-              title: '大阪市内5拠点の広域対応',
-              body: '港区・西淀川区・住之江区ほか市内広域に5院体制。担当エリアのご確認は地域医療連携部が一括対応します。',
-            },
-          ].map(({ icon, title, body }) => (
-            <div class="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 p-6 flex flex-col gap-3">
-              <Icon name={icon} class="w-8 h-8 text-primary" />
-              <p class="font-bold text-gray-900 dark:text-white">{title}</p>
-              <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{body}</p>
-            </div>
-          ))
-        }
       </div>
     </div>
   </section>
@@ -652,34 +623,6 @@ const branches = [
     document.addEventListener('astro:page-load', initDoctorTabs);
     initDoctorTabs();
   </script>
-
-  <!-- ===== あゆみ（沿革） ===== -->
-  <Steps2
-    tagline="あゆみ"
-    title="2017年の開院から現在まで"
-    items={[
-      {
-        title: '2017年　大阪市港区に本院開設',
-        description:
-          '大阪市港区夕凪に「かもめクリニック」本院を開設。厚生労働省が定める在宅医療の最高水準クリニック（機能強化型在宅療養支援診療所）として認定を受け、地域の在宅医療をスタート。',
-      },
-      {
-        title: '精神科専門医3名常勤体制を構築',
-        description:
-          '大阪市内の訪問診療クリニックとして唯一、精神科専門医を3名常勤配置。外出困難な精神疾患の患者さまにも専門的な在宅医療を提供。',
-      },
-      {
-        title: '第4・第5・第8院など市内5院体制へ',
-        description:
-          '西淀川区・住之江区ほかに拠点を拡大。大阪市内の広域をカバーし、多様な地域・施設へ対応できる体制を整備。',
-      },
-      {
-        title: '常勤医師13名・年間看取り約100件',
-        description:
-          '内科・精神科・小児科あわせて常勤医師13名。グループ全体で約50施設・年間約100件の在宅看取りを実施。',
-      },
-    ]}
-  />
 
   <!-- ===== グループ拠点 ===== -->
   <section id="access" class="py-16 bg-blue-50 dark:bg-slate-800 border-y border-blue-100 dark:border-slate-700">

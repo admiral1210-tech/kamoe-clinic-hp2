@@ -55,22 +55,35 @@ const { socialLinks = [], secondaryLinks = [], links = [], theme = 'light' } = A
           </p>
           <p class="flex items-center gap-2">
             <Icon name="tabler:clock" class="w-4 h-4 shrink-0 text-primary" />
-            <span>平日 9:00〜17:00<br />緊急往診 24時間365日</span>
+            <span>平日・祝日 9:00〜17:00<br />緊急往診 24時間365日</span>
           </p>
         </address>
 
         <!-- ソーシャルリンク -->
         <div class="flex items-center gap-1 pt-1">
           {
-            socialLinks.map(({ ariaLabel, href, icon }) => (
-              <a
-                class="text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2 inline-flex items-center transition-colors"
-                aria-label={ariaLabel}
-                href={href}
-              >
-                {icon && <Icon name={icon} class="w-5 h-5" />}
-              </a>
-            ))
+            socialLinks.map(({ ariaLabel, href, icon }) => {
+              const isInstagram = ariaLabel === 'Instagram';
+              const isLine = ariaLabel === 'LINE';
+              const socialClass = isInstagram
+                ? 'text-[#E4405F] bg-[#E4405F]/10 hover:bg-[#E4405F]/20 dark:bg-[#E4405F]/15 dark:hover:bg-[#E4405F]/30'
+                : isLine
+                  ? 'text-[#06C755] bg-[#06C755]/10 hover:bg-[#06C755]/20 dark:bg-[#06C755]/15 dark:hover:bg-[#06C755]/30'
+                  : 'text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700';
+
+              return (
+                <a
+                  class:list={[
+                    'rounded-xl p-3 inline-flex items-center transition-colors',
+                    socialClass,
+                  ]}
+                  aria-label={ariaLabel}
+                  href={href}
+                >
+                  {icon && <Icon name={icon} class="w-6 h-6" />}
+                </a>
+              );
+            })
           }
         </div>
       </div>

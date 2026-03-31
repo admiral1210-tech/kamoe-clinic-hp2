@@ -63,10 +63,10 @@ export const footerData = {
       title: '診療案内',
       links: [
         { text: '訪問診療とは・流れ', href: getPermalink('/houmon-shinryo') },
-        { text: '診療内容（内科・精神科・小児科）', href: getPermalink('/#departments') },
+        { text: '診療内容', href: getPermalink('/#departments') },
         { text: '内科の訪問診療', href: getPermalink('/naika') },
-        { text: '精神科の訪問診療・オンライン診療', href: getPermalink('/seishinika') },
-        { text: '小児科の訪問診療（医療ケア児対応）', href: getPermalink('/shoninka') },
+        { text: '精神科の診療内容', href: getPermalink('/seishinika') },
+        { text: '小児科の診療内容', href: getPermalink('/shoninka') },
         { text: '整形外科の訪問診療', href: getPermalink('/seikeigeka') },
         { text: '費用・保険について', href: getPermalink('/cost') },
         { text: '医療費助成・診断書', href: getPermalink('/joseikin') },

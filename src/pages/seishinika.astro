@@ -1,24 +1,38 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
+import PageTocNav from '~/components/ui/PageTocNav.astro';
 import Features from '~/components/widgets/Features.astro';
 import Features2 from '~/components/widgets/Features2.astro';
 import Content from '~/components/widgets/Content.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
+import {
+  clinicalAnchorScrollMargin,
+  clinicalHeroSubtitleClass,
+  clinicalHeroTaglineClass,
+  clinicalHeroTitleClass,
+  clinicalSectionHeadline,
+} from '~/constants/clinical-page-ui';
+import { CLINIC_CONTACT } from '~/data/clinic-contact';
+import { seishinikaFaqEntries } from '~/data/faq-seishinika';
+import { seishinikaMedicalConditionGraph } from '~/data/seishinika-structured-data';
+import { getPermalink } from '~/utils/permalinks';
+import { buildFaqPageJsonLd, faqEntriesToWidgetItems } from '~/utils/seo-faq';
+import { twMerge } from 'tailwind-merge';
+import { serializeJsonLdForScript } from '~/utils/json-ld-script';
 
 const metadata = {
   title: '精神科の訪問診療・オンライン診療｜大阪市｜かもめクリニック',
   description:
-    '大阪市の精神科訪問診療。精神科専門医3名常勤（大阪市内唯一）。うつ病・統合失調症・認知症・引きこもり・双極性障害に対応。精神疾患は初診からオンライン診療可能。在支診1認定。',
+    '大阪市の精神科訪問診療。精神科専門医3名常勤（精神保健指定医在籍）。うつ病・統合失調症・認知症・引きこもり・双極性障害に対応。厚生労働省の指針に基づき要件を満たす場合、精神疾患の初診からオンライン診療に対応。在支診1認定。',
   ignoreTitleTemplate: true,
   openGraph: {
     type: 'website',
-    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+    /** adaptOpenGraphImages（外部URL・Unpic）の出力に合わせる */
+    images: [{ url: 'https://kamome-clinic.net/images/top/slider02.jpg', width: 1200, height: 626 }],
   },
 };
 
-// JSON-LD: BreadcrumbList
 const jsonLdBreadcrumb = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -33,173 +47,144 @@ const jsonLdBreadcrumb = {
   ],
 };
 
-// JSON-LD: FAQPage
-const jsonLdFAQ = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: '精神科の訪問診療は初診から受けられますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'はい。かもめクリニックでは精神疾患の方を初診からお受けしています。外出が困難な方・長期間通院を中断している方・ご家族が受診を勧めたい方など、幅広くご相談いただけます。2022年の法改正により精神疾患は初診からオンライン診療も可能です。まずはお電話（06-4301-7871）またはLINEでご相談ください。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '引きこもりの家族に精神科の訪問診療を頼めますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'はい、ご家族からのご相談も受け付けています。ご本人が外出を拒否している場合も、まずはご家族だけでご相談ください。状況を丁寧にお聞きした上で、訪問診療・オンライン診療・段階的なアプローチなど最適な方法を一緒に考えます。長期引きこもりの方へのご家族支援の経験も豊富です。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '認知症の訪問診療は精神科で受けられますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'はい。認知症（アルツハイマー型・レビー小体型・血管性認知症など）は精神科・内科の両面から診療します。BPSD（徘徊・暴言・妄想・夜間不眠など）への薬物調整も精神科専門医が対応します。認知症の進行を抑えながら、住み慣れたご自宅・施設での生活継続をサポートします。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'オンライン診療とはどういうものですか？精神科でも使えますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: '2022年の法改正により、精神疾患は初診からオンライン診療が可能になりました。スマートフォンやパソコンのビデオ通話で医師の診察を受けられます。外出困難・交通手段がない・対面が不安という方に適しています。処方箋は薬局への直送も可能です。訪問診療への移行もいつでも対応できます。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '精神科の薬も処方してもらえますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'はい。向精神薬・睡眠薬・抗認知症薬・抗不安薬・気分安定薬など必要な処方を行います。定期訪問のたびに状態を丁寧に確認し、薬の種類・用量を適切に調整します。複数の薬を服用中の方の薬の整理・減薬についても精神科専門医がご相談に応じます。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '訪問診療の費用はどのくらいかかりますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: '健康保険・介護保険が適用され、月2〜3回の定期訪問で3割負担の方の目安は月額1万円前後です。75歳以上の後期高齢者は1割または2割負担でさらに軽減されます。生活保護の方は自己負担ゼロで受けられます。詳しくは費用・保険のページ（/cost）またはお電話（06-4301-7871）でご確認ください。',
-      },
-    },
-  ],
-};
+const jsonLdFAQ = buildFaqPageJsonLd(seishinikaFaqEntries);
+const seishinikaFaqWidgetItems = faqEntriesToWidgetItems(seishinikaFaqEntries);
 
-// JSON-LD: MedicalCondition（対応疾患）
-const jsonLdConditions = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'MedicalCondition',
-    name: 'うつ病',
-    alternateName: '抑うつ状態・大うつ病性障害',
-    relevantSpecialty: 'https://schema.org/Psychiatry',
-    recognizingAuthority: { '@type': 'Organization', name: '日本精神神経学会' },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'MedicalCondition',
-    name: '統合失調症',
-    relevantSpecialty: 'https://schema.org/Psychiatry',
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'MedicalCondition',
-    name: '認知症',
-    alternateName: 'アルツハイマー型認知症・レビー小体型認知症・血管性認知症',
-    relevantSpecialty: 'https://schema.org/Psychiatry',
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'MedicalCondition',
-    name: '双極性障害',
-    alternateName: '躁うつ病',
-    relevantSpecialty: 'https://schema.org/Psychiatry',
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'MedicalCondition',
-    name: '発達障害',
-    alternateName: 'ADHD・ASD・自閉スペクトラム症・注意欠如多動症',
-    relevantSpecialty: 'https://schema.org/Psychiatry',
-  },
-];
-
-// JSON-LD: Speakable
-const jsonLdSpeakable = {
-  '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  '@id': 'https://kamome-clinic.net/seishinika',
-  name: '精神科の訪問診療・オンライン診療｜大阪市｜かもめクリニック',
-  speakable: {
-    '@type': 'SpeakableSpecification',
-    cssSelector: ['h1', 'h2', '.hero-subtitle'],
-  },
-  url: 'https://kamome-clinic.net/seishinika',
-};
+const doctorsHref = getPermalink('/doctors');
+const contactHref = getPermalink('/renkei');
 ---
 
 <Layout metadata={metadata}>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdFAQ)} />
-    {jsonLdConditions.map((c) => <script type="application/ld+json" set:html={JSON.stringify(c)} />)}
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdSpeakable)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdFAQ)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(seishinikaMedicalConditionGraph)} />
   </Fragment>
 
   <!-- Hero -->
   <Hero
     tagline="精神科 訪問診療・オンライン診療｜大阪市"
-    titleClass="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight mb-5 md:mb-8 font-heading text-gray-900 dark:text-gray-100 intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
-    subtitleClass="hero-subtitle text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-gray-800 dark:text-slate-100 leading-relaxed mb-8 intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
-    actions={[
-      { variant: 'primary', text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
-      {
-        variant: 'line',
-        text: 'LINEで無料相談',
-        href: 'https://line.me/R/ti/p/%40512ysmzx',
-        icon: 'tabler:brand-line',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=2070&q=80',
-      alt: '精神科訪問診療のイメージ',
-    }}
+    taglineClass={clinicalHeroTaglineClass}
+    titleClass={clinicalHeroTitleClass}
+    subtitleClass={clinicalHeroSubtitleClass}
+    sectionPaddingClass="pt-8 md:pt-14 pb-3 md:pb-4"
+    textBlockPaddingClass="pb-2 md:pb-3"
   >
     <Fragment slot="title">
       外に出られなくても<br />
-      <span class="text-accent dark:text-white highlight">精神科</span>の<br />
+      <span class="text-primary dark:text-blue-300">精神科</span>の<br />
       診療を受けられます
     </Fragment>
     <Fragment slot="subtitle">
-      <span class="block mb-3 sm:mb-4 text-purple-800 dark:text-purple-200 font-bold text-lg sm:text-xl md:text-2xl leading-snug">
-        精神科専門医3名常勤｜大阪市内の訪問診療クリニックとして唯一の体制
+      <span class="hero-subtitle block mb-2 font-semibold text-primary dark:text-blue-300">
+        精神科専門医3名常勤｜精神保健指定医・医学博士在籍の訪問診療体制
       </span>
-      <span class="block mb-3 sm:mb-4 font-semibold text-gray-800 dark:text-slate-200">
+      <span class="block mb-2">
         <span class="sm:hidden">
           外出困難な方・引きこもりの方・認知症の方のご自宅や施設へ専門医が伺います。<br />
-          <strong class="text-gray-900 dark:text-white">初診からオンライン診療</strong>も可能です。
+          厚生労働省の指針に基づき要件を満たす場合、<strong class="text-gray-900 dark:text-gray-100">初診からオンライン診療</strong>にも対応します。
         </span>
         <span class="hidden sm:inline">
           通院困難な方・引きこもりの方・認知症の方のご自宅や施設へ、専門医が直接伺います。<br />
-          <strong class="text-gray-900 dark:text-white">精神疾患は初診からオンライン診療も可能</strong>です。
+          厚生労働省の指針に基づき要件を満たす場合、<strong class="text-gray-900 dark:text-gray-100">精神疾患の初診からオンライン診療にも対応</strong>します。
         </span>
       </span>
-      <span class="block text-sm sm:text-base md:text-lg font-medium text-purple-700 dark:text-purple-300">
+      <span class="block text-xs text-gray-500 dark:text-gray-400">
         精神保健指定医・医学博士・日本神経精神学会専門医が在籍
+      </span>
+      <span class="block text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">
+        <a href={doctorsHref} class="text-primary underline">医師紹介</a>で体制の詳細をご確認ください。
       </span>
     </Fragment>
   </Hero>
 
+  <PageTocNav
+    ariaLabel="このページの主な内容"
+    items={[
+      { href: '#first-step', label: 'まずはご相談' },
+      { href: '#visit-vs-online', label: '訪問・オンラインの違い' },
+      { href: '#diseases', label: '対応疾患' },
+      { href: '#target', label: '対象' },
+      { href: '#online', label: 'オンライン診療' },
+      { href: '#faq', label: 'よくある質問' },
+    ]}
+  />
+
+  <!-- 次の一歩（相談導線） -->
+  <Features
+    id="first-step"
+    scrollMarginClass={clinicalAnchorScrollMargin}
+    tagline="ご利用の流れ"
+    title="まずはご相談から"
+    subtitle="診療の有無を決める前に、お電話・フォームでお困りごとをお聞かせください。画面下のボタンからもいつでも操作できます。"
+    columns={2}
+    classes={{
+      headline: { ...clinicalSectionHeadline },
+      container: 'max-w-7xl mx-auto pt-2 md:pt-3 pb-8 md:pb-14 lg:pb-16',
+    }}
+    items={[
+      {
+        title: 'お電話',
+        description: `平日・祝日 ${CLINIC_CONTACT.hoursPrimary}に、看護師・事務が初回のご相談をお受けします。`,
+        icon: 'tabler:phone',
+        callToAction: {
+          variant: 'floatingCtaTel' as const,
+          text: CLINIC_CONTACT.telDisplay,
+          href: CLINIC_CONTACT.telHref,
+          icon: 'tabler:phone',
+        },
+      },
+      {
+        title: 'お問い合わせフォーム',
+        description: 'ご都合のよい時間に、内容を整理して送信いただけます。',
+        icon: 'tabler:clipboard-list',
+        callToAction: {
+          variant: 'floatingCtaForm' as const,
+          text: '問い合わせフォーム',
+          href: contactHref,
+          icon: 'tabler:clipboard-list',
+        },
+      },
+    ]}
+  />
+
+  <!-- 訪問とオンラインの違い -->
+  <Features
+    id="visit-vs-online"
+    scrollMarginClass={clinicalAnchorScrollMargin}
+    tagline="受け方の選択"
+    title="訪問診療とオンライン診療の違い"
+    subtitle="状況に応じて併用・切り替えも可能です。詳しいオンラインの手順は下のセクションでもご案内しています。"
+    columns={2}
+    classes={{ headline: { ...clinicalSectionHeadline }, container: 'max-w-7xl mx-auto' }}
+    items={[
+      {
+        title: '訪問診療',
+        description:
+          '精神科専門医がご自宅・施設へ伺い、対面で診察・処方・状態確認を行います。通院が困難な方、身体合併や認知症で対面評価が望ましい方に適しています。',
+        icon: 'tabler:home-heart',
+      },
+      {
+        title: 'オンライン診療',
+        description:
+          'スマートフォンやパソコンのビデオ通話で受診します。2022年の厚生労働省指針改訂により、要件を満たす場合は精神疾患の初診から利用できます。外出恐怖や交通手段のない方の第一歩にも適しています。',
+        icon: 'tabler:video',
+      },
+    ]}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Features>
+
   <!-- 対応する疾患 -->
   <Features
     id="diseases"
+    scrollMarginClass={clinicalAnchorScrollMargin}
     tagline="対応疾患"
     title="こんな疾患・状態に対応しています"
     subtitle="専門医が継続的に診療。処方・調整・ご家族への指導も行います。"
+    classes={{ headline: { ...clinicalSectionHeadline } }}
     items={[
       {
         title: 'うつ病・抑うつ状態',
@@ -223,7 +208,7 @@ const jsonLdSpeakable = {
         title: '認知症（BPSDを含む）',
         description:
           'アルツハイマー型・レビー小体型・血管性認知症など。徘徊・暴言・妄想などBPSDへの薬物調整も精神科専門医が担当します。',
-        icon: 'tabler:brain',
+        icon: 'tabler:user-heart',
       },
       {
         title: 'アルコール・薬物依存症',
@@ -251,53 +236,13 @@ const jsonLdSpeakable = {
     ]}
   />
 
-  <!-- オンライン診療 -->
-  <Content
-    id="online"
-    tagline="オンライン診療"
-    title="精神疾患は初診からオンライン診療が可能です"
-    isReversed
-    items={[
-      {
-        title: '2022年法改正により初診から可能に',
-        description:
-          '従来は再診のみでしたが、精神疾患は初診からオンライン診療が認められています。まずは気軽に始めていただけます。',
-      },
-      {
-        title: 'スマホ・PCで受診できる',
-        description:
-          'ビデオ通話で医師と対面診療。通院・外出不要で診察・処方が受けられます。処方箋は薬局への直送も可能です。',
-      },
-      {
-        title: 'こんな方に向いています',
-        description:
-          '外出恐怖のある方・交通手段がない方・対面が不安な方・遠方の親御さんを心配されている方などに適しています。',
-      },
-      {
-        title: '訪問診療への移行も可能',
-        description: 'まずオンラインで診療を開始し、状況に応じて訪問診療に切り替えることもできます。柔軟に対応します。',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80',
-      alt: 'オンライン診療のイメージ',
-    }}
-  >
-    <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
-        自宅にいながら精神科医に相談できます
-      </h3>
-    </Fragment>
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-purple-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
   <!-- 対象者 -->
   <Features2
     id="target"
+    scrollMarginClass={clinicalAnchorScrollMargin}
     tagline="こんな方へ"
     title="精神科の訪問診療をご検討ください"
+    classes={{ headline: { ...clinicalSectionHeadline }, container: 'max-w-7xl mx-auto' }}
     items={[
       {
         title: '外来受診をやめてしまった方',
@@ -337,62 +282,70 @@ const jsonLdSpeakable = {
     </Fragment>
   </Features2>
 
-  <!-- FAQ -->
-  <FAQs
-    id="faq"
-    title="精神科訪問診療 よくある質問"
-    tagline="FAQ"
-    classes={{ container: 'max-w-6xl' }}
+  <!-- オンライン診療（詳細） -->
+  <Content
+    id="online"
+    scrollMarginClass={clinicalAnchorScrollMargin}
+    tagline="オンライン診療"
+    title="厚生労働省の指針に基づき、要件を満たす場合に初診からオンライン診療に対応します"
+    isReversed
+    classes={{
+      headline: {
+        ...clinicalSectionHeadline,
+        container: twMerge('max-w-xl sm:mx-auto lg:max-w-2xl text-left sm:text-center', clinicalSectionHeadline.container),
+      },
+    }}
     items={[
       {
-        title: '精神科の訪問診療は初診から受けられますか？',
+        title: '2022年法改正により要件を満たす場合に初診から対応可能に',
         description:
-          'はい。初診からお受けしています。外出が困難な方・長期間通院を中断している方・ご家族が受診を勧めたい方など、幅広くご相談いただけます。2022年の法改正により精神疾患は初診からオンライン診療も可能になりました。お気軽にお電話（06-4301-7871）またはLINEでご相談ください。',
+          '従来は再診のみでしたが、2022年の厚生労働省指針改訂により、一定の要件を満たす場合に限り精神疾患の初診からオンライン診療が認められています。詳細はお電話・フォームにてご確認ください。',
       },
       {
-        title: '引きこもりの家族に精神科の訪問診療を頼めますか？',
+        title: 'スマホ・PCで受診できる',
         description:
-          'はい、ご家族からのご相談も受け付けています。ご本人が外出を拒否している場合も、まずはご家族だけでご相談ください。状況を丁寧にお聞きした上で、訪問診療・オンライン診療・段階的なアプローチなど最適な方法を一緒に考えます。',
+          'ビデオ通話で医師と対面診療。通院・外出不要で診察・処方が受けられます。処方箋は薬局への直送も可能です。',
       },
       {
-        title: '認知症の訪問診療は精神科で受けられますか？',
+        title: 'こんな方に向いています',
         description:
-          'はい。認知症（アルツハイマー型・レビー小体型・血管性認知症など）は精神科・内科の両面から診療します。BPSD（徘徊・暴言・妄想・夜間不眠など）への薬物調整も精神科専門医が対応します。住み慣れたご自宅・施設での生活継続を継続的にサポートします。',
+          '外出恐怖のある方・交通手段がない方・対面が不安な方・遠方の親御さんを心配されている方などに適しています。',
       },
       {
-        title: 'オンライン診療はどうやって受けますか？',
-        description:
-          'スマートフォンやパソコンのビデオ通話で医師の診察を受けます。予約後、指定のURLまたはアプリで接続するだけです。処方箋は薬局への直送も可能です。詳細はお電話（06-4301-7871）またはLINEでご案内します。',
-      },
-      {
-        title: '精神科の薬も処方してもらえますか？',
-        description:
-          'はい。向精神薬・睡眠薬・抗認知症薬・抗不安薬・気分安定薬など必要な処方を行います。定期訪問のたびに状態を丁寧に確認し、薬の種類・用量を適切に調整します。複数の薬を服用中の方の整理・減薬についてもご相談いただけます。',
-      },
-      {
-        title: '訪問診療の費用はどのくらいかかりますか？',
-        description:
-          '健康保険・介護保険が適用され、月2〜3回の定期訪問で3割負担の方の目安は月額1万円前後です。75歳以上の後期高齢者は1割または2割負担になります。生活保護の方は自己負担ゼロです。詳しくは「費用・保険について」ページまたはお電話（06-4301-7871）でご確認ください。',
-      },
-    ]}
-  />
-
-  <!-- CTA -->
-  <CallToAction
-    actions={[
-      { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
-      {
-        variant: 'line',
-        text: 'LINEで無料相談（@512ysmzx）',
-        href: 'https://line.me/R/ti/p/%40512ysmzx',
-        icon: 'tabler:brand-line',
+        title: '訪問診療への移行も可能',
+        description: 'まずオンラインで診療を開始し、状況に応じて訪問診療に切り替えることもできます。柔軟に対応します。',
       },
     ]}
   >
-    <Fragment slot="title">精神科の訪問診療・オンライン診療のご相談</Fragment>
-    <Fragment slot="subtitle">
-      受付：平日・祝日 9:00〜17:00 | LINE（@512ysmzx）は24時間受付<br />
-      ご家族からのご相談も歓迎しています。まずはお気軽にどうぞ。
+    <Fragment slot="content">
+      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
+        自宅にいながら精神科医に相談できます
+      </h3>
     </Fragment>
-  </CallToAction>
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Content>
+
+  <!-- 命の危機・緊急時 -->
+  <section
+    class="max-w-4xl mx-auto px-4 sm:px-6 py-10 text-sm text-gray-600 dark:text-gray-300 leading-relaxed border-t border-gray-200 dark:border-slate-700"
+    aria-label="緊急時のご案内"
+  >
+    <p class="mb-0">
+      ご自身や身近な方に<strong class="text-gray-800 dark:text-gray-100">命の危機</strong>や<strong
+        class="text-gray-800 dark:text-gray-100">自殺念慮</strong
+      >がある場合は、まず<strong>110・119</strong>や、お住まいの地域のいのちの電話・救急医療をご利用ください。
+    </p>
+  </section>
+
+  <!-- FAQ -->
+  <FAQs
+    id="faq"
+    scrollMarginClass={clinicalAnchorScrollMargin}
+    title="精神科訪問診療 よくある質問"
+    tagline="FAQ"
+    classes={{ container: 'max-w-6xl', headline: { ...clinicalSectionHeadline } }}
+    items={seishinikaFaqWidgetItems}
+  />
 </Layout>

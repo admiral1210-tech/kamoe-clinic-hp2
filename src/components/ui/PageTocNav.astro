@@ -1,0 +1,44 @@
+---
+interface Props {
+  items: { href: string; label: string }[];
+  ariaLabel?: string;
+  /** sticky バー内のラベル（省略時は非表示） */
+  heading?: string;
+}
+
+const { items, ariaLabel = 'このページの目次', heading } = Astro.props;
+---
+
+<nav
+  class="sticky z-30 top-[4.5rem] md:top-[4.75rem] border-b border-gray-200/80 dark:border-slate-700 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md not-prose"
+  aria-label={ariaLabel}
+>
+  <div class="max-w-5xl mx-auto px-3 sm:px-4 py-1.5">
+    <div class="flex items-center overflow-x-auto sm:overflow-x-visible gap-2 pb-1 sm:pb-0 scrollbar-none">
+      {heading && (
+        <span class="hidden sm:inline-flex shrink-0 items-center text-[0.65rem] font-semibold text-primary tracking-widest uppercase whitespace-nowrap pr-1 border-r border-gray-200 dark:border-slate-600 mr-1">
+          {heading}
+        </span>
+      )}
+      {
+        items.map(({ href, label }) => (
+          <a
+            href={href}
+            class="inline-flex shrink-0 items-center justify-center min-h-[2.75rem] rounded-full border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800/80 px-3 text-xs font-medium text-gray-700 dark:text-gray-200 hover:border-primary hover:text-primary dark:hover:text-blue-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+          >
+            {label}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</nav>
+
+<style>
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+</style>

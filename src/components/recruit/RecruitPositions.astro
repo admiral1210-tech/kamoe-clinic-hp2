@@ -1,0 +1,153 @@
+---
+import { Icon } from 'astro-icon/components';
+import {
+  recruitPositionCards,
+  recruitNurseFulltime,
+} from '~/data/recruit';
+
+const nf = recruitNurseFulltime;
+---
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6">
+  <div class="text-center mb-12 max-w-3xl mx-auto">
+    <p class="text-xs font-semibold text-primary tracking-widest uppercase mb-1">Positions</p>
+    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">募集職種</h2>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-6">
+    {
+      recruitPositionCards.map((card) => (
+        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
+          <div class="bg-primary px-6 py-4">
+            <h3 class="text-white font-bold text-lg">{card.title}</h3>
+          </div>
+          <div class="p-6 space-y-3 text-sm text-gray-700 dark:text-gray-300 flex flex-col flex-1">
+            {card.rows.map((row) => (
+              <div class="flex gap-2">
+                <span class="font-semibold w-20 shrink-0 text-gray-500">{row.label}</span>
+                <span>{row.value}</span>
+              </div>
+            ))}
+            <div class="mt-auto pt-3">
+              {card.cta.type === 'anchor' ? (
+                <a
+                  href={card.cta.href}
+                  class="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-white hover:opacity-90 transition-opacity w-full"
+                >
+                  {card.cta.label}
+                </a>
+              ) : (
+                <details
+                  id={card.cta.detailsId}
+                  class="recruit-nurse-details scroll-mt-[72px] rounded-xl border border-primary/25 bg-gray-50/80 dark:bg-slate-800/50 dark:border-primary/30"
+                >
+                  <summary class="flex cursor-pointer list-none items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-white hover:opacity-90 transition-opacity [&::-webkit-details-marker]:hidden">
+                    {card.cta.label}
+                    <Icon
+                      name="tabler:chevron-down"
+                      class="recruit-nurse-details__chevron w-4 h-4 shrink-0 transition-transform duration-200"
+                      aria-hidden="true"
+                    />
+                  </summary>
+                  <div class="border-t border-gray-200 dark:border-slate-600 p-4 pt-5">
+                    <div class="rounded-xl border-2 border-primary/40 overflow-hidden bg-white dark:bg-slate-800">
+                      <div class="bg-primary px-4 py-3 sm:px-6 sm:py-4 flex items-center gap-3">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="w-6 h-6 text-white shrink-0"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          aria-hidden="true"
+                          ><path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9 12h6m-3-3v6m5 4H7a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z"></path></svg
+                        >
+                        <h4 class="text-white font-bold text-base sm:text-lg m-0">{nf.title}</h4>
+                      </div>
+                      <div class="p-4 sm:p-6">
+                        {nf.introHtml.map((html) => (
+                          <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 last:mb-0 leading-relaxed" set:html={html} />
+                        ))}
+                        <div class="grid md:grid-cols-2 gap-4 text-sm mt-6">
+                          <div class="space-y-3">
+                            {nf.leftColumn.map((row, i) => (
+                              <div
+                                class:list={[
+                                  'flex gap-3',
+                                  i < nf.leftColumn.length - 1 ? 'border-b border-gray-100 dark:border-slate-700 pb-3' : '',
+                                ]}
+                              >
+                                <span class="font-semibold text-gray-500 w-24 shrink-0">{row.label}</span>
+                                <span class="min-w-0 text-gray-800 dark:text-gray-200" set:html={row.valueHtml} />
+                              </div>
+                            ))}
+                          </div>
+                          <div class="space-y-3">
+                            {nf.rightColumn.map((row, i) => (
+                              <div
+                                class:list={[
+                                  'flex gap-3',
+                                  i < nf.rightColumn.length - 1 ? 'border-b border-gray-100 dark:border-slate-700 pb-3' : '',
+                                ]}
+                              >
+                                <span class="font-semibold text-gray-500 w-24 shrink-0">{row.label}</span>
+                                <span class="text-gray-800 dark:text-gray-200" set:html={row.valueHtml} />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        <div class="mt-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4">
+                          <p class="text-sm font-semibold text-primary dark:text-blue-300 mb-2">{nf.desiredProfile.heading}</p>
+                          <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                            {nf.desiredProfile.items.map((text, idx) => {
+                              const isLast = idx === nf.desiredProfile.items.length - 1;
+                              const emphasized = nf.desiredProfile.emphasizedLast && isLast;
+                              return (
+                                <li
+                                  class:list={[
+                                    emphasized ? 'text-primary dark:text-blue-400 font-medium' : '',
+                                  ]}
+                                >
+                                  ・{text}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </details>
+              )}
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <p class="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
+    ※ 上記以外の職種でも随時ご相談を受け付けています。まずはお気軽にお問い合わせください。
+  </p>
+</div>
+
+<style>
+  .recruit-nurse-details[open] .recruit-nurse-details__chevron {
+    transform: rotate(180deg);
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    function openNurseDetailFromHash() {
+      if (window.location.hash !== '#nurse-fulltime') return;
+      var el = document.getElementById('nurse-fulltime');
+      if (el && el.tagName === 'DETAILS') el.setAttribute('open', '');
+    }
+    openNurseDetailFromHash();
+    window.addEventListener('hashchange', openNurseDetailFromHash);
+  })();
+</script>

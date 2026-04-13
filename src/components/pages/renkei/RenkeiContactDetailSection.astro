@@ -1,0 +1,99 @@
+---
+import PageSectionHeading from '~/components/ui/PageSectionHeading.astro';
+import { Icon } from 'astro-icon/components';
+import { RENKEI_VISIT_CONSULT_FORM_URL } from '~/constants/renkei';
+---
+
+<!-- 連絡先（フォーム＋電話2窓口）※詳細層 -->
+<div
+  id="renkei-contact-detail"
+  class="-mx-4 sm:-mx-6 px-4 sm:px-6 py-12 md:py-14 bg-blue-50 dark:bg-slate-800 border-b border-blue-100 dark:border-slate-700 scroll-mt-32"
+>
+  <PageSectionHeading
+    tagline="連絡先"
+    title="地域医療連携部の連絡先"
+    subtitle="ご家族の方も、医療・介護関係者の方も、まずはオンライン相談書からご連絡ください。内容を確認のうえ、担当者より折り返しご連絡します。"
+  />
+
+  <!-- プライバシー同意 + フォームCTA -->
+  <div class="mb-4">
+    <!-- 同意チェックボックス（必須） -->
+    <label
+      class="flex items-start gap-3 cursor-pointer bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl px-5 py-4 mb-3 max-w-2xl mx-auto"
+    >
+      <input
+        type="checkbox"
+        id="renkei-privacy-consent"
+        class="mt-0.5 h-5 w-5 shrink-0 accent-primary cursor-pointer"
+        required
+        aria-required="true"
+        onchange="document.getElementById('renkei-form-link').classList.toggle('opacity-40 pointer-events-none', !this.checked)"
+      />
+      <span class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+        <a href="/privacy" class="underline text-primary hover:opacity-80" target="_blank" rel="noopener">個人情報保護方針</a>
+        を確認・同意のうえ、フォームに進みます（必須）
+      </span>
+    </label>
+
+    <!-- フォームCTA -->
+    <a
+      id="renkei-form-link"
+      href={RENKEI_VISIT_CONSULT_FORM_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-primary dark:bg-blue-700 hover:opacity-95 transition-opacity rounded-2xl px-8 py-6 group opacity-40 pointer-events-none"
+      aria-disabled="true"
+    >
+      <div class="flex items-center gap-4 text-white">
+        <Icon name="tabler:clipboard-list" class="w-10 h-10 shrink-0" aria-hidden="true" />
+        <div>
+          <p class="text-xs font-semibold text-blue-100 mb-0.5">オンライン相談書（Googleフォーム）</p>
+          <p class="text-xl font-black leading-tight">かもめクリニック 訪問診療相談書</p>
+          <p class="text-sm text-blue-100 mt-1">患者さまの基本情報・状態・ご要望を記入して送信できます。24時間受付。</p>
+        </div>
+      </div>
+      <div class="shrink-0">
+        <span
+          class="inline-flex items-center gap-2 bg-white text-primary font-bold px-5 py-3 rounded-xl text-sm group-hover:shadow-md transition-shadow"
+        >
+          <Icon name="tabler:external-link" class="w-4 h-4 shrink-0" aria-hidden="true" />
+          フォームを開く
+        </span>
+      </div>
+    </a>
+  </div>
+
+  <!-- 急ぎの場合の電話案内 -->
+  <p class="text-center text-sm text-gray-500 dark:text-gray-400 mb-4">
+    お急ぎの場合はお電話でもご相談いただけます。
+  </p>
+
+  <!-- 電話2窓口カード -->
+  <div class="grid sm:grid-cols-2 gap-4 max-w-3xl mx-auto">
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6 text-center">
+      <Icon name="tabler:phone" class="w-8 h-8 text-primary mx-auto mb-3" aria-hidden="true" />
+      <p class="font-bold text-gray-900 dark:text-white mb-1">地域医療連携部（専用）</p>
+      <a href="tel:0643017883" class="text-2xl font-black text-primary hover:underline block">06-4301-7883</a>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">平日・祝日 9:00〜17:00</p>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-2 leading-snug text-left px-1">
+        病院・施設・ケアマネの方からのご紹介、施設連携、訪問診療の受け入れ可否・エリア確認など
+      </p>
+    </div>
+    <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6 text-center">
+      <Icon name="tabler:phone" class="w-8 h-8 text-gray-500 mx-auto mb-3" aria-hidden="true" />
+      <p class="font-bold text-gray-900 dark:text-white mb-1">一般受付</p>
+      <a href="tel:0643017871" class="text-2xl font-black text-gray-700 dark:text-gray-300 hover:underline block"
+        >06-4301-7871</a
+      >
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">平日・祝日 9:00〜17:00</p>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-2 leading-snug text-left px-1">
+        診療のご予約・変更、患者さまご本人・ご家族からのお問い合わせなど
+      </p>
+    </div>
+  </div>
+
+  <!-- FAX案内 -->
+  <p class="text-center text-xs text-gray-400 dark:text-gray-500 mt-4">
+    FAX：06-4301-7872（随時受付）
+  </p>
+</div>

@@ -4,7 +4,7 @@ import { Icon } from 'astro-icon/components';
 import { twMerge } from 'tailwind-merge';
 import Button from './Button.astro';
 
-const { items = [], columns, defaultIcon = '', classes = {} } = Astro.props;
+const { items = [], columns, defaultIcon = '', classes = {}, numberedTitles = false } = Astro.props;
 
 const {
   container: containerClass = '',
@@ -29,24 +29,45 @@ const {
                 ? 'sm:grid-cols-2 '
                 : ''
         }`,
-        containerClass
+        containerClass,
+        numberedTitles && 'clinical-itemgrid2-numbered'
       )}
     >
-      {items.map(({ title, description, icon, callToAction, classes: itemClasses = {} }) => (
+      {items.map(({ title, description, descriptionSummary, icon, callToAction, highlight, classes: itemClasses = {} }) => (
         <div
           class={twMerge(
             'relative flex flex-col intersect-once intersect-quarter intersect-no-queue motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade',
             panelClass,
-            itemClasses?.panel
+            itemClasses?.panel,
+            highlight &&
+              'ring-2 ring-primary/35 dark:ring-blue-400/40 shadow-[0_4px_24px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.25)]'
           )}
         >
           {(icon || defaultIcon) && (
             <Icon name={icon || defaultIcon} class={twMerge('mb-2 w-10 h-10', defaultIconClass, itemClasses?.icon)} />
           )}
-          <div class={twMerge('text-xl font-bold', titleClass, itemClasses?.title)}>{title}</div>
-          {description && (
-            <p class={twMerge('text-muted mt-2', descriptionClass, itemClasses?.description)} set:html={description} />
+          {title && (
+            <h3 class={twMerge('text-xl font-bold', titleClass, itemClasses?.title)}>{title}</h3>
           )}
+          {descriptionSummary && (
+            <p class={twMerge('text-muted mt-2', descriptionClass, itemClasses?.description)}>{descriptionSummary}</p>
+          )}
+          {description &&
+            (descriptionSummary ? (
+              <details class="mt-2">
+                <summary
+                  class="cursor-pointer list-none text-sm font-semibold text-primary hover:underline [&::-webkit-details-marker]:hidden"
+                >
+                  続きを読む
+                </summary>
+                <div
+                  class={twMerge('mt-2 text-muted', descriptionClass, itemClasses?.description)}
+                  set:html={description}
+                />
+              </details>
+            ) : (
+              <p class={twMerge('text-muted mt-2', descriptionClass, itemClasses?.description)} set:html={description} />
+            ))}
           {callToAction && (
             <div class="mt-2">
               <Button {...callToAction} />
@@ -57,3 +78,17 @@ const {
     </div>
   )
 }
+
+{numberedTitles && (
+  <style is:global>
+    .clinical-itemgrid2-numbered {
+      counter-reset: clinical-feature2;
+    }
+    .clinical-itemgrid2-numbered > div > h3::before {
+      counter-increment: clinical-feature2;
+      content: counter(clinical-feature2) '.\00a0';
+      font-weight: 800;
+      color: var(--aw-color-primary);
+    }
+  </style>
+)}

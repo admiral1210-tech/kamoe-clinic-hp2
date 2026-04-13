@@ -1,0 +1,113 @@
+---
+import type { Doctor, SectionConfig } from '~/data/doctors-intro';
+
+interface Props {
+  section: SectionConfig;
+  doc: Doctor;
+  /** 医師紹介ページと同じく lazy。ヒーローでは eager を指定 */
+  imageLoading?: 'eager' | 'lazy';
+}
+
+const { section, doc, imageLoading = 'lazy' } = Astro.props;
+---
+
+<article class={`bg-white dark:bg-slate-900 rounded-2xl shadow-sm overflow-hidden border ${section.accentBorder}`}>
+  <div class={`${section.accent} h-1 w-full`}></div>
+
+  <div class="flex justify-center bg-gray-100 dark:bg-slate-800 py-4 sm:py-5">
+    <figure
+      class="relative m-0 aspect-[3/4] w-[min(260px,70vw)] sm:w-[290px] overflow-hidden rounded-xl shadow-sm ring-1 ring-black/5 dark:ring-white/10 bg-gray-100 dark:bg-slate-800"
+    >
+      {
+        doc.image ? (
+          <img
+            src={doc.image}
+            alt={`${doc.name}の写真`}
+            width="960"
+            height="1280"
+            class="absolute inset-0 h-full w-full object-cover object-top"
+            loading={imageLoading}
+            fetchpriority={imageLoading === 'eager' ? 'high' : undefined}
+            decoding="async"
+            sizes="(max-width:640px) 70vw, 290px"
+          />
+        ) : (
+          <div class={`absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 ${section.placeholderBg}`}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class={`h-14 w-14 shrink-0 opacity-35 ${section.placeholderText}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="1.25"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+              />
+            </svg>
+            <p class={`text-sm font-semibold tracking-wide ${section.placeholderText}`}>準備中</p>
+          </div>
+        )
+      }
+    </figure>
+  </div>
+
+  <div class="px-5 pt-6 pb-2 text-center sm:px-6">
+    <h3 class="text-2xl font-bold leading-snug text-gray-900 dark:text-white">{doc.name}</h3>
+    <p class={`mt-2 text-sm font-semibold leading-snug text-balance ${section.accentText}`}>{doc.role}</p>
+  </div>
+
+  <dl class="mt-4 space-y-4 px-5 pb-2 sm:px-6">
+    <div>
+      <dt class="mb-1 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">専門</dt>
+      <dd class="text-sm leading-relaxed text-gray-700 dark:text-gray-300">{doc.specialty}</dd>
+    </div>
+
+    {
+      doc.qualifications && (
+        <div>
+          <dt class="mb-1 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">所属学会・資格</dt>
+          <dd>
+            <ul class="space-y-1">
+              {doc.qualifications.map((q) => (
+                <li class="flex items-start gap-2 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                  <span class={`mt-2 h-1 w-1 shrink-0 rounded-full ${section.accent}`} aria-hidden="true" />
+                  {q}
+                </li>
+              ))}
+            </ul>
+          </dd>
+        </div>
+      )
+    }
+
+    {
+      (doc.education || doc.career) && (
+        <div>
+          <dt class="mb-1 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">略歴</dt>
+          <dd class="space-y-2 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+            {doc.education && <p class="whitespace-pre-line">{doc.education}</p>}
+            {doc.career && <p class="whitespace-pre-line text-gray-600 dark:text-gray-400">{doc.career}</p>}
+          </dd>
+        </div>
+      )
+    }
+
+    {
+      doc.hobbies && (
+        <div>
+          <dt class="mb-1 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">趣味</dt>
+          <dd class="text-sm leading-relaxed text-gray-700 dark:text-gray-300">{doc.hobbies}</dd>
+        </div>
+      )
+    }
+  </dl>
+
+  <div class={`mx-5 mb-6 mt-5 rounded-xl p-4 sm:mx-6 ${section.quoteBg}`}>
+    <p class={`mb-2 text-xs font-bold ${section.quoteLabel}`}>ひとこと</p>
+    <p class="whitespace-pre-line text-sm leading-relaxed text-gray-700 dark:text-gray-300">{doc.message}</p>
+  </div>
+</article>

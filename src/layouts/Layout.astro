@@ -12,7 +12,6 @@ import SiteVerification from '~/components/common/SiteVerification.astro';
 import Analytics from '~/components/common/Analytics.astro';
 import BasicScripts from '~/components/common/BasicScripts.astro';
 
-// Comment the line below to disable View Transitions
 import { ClientRouter } from 'astro:transitions';
 
 import type { MetaData as MetaDataType } from '~/types';
@@ -28,6 +27,8 @@ const { language, textDirection } = I18N;
 <!doctype html>
 <html lang={language} dir={textDirection} class="2xl:text-[20px]">
   <head>
+    <!-- ライトモード専用宣言: Android Chrome 強制ダークモード / iOS Safari 自動反転を防止 -->
+    <meta name="color-scheme" content="light" />
     <CommonMeta />
     <Favicons />
     <CustomStyles />
@@ -37,7 +38,7 @@ const { language, textDirection } = I18N;
     <Analytics />
     <slot name="head" />
 
-    <!-- Comment the line below to disable View Transitions -->
+    <!-- ページ遷移のちらつきを抑制。BasicScripts の astro:after-swap で再初期化済み -->
     <ClientRouter fallback="swap" />
   </head>
 

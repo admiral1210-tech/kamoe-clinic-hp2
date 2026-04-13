@@ -31,93 +31,230 @@ import { UI } from 'astrowind:config';
   };
   initTheme();
 
-  function attachEvent(selector, event, fn) {
+  function attachEvent(selector, event, fn, options) {
+    const signal = options && options.signal;
+    const listenerOpts = signal ? { signal } : false;
     const matches = typeof selector === 'string' ? document.querySelectorAll(selector) : selector;
     if (matches && matches.length) {
       matches.forEach((elem) => {
-        elem.addEventListener(event, (e) => fn(e, elem), false);
+        elem.addEventListener(event, (e) => fn(e, elem), listenerOpts);
       });
     }
   }
 
+  /** View Transitions などで onLoad が再実行されても document 直下のリスナーが積み上がらないようにする */
+  let headerLoadAbort = null;
+
+  function closeMobileSubmenus() {
+    document.querySelectorAll('#header li.dropdown.is-submenu-open').forEach((li) => {
+      li.classList.remove('is-submenu-open');
+      const b = li.querySelector(':scope > button');
+      if (b instanceof HTMLButtonElement) b.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  function closeMobileMenu() {
+    closeMobileSubmenus();
+    const toggleBtn = document.querySelector('[data-aw-toggle-menu]');
+    toggleBtn?.classList.remove('expanded');
+    syncMobileMenuToggle(toggleBtn);
+    document.body.classList.remove('overflow-hidden');
+    document.getElementById('header')?.classList.remove('h-screen');
+    document.getElementById('header')?.classList.remove('expanded');
+    document.getElementById('header')?.classList.remove('bg-page');
+    document.querySelector('#header nav')?.classList.add('hidden');
+    document.querySelector('#header > div > div:last-child')?.classList.add('hidden');
+  }
+
+  function focusFirstMobileNavItem() {
+    requestAnimationFrame(() => {
+      const nav = document.getElementById('main-nav');
+      const first = nav?.querySelector('a[href], button:not([disabled])');
+      first?.focus();
+    });
+  }
+
+  function syncMobileMenuToggle(button) {
+    if (!(button instanceof HTMLElement)) return;
+    const expanded = button.classList.contains('expanded');
+    button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    button.setAttribute('aria-label', expanded ? 'メニューを閉じる' : 'メニューを開く');
+  }
+
+  const mobileNavMq = window.matchMedia('(max-width: 767px)');
+
+  function isMobileNavLayout() {
+    return mobileNavMq.matches;
+  }
+
+  function initHeaderNavDropdownA11y(signal) {
+    document.querySelectorAll('#header li.dropdown').forEach((dd) => {
+      const btn = dd.querySelector(':scope > button');
+      const menu = dd.querySelector(':scope > ul');
+      if (!(btn instanceof HTMLButtonElement) || !menu) return;
+      const setOpen = (open) => {
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      };
+      const opts = signal ? { signal } : undefined;
+
+      /* モバイル: クリックで開閉（メニュー全体を閉じないよう伝播停止） */
+      btn.addEventListener(
+        'click',
+        (e) => {
+          if (!isMobileNavLayout()) return;
+          e.stopPropagation();
+          const willOpen = !dd.classList.contains('is-submenu-open');
+          document.querySelectorAll('#header li.dropdown.is-submenu-open').forEach((openLi) => {
+            if (openLi !== dd) {
+              openLi.classList.remove('is-submenu-open');
+              const ob = openLi.querySelector(':scope > button');
+              if (ob instanceof HTMLButtonElement) ob.setAttribute('aria-expanded', 'false');
+            }
+          });
+          dd.classList.toggle('is-submenu-open', willOpen);
+          setOpen(willOpen);
+        },
+        opts
+      );
+
+      /* デスクトップのみ: ホバー／フォーカスで aria-expanded を同期 */
+      const setDesktopOpen = (open) => {
+        if (isMobileNavLayout()) return;
+        setOpen(open);
+      };
+      dd.addEventListener('focusin', () => setDesktopOpen(true), opts);
+      dd.addEventListener(
+        'focusout',
+        (e) => {
+          if (isMobileNavLayout()) return;
+          if (e.relatedTarget instanceof Node && dd.contains(e.relatedTarget)) return;
+          setDesktopOpen(false);
+        },
+        opts
+      );
+      dd.addEventListener('mouseenter', () => setDesktopOpen(true), opts);
+      dd.addEventListener('mouseleave', () => setDesktopOpen(false), opts);
+    });
+  }
+
   const onLoad = function () {
+    headerLoadAbort?.abort();
+    headerLoadAbort = new AbortController();
+    const signal = headerLoadAbort.signal;
+
     let lastKnownScrollPosition = window.scrollY;
     let ticking = true;
 
-    attachEvent('#header nav', 'click', function () {
-      document.querySelector('[data-aw-toggle-menu]')?.classList.remove('expanded');
-      document.body.classList.remove('overflow-hidden');
-      document.getElementById('header')?.classList.remove('h-screen');
-      document.getElementById('header')?.classList.remove('expanded');
-      document.getElementById('header')?.classList.remove('bg-page');
-      document.querySelector('#header nav')?.classList.add('hidden');
-      document.querySelector('#header > div > div:last-child')?.classList.add('hidden');
-    });
+    initHeaderNavDropdownA11y(signal);
 
-    attachEvent('[data-aw-toggle-menu]', 'click', function (_, elem) {
-      elem.classList.toggle('expanded');
-      document.body.classList.toggle('overflow-hidden');
-      document.getElementById('header')?.classList.toggle('h-screen');
-      document.getElementById('header')?.classList.toggle('expanded');
-      document.getElementById('header')?.classList.toggle('bg-page');
-      document.querySelector('#header nav')?.classList.toggle('hidden');
-      document.querySelector('#header > div > div:last-child')?.classList.toggle('hidden');
-    });
+    /* モバイル: ナビ内のリンクを選んだときだけオーバーレイを閉じる（ドロップダウン親ボタンは除外） */
+    attachEvent(
+      '#header #main-nav',
+      'click',
+      function (e) {
+        if (!isMobileNavLayout()) return;
+        const t = e.target;
+        if (!(t instanceof Element)) return;
+        const link = t.closest('a[href]');
+        if (!link || !document.getElementById('main-nav')?.contains(link)) return;
+        closeMobileMenu();
+      },
+      { signal }
+    );
 
-    attachEvent('[data-aw-toggle-color-scheme]', 'click', function () {
-      if (defaultTheme.endsWith(':only')) {
-        return;
-      }
+    attachEvent(
+      '[data-aw-toggle-menu]',
+      'click',
+      function (_, elem) {
+        const willOpen = !elem.classList.contains('expanded');
+        elem.classList.toggle('expanded');
+        syncMobileMenuToggle(elem);
+        document.body.classList.toggle('overflow-hidden');
+        document.getElementById('header')?.classList.toggle('h-screen');
+        document.getElementById('header')?.classList.toggle('expanded');
+        document.getElementById('header')?.classList.toggle('bg-page');
+        document.querySelector('#header nav')?.classList.toggle('hidden');
+        document.querySelector('#header > div > div:last-child')?.classList.toggle('hidden');
+        if (willOpen) focusFirstMobileNavItem();
+      },
+      { signal }
+    );
 
-      Observer.removeAnimationDelay();
-
-      document.documentElement.classList.toggle('dark');
-      localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-    });
-
-    attachEvent('[data-aw-social-share]', 'click', function (_, elem) {
-      const network = elem.getAttribute('data-aw-social-share');
-      const url = encodeURIComponent(elem.getAttribute('data-aw-url'));
-      const text = encodeURIComponent(elem.getAttribute('data-aw-text'));
-
-      let href;
-      switch (network) {
-        case 'facebook':
-          href = `https://www.facebook.com/sharer.php?u=${url}`;
-          break;
-        case 'twitter':
-          href = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
-          break;
-        case 'linkedin':
-          href = `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${text}`;
-          break;
-        case 'whatsapp':
-          href = `https://wa.me/?text=${text}%20${url}`;
-          break;
-        case 'mail':
-          href = `mailto:?subject=%22${text}%22&body=${text}%20${url}`;
-          break;
-
-        default:
+    attachEvent(
+      '[data-aw-toggle-color-scheme]',
+      'click',
+      function () {
+        if (defaultTheme.endsWith(':only')) {
           return;
-      }
+        }
 
-      const newlink = document.createElement('a');
-      newlink.target = '_blank';
-      newlink.href = href;
-      newlink.click();
-    });
+        Observer.removeAnimationDelay();
+
+        document.documentElement.classList.toggle('dark');
+        localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      },
+      { signal }
+    );
+
+    attachEvent(
+      '[data-aw-social-share]',
+      'click',
+      function (_, elem) {
+        const network = elem.getAttribute('data-aw-social-share');
+        const url = encodeURIComponent(elem.getAttribute('data-aw-url'));
+        const text = encodeURIComponent(elem.getAttribute('data-aw-text'));
+
+        let href;
+        switch (network) {
+          case 'facebook':
+            href = `https://www.facebook.com/sharer.php?u=${url}`;
+            break;
+          case 'twitter':
+            href = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
+            break;
+          case 'linkedin':
+            href = `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${text}`;
+            break;
+          case 'whatsapp':
+            href = `https://wa.me/?text=${text}%20${url}`;
+            break;
+          case 'mail':
+            href = `mailto:?subject=%22${text}%22&body=${text}%20${url}`;
+            break;
+
+          default:
+            return;
+        }
+
+        const newlink = document.createElement('a');
+        newlink.target = '_blank';
+        newlink.href = href;
+        newlink.click();
+      },
+      { signal }
+    );
 
     const screenSize = window.matchMedia('(max-width: 767px)');
-    screenSize.addEventListener('change', function () {
-      document.querySelector('[data-aw-toggle-menu]')?.classList.remove('expanded');
-      document.body.classList.remove('overflow-hidden');
-      document.getElementById('header')?.classList.remove('h-screen');
-      document.getElementById('header')?.classList.remove('expanded');
-      document.getElementById('header')?.classList.remove('bg-page');
-      document.querySelector('#header nav')?.classList.add('hidden');
-      document.querySelector('#header > div > div:last-child')?.classList.add('hidden');
-    });
+    screenSize.addEventListener(
+      'change',
+      function () {
+        closeMobileMenu();
+      },
+      { signal }
+    );
+
+    document.addEventListener(
+      'keydown',
+      function (e) {
+        if (e.key !== 'Escape') return;
+        const toggleBtn = document.querySelector('[data-aw-toggle-menu].expanded');
+        if (!toggleBtn) return;
+        e.preventDefault();
+        closeMobileMenu();
+        toggleBtn.focus();
+      },
+      { signal }
+    );
 
     function applyHeaderStylesOnScroll() {
       const header = document.querySelector('#header[data-aw-sticky-header]');
@@ -131,27 +268,25 @@ import { UI } from 'astrowind:config';
     }
     applyHeaderStylesOnScroll();
 
-    attachEvent([document], 'scroll', function () {
-      lastKnownScrollPosition = window.scrollY;
+    attachEvent(
+      [document],
+      'scroll',
+      function () {
+        lastKnownScrollPosition = window.scrollY;
 
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          applyHeaderStylesOnScroll();
-        });
-        ticking = true;
-      }
-    });
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            applyHeaderStylesOnScroll();
+          });
+          ticking = true;
+        }
+      },
+      { signal }
+    );
   };
   const onPageShow = function () {
     document.documentElement.classList.add('motion-safe:scroll-smooth');
-    const elem = document.querySelector('[data-aw-toggle-menu]');
-    if (elem) {
-      elem.classList.remove('expanded');
-    }
-    document.body.classList.remove('overflow-hidden');
-    document.getElementById('header')?.classList.remove('h-screen');
-    document.getElementById('header')?.classList.remove('expanded');
-    document.querySelector('#header nav')?.classList.add('hidden');
+    closeMobileMenu();
   };
 
   window.onload = onLoad;
@@ -173,6 +308,12 @@ import { UI } from 'astrowind:config';
     elements: null,
 
     start() {
+      if (this.observer) {
+        this.observer.disconnect();
+        this.observer = null;
+      }
+      this.animationCounter = 0;
+
       const selectors = [
         '[class*=" intersect:"]',
         '[class*=":intersect:"]',

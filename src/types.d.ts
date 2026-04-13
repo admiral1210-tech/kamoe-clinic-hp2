@@ -44,6 +44,9 @@ export interface Post {
   readingTime?: number;
 }
 
+/** 一覧・RSS・ウィジェット向け。`render()` による本文は含めない。 */
+export type PostSummary = Omit<Post, 'Content'>;
+
 export interface Taxonomy {
   slug: string;
   title: string;
@@ -137,7 +140,11 @@ export interface Stat {
 export interface Item {
   title?: string;
   description?: string;
+  /** 指定時は常に表示し、description は「続きを読む」内に表示（長文カードの段階開示） */
+  descriptionSummary?: string;
   icon?: string;
+  /** ItemGrid2 等でカードを視覚的に強調（採用LPの差別化項目など） */
+  highlight?: boolean;
   classes?: Record<string, string>;
   callToAction?: CallToAction;
   image?: Image;
@@ -184,7 +191,7 @@ export interface Disclaimer {
 
 // COMPONENTS
 export interface CallToAction extends Omit<HTMLAttributes<'a'>, 'slot'> {
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'link' | 'line';
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'link' | 'line' | 'floatingCtaTel' | 'floatingCtaForm';
   text?: string;
   icon?: string;
   classes?: Record<string, string>;
@@ -196,6 +203,8 @@ export interface ItemGrid {
   columns?: number;
   defaultIcon?: string;
   classes?: Record<string, string>;
+  /** ItemGrid2 のみ使用。見出しに CSS 番号を付与 */
+  numberedTitles?: boolean;
 }
 
 export interface Collapse {
@@ -219,10 +228,20 @@ export interface Hero extends Omit<Headline, 'classes'>, Omit<Widget, 'isDark' |
   content?: string;
   actions?: string | CallToAction[];
   image?: string | unknown;
+  /** true のとき画像ブロックを見出しより上に配置（LCP・ファーストビュー優先） */
+  imageFirst?: boolean;
+  /** タグライン用の追加クラス（例: normal-case） */
+  taglineClass?: string;
   /** 省略時は既定の見出しスタイル（ページごとに上書き可） */
   titleClass?: string;
   /** 省略時は既定のリード文スタイル */
   subtitleClass?: string;
+  /** image スロット外枠の幅クラス（例: max-w-7xl）。省略時は max-w-5xl */
+  imageContainerClass?: string;
+  /** 見出し・リード文ブロックの下余白（省略時は imageFirst に応じて pb-6〜pb-16） */
+  textBlockPaddingClass?: string;
+  /** メイン縦パディング（省略時は py-12 md:py-20） */
+  sectionPaddingClass?: string;
 }
 
 export interface Team extends Omit<Headline, 'classes'>, Widget {
@@ -231,10 +250,23 @@ export interface Team extends Omit<Headline, 'classes'>, Widget {
 
 export interface Stats extends Omit<Headline, 'classes'>, Widget {
   stats?: Array<Stat>;
+  footnote?: string;
 }
 
 export interface Pricing extends Omit<Headline, 'classes'>, Widget {
   prices?: Array<Price>;
+  /** 自費診療の場合は必須：リスク・注意事項の説明文（SelfPayPricing を使用すること） */
+  riskNotes?: string;
+  /** 自費診療の場合は必須：副作用・合併症の説明文（SelfPayPricing を使用すること） */
+  sideEffectNotes?: string;
+}
+
+/** 自由診療（自費）コンテンツ専用。医療広告ガイドライン準拠のため riskNotes・sideEffectNotes を必須とする。 */
+export interface SelfPayPricing extends Pricing {
+  /** 必須：リスク・注意事項の説明文 */
+  riskNotes: string;
+  /** 必須：副作用・合併症の説明文 */
+  sideEffectNotes: string;
 }
 
 export interface Testimonials extends Omit<Headline, 'classes'>, Widget {

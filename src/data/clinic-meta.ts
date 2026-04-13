@@ -16,10 +16,17 @@
 //
 //    確認方法: Googleマップ または Googleビジネスプロフィール管理画面
 //    例: ratingValue: 4.8, reviewCount: 32
+//
+//    ⚠️ 医療広告ガイドライン上の注意（有効化前に必ず確認）:
+//    Googleレビューは患者の体験談に相当し、医療法・医療広告ガイドライン（厚生労働省）の
+//    規制対象です。原則として患者体験談の広告掲載は禁止されています（限定解除要件あり）。
+//    有効化する場合は医療法第6条の5・医療広告ガイドラインを遵守し、
+//    法務・顧問弁護士の確認を取ったうえで設定してください。
+//    null のままであればトップページに一切表示されません（現在は安全な状態です）。
 // ===========================================================================
 export const googleReview = {
-  ratingValue: null as number | null, // TODO: 例 → 4.8
-  reviewCount: null as number | null, // TODO: 例 → 32
+  ratingValue: null as number | null, // null = 非表示（医療広告ガイドライン確認後に設定）
+  reviewCount: null as number | null, // null = 非表示（医療広告ガイドライン確認後に設定）
 };
 
 // ===========================================================================
@@ -57,16 +64,21 @@ export const staffCount = {
 //    → LocalBusiness JSON-LD の foundingDate に使用
 //    → 支院ページ・ブランチスキーマに反映
 //
-//    確認方法: 各院の開設届・法人登記
-//    例: branch2: 2018
+//    確認方法: 各院の開設届・法人登記。公開情報のみ反映（第3・第4は公式ブログ）。
+//    null は未入力（スキーマから除外）。推測で埋めないこと。
 // ===========================================================================
 export const branchFoundingYears = {
   main: 2017, // 本院（港区）・確定値
-  branch2: null as number | null, // TODO: 第2院（港区夕凪）
-  branch3: null as number | null, // TODO: 第3院
-  branch4: null as number | null, // TODO: 第4院（西淀川区）
-  branch5: null as number | null, // TODO: 第5院（住之江区）
-  branch8: null as number | null, // TODO: 第8院（住之江区）
+  /** 開業年は院内・開設届で要確認（公開情報に年なし） */
+  branch2: null as number | null,
+  /** 公式ブログ「かもめクリニック第3、かもめクリニック第4の案内」2021年8月開業 */
+  branch3: 2021,
+  /** 同上 2021年9月開業 */
+  branch4: 2021,
+  /** 開業年は院内・開設届で要確認 */
+  branch5: null as number | null,
+  /** 開業年は院内・開設届で要確認 */
+  branch8: null as number | null,
 };
 
 // ===========================================================================
@@ -133,4 +145,17 @@ export function getCumulativeText(): string | null {
     return `開院以来${cumulativeStats.yearsInOperation}年・延べ患者数${cumulativeStats.totalPatients}・累計診察${cumulativeStats.totalVisits}`;
   }
   return null;
+}
+
+/** ヒーロー等の表示用。未設定・空文字のときは従来どおりの確定コピーを返す */
+export function getCumulativePatientsDisplay(): string {
+  const v = cumulativeStats.totalPatients;
+  if (v != null && String(v).trim() !== '') return String(v).trim();
+  return '1,000名';
+}
+
+export function getCumulativeVisitsDisplay(): string {
+  const v = cumulativeStats.totalVisits;
+  if (v != null && String(v).trim() !== '') return String(v).trim();
+  return '1.2万件';
 }

@@ -1,23 +1,33 @@
 ---
+/**
+ * ユーザー向けブログ一覧の唯一の正（canonical）はこの /blog ページ。
+ * 旧 Astrowind テンプレの [...blog]/[...page] 一覧は廃止済み。
+ */
 import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
 import { Icon } from 'astro-icon/components';
-import { fetchPosts } from '~/utils/blog';
-import { getPermalink } from '~/utils/permalinks';
-import { OLD_BLOG_URL, MIGRATION_START } from '~/data/site-policy';
-import Note from '~/components/widgets/Note.astro';
+import { fetchPostSummaries, blogListRobots } from '~/utils/blog';
+import { getCanonical } from '~/utils/permalinks';
+import OldBlogNotice from '~/components/blog/OldBlogNotice.astro';
+import BlogPostCard from '~/components/blog/BlogPostCard.astro';
+import { serializeJsonLdForScript } from '~/utils/json-ld-script';
 
-const posts = await fetchPosts();
+const posts = await fetchPostSummaries();
+
+const heroImageUrl = String(getCanonical('/images/top/slider02.jpg'));
 
 const metadata = {
   title: 'お知らせ・ブログ｜かもめクリニック（大阪市）',
   description:
     'かもめクリニックのお知らせ・ブログ記事一覧。診療体制・休診・採用・地域連携などの最新情報を掲載しています。',
   ignoreTitleTemplate: true,
+  robots: {
+    index: blogListRobots?.index,
+    follow: blogListRobots?.follow,
+  },
   openGraph: {
     type: 'website',
-    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+    images: [{ url: heroImageUrl, width: 1400, height: 500 }],
   },
 };
 
@@ -25,128 +35,47 @@ const jsonLdBreadcrumb = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
-    { '@type': 'ListItem', position: 2, name: 'お知らせ・ブログ', item: 'https://kamome-clinic.net/blog' },
+    { '@type': 'ListItem', position: 1, name: 'トップページ', item: String(getCanonical('/')) },
+    { '@type': 'ListItem', position: 2, name: 'お知らせ・ブログ', item: String(getCanonical('/blog')) },
   ],
 };
 ---
 
 <Layout metadata={metadata}>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdBreadcrumb)} />
   </Fragment>
 
-  <Hero
-    tagline="お知らせ・ブログ"
-    image={{
-      src: 'https://www.kamome-clinic.net/images/top/slider02.jpg',
-      alt: 'かもめクリニック',
-    }}
-  >
+  <Hero tagline="お知らせ・ブログ">
     <Fragment slot="title">お知らせ・ブログ</Fragment>
     <Fragment slot="subtitle">
       院長コラム・スタッフ記事・診療体制のお知らせなど、かもめクリニックの最新情報をお届けします。
     </Fragment>
   </Hero>
 
-  <Note
-    icon="tabler:archive"
-    title={`${MIGRATION_START}以前の過去記事について`}
-    description={`過去の記事は<a href="${OLD_BLOG_URL}" target="_blank" rel="noopener noreferrer" class="underline font-semibold hover:text-primary-700">旧サイトのブログ（アーカイブ）</a>でご覧いただけます。新しいお知らせ・情報発信はこのページで掲載しています。`}
-  />
+  <OldBlogNotice variant="note" />
 
-  <section class="py-12 md:py-16 bg-white dark:bg-slate-900">
+  <section class="py-12 md:py-16 bg-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
-
-      {posts.length === 0 ? (
-        <div class="text-center py-16">
-          <Icon name="tabler:news-off" class="w-12 h-12 mx-auto text-gray-300 dark:text-slate-600 mb-4" aria-hidden="true" />
-          <p class="text-gray-500 dark:text-gray-400 text-lg">現在、掲載できる記事がありません。</p>
-          <p class="text-gray-400 dark:text-gray-500 text-sm mt-2">
-            過去の記事は
-            <a href={OLD_BLOG_URL} target="_blank" rel="noopener noreferrer" class="text-primary underline">
-              旧サイトのブログ
-            </a>
-            でご覧いただけます。
-          </p>
-        </div>
-      ) : (
-        <ul class="flex flex-col gap-6">
-          {posts.map((post) => {
-            const postUrl = getPermalink(post.permalink, 'post');
-            const dateStr = post.publishDate.toLocaleDateString('ja-JP', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            });
-            return (
-              <li>
-                <article class="rounded-2xl border border-gray-100 dark:border-slate-700 bg-blue-50/40 dark:bg-slate-800/50 p-6 shadow-sm hover:border-primary/30 transition-colors">
-                  <time
-                    class="text-sm text-gray-500 dark:text-gray-400 block mb-2"
-                    datetime={post.publishDate.toISOString()}
-                  >
-                    {dateStr}
-                  </time>
-                  {post.category && (
-                    <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-gray-600 dark:text-gray-300 inline-block mb-3">
-                      {post.category.title}
-                    </span>
-                  )}
-                  <h2 class="text-xl font-bold text-gray-900 dark:text-white leading-snug mb-3">
-                    <a href={postUrl} class="hover:text-primary transition-colors">
-                      {post.title}
-                    </a>
-                  </h2>
-                  {post.excerpt && (
-                    <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-3">
-                      {post.excerpt}
-                    </p>
-                  )}
-                  <a
-                    href={postUrl}
-                    class="inline-flex items-center gap-1 mt-4 text-sm font-bold text-primary hover:underline"
-                  >
-                    記事を読む
-                    <Icon name="tabler:arrow-right" class="w-4 h-4" />
-                  </a>
-                </article>
-              </li>
-            );
-          })}
-        </ul>
-      )}
-
-      <div class="mt-12 text-center border-t border-gray-100 dark:border-slate-700 pt-10">
-        <p class="text-sm text-gray-500 dark:text-gray-400">
-          2024年以前の過去記事は
-          <a
-            href={OLD_BLOG_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary underline font-semibold"
-          >
-            旧サイトのブログ
-            <Icon name="tabler:external-link" class="w-3.5 h-3.5 inline-block align-text-top ml-0.5" />
-          </a>
-          でご覧いただけます。
-        </p>
-      </div>
+      {
+        posts.length === 0 ? (
+          <div class="text-center py-16">
+            <Icon
+              name="tabler:news-off"
+              class="w-12 h-12 mx-auto text-gray-300 mb-4"
+              aria-hidden="true"
+            />
+            <p class="text-gray-500 text-lg m-0">現在、新規記事を作成中です。</p>
+            <OldBlogNotice variant="empty" />
+          </div>
+        ) : (
+          <ul class="flex flex-col gap-6 list-none p-0 m-0">
+            {posts.map((post) => (
+              <BlogPostCard post={post} />
+            ))}
+          </ul>
+        )
+      }
     </div>
   </section>
-
-  <CallToAction
-    actions={[
-      { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
-      {
-        variant: 'line',
-        text: 'LINEで無料相談',
-        href: 'https://line.me/R/ti/p/%40512ysmzx',
-        icon: 'tabler:brand-line',
-      },
-    ]}
-  >
-    <Fragment slot="title">訪問診療のご相談はこちら</Fragment>
-    <Fragment slot="subtitle"> 受付：平日・祝日 9:00〜17:00 | LINE（@512ysmzx）は24時間受付 </Fragment>
-  </CallToAction>
 </Layout>

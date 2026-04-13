@@ -1,0 +1,52 @@
+---
+import { Icon } from 'astro-icon/components';
+import FooterNavLinkList from '~/components/widgets/FooterNavLinkList.astro';
+import type { FooterNavLink } from '~/types/footer';
+
+interface Props {
+  title: string;
+  links: FooterNavLink[];
+  /** 狭い画面で折りたたみ（長いセクション向け） */
+  collapsibleMobile?: boolean;
+}
+
+const { title, links, collapsibleMobile } = Astro.props;
+
+const titleClass =
+  'font-bold text-xs text-gray-900 dark:text-white tracking-wide';
+const titleMargin = 'mb-2';
+---
+
+{
+  collapsibleMobile ? (
+    <div>
+      <details class="group border-b border-gray-200 dark:border-slate-700 lg:hidden">
+        <summary
+          class:list={[
+            titleClass,
+            'cursor-pointer list-none flex items-center justify-between gap-2 py-3 [&::-webkit-details-marker]:hidden',
+          ]}
+        >
+          <span>{title}</span>
+          <Icon
+            name="tabler:chevron-down"
+            class="w-4 h-4 shrink-0 text-gray-500 transition-transform group-open:rotate-180 dark:text-gray-400"
+            aria-hidden="true"
+          />
+        </summary>
+        <div class="pb-3">
+          <FooterNavLinkList links={links} />
+        </div>
+      </details>
+      <div class="hidden lg:block">
+        <h3 class:list={[titleClass, titleMargin]}>{title}</h3>
+        <FooterNavLinkList links={links} />
+      </div>
+    </div>
+  ) : (
+    <div>
+      <h3 class:list={[titleClass, titleMargin]}>{title}</h3>
+      <FooterNavLinkList links={links} />
+    </div>
+  )
+}

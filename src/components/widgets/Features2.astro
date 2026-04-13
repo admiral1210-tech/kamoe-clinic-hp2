@@ -2,7 +2,9 @@
 import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
 import Headline from '~/components/ui/Headline.astro';
 import ItemGrid2 from '~/components/ui/ItemGrid2.astro';
-import type { Features as Props } from '~/types';
+import type { Features } from '~/types';
+
+type Props = Features & { numberedTitles?: boolean };
 
 const {
   title = await Astro.slots.render('title'),
@@ -11,27 +13,32 @@ const {
   items = [],
   columns = 3,
   defaultIcon,
+  numberedTitles = false,
 
   id,
   isDark = false,
   classes = {},
   bg = await Astro.slots.render('bg'),
-} = Astro.props;
+  scrollMarginClass,
+} = Astro.props as Props;
 ---
 
-<WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-7xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
+<WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-7xl mx-auto ${classes?.container ?? ''}`} bg={bg} scrollMarginClass={scrollMarginClass}>
   <Headline title={title} subtitle={subtitle} tagline={tagline} classes={classes?.headline as Record<string, string>} />
   <ItemGrid2
     items={items}
     columns={columns}
     defaultIcon={defaultIcon}
+    numberedTitles={numberedTitles}
     classes={{
       container: 'gap-4 md:gap-6',
       panel:
         'rounded-lg shadow-[0_4px_30px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur border border-[#ffffff29] bg-white dark:bg-slate-900 p-6',
       // panel:
       //   "text-center bg-page items-center md:text-left rtl:md:text-right md:items-start p-6 p-6 rounded-md shadow-xl dark:shadow-none dark:border dark:border-slate-800",
-      icon: 'w-12 h-12 mb-6 text-primary',
+      icon: 'w-12 h-12 mb-6 text-primary dark:text-blue-300',
+      title: 'dark:text-white',
+      description: 'dark:text-slate-300',
       ...((classes?.items as Record<string, never>) ?? {}),
     }}
   />

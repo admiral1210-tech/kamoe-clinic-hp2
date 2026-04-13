@@ -32,7 +32,7 @@ const {
         containerClass
       )}
     >
-      {items.map(({ title, description, icon, callToAction, classes: itemClasses = {} }) => (
+      {items.map(({ title, description, descriptionSummary, icon, callToAction, classes: itemClasses = {} }) => (
         <div class="intersect-once motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade">
           <div class={twMerge('flex flex-row max-w-md', panelClass, itemClasses?.panel)}>
             <div class="flex justify-center">
@@ -45,15 +45,37 @@ const {
             </div>
             <div class="mt-0.5">
               {title && <h3 class={twMerge('text-xl font-bold', titleClass, itemClasses?.title)}>{title}</h3>}
-              {description && (
+              {descriptionSummary && (
                 <p
                   class={twMerge(`${title ? 'mt-3' : ''} text-muted`, descriptionClass, itemClasses?.description)}
-                  set:html={description}
-                />
+                >
+                  {descriptionSummary}
+                </p>
               )}
+              {description &&
+                (descriptionSummary ? (
+                  <details class="mt-2">
+                    <summary
+                      class="cursor-pointer list-none text-sm font-semibold text-primary hover:underline [&::-webkit-details-marker]:hidden"
+                    >
+                      続きを読む
+                    </summary>
+                    <div
+                      class={twMerge('mt-2 text-muted', descriptionClass, itemClasses?.description)}
+                      set:html={description}
+                    />
+                  </details>
+                ) : (
+                  <p
+                    class={twMerge(`${title ? 'mt-3' : ''} text-muted`, descriptionClass, itemClasses?.description)}
+                    set:html={description}
+                  />
+                ))}
               {callToAction && (
-                <div class={twMerge(`${title || description ? 'mt-3' : ''}`, actionClass, itemClasses?.actionClass)}>
-                  <Button variant="link" {...callToAction} />
+                <div
+                  class={twMerge(`${title || description || descriptionSummary ? 'mt-3' : ''}`, actionClass, itemClasses?.actionClass)}
+                >
+                  <Button {...callToAction} variant={callToAction.variant ?? 'link'} />
                 </div>
               )}
             </div>

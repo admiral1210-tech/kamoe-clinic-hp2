@@ -15,11 +15,23 @@ const {
   isDark = false,
   classes = {},
   bg = await Astro.slots.render('bg'),
+  scrollMarginClass,
 } = Astro.props;
 ---
 
-<WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-7xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
-  <Headline title={title} subtitle={subtitle} tagline={tagline} />
+<WidgetWrapper
+  id={id}
+  isDark={isDark}
+  containerClass={`max-w-7xl mx-auto ${classes?.container ?? ''}`}
+  bg={bg}
+  scrollMarginClass={scrollMarginClass}
+>
+  <Headline
+    title={title}
+    subtitle={subtitle}
+    tagline={tagline}
+    classes={(classes?.headline as Record<string, string>) ?? {}}
+  />
   <div class="max-w-4xl mx-auto">
     <FaqAccordionList items={items} />
   </div>

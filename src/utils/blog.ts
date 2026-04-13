@@ -1,9 +1,9 @@
 import type { PaginateFunction } from 'astro';
 import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import type { Post } from '~/types';
+import type { Post, PostSummary } from '~/types';
 import { APP_BLOG } from 'astrowind:config';
-import { cleanSlug, trimSlash, BLOG_BASE, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
+import { cleanSlug, trimSlash, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
 
 const generatePermalink = async ({
   id,
@@ -40,10 +40,9 @@ const generatePermalink = async ({
     .join('/');
 };
 
-const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> => {
+/** frontmatter のみ。一覧・RSS・ウィジェット用（MDX render なし）。 */
+const buildPostSummaryFields = async (post: CollectionEntry<'post'>): Promise<PostSummary> => {
   const { id, data } = post;
-  const { Content, remarkPluginFrontmatter } = await render(post);
-
   const {
     publishDate: rawPublishDate = new Date(),
     updateDate: rawUpdateDate,
@@ -57,7 +56,7 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> =
     metadata = {},
   } = data;
 
-  const slug = cleanSlug(id); // cleanSlug(rawSlug.split('/').pop());
+  const slug = cleanSlug(id);
   const publishDate = new Date(rawPublishDate);
   const updateDate = rawUpdateDate ? new Date(rawUpdateDate) : undefined;
 
@@ -74,44 +73,46 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> =
   }));
 
   return {
-    id: id,
-    slug: slug,
+    id,
+    slug,
     permalink: await generatePermalink({ id, slug, publishDate, category: category?.slug }),
-
-    publishDate: publishDate,
-    updateDate: updateDate,
-
-    title: title,
-    excerpt: excerpt,
-    image: image,
-
-    category: category,
-    tags: tags,
-    author: author,
-
-    draft: draft,
-
+    publishDate,
+    updateDate,
+    title,
+    excerpt,
+    image,
+    category,
+    tags,
+    author,
+    draft,
     metadata,
+  };
+};
 
-    Content: Content,
-    // or 'content' in case you consume from API
-
+const buildPostFull = async (post: CollectionEntry<'post'>): Promise<Post> => {
+  const { Content, remarkPluginFrontmatter } = await render(post);
+  const base = await buildPostSummaryFields(post);
+  return {
+    ...base,
+    Content,
     readingTime: remarkPluginFrontmatter?.readingTime,
   };
 };
 
-const load = async function (): Promise<Array<Post>> {
-  const posts = await getCollection('post');
-  const normalizedPosts = posts.map(async (post) => await getNormalizedPost(post));
+let _postEntries: CollectionEntry<'post'>[] | undefined;
+let _summaries: PostSummary[] | undefined;
+let _fullPosts: Post[] | undefined;
 
-  const results = (await Promise.all(normalizedPosts))
-    .sort((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf())
-    .filter((post) => !post.draft);
-
-  return results;
+const ensureSortedEntries = async (): Promise<CollectionEntry<'post'>[]> => {
+  if (!_postEntries) {
+    const posts = await getCollection('post');
+    _postEntries = [...posts].sort(
+      (a, b) =>
+        new Date(b.data.publishDate ?? 0).valueOf() - new Date(a.data.publishDate ?? 0).valueOf()
+    );
+  }
+  return _postEntries;
 };
-
-let _posts: Array<Post>;
 
 /** */
 export const isBlogEnabled = APP_BLOG.isEnabled;
@@ -128,24 +129,37 @@ export const blogTagRobots = APP_BLOG.tag.robots;
 
 export const blogPostsPerPage = APP_BLOG?.postsPerPage;
 
-/** */
-export const fetchPosts = async (): Promise<Array<Post>> => {
-  if (!_posts) {
-    _posts = await load();
+/** 一覧・RSS・タグ/カテゴリ一覧など。MDX の `render` は行わない。 */
+export const fetchPostSummaries = async (): Promise<PostSummary[]> => {
+  if (_summaries) return _summaries;
+  if (_fullPosts) {
+    _summaries = _fullPosts.map(({ Content: _omit, ...rest }) => rest);
+    return _summaries;
   }
+  const entries = await ensureSortedEntries();
+  const all = await Promise.all(entries.map((e) => buildPostSummaryFields(e)));
+  _summaries = all.filter((p) => !p.draft);
+  return _summaries;
+};
 
-  return _posts;
+/** 個別記事ページなど本文コンポーネントが必要なときのみ。 */
+export const fetchPosts = async (): Promise<Array<Post>> => {
+  if (_fullPosts) return _fullPosts;
+  const entries = await ensureSortedEntries();
+  const all = await Promise.all(entries.map((e) => buildPostFull(e)));
+  _fullPosts = all.filter((p) => !p.draft);
+  return _fullPosts;
 };
 
 /** */
 export const findPostsBySlugs = async (slugs: Array<string>): Promise<Array<Post>> => {
   if (!Array.isArray(slugs)) return [];
 
-  const posts = await fetchPosts();
+  const posts = await fetchPostSummaries();
 
   return slugs.reduce(function (r: Array<Post>, slug: string) {
-    posts.some(function (post: Post) {
-      return slug === post.slug && r.push(post);
+    posts.some(function (post: PostSummary) {
+      return slug === post.slug && r.push(post as Post);
     });
     return r;
   }, []);
@@ -155,11 +169,11 @@ export const findPostsBySlugs = async (slugs: Array<string>): Promise<Array<Post
 export const findPostsByIds = async (ids: Array<string>): Promise<Array<Post>> => {
   if (!Array.isArray(ids)) return [];
 
-  const posts = await fetchPosts();
+  const posts = await fetchPostSummaries();
 
   return ids.reduce(function (r: Array<Post>, id: string) {
-    posts.some(function (post: Post) {
-      return id === post.id && r.push(post);
+    posts.some(function (post: PostSummary) {
+      return id === post.id && r.push(post as Post);
     });
     return r;
   }, []);
@@ -168,19 +182,12 @@ export const findPostsByIds = async (ids: Array<string>): Promise<Array<Post>> =
 /** */
 export const findLatestPosts = async ({ count }: { count?: number }): Promise<Array<Post>> => {
   const _count = count || 4;
-  const posts = await fetchPosts();
+  const posts = await fetchPostSummaries();
 
-  return posts ? posts.slice(0, _count) : [];
+  return posts ? posts.slice(0, _count).map((p) => p as Post) : [];
 };
 
-/** */
-export const getStaticPathsBlogList = async ({ paginate }: { paginate: PaginateFunction }) => {
-  if (!isBlogEnabled || !isBlogListRouteEnabled) return [];
-  return paginate(await fetchPosts(), {
-    params: { blog: BLOG_BASE || undefined },
-    pageSize: blogPostsPerPage,
-  });
-};
+/** ブログ一覧は src/pages/blog/index.astro（/blog）が唯一の正。旧 [...blog]/[...page] は廃止。 */
 
 /** */
 export const getStaticPathsBlogPost = async () => {
@@ -197,7 +204,7 @@ export const getStaticPathsBlogPost = async () => {
 export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: PaginateFunction }) => {
   if (!isBlogEnabled || !isBlogCategoryRouteEnabled) return [];
 
-  const posts = await fetchPosts();
+  const posts = await fetchPostSummaries();
   const categories = {};
   posts.map((post) => {
     if (post.category?.slug) {
@@ -221,7 +228,7 @@ export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: Pagin
 export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFunction }) => {
   if (!isBlogEnabled || !isBlogTagRouteEnabled) return [];
 
-  const posts = await fetchPosts();
+  const posts = await fetchPostSummaries();
   const tags = {};
   posts.map((post) => {
     if (Array.isArray(post.tags)) {
@@ -245,10 +252,10 @@ export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFu
 
 /** */
 export async function getRelatedPosts(originalPost: Post, maxResults: number = 4): Promise<Post[]> {
-  const allPosts = await fetchPosts();
+  const allPosts = await fetchPostSummaries();
   const originalTagsSet = new Set(originalPost.tags ? originalPost.tags.map((tag) => tag.slug) : []);
 
-  const postsWithScores = allPosts.reduce((acc: { post: Post; score: number }[], iteratedPost: Post) => {
+  const postsWithScores = allPosts.reduce((acc: { post: PostSummary; score: number }[], iteratedPost: PostSummary) => {
     if (iteratedPost.slug === originalPost.slug) return acc;
 
     let score = 0;
@@ -273,7 +280,7 @@ export async function getRelatedPosts(originalPost: Post, maxResults: number = 4
   const selectedPosts: Post[] = [];
   let i = 0;
   while (selectedPosts.length < maxResults && i < postsWithScores.length) {
-    selectedPosts.push(postsWithScores[i].post);
+    selectedPosts.push(postsWithScores[i].post as Post);
     i++;
   }
 

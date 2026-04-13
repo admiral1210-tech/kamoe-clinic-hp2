@@ -21,14 +21,8 @@ const hasExternalScripts = false;
 const whenExternalScripts = (items: (() => AstroIntegration) | (() => AstroIntegration)[] = []) =>
   hasExternalScripts ? (Array.isArray(items) ? items.map((item) => item()) : [items()]) : [];
 
-const OFFICIAL_BLOG_URL = 'https://www.kamome-clinic.net/blog/';
-
 export default defineConfig({
   output: 'static',
-
-  redirects: {
-    '/blog': OFFICIAL_BLOG_URL,
-  },
 
   integrations: [
     tailwind({
@@ -36,14 +30,19 @@ export default defineConfig({
     }),
     sitemap({
       filter: (page) => {
-        // テンプレートページをサイトマップから除外
-        const excludePaths = ['/about', '/services', '/pricing', '/contact'];
+        // /pricing は /cost へ誘導する薄いページのためサイトマップ除外
+        // /homes/ /landing/ はAstrowindテンプレートのデモページのため除外
+        const excludePaths = ['/pricing'];
         const excludePrefixes = ['/homes/', '/landing/'];
-        const path = page.replace('https://kamome-clinic.net', '');
-        // 外部公式ブログへ転送のみ（検索エンジンは転送元より先URLを正とするのが望ましい）
-        if (path === '/blog') return false;
-        if (excludePaths.includes(path)) return false;
-        if (excludePrefixes.some((prefix) => path.startsWith(prefix))) return false;
+        let pathname: string;
+        try {
+          pathname = new URL(page).pathname || '/';
+        } catch {
+          pathname = page.replace(/^https?:\/\/[^/]+/i, '') || '/';
+        }
+        if (!pathname.startsWith('/')) pathname = `/${pathname}`;
+        if (excludePaths.includes(pathname)) return false;
+        if (excludePrefixes.some((prefix) => pathname.startsWith(prefix))) return false;
         return true;
       },
     }),

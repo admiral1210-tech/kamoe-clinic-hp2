@@ -1,4 +1,5 @@
 ---
+import { SITE } from 'astrowind:config';
 import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
 import Features2 from '~/components/widgets/Features2.astro';
@@ -6,32 +7,57 @@ import Steps from '~/components/widgets/Steps.astro';
 import Content from '~/components/widgets/Content.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
+import RecruitSection from '~/components/recruit/RecruitSection.astro';
+import RecruitPositions from '~/components/recruit/RecruitPositions.astro';
+import {
+  clinicalHeroSubtitleClass,
+  clinicalHeroTaglineClass,
+  clinicalHeroTitleClass,
+  clinicalSectionHeadline,
+} from '~/constants/clinical-page-ui';
+import { KAMOME_BRANCH_COUNT } from '~/data/branches';
+import { CLINIC_CONTACT } from '~/data/clinic-contact';
+import {
+  recruitBenefitsItems,
+  recruitFaqItems,
+  recruitFinalCtaActions,
+  recruitFlowItems,
+  recruitJobPostingNurseJsonLd,
+  recruitWhyFeaturesItems,
+} from '~/data/recruit';
+import { serializeJsonLdForScript } from '~/utils/json-ld-script';
 
 const metadata = {
   title: '従業員募集｜かもめクリニック（大阪市・訪問診療）',
   description:
     'かもめクリニックでは訪問診療を一緒に支えてくれる仲間を募集しています。医師・看護師・事務スタッフなど各職種を随時募集。大阪市港区を拠点に複数院展開中。',
+  openGraph: {
+    type: 'website',
+    images: [{ url: '~/assets/images/default.png', width: 1200, height: 628 }],
+  },
 };
+
+const jobPostingLd = {
+  ...recruitJobPostingNurseJsonLd,
+  url: new URL('/recruit#nurse-fulltime', SITE.site).href,
+};
+const jobPostingJson = serializeJsonLdForScript(jobPostingLd);
 ---
 
 <Layout metadata={metadata}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={jobPostingJson} />
+  </Fragment>
   <!-- ============================================================
     Hero
   ================================================================ -->
   <Hero
-    actions={[
-      {
-        variant: 'primary',
-        text: '応募・お問い合わせ',
-        href: '#apply',
-        icon: 'tabler:send',
-      },
-      { text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
-    ]}
-    image={{
-      src: 'https://www.kamome-clinic.net/images/top/slider02.jpg',
-      alt: 'かもめクリニックのスタッフチーム',
-    }}
+    tagline="採用情報"
+    taglineClass={clinicalHeroTaglineClass}
+    titleClass={clinicalHeroTitleClass}
+    subtitleClass={`${clinicalHeroSubtitleClass} !mb-0`}
+    sectionPaddingClass="py-6 md:py-10"
+    textBlockPaddingClass="pb-0"
   >
     <Fragment slot="title">
       「お家に帰りたい」という<br />
@@ -39,7 +65,7 @@ const metadata = {
       仕事をしませんか
     </Fragment>
     <Fragment slot="subtitle">
-      かもめクリニックは大阪市内5院を展開する訪問診療専門クリニックです。<br />
+      かもめクリニックは大阪市内{KAMOME_BRANCH_COUNT}院を展開する訪問診療専門クリニックです。<br class="hidden sm:inline" />
       患者さまが住み慣れた場所で暮らし続けられるよう、医療で支える仲間を募集しています。
     </Fragment>
   </Hero>
@@ -52,249 +78,19 @@ const metadata = {
     tagline="働く環境"
     title="かもめクリニックで働く魅力"
     subtitle="訪問診療だからこそ生まれる、患者さまとの深い関わり。専門性を高めながら長く活躍できる環境があります。"
-    items={[
-      {
-        title: '患者さまと深く関わる医療',
-        description: '外来と違い、患者さまの生活の場に入り込む訪問診療。信頼関係を築きながら長期的に支える仕事です。',
-        icon: 'tabler:heart-handshake',
-      },
-      {
-        title: '多職種連携の充実した環境',
-        description:
-          '内科・精神科・小児科が連携するクリニックで、幅広い症例に関われます。ケアマネジャー・訪問看護師とも密に連携します。',
-        icon: 'tabler:network',
-      },
-      {
-        title: '複数拠点で安定した組織基盤',
-        description: '大阪市内5院を展開する組織力で、安定した雇用環境とキャリアパスを提供します。',
-        icon: 'tabler:building',
-      },
-      {
-        title: '24時間体制をチームで分担',
-        description:
-          '緊急対応はチームで分担し、一人に負担が偏らない体制を整えています。プライベートとの両立が可能です。',
-        icon: 'tabler:clock-24',
-      },
-      {
-        title: '専門医のいる職場で学べる',
-        description: '精神科専門医・小児科専門医が常勤。日常業務を通じて専門知識を深められる環境です。',
-        icon: 'tabler:school',
-      },
-      {
-        title: '人生の最終段階に寄り添う仕事',
-        description: 'ターミナルケア・ACPなど、人生の最終段階に関わる重要な医療を担える職場です。',
-        icon: 'tabler:home-heart',
-      },
-    ]}
-  >
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Features2>
+    classes={{
+      headline: { ...clinicalSectionHeadline },
+      container: '!pt-5 md:!pt-8 lg:!pt-10',
+    }}
+    items={recruitWhyFeaturesItems}
+  />
 
   <!-- ============================================================
     募集職種
   ================================================================ -->
-  <section id="positions" class="py-16 bg-white dark:bg-slate-900">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-12">
-        <p class="text-base text-primary font-semibold uppercase tracking-wide mb-1">Positions</p>
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">募集職種</h2>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-6">
-        <!-- 医師 -->
-        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div class="bg-primary px-6 py-4">
-            <h3 class="text-white font-bold text-lg">医師（内科・精神科・小児科）</h3>
-          </div>
-          <div class="p-6 space-y-3 text-sm text-gray-700 dark:text-gray-300">
-            <div class="flex gap-2">
-              <span class="font-semibold w-20 shrink-0 text-gray-500">雇用形態</span>
-              <span>常勤・非常勤（相談可）</span>
-            </div>
-            <div class="flex gap-2">
-              <span class="font-semibold w-20 shrink-0 text-gray-500">勤務地</span>
-              <span>大阪市内各院（港区・西淀川区・住之江区 等）</span>
-            </div>
-            <div class="flex gap-2">
-              <span class="font-semibold w-20 shrink-0 text-gray-500">勤務時間</span>
-              <span>平日 9:00〜17:00（緊急往診はオンコール制）</span>
-            </div>
-            <div class="flex gap-2">
-              <span class="font-semibold w-20 shrink-0 text-gray-500">必須資格</span>
-              <span>医師免許（経験・年次不問、訪問診療未経験可）</span>
-            </div>
-            <div class="flex gap-2">
-              <span class="font-semibold w-20 shrink-0 text-gray-500">給与</span>
-              <span>経験・スキルに応じて応相談</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 看護師 -->
-        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div class="bg-teal-600 px-6 py-4">
-            <h3 class="text-white font-bold text-lg">看護師</h3>
-          </div>
-          <div class="p-6 space-y-3 text-sm text-gray-700 dark:text-gray-300">
-            <div class="flex gap-2">
-              <span class="font-semibold w-20 shrink-0 text-gray-500">雇用形態</span>
-              <span>正社員・パート（相談可）</span>
-            </div>
-            <div class="flex gap-2">
-              <span class="font-semibold w-20 shrink-0 text-gray-500">勤務地</span>
-              <span>大阪市内各院・訪問先（車で移動）</span>
-            </div>
-            <div class="flex gap-2">
-              <span class="font-semibold w-20 shrink-0 text-gray-500">勤務時間</span>
-              <span>平日 9:00〜17:00（曜日・時間相談可）</span>
-            </div>
-            <div class="flex gap-2">
-              <span class="font-semibold w-20 shrink-0 text-gray-500">必須資格</span>
-              <span>看護師免許（訪問看護経験不問）</span>
-            </div>
-            <div class="flex gap-2">
-              <span class="font-semibold w-20 shrink-0 text-gray-500">給与</span>
-              <span>経験・スキルに応じて応相談</span>
-            </div>
-            <a
-              href="/recruit#nurse-fulltime"
-              class="inline-flex items-center justify-center mt-2 rounded-full bg-teal-600 px-4 py-2 text-sm font-bold text-white hover:opacity-90 transition-opacity"
-            >
-              詳細はこちら
-            </a>
-          </div>
-        </div>
-
-        <!-- 医療事務 -->
-        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div class="bg-slate-600 px-6 py-4">
-            <h3 class="text-white font-bold text-lg">医療事務</h3>
-          </div>
-          <div class="p-6 space-y-3 text-sm text-gray-700 dark:text-gray-300">
-            <div class="flex gap-2">
-              <span class="font-semibold w-20 shrink-0 text-gray-500">雇用形態</span>
-              <span>正社員・パート</span>
-            </div>
-            <div class="flex gap-2">
-              <span class="font-semibold w-20 shrink-0 text-gray-500">勤務地</span>
-              <span>大阪市港区（本院）</span>
-            </div>
-            <div class="flex gap-2">
-              <span class="font-semibold w-20 shrink-0 text-gray-500">勤務時間</span>
-              <span>平日 9:00〜17:00</span>
-            </div>
-            <div class="flex gap-2">
-              <span class="font-semibold w-20 shrink-0 text-gray-500">必須資格</span>
-              <span>不問（医療事務経験者優遇）</span>
-            </div>
-            <div class="flex gap-2">
-              <span class="font-semibold w-20 shrink-0 text-gray-500">給与</span>
-              <span>経験・スキルに応じて応相談</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <p class="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
-        ※ 上記以外の職種でも随時ご相談を受け付けています。まずはお気軽にお問い合わせください。
-      </p>
-
-      <!-- 看護師 詳細募集要項 -->
-      <div id="nurse-fulltime" class="mt-12 rounded-2xl border-2 border-teal-500/40 overflow-hidden scroll-mt-28">
-        <div class="bg-teal-600 px-6 py-4 flex items-center gap-3">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-6 h-6 text-white"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            ><path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9 12h6m-3-3v6m5 4H7a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z"></path></svg
-          >
-          <h3 class="text-white font-bold text-lg">【看護師・正社員】詳細募集要項</h3>
-        </div>
-        <div class="p-6 bg-white dark:bg-slate-800">
-          <p class="text-sm text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-            「訪問看護」ではありません。<strong>常に医師とともに行動する「診療同行看護師」</strong
-            >として、患者さまの生活を医師の「目」となって守る役割をお任せします。
-          </p>
-          <p class="text-sm text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-            スピードより「丁寧さ・確実さ」を大切にできる方を歓迎します。訪問診療の経験は不問。ブランクのある方も丁寧に指導します。
-          </p>
-          <div class="grid md:grid-cols-2 gap-4 text-sm">
-            <div class="space-y-3">
-              <div class="flex gap-3 border-b border-gray-100 dark:border-slate-700 pb-3">
-                <span class="font-semibold text-gray-500 w-24 shrink-0">雇用形態</span>
-                <span class="text-gray-800 dark:text-gray-200">正社員（常勤）</span>
-              </div>
-              <div class="flex gap-3 border-b border-gray-100 dark:border-slate-700 pb-3">
-                <span class="font-semibold text-gray-500 w-24 shrink-0">給与</span>
-                <span class="text-gray-800 dark:text-gray-200 font-bold"
-                  >月給 300,000円〜350,000円<span class="font-normal text-gray-500">（試用期間3ヶ月・同条件）</span
-                  ></span
-                >
-              </div>
-              <div class="flex gap-3 border-b border-gray-100 dark:border-slate-700 pb-3">
-                <span class="font-semibold text-gray-500 w-24 shrink-0">賞与</span>
-                <span class="text-gray-800 dark:text-gray-200">年1.5〜2ヶ月分（昨年度実績）</span>
-              </div>
-              <div class="flex gap-3 border-b border-gray-100 dark:border-slate-700 pb-3">
-                <span class="font-semibold text-gray-500 w-24 shrink-0">昇給・手当</span>
-                <span class="text-gray-800 dark:text-gray-200">ベースアップ加算 1〜3万円/年・役職手当あり</span>
-              </div>
-              <div class="flex gap-3">
-                <span class="font-semibold text-gray-500 w-24 shrink-0">待遇</span>
-                <span class="text-gray-800 dark:text-gray-200">社会保険完備・交通費規定支給（月1万円まで）</span>
-              </div>
-            </div>
-            <div class="space-y-3">
-              <div class="flex gap-3 border-b border-gray-100 dark:border-slate-700 pb-3">
-                <span class="font-semibold text-gray-500 w-24 shrink-0">勤務時間</span>
-                <span class="text-gray-800 dark:text-gray-200">8:45〜17:30（休憩45分・実働8時間）</span>
-              </div>
-              <div class="flex gap-3 border-b border-gray-100 dark:border-slate-700 pb-3">
-                <span class="font-semibold text-gray-500 w-24 shrink-0">休日</span>
-                <span class="text-gray-800 dark:text-gray-200"
-                  >土日・設定休暇（1〜9日）・有給（入社6ヶ月後10日）<br /><span class="text-gray-500"
-                    >※年間休日120日程度</span
-                  ></span
-                >
-              </div>
-              <div class="flex gap-3 border-b border-gray-100 dark:border-slate-700 pb-3">
-                <span class="font-semibold text-gray-500 w-24 shrink-0">必須資格</span>
-                <span class="text-gray-800 dark:text-gray-200">看護師免許<br />普通自動車免許（AT限定可）</span>
-              </div>
-              <div class="flex gap-3 border-b border-gray-100 dark:border-slate-700 pb-3">
-                <span class="font-semibold text-gray-500 w-24 shrink-0">勤務先</span>
-                <span class="text-gray-800 dark:text-gray-200">かもめクリニック本院・各分院（大阪市内）</span>
-              </div>
-              <div class="flex gap-3">
-                <span class="font-semibold text-gray-500 w-24 shrink-0">選考</span>
-                <span class="text-gray-800 dark:text-gray-200">書類選考 → 面接（1回） → 内定</span>
-              </div>
-            </div>
-          </div>
-          <div class="mt-6 bg-teal-50 dark:bg-teal-900/20 rounded-xl p-4">
-            <p class="text-sm font-semibold text-teal-800 dark:text-teal-300 mb-2">求める人物像</p>
-            <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
-              <li>・看護師免許をお持ちの方</li>
-              <li>・「丁寧さ」「確実さ」を大切にできる方</li>
-              <li>・患者さまのお話にじっくり耳を傾けられる方</li>
-              <li>・運転に抵抗がない方（安全運転第一）</li>
-              <li class="text-teal-700 dark:text-teal-400 font-medium">
-                ・訪問診療の経験は問いません。ブランクがある方も丁寧に指導します。
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <RecruitSection id="positions" class="py-16 dark:bg-slate-900">
+    <RecruitPositions />
+  </RecruitSection>
 
   <!-- ============================================================
     福利厚生・待遇
@@ -304,35 +100,11 @@ const metadata = {
     tagline="福利厚生・待遇"
     title="安心して長く働ける環境を整えています"
     isReversed
-    items={[
-      {
-        title: '各種社会保険完備',
-        description: '健康保険・厚生年金・雇用保険・労災保険に加入しています。',
-      },
-      {
-        title: '交通費支給・車通勤可',
-        description: '公共交通機関の実費を支給。訪問業務には法人車両を使用します（普通自動車免許優遇）。',
-      },
-      {
-        title: '年間休日・有給休暇',
-        description: '土日祝休み（週休2日）。有給休暇は入社6ヶ月後より付与（法定通り）。',
-      },
-      {
-        title: '研修・スキルアップ支援',
-        description: '専門医によるカンファレンス・院内勉強会を定期開催。外部研修の費用補助制度もあります。',
-      },
-    ]}
-    image={{
-      src: 'https://www.kamome-clinic.net/images/top/slider02.jpg',
-      alt: 'かもめクリニックのスタッフと職場環境',
-    }}
+    items={recruitBenefitsItems}
   >
     <Fragment slot="content">
       <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">スタッフが長く活躍できる職場</h3>
       訪問診療の現場で成長しながら、患者さまの生活を支え続けられる環境をつくっています。
-    </Fragment>
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
     </Fragment>
   </Content>
 
@@ -343,34 +115,7 @@ const metadata = {
     id="flow"
     title="応募の流れ"
     subtitle="まずはお気軽にご連絡ください。選考は面接1回のみ、スムーズに進めます。"
-    items={[
-      {
-        title: 'Step 1: お問い合わせ・履歴書送付',
-        description:
-          'メール（kamome@kamome-clinic.net）またはお電話（06-4301-7871）にてご連絡ください。履歴書・職務経歴書をお送りいただければ幸いです。',
-        icon: 'tabler:send',
-      },
-      {
-        title: 'Step 2: 書類選考',
-        description: '書類到着後、1週間以内に結果をご連絡します。',
-        icon: 'tabler:file-check',
-      },
-      {
-        title: 'Step 3: 面接（1回）',
-        description: '院長・担当者との面接を行います。ご希望に応じてオンライン面接も対応可能です。',
-        icon: 'tabler:user-check',
-      },
-      {
-        title: 'Step 4: 内定・入職',
-        description:
-          '内定後は入職日・条件などを調整します。訪問診療が初めての方には丁寧なオリエンテーションを行います。',
-        icon: 'tabler:home-check',
-      },
-    ]}
-    image={{
-      src: 'https://www.kamome-clinic.net/images/top/slider02.jpg',
-      alt: 'かもめクリニックで活躍するスタッフ',
-    }}
+    items={recruitFlowItems}
   />
 
   <!-- ============================================================
@@ -381,60 +126,19 @@ const metadata = {
     title="採用に関するよくある質問"
     subtitle="応募前にご確認ください。その他のご質問はお気軽にお問い合わせください。"
     tagline="FAQ"
-    classes={{ container: 'max-w-6xl' }}
-    items={[
-      {
-        title: '訪問診療の経験がなくても応募できますか？',
-        description:
-          'はい、歓迎しています。入職後は先輩スタッフと同行研修を行いますので、訪問診療が初めての方もご安心ください。外来や病棟での経験をお持ちであれば十分です。',
-      },
-      {
-        title: '非常勤・パートでの勤務は可能ですか？',
-        description:
-          '可能です。週1日からの非常勤・週2〜3日のパートタイム勤務など、ご希望に合わせて相談します。育児・介護中の方も多く活躍しています。',
-      },
-      {
-        title: '車の運転は必須ですか？',
-        description:
-          '看護師・医師など訪問業務を行う職種は普通自動車免許（AT限定可）があると業務がスムーズです。ただし、免許がない場合も相談可能です。事務職は不要です。',
-      },
-      {
-        title: '夜間・休日対応はありますか？',
-        description: '医師の場合、夜間・休日対応は当番制を敷いております。月に２〜３回程度です。',
-      },
-      {
-        title: '転職活動中で在職中でも相談できますか？',
-        description:
-          'もちろんです。在職中の転職活動でも、秘密厳守でご対応します。まずはお気軽にお電話またはメールでご相談ください。',
-      },
-    ]}
+    classes={{ container: 'max-w-7xl', headline: { ...clinicalSectionHeadline } }}
+    items={recruitFaqItems}
   />
 
   <!-- ============================================================
     応募CTA
   ================================================================ -->
-  <CallToAction
-    id="apply"
-    actions={[
-      {
-        variant: 'primary',
-        text: 'メールで応募・お問い合わせ',
-        href: 'mailto:kamome@kamome-clinic.net?subject=採用応募',
-        icon: 'tabler:mail',
-      },
-      {
-        variant: 'secondary',
-        text: 'お電話でのご相談（06-4301-7871）',
-        href: 'tel:0643017871',
-        icon: 'tabler:phone',
-      },
-    ]}
-  >
+  <CallToAction id="apply" actions={recruitFinalCtaActions}>
     <Fragment slot="title">一緒に訪問診療を支えませんか</Fragment>
     <Fragment slot="subtitle">
       ご質問・応募書類の送付はお気軽にどうぞ。<br />
-      受付：平日・祝日 9:00〜17:00 | TEL：06-4301-7871<br />
-      <span class="text-sm opacity-80">Mail：kamome@kamome-clinic.net</span>
+      受付：{CLINIC_CONTACT.hoursPrimary} | TEL：{CLINIC_CONTACT.telDisplay}<br />
+      <span class="text-sm opacity-80">Mail：{CLINIC_CONTACT.email}</span>
     </Fragment>
   </CallToAction>
 </Layout>

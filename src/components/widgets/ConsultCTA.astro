@@ -1,0 +1,96 @@
+---
+import { Icon } from 'astro-icon/components';
+import { ctaHeroPrimaryClass, ctaHeroSecondaryClass } from '~/constants/clinical-page-ui';
+import { getPermalink } from '~/utils/permalinks';
+
+interface Action {
+  text: string;
+  href: string;
+  icon?: string;
+  variant?: 'primary' | 'secondary';
+  target?: string;
+  rel?: string;
+}
+
+interface Props {
+  tagline?: string;
+  title?: string;
+  subtitle?: string;
+  actions?: Action[];
+  showNap?: boolean;
+  id?: string;
+}
+
+const subtitleSlot = await Astro.slots.render('subtitle');
+
+const defaultConsultActions: Action[] = [
+  { text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone', variant: 'primary' },
+  {
+    text: '問い合わせフォームはこちら',
+    href: getPermalink('/renkei#renkei-contact-detail'),
+    icon: 'tabler:clipboard-list',
+    variant: 'secondary',
+  },
+];
+
+const {
+  tagline = '相談窓口',
+  title = 'お気軽にご相談ください',
+  subtitle = '受付は平日・祝日 9:00〜17:00。緊急往診は24時間365日対応。\nご本人・ご家族・医療介護関係者からのお問い合わせも歓迎します。',
+  actions = defaultConsultActions,
+  showNap = true,
+  id = 'contact',
+} = Astro.props;
+
+const variantClass: Record<string, string> = {
+  primary: ctaHeroPrimaryClass,
+  secondary: ctaHeroSecondaryClass,
+};
+---
+
+<section
+  id={id}
+  class="scroll-mt-32 py-8 md:py-10 bg-white dark:bg-slate-900 not-prose"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-5">
+      {tagline && (
+        <p class="text-xs font-semibold text-primary tracking-widest uppercase mb-1">{tagline}</p>
+      )}
+      <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">{title}</h2>
+      {subtitleSlot ? (
+        <div
+          class="mt-2 text-gray-600 dark:text-gray-300 text-sm leading-relaxed [&_a]:text-primary [&_a]:underline [&_a]:font-semibold"
+          set:html={subtitleSlot}
+        />
+      ) : (
+        subtitle && (
+          <p class="mt-2 text-gray-600 dark:text-gray-300 text-sm leading-relaxed whitespace-pre-line">
+            {subtitle}
+          </p>
+        )
+      )}
+    </div>
+
+    <div class="bg-gray-50 dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-4 shadow-sm">
+      <div class="flex flex-col sm:flex-row gap-3 justify-center mb-3">
+        {actions.map((action) => (
+          <a
+            href={action.href}
+            target={action.target}
+            rel={action.rel}
+            class={`${variantClass[action.variant ?? 'primary']}`}
+          >
+            {action.icon && <Icon name={action.icon} class="w-5 h-5 shrink-0" />}
+            {action.text}
+          </a>
+        ))}
+      </div>
+      {showNap && (
+        <p class="text-center text-xs text-gray-400 dark:text-gray-500">
+          〒552-0004 大阪市港区夕凪2丁目16-9　TEL 06-4301-7871　FAX 06-4301-7872
+        </p>
+      )}
+    </div>
+  </div>
+</section>

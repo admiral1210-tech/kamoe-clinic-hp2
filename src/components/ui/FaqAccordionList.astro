@@ -23,7 +23,10 @@ const list = items.filter((i) => i.title?.trim());
       {list.map((item) => (
         <details class="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden group">
           <summary class="flex items-start gap-3 p-4 md:p-5 cursor-pointer list-none select-none">
-            <span class="bg-primary/10 text-primary font-black text-sm w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-1">
+            <span
+              class="bg-primary/10 text-primary font-black text-sm w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-1"
+              aria-hidden="true"
+            >
               Q
             </span>
             <span class="font-bold text-gray-900 dark:text-white text-base md:text-lg flex-1 leading-snug">
@@ -31,7 +34,13 @@ const list = items.filter((i) => i.title?.trim());
             </span>
             <Icon
               name="tabler:plus"
-              class="w-6 h-6 text-primary shrink-0 transition-transform group-open:rotate-45 mt-0.5"
+              class="w-6 h-6 text-primary shrink-0 transition-transform group-open:hidden mt-0.5"
+              aria-hidden="true"
+            />
+            <Icon
+              name="tabler:x"
+              class="w-6 h-6 text-primary shrink-0 hidden group-open:block mt-0.5"
+              aria-hidden="true"
             />
           </summary>
           <div class="px-4 pb-4 md:px-5 md:pb-5 pl-14 md:pl-16">

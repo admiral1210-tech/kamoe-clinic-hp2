@@ -1,0 +1,56 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { PostSummary } from '~/types';
+import { getPermalink } from '~/utils/permalinks';
+import { formatBlogListingDate } from '~/utils/utils';
+
+export interface Props {
+  post: PostSummary;
+}
+
+const { post } = Astro.props;
+const postUrl = getPermalink(post.permalink, 'post');
+const dateStr = formatBlogListingDate(post.publishDate);
+
+const focusRing =
+  'focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2';
+---
+
+<li>
+  <article
+    class="rounded-2xl border border-gray-100 bg-blue-50/40 p-0 shadow-sm transition-colors hover:border-primary/30"
+  >
+    <a
+      href={postUrl}
+      class:list={[focusRing, 'group block rounded-2xl p-6 text-left no-underline text-inherit']}
+    >
+      <time class="text-sm text-gray-500 block mb-2" datetime={post.publishDate.toISOString()}>
+        {dateStr}
+      </time>
+      {
+        post.category && (
+          <span
+            class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-white border border-gray-200 text-gray-600 inline-block mb-3"
+          >
+            {post.category.title}
+          </span>
+        )
+      }
+      <h2 class="text-xl font-bold text-gray-900 leading-snug mb-3 transition-colors group-hover:text-primary">
+        {post.title}
+      </h2>
+      {
+        post.excerpt && (
+          <p class="text-sm text-gray-600 leading-relaxed line-clamp-3 m-0">{post.excerpt}</p>
+        )
+      }
+      <span
+        class="inline-flex items-center gap-1 mt-4 text-sm font-bold text-primary"
+        aria-hidden="true"
+      >
+        記事を読む
+        <Icon name="tabler:arrow-right" class="w-4 h-4" aria-hidden="true" />
+      </span>
+    </a>
+  </article>
+</li>

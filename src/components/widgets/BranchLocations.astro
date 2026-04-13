@@ -1,0 +1,56 @@
+---
+import { Icon } from 'astro-icon/components';
+import { KAMOME_BRANCHES, KAMOME_BRANCH_COUNT } from '~/data/branches';
+---
+
+<section
+  id="access"
+  class="scroll-mt-32 py-16 bg-blue-50 dark:bg-slate-800 border-y border-blue-100 dark:border-slate-700"
+  aria-labelledby="access-heading"
+>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-10">
+      <p class="text-sm font-semibold text-primary tracking-widest mb-1">診療拠点</p>
+      <h2 id="access-heading" class="text-3xl font-bold text-gray-900 dark:text-white">
+        大阪市内{KAMOME_BRANCH_COUNT}院の診療拠点
+      </h2>
+      <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
+        各拠点が連携し、大阪市内全域に対応しています。担当エリアのご確認はお気軽に地域医療連携部（06-4301-7883）へご相談ください。
+      </p>
+    </div>
+    <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 list-none p-0 m-0">
+      {
+        KAMOME_BRANCHES.map(({ name, area, address, tel, fax, href }) => (
+          <li class="min-h-0">
+            <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 p-5 h-full flex flex-col gap-3">
+              <div class="flex items-start gap-2">
+                <Icon name="tabler:map-pin" class="w-5 h-5 text-primary shrink-0 mt-0.5" aria-hidden="true" />
+                <p class="font-bold text-gray-900 dark:text-white">{name}</p>
+              </div>
+              <address class="text-sm text-gray-600 dark:text-gray-400 space-y-1 pl-7 not-italic">
+                <p>{area}</p>
+                <p>{address}</p>
+                <a href={`tel:${tel.replace(/-/g, '')}`} class="text-primary font-bold hover:underline block">
+                  TEL: {tel}
+                </a>
+                {fax ? <p>FAX: {fax}</p> : null}
+              </address>
+              {href ? (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${name}の公式サイト。新しいタブで開きます。`}
+                  class="mt-auto ml-7 inline-flex items-center gap-1.5 text-sm font-bold text-primary border border-primary rounded-full px-4 py-1.5 hover:bg-blue-50 dark:hover:bg-slate-800 transition-colors w-fit"
+                >
+                  <Icon name="tabler:external-link" class="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                  専用サイトを見る
+                </a>
+              ) : null}
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

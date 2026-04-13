@@ -2,6 +2,11 @@ import { isUnpicCompatible, unpicOptimizer, astroAssetsOptimizer } from './image
 import type { ImageMetadata } from 'astro';
 import type { OpenGraph } from '@astrolib/seo';
 import type { ImagesOptimizer } from './images-optimization';
+import { NEW_HP_URL } from '~/data/site-policy';
+
+/** OGP画像の解決・最適化が失敗したときに使うフォールバックURL */
+const DEFAULT_OG_IMAGE_URL = `${NEW_HP_URL}/images/top/slider02.jpg`;
+
 /** The optimized image shape returned by our ImagesOptimizer */
 type OptimizedImage = Awaited<ReturnType<ImagesOptimizer>>[0];
 
@@ -69,9 +74,8 @@ export const adaptOpenGraphImages = async (
       if (image?.url) {
         const resolvedImage = (await findImage(image.url)) as ImageMetadata | string | undefined;
         if (!resolvedImage) {
-          return {
-            url: '',
-          };
+          console.warn(`[OGP] image not found: "${image.url}" — falling back to default OG image.`);
+          return { url: DEFAULT_OG_IMAGE_URL };
         }
 
         let _image: OptimizedImage | undefined;
@@ -91,20 +95,23 @@ export const adaptOpenGraphImages = async (
         }
 
         if (typeof _image === 'object') {
+          const resolvedUrl =
+            'src' in _image && typeof _image.src === 'string' ? String(new URL(_image.src, astroSite)) : '';
+          if (!resolvedUrl) {
+            console.warn(`[OGP] image optimization failed for "${image.url}" — falling back to default OG image.`);
+            return { url: DEFAULT_OG_IMAGE_URL };
+          }
           return {
-            url: 'src' in _image && typeof _image.src === 'string' ? String(new URL(_image.src, astroSite)) : '',
+            url: resolvedUrl,
             width: 'width' in _image && typeof _image.width === 'number' ? _image.width : undefined,
             height: 'height' in _image && typeof _image.height === 'number' ? _image.height : undefined,
           };
         }
-        return {
-          url: '',
-        };
+        console.warn(`[OGP] image optimization produced no result for "${image.url}" — falling back to default OG image.`);
+        return { url: DEFAULT_OG_IMAGE_URL };
       }
 
-      return {
-        url: '',
-      };
+      return { url: DEFAULT_OG_IMAGE_URL };
     })
   );
 

@@ -1,0 +1,102 @@
+---
+import { Icon } from 'astro-icon/components';
+import DoctorIntroCard from '~/components/doctors/DoctorIntroCard.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Layout from '~/layouts/PageLayout.astro';
+import {
+  clinicalHeroSubtitleClass,
+  clinicalHeroTaglineClass,
+  clinicalHeroTitleClass,
+} from '~/constants/clinical-page-ui';
+import { KAMOME_BRANCH_COUNT } from '~/data/branches';
+import { doctorIntroSections as sections } from '~/data/doctors-intro';
+import heroMainTop from '~/assets/images/hero-main-top.png';
+
+const metadata = {
+  title: '医師紹介｜かもめクリニック（大阪市）',
+  description:
+    'かもめクリニックの医師紹介ページ。内科・精神科・小児科の専門医13名が連携し、大阪市内で在宅医療を提供しています。',
+  ignoreTitleTemplate: true,
+  openGraph: {
+    type: 'website',
+    images: [
+      {
+        url: '~/assets/images/hero-main-top.png',
+        width: heroMainTop.width,
+        height: heroMainTop.height,
+      },
+    ],
+  },
+  twitter: { cardType: 'summary_large_image' },
+};
+---
+
+<Layout metadata={metadata}>
+  <Hero
+    tagline="医師紹介"
+    taglineClass={clinicalHeroTaglineClass}
+    titleClass={clinicalHeroTitleClass}
+    subtitleClass={clinicalHeroSubtitleClass}
+  >
+    <Fragment slot="title">専門医チームが<br />在宅医療を支えます</Fragment>
+    <Fragment slot="subtitle">
+      内科・精神科・小児科の専門医が連携し、<br class="hidden sm:inline" />
+      大阪市内{KAMOME_BRANCH_COUNT}院体制で24時間365日の在宅医療を提供しています。
+    </Fragment>
+  </Hero>
+
+  <!-- ===== Stats ===== -->
+  <section class="bg-white dark:bg-slate-900 py-8 px-4 border-b border-gray-100 dark:border-slate-700">
+    <div class="max-w-sm mx-auto grid grid-cols-3 divide-x divide-gray-200 dark:divide-slate-700 text-center">
+      <div class="px-2">
+        <p class="text-3xl font-extrabold text-sky-600 dark:text-sky-400 tabular-nums">13名</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">常勤医師</p>
+      </div>
+      <div class="px-2">
+        <p class="text-3xl font-extrabold text-sky-600 dark:text-sky-400 tabular-nums">{KAMOME_BRANCH_COUNT}院</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">市内拠点</p>
+      </div>
+      <div class="px-2">
+        <p class="text-3xl font-extrabold text-sky-600 dark:text-sky-400 tabular-nums">2017</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">年 開院</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 診療科ジャンプリンク ===== -->
+  <nav class="sticky top-0 z-10 bg-white/90 dark:bg-slate-900/90 backdrop-blur border-b border-gray-200 dark:border-slate-700">
+    <div class="max-w-3xl mx-auto flex">
+      {sections.map((s) => (
+        <a
+          href={`#${s.id}`}
+          class="flex-1 flex items-center justify-center gap-1.5 py-3 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-sky-600 dark:hover:text-sky-400 transition-colors"
+        >
+          <Icon name={s.icon} class="h-5 w-5 shrink-0 opacity-90" aria-hidden="true" />
+          {s.label}
+        </a>
+      ))}
+    </div>
+  </nav>
+
+  <!-- ===== 診療科セクション ===== -->
+  {sections.map((section) => (
+    <section id={section.id} class={`py-12 px-4 ${section.accentLight}`}>
+      <div class="max-w-3xl mx-auto">
+
+        <!-- 診療科見出し -->
+        <div class="flex items-center gap-3 mb-8">
+          <Icon name={section.icon} class={`h-8 w-8 shrink-0 ${section.accentText}`} aria-hidden="true" />
+          <h2 class={`text-2xl font-bold ${section.accentText}`}>{section.label}</h2>
+          <div class="flex-1 h-px bg-gray-200 dark:bg-slate-700"></div>
+        </div>
+
+        <!-- 医師カード一覧 -->
+        <div class="space-y-6">
+          {section.doctors.map((doc) => (
+            <DoctorIntroCard section={section} doc={doc} />
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+</Layout>

@@ -1,0 +1,40 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { FooterNavLink } from '~/types/footer';
+
+interface Props {
+  links: FooterNavLink[];
+}
+
+const { links } = Astro.props;
+
+const linkClass =
+  'text-sm text-muted hover:text-gray-700 hover:underline dark:text-gray-400 dark:hover:text-gray-200 transition duration-150 ease-in-out leading-snug inline-flex items-center gap-1 max-w-full';
+---
+
+<ul class="space-y-1.5">
+  {
+    links.map(({ text, href, ariaLabel, kind }) => {
+      const outbound = kind === 'external' || kind === 'legacy-blog';
+      return (
+        <li>
+          <a
+            class={linkClass}
+            href={href}
+            aria-label={ariaLabel}
+            target={outbound ? '_blank' : undefined}
+            rel={outbound ? 'noopener noreferrer' : undefined}
+          >
+            <span class="break-words">{text}</span>
+            {outbound && (
+              <>
+                <Icon name="tabler:external-link" class="w-3.5 h-3.5 shrink-0 opacity-70" aria-hidden="true" />
+                <span class="sr-only">（別タブで開きます）</span>
+              </>
+            )}
+          </a>
+        </li>
+      );
+    })
+  }
+</ul>

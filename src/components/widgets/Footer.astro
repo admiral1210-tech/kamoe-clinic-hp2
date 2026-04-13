@@ -1,25 +1,12 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { SITE } from 'astrowind:config';
-import { getHomePermalink } from '~/utils/permalinks';
+import { getHomePermalink, getPermalink } from '~/utils/permalinks';
+import { CLINIC_CONTACT } from '~/data/clinic-contact';
+import FooterNavColumn from '~/components/widgets/FooterNavColumn.astro';
+import type { FooterData } from '~/types/footer';
 
-interface Link {
-  text?: string;
-  href?: string;
-  ariaLabel?: string;
-  icon?: string;
-}
-
-interface Links {
-  title?: string;
-  links: Array<Link>;
-}
-
-export interface Props {
-  links: Array<Links>;
-  secondaryLinks: Array<Link>;
-  socialLinks: Array<Link>;
-  footNote?: string;
+export interface Props extends FooterData {
   theme?: string;
 }
 
@@ -28,13 +15,11 @@ const { socialLinks = [], secondaryLinks = [], links = [], theme = 'light' } = A
 
 <footer class:list={[{ dark: theme === 'dark' }, 'relative border-t border-gray-200 dark:border-slate-800 not-prose']}>
   <div class="dark:bg-dark absolute inset-0 pointer-events-none" aria-hidden="true"></div>
-  <div
-    class="relative max-w-7xl mx-auto px-4 sm:px-6 dark:text-slate-300 intersect-once intersect-quarter intersect-no-queue motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
-  >
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 dark:text-slate-300">
     <!-- 上段：クリニック情報 + リンクグリッド -->
     <div class="py-8 flex flex-col lg:flex-row gap-8 border-b border-gray-100 dark:border-slate-700">
       <!-- クリニック情報ブロック（住所・TEL・診療時間） -->
-      <div class="shrink-0 space-y-3 lg:w-56">
+      <div class="shrink-0 space-y-4 lg:w-64">
         <a
           class="font-bold text-base text-gray-900 dark:text-white hover:text-primary transition-colors block"
           href={getHomePermalink()}
@@ -42,72 +27,106 @@ const { socialLinks = [], secondaryLinks = [], links = [], theme = 'light' } = A
           {SITE?.name}
         </a>
 
+        <!-- 住所・診療時間 -->
         <address class="not-italic space-y-2 text-sm text-muted dark:text-gray-400">
           <p class="flex items-start gap-2">
-            <Icon name="tabler:map-pin" class="w-4 h-4 shrink-0 mt-0.5 text-primary" />
-            <span>〒552-0004 大阪市港区夕凪2丁目16-9<br />icrossAMポートビル 4F-B</span>
+            <Icon name="tabler:map-pin" class="w-4 h-4 shrink-0 mt-0.5 text-primary" aria-hidden="true" />
+            <span>
+              {CLINIC_CONTACT.postalCode}
+              {' '}
+              {CLINIC_CONTACT.addressLine1}
+              <br />
+              {CLINIC_CONTACT.addressLine2}
+            </span>
           </p>
-          <p class="flex items-center gap-2">
-            <Icon name="tabler:phone" class="w-4 h-4 shrink-0 text-primary" />
-            <a href="tel:0643017871" class="text-blue-600 dark:text-blue-400 underline hover:no-underline">
-              06-4301-7871
-            </a>
-          </p>
-          <p class="flex items-center gap-2">
-            <Icon name="tabler:clock" class="w-4 h-4 shrink-0 text-primary" />
-            <span>平日・祝日 9:00〜17:00<br />緊急往診 24時間365日</span>
+          <p class="flex items-start gap-2">
+            <Icon name="tabler:clock" class="w-4 h-4 shrink-0 mt-0.5 text-primary" aria-hidden="true" />
+            <span>
+              <span class="text-gray-500 dark:text-gray-500 text-xs">通常受付：</span>{CLINIC_CONTACT.hoursPrimary}
+              <br />
+              {CLINIC_CONTACT.hoursEmergency}
+            </span>
           </p>
         </address>
 
-        <!-- ソーシャルリンク -->
-        <div class="flex items-center gap-1 pt-1">
-          {
-            socialLinks.map(({ ariaLabel, href, icon }) => {
-              const isInstagram = ariaLabel === 'Instagram';
-              const isLine = ariaLabel === 'LINE';
-              const socialClass = isInstagram
-                ? 'text-[#E4405F] bg-[#E4405F]/10 hover:bg-[#E4405F]/20 dark:bg-[#E4405F]/15 dark:hover:bg-[#E4405F]/30'
-                : isLine
-                  ? 'text-[#06C755] bg-[#06C755]/10 hover:bg-[#06C755]/20 dark:bg-[#06C755]/15 dark:hover:bg-[#06C755]/30'
-                  : 'text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700';
+        <!-- 電話CTA カード -->
+        <a
+          href={CLINIC_CONTACT.telHref}
+          class="flex items-center gap-3 rounded-xl bg-primary/10 hover:bg-primary/15 dark:bg-primary/20 dark:hover:bg-primary/30 px-4 py-3 transition-colors"
+        >
+          <Icon name="tabler:phone" class="w-5 h-5 shrink-0 text-primary" aria-hidden="true" />
+          <span>
+            <span class="block text-xs text-gray-500 dark:text-gray-400 mb-0.5">お電話でのご相談</span>
+            <span class="font-bold text-lg text-primary tracking-wider leading-none"
+              >{CLINIC_CONTACT.telDisplay}</span
+            >
+          </span>
+        </a>
 
-              return (
+        <!-- お問い合わせリンク（電話の代替手段として直近に配置） -->
+        <a
+          href={getPermalink('/renkei')}
+          class="flex items-center gap-1.5 text-sm text-primary hover:underline"
+        >
+          <Icon name="tabler:mail" class="w-4 h-4 shrink-0" aria-hidden="true" />
+          メール・フォームでのお問い合わせ
+        </a>
+
+        <!-- Instagram QR（縮小・説明テキスト付き） -->
+        {
+          socialLinks.map(({ ariaLabel, href, icon, imageSrc, variant }) =>
+            variant === 'instagram-qr' && imageSrc ? (
+              <div class="flex items-center gap-3 pt-1">
                 <a
-                  class:list={[
-                    'rounded-xl p-3 inline-flex items-center transition-colors',
-                    socialClass,
-                  ]}
-                  aria-label={ariaLabel}
                   href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={ariaLabel}
+                  class="shrink-0"
                 >
-                  {icon && <Icon name={icon} class="w-6 h-6" />}
+                  <img
+                    src={imageSrc}
+                    alt="かもめクリニック Instagram QRコード"
+                    width={240}
+                    height={276}
+                    class="h-14 w-auto object-contain rounded-lg bg-white border border-gray-200 dark:border-slate-700"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </a>
-              );
-            })
-          }
-        </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 leading-snug">
+                  Instagram<br />公式アカウント<br />
+                  <span class="text-[#E4405F]">@kamomeclinic</span>
+                </p>
+              </div>
+            ) : !variant && icon ? (
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={ariaLabel}
+                class="inline-flex items-center justify-center rounded-xl p-2.5 text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                <Icon name={icon} class="w-6 h-6" />
+              </a>
+            ) : null
+          )
+        }
       </div>
 
-      <!-- リンクグリッド（各セクションタイトルあり） -->
-      <nav class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-6 flex-1">
+      <!-- リンクグリッド（各セクション見出しあり） -->
+      <h2 id="footer-nav-heading" class="sr-only">サイトマップ</h2>
+      <nav
+        class="grid grid-cols-1 lg:grid-cols-5 gap-x-4 gap-y-0 lg:gap-y-6 flex-1"
+        aria-labelledby="footer-nav-heading"
+      >
         {
-          links.map(({ title, links: sectionLinks }) => (
-            <div>
-              <p class="font-bold text-xs text-gray-900 dark:text-white mb-2 tracking-wide">{title}</p>
-              <ul class="space-y-1.5">
-                {sectionLinks.map(({ text, href, ariaLabel }) => (
-                  <li>
-                    <a
-                      class="text-sm text-muted hover:text-gray-700 hover:underline dark:text-gray-400 dark:hover:text-gray-200 transition duration-150 ease-in-out leading-snug block"
-                      href={href}
-                      aria-label={ariaLabel}
-                    >
-                      <Fragment set:html={text} />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          links.map(({ title, links: sectionLinks, collapsibleMobile }) => (
+            <FooterNavColumn
+              title={title}
+              links={sectionLinks}
+              collapsibleMobile={collapsibleMobile}
+            />
           ))
         }
       </nav>
@@ -121,8 +140,9 @@ const { socialLinks = [], secondaryLinks = [], links = [], theme = 'light' } = A
             <a
               class="hover:text-gray-700 dark:text-gray-400 hover:underline transition duration-150 ease-in-out"
               href={href}
-              set:html={text}
-            />
+            >
+              {text}
+            </a>
           ))
         }
       </div>

@@ -1,17 +1,24 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
+import Hero from '~/components/widgets/Hero.astro';
 import { Icon } from 'astro-icon/components';
 import { OSAKA_CITY_WARDS } from '~/data/osaka-wards';
+import {
+  clinicalHeroSubtitleClass,
+  clinicalHeroTaglineClass,
+  clinicalHeroTitleClass,
+  ctaHeroPrimaryClass,
+} from '~/constants/clinical-page-ui';
+import { KAMOME_BRANCH_COUNT } from '~/data/branches';
+import { serializeJsonLdForScript } from '~/utils/json-ld-script';
 
 const metadata = {
   title: '訪問診療の対応エリア（大阪市）｜かもめクリニック',
-  description:
-    '大阪市24区全域で訪問診療・緊急往診に対応。5院体制で市内をカバーします。区ごとの案内ページ・地域医療連携部（06-4301-7883）をご利用ください。',
+  description: `大阪市24区全域で訪問診療・緊急往診に対応。${KAMOME_BRANCH_COUNT}院体制で市内をカバーします。区ごとの案内ページ・地域医療連携部（06-4301-7883）をご利用ください。`,
   ignoreTitleTemplate: true,
   openGraph: {
     type: 'website',
-    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+    images: [{ url: 'https://kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
   },
 };
 
@@ -30,8 +37,7 @@ const jsonLdWebPage = {
   '@id': 'https://kamome-clinic.net/area-osaka',
   name: '訪問診療の対応エリア（大阪市）｜かもめクリニック',
   url: 'https://kamome-clinic.net/area-osaka',
-  description:
-    'かもめクリニックは大阪市24区全域で訪問診療・緊急往診に対応しています。市内5院体制でカバーし、詳細は地域医療連携部（06-4301-7883）までお問い合わせください。',
+  description: `かもめクリニックは大阪市24区全域で訪問診療・緊急往診に対応しています。市内${KAMOME_BRANCH_COUNT}院体制でカバーし、詳細は地域医療連携部（06-4301-7883）までお問い合わせください。`,
   isPartOf: { '@type': 'WebSite', '@id': 'https://kamome-clinic.net/#website' },
   about: { '@type': 'MedicalClinic', '@id': 'https://kamome-clinic.net/#clinic', name: 'かもめクリニック' },
 };
@@ -39,20 +45,26 @@ const jsonLdWebPage = {
 
 <Layout metadata={metadata}>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdWebPage)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdWebPage)} />
   </Fragment>
 
-  <section class="py-10 md:py-14 bg-blue-50 dark:bg-slate-800">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-8">
-        <p class="text-sm font-semibold text-primary tracking-widest mb-1">訪問診療エリア</p>
-        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">大阪市の対応エリア</h1>
-        <p class="text-center text-sm text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mt-4 leading-relaxed">
-          <strong>訪問診療</strong>および<strong>緊急往診</strong>の対象エリアは、大阪市の<strong>24区すべて</strong>です。<strong>5院体制</strong>で市内全域をカバーしています。区ごとに紹介ページのある区はリンクからご覧ください。
-        </p>
-      </div>
+  <Hero
+    tagline="訪問診療エリア"
+    taglineClass={clinicalHeroTaglineClass}
+    titleClass={clinicalHeroTitleClass}
+    subtitleClass={clinicalHeroSubtitleClass}
+  >
+    <Fragment slot="title">大阪市の対応エリア</Fragment>
+    <Fragment slot="subtitle">
+      <strong>訪問診療</strong>および<strong>緊急往診</strong>の対象エリアは、大阪市の<strong>24区すべて</strong>です。<strong
+        >{KAMOME_BRANCH_COUNT}院体制</strong
+      >で市内全域をカバーしています。区ごとに紹介ページのある区はリンクからご覧ください。
+    </Fragment>
+  </Hero>
 
+  <section class="py-10 md:py-14 bg-gray-50 dark:bg-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
       <p class="text-center text-xs text-gray-500 dark:text-gray-400 mb-3">大阪市24区（市の区並び順）</p>
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 mb-8">
         {
@@ -60,13 +72,13 @@ const jsonLdWebPage = {
             slug ? (
               <a
                 href={`/area/${slug}`}
-                class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-slate-700 text-gray-800 dark:text-gray-200 hover:border-primary px-3 py-2.5 rounded-full text-sm font-medium transition-colors inline-flex items-center justify-center gap-1 text-center"
+                class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-slate-700 text-gray-800 dark:text-gray-200 hover:border-primary px-3 py-2.5 rounded-xl text-sm font-medium transition-colors inline-flex items-center justify-center gap-1 text-center"
               >
                 {name}
                 <Icon name="tabler:arrow-right" class="w-3.5 h-3.5 shrink-0 text-primary" />
               </a>
             ) : (
-              <span class="bg-white/80 dark:bg-slate-900/80 border border-dashed border-blue-200 dark:border-slate-600 text-gray-700 dark:text-gray-300 px-3 py-2.5 rounded-full text-sm font-medium inline-flex flex-col sm:flex-row items-center justify-center gap-0.5 text-center leading-tight">
+              <span class="bg-white/80 dark:bg-slate-900/80 border border-dashed border-blue-200 dark:border-slate-600 text-gray-700 dark:text-gray-300 px-3 py-2.5 rounded-xl text-sm font-medium inline-flex flex-col sm:flex-row items-center justify-center gap-0.5 text-center leading-tight">
                 <span>{name}</span>
                 <span class="text-xs text-gray-500 dark:text-gray-500">（詳細はお電話）</span>
               </span>
@@ -75,40 +87,19 @@ const jsonLdWebPage = {
         }
       </div>
 
-      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-blue-100 dark:border-slate-700 p-6 text-center">
-        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+      <div class="max-w-3xl mx-auto bg-white dark:bg-slate-900 rounded-2xl border border-blue-100 dark:border-slate-700 p-6 text-center">
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 max-w-prose mx-auto">
           大阪市外のご相談や、担当院の調整なども地域医療連携部がお受けします。まずはお気軽にどうぞ。
         </p>
-        <a
-          href="tel:0643017883"
-          class="inline-flex items-center gap-2 bg-primary text-white font-bold px-6 py-3 rounded-full hover:opacity-90 text-sm"
-        >
-          <Icon name="tabler:phone" class="w-4 h-4" /> エリア・連携のご相談 06-4301-7883
+        <a href="tel:0643017883" class:list={[ctaHeroPrimaryClass, 'inline-flex gap-2']}>
+          <Icon name="tabler:phone" class="w-4 h-4 shrink-0" /> エリア・連携のご相談 06-4301-7883
         </a>
         <p class="mt-4">
-          <a href="/houmon-shinryo" class="text-primary text-sm font-bold hover:underline">訪問診療とは・ご利用の流れ</a
-          >
+          <a href="/houmon-shinryo" class="text-primary text-sm font-bold hover:underline">訪問診療とは・ご利用の流れ</a>
           <span class="text-gray-300 dark:text-gray-600 mx-2">|</span>
           <a href="/about#access" class="text-primary text-sm font-bold hover:underline">各院のアクセス</a>
         </p>
       </div>
     </div>
   </section>
-
-  <CallToAction
-    actions={[
-      { variant: 'primary', text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
-      {
-        variant: 'line',
-        text: 'LINEで無料相談',
-        href: 'https://line.me/R/ti/p/%40512ysmzx',
-        icon: 'tabler:brand-line',
-      },
-    ]}
-  >
-    <Fragment slot="title">ご自宅・施設のエリアが心配な方へ</Fragment>
-    <Fragment slot="subtitle">
-      患者さま・ご家族からのお問い合わせは <strong>06-4301-7871</strong>（受付平日・祝日9:00〜17:00）。
-    </Fragment>
-  </CallToAction>
 </Layout>

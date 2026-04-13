@@ -1,11 +1,35 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
+import PageTocNav from '~/components/ui/PageTocNav.astro';
+import PageSectionHeading from '~/components/ui/PageSectionHeading.astro';
 import Features from '~/components/widgets/Features.astro';
 import Features2 from '~/components/widgets/Features2.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
+import ClinicalPageClosing from '~/components/widgets/ClinicalPageClosing.astro';
 import { Icon } from 'astro-icon/components';
+import {
+  clinicalAnchorScrollMargin,
+  clinicalHeroSubtitleClass,
+  clinicalHeroTaglineClass,
+  clinicalHeroTitleClass,
+  clinicalSectionHeadline,
+} from '~/constants/clinical-page-ui';
+import { CLINIC_CONTACT } from '~/data/clinic-contact';
+import {
+  joseikinFlowSteps,
+  joseikinJoseiFeatureItems,
+  joseikinPointItems,
+  joseikinShindanshoFeatureItems,
+} from '~/data/joseikin-content';
+import { joseikinFaqEntries } from '~/data/faq-joseikin';
+import { getCanonical, getPermalink } from '~/utils/permalinks';
+import { buildFaqPageJsonLd, faqEntriesToWidgetItems } from '~/utils/seo-faq';
+import { serializeJsonLdForScript } from '~/utils/json-ld-script';
+
+const siteHome = String(getCanonical('/'));
+const pageCanonical = String(getCanonical('/joseikin'));
+const ogImageUrl = String(getCanonical('/images/top/slider02.jpg'));
 
 const metadata = {
   title: '医療費助成・診断書のご案内｜かもめクリニック（大阪市）',
@@ -14,7 +38,7 @@ const metadata = {
   ignoreTitleTemplate: true,
   openGraph: {
     type: 'website',
-    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+    images: [{ url: ogImageUrl, width: 1400, height: 500 }],
   },
 };
 
@@ -22,85 +46,45 @@ const jsonLdBreadcrumb = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
-    { '@type': 'ListItem', position: 2, name: '医療費助成・診断書', item: 'https://kamome-clinic.net/joseikin' },
+    { '@type': 'ListItem', position: 1, name: 'トップページ', item: siteHome },
+    { '@type': 'ListItem', position: 2, name: '医療費助成・診断書', item: pageCanonical },
   ],
 };
 
-const jsonLdFAQ = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: '診断書の発行にはどれくらい時間がかかりますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: '診断書の種類によって異なりますが、目安として1〜2週間程度をいただいています。難病の臨床調査個人票など複雑な書類は2〜4週間かかる場合があります。申請期限がある場合は早めにご相談ください。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '自立支援医療（精神通院医療）はどこに申請すればよいですか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'お住まいの区の保健福祉センター（区役所）窓口に申請します。当院で作成した診断書・意見書と、健康保険証・マイナンバーが確認できる書類などを持参してください。申請手続きの詳細はお電話またはフォームでご相談ください。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '難病の診断書（臨床調査個人票）は誰でも書いてもらえますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: '指定難病の医療費助成申請には、都道府県が指定した「指定医」が作成した診断書（臨床調査個人票）が必要です。当院には指定医が在籍していますので、対象疾患に該当する方はご相談ください。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '高額療養費制度の申請はどうすればよいですか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'ご加入の健康保険（協会けんぽ・国民健康保険・後期高齢者医療保険など）の窓口に申請します。事前に「限度額適用認定証」を取得すると、医療機関での支払いが自己負担限度額までとなり、後日還付を待つ必要がありません。詳しくはお住まいの区役所または保険証記載の保険者へご確認ください。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '身体障害者手帳の診断書はどの科で書いてもらえますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: '身体障害者手帳の診断書は、都道府県が指定した「指定医」が作成する必要があります。当院では肢体不自由・腎臓機能障害の診断書に対応しています。対象かどうか不明な場合もまずご相談ください。',
-      },
-    },
-  ],
-};
+const jsonLdFAQ = buildFaqPageJsonLd(joseikinFaqEntries);
+const joseikinFaqWidgetItems = faqEntriesToWidgetItems(joseikinFaqEntries);
+
+const heroActions = [
+  { variant: 'primary' as const, href: CLINIC_CONTACT.telHref, text: '電話する', icon: 'tabler:phone' },
+  {
+    variant: 'secondary' as const,
+    href: getPermalink('/renkei'),
+    text: '問い合わせ',
+    icon: 'tabler:clipboard-list',
+  },
+];
+
+const siteFaqHref = getPermalink('/faq');
+const contactFormHref = getPermalink('/renkei');
 ---
 
 <Layout metadata={metadata}>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdFAQ)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdFAQ)} />
   </Fragment>
 
-  <!-- ===== Hero ===== -->
+  <!-- 1. ヒーローCTA（電話・問い合わせ） -->
   <Hero
     tagline="医療費助成・診断書｜大阪市の訪問診療"
-    actions={[
-      { variant: 'primary', text: 'お電話でご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
-      {
-        variant: 'line',
-        text: 'LINEで無料相談',
-        href: 'https://line.me/R/ti/p/%40512ysmzx',
-        icon: 'tabler:brand-line',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=2070&q=80',
-      alt: '医療費助成・診断書のイメージ',
-    }}
+    taglineClass={clinicalHeroTaglineClass}
+    titleClass={clinicalHeroTitleClass}
+    subtitleClass={clinicalHeroSubtitleClass}
+    actions={heroActions}
   >
     <Fragment slot="title">
       医療費助成・<br />
-      <span class="text-accent dark:text-white highlight">診断書</span>のご案内
+      <span class="text-primary dark:text-blue-300">診断書</span>のご案内
     </Fragment>
     <Fragment slot="subtitle">
       かもめクリニックでは<strong>診断書の作成・発行</strong>に幅広く対応しています。<br class="hidden sm:inline" />
@@ -108,77 +92,79 @@ const jsonLdFAQ = {
     </Fragment>
   </Hero>
 
-  <!-- ===== 診断書発行可能項目 ===== -->
-  <Features
-    tagline="診断書"
-    title="発行できる診断書の種類"
-    subtitle="訪問診療の中で必要な書類作成も一括対応します。申請期限がある場合はお早めにご相談ください。"
+  <PageTocNav
+    ariaLabel="このページの主な内容"
     items={[
-      {
-        title: '自立支援医療（精神通院医療）',
-        description:
-          '精神疾患のために継続的な外来通院・訪問診療が必要な方の医療費を軽減する制度です。原則1割負担となり、所得に応じてさらに軽減されます。診断書の新規作成・更新申請（2年ごと）に対応しています。',
-        icon: 'tabler:brain',
-      },
-      {
-        title: '身体障害者手帳（肢体不自由・腎臓機能障害）',
-        description:
-          '肢体不自由や腎臓機能障害のある方が身体障害者手帳を取得するための診断書を発行します。手帳を取得することで医療費助成・各種福祉サービス・税の減免などが受けられます。指定医が作成します。',
-        icon: 'tabler:accessible',
-      },
-      {
-        title: '障害年金（障害基礎年金・障害厚生年金）',
-        description:
-          '病気やけがで一定の障害状態になった場合に受給できる公的年金です。初診日の確認・現症に関する診断書の作成をサポートします。請求前にまずご相談ください。',
-        icon: 'tabler:file-certificate',
-      },
-      {
-        title: '難病医療（指定難病・新規・更新）',
-        description:
-          '国が指定する難病（指定難病）の医療費助成申請に必要な臨床調査個人票（診断書）を作成します。新規申請・更新申請の両方に対応しています。当院には都道府県指定の指定医が在籍しています。',
-        icon: 'tabler:stethoscope',
-      },
+      { href: '#first-visit', label: 'はじめての方へ' },
+      { href: '#shindansho', label: '診断書の種類' },
+      { href: '#nagare', label: '発行の流れ' },
+      { href: '#josei', label: '助成制度' },
+      { href: '#points', label: '利用のポイント' },
+      { href: '#faq', label: 'よくある質問' },
     ]}
   />
 
-  <!-- ===== 診断書の流れ ===== -->
-  <section class="py-14 bg-blue-50 dark:bg-slate-800 border-y border-blue-100 dark:border-slate-700">
+  <!-- 7. はじめての方へ（整形外科ページと同型） -->
+  <section
+    id="first-visit"
+    class="scroll-mt-20 py-10 bg-gray-50 dark:bg-slate-800/50 border-y border-gray-100 dark:border-slate-700 not-prose"
+  >
     <div class="max-w-3xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-8">
-        <p class="text-sm font-semibold text-primary uppercase tracking-widest mb-1">Flow</p>
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">診断書発行の流れ</h2>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">申請期限がある場合は余裕をもってご依頼ください</p>
-      </div>
-      <ol class="space-y-4">
+      <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100 text-center mb-3">
+        はじめての方へ（ご家族の方も）
+      </h2>
+      <p class="text-sm md:text-base text-gray-600 dark:text-gray-300 text-center leading-relaxed mb-6">
+        診断書の種類や申請先は制度ごとに異なります。まずはお電話またはフォームで、必要な書類と大まかな流れをご案内します。
+      </p>
+      <ol class="list-decimal pl-5 space-y-2 text-sm md:text-base text-gray-800 dark:text-gray-200 mb-6">
+        <li>
+          お電話（<a href={CLINIC_CONTACT.telHref} class="text-primary font-semibold underline"
+            >{CLINIC_CONTACT.telDisplay}</a
+          >）または<a href={contactFormHref} class="text-primary font-semibold underline">お問い合わせフォーム</a
+          >で、必要な診断書または利用を検討している助成制度、申請の目安時期をお知らせください（{CLINIC_CONTACT.hoursPrimary}）。
+        </li>
+        <li>当院での対応可否・お持ちいただく書類の目安をご案内します。</li>
+        <li>診察・書類作成の日程を調整し、完成後の受け取り方法をご説明します。</li>
+      </ol>
+      <p class="text-xs text-gray-500 dark:text-gray-400 text-center leading-relaxed">
+        文書料・紹介状の要否などは個別に説明します。詳しくは<a href={siteFaqHref} class="text-primary underline"
+          >よくある質問（サイト全体）</a
+        >もご覧ください。
+      </p>
+    </div>
+  </section>
+
+  <!-- 5. 診断書の種類（要約＋続きを読む） -->
+  <Features
+    id="shindansho"
+    scrollMarginClass={clinicalAnchorScrollMargin}
+    tagline="診断書"
+    title="発行できる診断書の種類"
+    subtitle="訪問診療の中で必要な書類作成も一括対応します。申請期限がある場合はお早めにご相談ください。"
+    classes={{ headline: { ...clinicalSectionHeadline } }}
+    items={joseikinShindanshoFeatureItems}
+  />
+
+  <!-- 2・3. 発行の流れ（データ単一ソース・手順見出しは h3） -->
+  <section
+    id="nagare"
+    class="scroll-mt-32 py-14 bg-blue-50 dark:bg-slate-800 border-y border-blue-100 dark:border-slate-700"
+  >
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <PageSectionHeading
+        tagline="流れ"
+        title="診断書発行の流れ"
+        subtitle="申請期限がある場合は余裕をもってご依頼ください"
+      />
+      <ol class="list-none pl-0 m-0 space-y-4">
         {
-          [
-            {
-              step: '1',
-              title: 'お電話・フォームでご相談',
-              body: '必要な診断書の種類・申請先・期限をお知らせください。対応可否を確認のうえ、ご案内します。',
-            },
-            {
-              step: '2',
-              title: '診断書作成依頼（書類をご準備）',
-              body: '申請書類の書式は区役所・保健福祉センターで入手できます。書式が決まっている場合はお持ちください。',
-            },
-            {
-              step: '3',
-              title: '医師が診断書を作成（1〜4週間）',
-              body: '担当医が診察内容・経過をもとに作成します。種類によって作成期間が異なります。完成後にご連絡します。',
-            },
-            {
-              step: '4',
-              title: '受け取り・申請窓口へ提出',
-              body: '診断書をお受け取りいただき、区役所・保健福祉センター・年金機構などの窓口へ提出してください。',
-            },
-          ].map(({ step, title, body }) => (
+          joseikinFlowSteps.map(({ step, title, body }) => (
             <li class="flex gap-4 bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 px-5 py-4">
-              <span class="bg-primary text-white font-black text-sm w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+              <span class="bg-primary text-white font-black text-sm w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
                 {step}
               </span>
               <div>
-                <p class="font-bold text-gray-900 dark:text-white mb-1">{title}</p>
+                <h3 class="font-bold text-gray-900 dark:text-white mb-1 text-base leading-snug">{title}</h3>
                 <p class="text-sm text-gray-600 dark:text-gray-400">{body}</p>
               </div>
             </li>
@@ -191,136 +177,46 @@ const jsonLdFAQ = {
     </div>
   </section>
 
-  <!-- ===== 助成制度の案内 ===== -->
+  <!-- 5. 助成制度（要約＋続きを読む） -->
   <Features2
+    id="josei"
+    scrollMarginClass={clinicalAnchorScrollMargin}
     tagline="助成制度"
     title="ご利用いただける医療費助成制度"
     subtitle="各制度の申請・手続きに関するご相談も承ります。まずはお気軽にお問い合わせください。"
+    classes={{ headline: { ...clinicalSectionHeadline }, container: 'max-w-7xl mx-auto' }}
     columns={2}
-    items={[
-      {
-        title: '乳幼児・子供医療費助成（こども医療費助成）',
-        description:
-          '大阪市では中学校3年生（15歳到達後の最初の3月31日）まで、保険診療の自己負担分が助成されます。入院・通院・訪問診療いずれも対象です。保護者が区役所で申請を行い、医療証を取得します。医療ケアが必要なお子さまの在宅医療にも対応しています。',
-        icon: 'tabler:baby-carriage',
-      },
-      {
-        title: '高額療養費制度',
-        description:
-          '1か月の医療費自己負担が所得に応じた限度額を超えた場合、超過分が払い戻される制度です。事前に「限度額適用認定証」を取得すると窓口での支払いが上限額までとなります。70歳以上の方は限度額が低く設定されており、在宅医療での活用が特に有効です。',
-        icon: 'tabler:cash-banknote',
-      },
-      {
-        title: '公害医療（大気汚染関連疾患）',
-        description:
-          '大阪市の公害医療事業により、大気汚染による健康被害（気管支喘息・慢性気管支炎・肺気腫など）の認定患者さまは医療費の全額または一部が助成されます。認定を受けるには居住地の区役所に申請が必要です。既に認定を受けている方の訪問診療・往診にも対応します。',
-        icon: 'tabler:cloud',
-      },
-      {
-        title: '原爆被爆者医療',
-        description:
-          '被爆者健康手帳をお持ちの方は、原爆症認定疾病について医療費が全額公費負担となります。一般疾病医療機関としての診療にも対応しており、訪問診療・往診が必要な被爆者の方もご相談ください。申請・手続きは居住地の都道府県（大阪府）の担当窓口で行います。',
-        icon: 'tabler:shield-heart',
-      },
-    ]}
+    items={joseikinJoseiFeatureItems}
   />
 
-  <!-- ===== 制度利用のポイント ===== -->
-  <section class="py-14" style="background-color: rgb(253 248 241);">
+  <!-- 4. 利用のポイント（意味的なリスト・見出しは h3） -->
+  <section id="points" class="scroll-mt-32 py-14 bg-page dark:bg-slate-900">
     <div class="max-w-3xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-8">
-        <p class="text-sm font-semibold text-primary uppercase tracking-widest mb-1">Point</p>
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">制度を利用する際のポイント</h2>
-      </div>
-      <div class="space-y-4">
+      <PageSectionHeading tagline="ポイント" title="制度を利用する際のポイント" />
+      <ul class="list-none pl-0 m-0 space-y-4">
         {
-          [
-            {
-              icon: 'tabler:calendar-check',
-              title: '申請期限・更新期限に注意',
-              body: '自立支援医療は2年ごと、難病医療費助成は年1回の更新が必要です。期限切れになると助成が一時停止となる場合があります。余裕をもって更新の診断書作成をご依頼ください。',
-            },
-            {
-              icon: 'tabler:building-community',
-              title: '申請窓口は区役所・保健福祉センター',
-              body: '多くの制度はお住まいの区の区役所・保健福祉センターが窓口です。書類の様式は窓口で取得できます。必要書類は制度によって異なりますので、事前に確認してからお越しください。',
-            },
-            {
-              icon: 'tabler:receipt',
-              title: '複数の制度を組み合わせることができます',
-              body: '高額療養費制度と自立支援医療、障害者医療費助成（マル障）など、複数の制度を組み合わせることで自己負担をさらに軽減できます。どの制度が使えるかわからない場合もご相談ください。',
-            },
-            {
-              icon: 'tabler:user-heart',
-              title: 'ケアマネジャー・福祉担当者との連携',
-              body: '各種申請の手続きが難しい場合は、担当ケアマネジャーや区役所の福祉担当者に相談することをお勧めします。かもめクリニックのスタッフが関係機関との連携をサポートします。',
-            },
-          ].map(({ icon, title, body }) => (
-            <div class="flex gap-4 bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 px-5 py-4">
-              <Icon name={icon} class="w-7 h-7 text-primary shrink-0 mt-0.5" />
+          joseikinPointItems.map(({ icon, title, body }) => (
+            <li class="flex gap-4 bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 px-5 py-4">
+              <Icon name={icon} class="w-7 h-7 text-primary shrink-0 mt-0.5" aria-hidden="true" />
               <div>
-                <p class="font-bold text-gray-900 dark:text-white mb-1">{title}</p>
+                <h3 class="font-bold text-gray-900 dark:text-white mb-1 text-base leading-snug">{title}</h3>
                 <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{body}</p>
               </div>
-            </div>
+            </li>
           ))
         }
-      </div>
+      </ul>
     </div>
   </section>
 
-  <!-- ===== FAQ ===== -->
   <FAQs
     id="faq"
+    scrollMarginClass={clinicalAnchorScrollMargin}
     title="医療費助成・診断書に関するよくある質問"
     tagline="FAQ"
-    classes={{ container: 'max-w-4xl' }}
-    items={[
-      {
-        title: '診断書の発行にはどれくらい時間がかかりますか？',
-        description:
-          '診断書の種類によって異なりますが、目安として1〜2週間程度をいただいています。難病の臨床調査個人票など複雑な書類は2〜4週間かかる場合があります。申請期限がある場合は早めにご相談ください。',
-      },
-      {
-        title: '自立支援医療（精神通院医療）はどこに申請すればよいですか？',
-        description:
-          'お住まいの区の保健福祉センター（区役所）窓口に申請します。当院で作成した診断書・意見書と、健康保険証・マイナンバーが確認できる書類などを持参してください。',
-      },
-      {
-        title: '難病の診断書（臨床調査個人票）は誰でも書いてもらえますか？',
-        description:
-          '指定難病の医療費助成申請には、都道府県が指定した「指定医」が作成した診断書が必要です。当院には指定医が在籍しており、対象疾患に該当する方はご相談ください。',
-      },
-      {
-        title: '高額療養費制度の申請はどうすればよいですか？',
-        description:
-          'ご加入の健康保険（協会けんぽ・国民健康保険・後期高齢者医療保険など）の窓口に申請します。事前に「限度額適用認定証」を取得すると、医療機関での支払いが自己負担限度額までとなり便利です。',
-      },
-      {
-        title: '身体障害者手帳の診断書はどの科で書いてもらえますか？',
-        description:
-          '身体障害者手帳の診断書は都道府県が指定した「指定医」が作成します。当院では肢体不自由・腎臓機能障害の診断書に対応しています。対象かどうか不明な場合もまずご相談ください。',
-      },
-    ]}
+    classes={{ container: 'max-w-7xl', headline: { ...clinicalSectionHeadline } }}
+    items={joseikinFaqWidgetItems}
   />
 
-  <!-- ===== CTA ===== -->
-  <CallToAction
-    actions={[
-      { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
-      {
-        variant: 'line',
-        text: 'LINEで無料相談（@512ysmzx）',
-        href: 'https://line.me/R/ti/p/%40512ysmzx',
-        icon: 'tabler:brand-line',
-      },
-    ]}
-  >
-    <Fragment slot="title">診断書・助成制度についてのご相談</Fragment>
-    <Fragment slot="subtitle">
-      「どの制度が使えるかわからない」「診断書が必要かどうかわからない」<br />
-      そんな段階でも、お気軽にご連絡ください。<br />
-      受付：平日・祝日 9:00〜17:00 | LINE（@512ysmzx）は24時間受付
-    </Fragment>
-  </CallToAction>
+  <ClinicalPageClosing />
 </Layout>

@@ -22,7 +22,7 @@
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center rounded-full border-gray-400 border bg-transparent font-medium text-center text-lg sm:text-base text-page leading-snug transition py-4 sm:py-3.5 px-6 md:px-8 ease-in duration-200 focus:ring-blue-500 focus:ring-offset-blue-200 focus:ring-2 focus:ring-offset-2 hover:bg-gray-100 hover:border-gray-600 dark:text-slate-300 dark:border-slate-500 dark:hover:bg-slate-800 dark:hover:border-slate-800 cursor-pointer;
+    @apply inline-flex items-center justify-center rounded-xl border-gray-400 border bg-transparent font-medium text-center text-lg sm:text-base text-page leading-snug transition py-4 sm:py-3.5 px-6 md:px-8 ease-in duration-200 focus:ring-blue-500 focus:ring-offset-blue-200 focus:ring-2 focus:ring-offset-2 hover:bg-gray-100 hover:border-gray-600 dark:text-slate-300 dark:border-slate-500 dark:hover:bg-slate-800 dark:hover:border-slate-800 cursor-pointer;
   }
 
   .btn-primary {
@@ -64,10 +64,27 @@
   padding: 0 5px;
 }
 
-.dropdown:focus .dropdown-menu,
-.dropdown:focus-within .dropdown-menu,
-.dropdown:hover .dropdown-menu {
-  display: block;
+/* デスクトップ: ホバー／フォーカスでサブメニュー表示 */
+@media (min-width: 768px) {
+  .dropdown:focus .dropdown-menu,
+  .dropdown:focus-within .dropdown-menu,
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+}
+
+/* モバイル: 親ボタンで開閉（.is-submenu-open）。ホバーだけでは開かない */
+@media (max-width: 767px) {
+  #header .dropdown .dropdown-menu {
+    display: none;
+  }
+  #header .dropdown.is-submenu-open .dropdown-menu {
+    display: block;
+  }
+  #header .dropdown.is-submenu-open > button .header-nav-chevron,
+  #header .dropdown.is-submenu-open > button .header-nav-chevron svg {
+    transform: rotate(180deg);
+  }
 }
 
 [astro-icon].icon-light > * {

@@ -26,7 +26,7 @@ export default {
       keyframes: {
         fadeInUp: {
           '0%': { opacity: 0, transform: 'translateY(2rem)' },
-          '100%': { opacity: 1, transform: 'translateY(0)' },
+          '100%': { opacity: 1 },
         },
       },
     },
@@ -37,5 +37,19 @@ export default {
       addVariant('intersect', '&:not([no-intersect])');
     }),
   ],
+  /**
+   * dark: クラスポリシー（light:only モード運用）
+   * ─────────────────────────────────────────────────────────
+   * config.yaml に ui.theme:'light:only' を設定しているため、BasicScripts.astro
+   * が document.documentElement.classList.remove('dark') を常に実行し、
+   * .dark クラスは決してページに付与されない。
+   *
+   * したがって dark: 変種 CSS は生成されるが一切マッチしない（実質的デッドコード）。
+   * 新規コードでは dark: クラスを使わないこと。
+   * 既存ページの dark: クラスは段階的に除去する（P2-3）。
+   *
+   * 'class' のまま残す理由: Astrowind テンプレートコンポーネントが
+   * .dark セレクタに依存するため、変更すると副作用がある。
+   */
   darkMode: 'class',
 };

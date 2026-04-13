@@ -6,6 +6,8 @@ import Announcement from '~/components/widgets/Announcement.astro';
 import { Icon } from 'astro-icon/components';
 
 import { headerData, footerData } from '~/navigation';
+import { CLINIC_CONTACT } from '~/data/clinic-contact';
+import { getPermalink } from '~/utils/permalinks';
 
 import type { MetaData } from '~/types';
 
@@ -14,6 +16,8 @@ export interface Props {
 }
 
 const { metadata } = Astro.props;
+
+const contactFormHref = getPermalink('/renkei#renkei-contact-detail');
 ---
 
 <Layout metadata={metadata}>
@@ -28,25 +32,27 @@ const { metadata } = Astro.props;
   <main>
     <slot />
   </main>
+  <!-- 全ページ共通：医療情報免責バナー -->
+  <aside aria-label="医療情報に関するご案内" class="bg-gray-100 dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 py-3 px-4">
+    <p class="max-w-5xl mx-auto text-xs text-gray-500 dark:text-gray-400 leading-relaxed text-center">
+      当サイトの情報は一般的な医療知識の提供を目的としており、個別の診断・治療を保証するものではありません。
+      症状や治療方針についてはかかりつけ医または担当医師にご相談ください。
+    </p>
+  </aside>
   <slot name="footer">
     <Footer {...footerData} />
   </slot>
 
-  <!-- 浮動CTA（全ページ共通・ページ読み込み直後から即座表示） -->
-  <div class="floating-cta" id="floating-cta" aria-label="お問い合わせ" transition:persist>
-    <a
-      href="https://docs.google.com/forms/d/e/1FAIpQLSdXxuP8iRtCW8fNrVf6zLnPI97tqk2StxX4n7Ix6HEwqSIJ_Q/viewform"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="floating-cta-mail"
-    >
-      <Icon name="tabler:clipboard-list" class="w-4 h-4" /> フォーム
+  <nav
+    class="floating-cta"
+    id="floating-cta"
+    aria-label="固定表示の連絡先（電話・問い合わせフォーム）"
+  >
+    <a href={CLINIC_CONTACT.telHref} class="floating-cta-tel">
+      <Icon name="tabler:phone" class="w-4 h-4" aria-hidden="true" /> {CLINIC_CONTACT.telDisplay}
     </a>
-    <a href="https://line.me/R/ti/p/%40512ysmzx" target="_blank" rel="noopener noreferrer" class="floating-cta-line">
-      <Icon name="tabler:brand-line" class="w-4 h-4" /> LINE相談
+    <a href={contactFormHref} class="floating-cta-form">
+      <Icon name="tabler:clipboard-list" class="w-4 h-4" aria-hidden="true" /> 問い合わせフォーム
     </a>
-    <a href="tel:0643017871" class="floating-cta-tel">
-      <Icon name="tabler:phone" class="w-4 h-4" /> 06-4301-7871
-    </a>
-  </div>
+  </nav>
 </Layout>

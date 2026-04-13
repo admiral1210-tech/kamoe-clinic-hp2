@@ -1,8 +1,15 @@
 ---
+// 体験談ページは一時非表示中。再掲載する際はこのリダイレクトを削除してください。
+return Astro.redirect('/', 301);
 import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
 import { Icon } from 'astro-icon/components';
+import {
+  clinicalHeroSubtitleClass,
+  clinicalHeroTaglineClass,
+  clinicalHeroTitleClass,
+} from '~/constants/clinical-page-ui';
+import { serializeJsonLdForScript } from '~/utils/json-ld-script';
 
 const metadata = {
   title: '患者さまの声・ご利用体験談｜かもめクリニック（大阪市）',
@@ -12,7 +19,7 @@ const metadata = {
   robots: { index: false, follow: false },
   openGraph: {
     type: 'website',
-    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+    images: [{ url: 'https://kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
   },
 };
 
@@ -112,15 +119,14 @@ const visibleCategories = categories.map((cat) => ({
 
 <Layout metadata={metadata}>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdBreadcrumb)} />
   </Fragment>
 
   <Hero
     tagline="患者さまの声"
-    image={{
-      src: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=2070&q=80',
-      alt: '患者さまの声イメージ',
-    }}
+    taglineClass={clinicalHeroTaglineClass}
+    titleClass={clinicalHeroTitleClass}
+    subtitleClass={clinicalHeroSubtitleClass}
   >
     <Fragment slot="title">
       患者さま・ご家族からの<br />
@@ -132,8 +138,8 @@ const visibleCategories = categories.map((cat) => ({
   </Hero>
 
   <!-- 体験談セクション -->
-  <section class="py-16 bg-white dark:bg-slate-900">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 space-y-16">
+  <section class="py-16 bg-gray-50 dark:bg-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 space-y-16">
       {
         visibleCategories.every((cat) => cat.items.length === 0) && (
           <div class="text-center py-12">
@@ -151,7 +157,7 @@ const visibleCategories = categories.map((cat) => ({
             <div id={cat.id}>
               {/* カテゴリヘッダー */}
               <div
-                class={`inline-flex items-center gap-2 ${cat.color} text-white font-bold px-5 py-2 rounded-full mb-6 text-sm`}
+                class={`inline-flex items-center gap-2 ${cat.color} text-white font-bold px-5 py-2 rounded-xl mb-6 text-sm`}
               >
                 <Icon name={cat.icon} class="w-4 h-4" />
                 {cat.label}
@@ -175,22 +181,4 @@ const visibleCategories = categories.map((cat) => ({
       }
     </div>
   </section>
-
-  <CallToAction
-    actions={[
-      { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
-      {
-        variant: 'line',
-        text: 'LINEで無料相談（@512ysmzx）',
-        href: 'https://line.me/R/ti/p/%40512ysmzx',
-        icon: 'tabler:brand-line',
-      },
-    ]}
-  >
-    <Fragment slot="title">訪問診療のご相談はこちら</Fragment>
-    <Fragment slot="subtitle">
-      受付：平日・祝日 9:00〜17:00 | LINE（@512ysmzx）は24時間受付<br />
-      患者さまご本人・ご家族・ケアマネジャー・医療機関の方、どなたでもご相談いただけます。
-    </Fragment>
-  </CallToAction>
 </Layout>

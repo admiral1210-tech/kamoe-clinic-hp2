@@ -1,33 +1,55 @@
 ---
+import { getImage } from 'astro:assets';
 import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
 import Features from '~/components/widgets/Features.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
 import { Icon } from 'astro-icon/components';
 import FaqAccordionList from '~/components/ui/FaqAccordionList.astro';
+import PageTocNav from '~/components/ui/PageTocNav.astro';
+import { KAMOME_BRANCHES, KAMOME_BRANCH_COUNT, type KamomeBranch } from '~/data/branches';
 import {
   buildAggregateRating,
   buildNumberOfEmployees,
   getBranchFoundingDate,
-  cumulativeStats,
+  getCumulativePatientsDisplay,
+  getCumulativeVisitsDisplay,
   googleReview,
 } from '~/data/clinic-meta';
 import { CLINIC_GENERAL_FAQ, CLINIC_GENERAL_FAQ_PREVIEW_COUNT } from '~/data/faq-general';
 import { NEW_BLOG_URL } from '~/data/site-policy';
+import { INSTAGRAM_QR_IMAGE_SRC } from '~/navigation';
+import { getPermalink } from '~/utils/permalinks';
+import { ctaHeroPrimaryClass, ctaHeroSecondaryClass } from '~/constants/clinical-page-ui';
+import heroHomeTop from '~/assets/images/hero-home-top.png';
+import { serializeJsonLdForScript } from '~/utils/json-ld-script';
+import { CLINIC_CONTACT, clinicPostalAddressJsonLd } from '~/data/clinic-contact';
+
+const heroHomeTopImg = await getImage({ src: heroHomeTop, width: 1024 });
+const heroHomeTopAbsoluteUrl = Astro.site
+  ? new URL(heroHomeTopImg.src, Astro.site).href
+  : `https://kamome-clinic.net${heroHomeTopImg.src}`;
 
 const metadata = {
   title: 'かもめクリニック｜大阪市の訪問診療 内科・精神科・小児科｜2017年開院',
   description:
-    '大阪市の機能強化型在宅療養支援診療所（在支診1）。2017年開院9年の実績。グループ患者数1,000名・年間診察1.2万件。精神科専門医3名常勤（大阪市内唯一）。内科・精神科・小児科対応。24時間365日緊急往診。健康保険・介護保険適用。',
+    '大阪市の機能強化型在宅療養支援診療所（在支診1）認定。2017年開院9年の実績。グループ患者数1,000名超・年間診察1.2万件（2025年1月〜12月）。精神科専門医3名常勤（精神保健指定医在籍）。内科・精神科・小児科対応。夜間・休日の緊急往診も対応。健康保険・介護保険適用。',
   ignoreTitleTemplate: true,
   openGraph: {
     type: 'website',
-    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+    images: [
+      {
+        url: '~/assets/images/hero-home-top.png',
+        width: heroHomeTop.width,
+        height: heroHomeTop.height,
+      },
+    ],
   },
   twitter: { cardType: 'summary_large_image' },
 };
 
-// ===== JSON-LD: 組織情報（機能強化型在支診1・LINE・foundingDate）=====
+const instagramUrl = 'https://www.instagram.com/kamomeclinic/';
+
+// ===== JSON-LD: 組織情報（機能強化型在支診1・foundingDate）=====
 const jsonLdClinic = {
   '@context': 'https://schema.org',
   '@id': 'https://kamome-clinic.net/#clinic',
@@ -35,22 +57,15 @@ const jsonLdClinic = {
   name: 'かもめクリニック',
   alternateName: 'Kamome Clinic',
   url: 'https://kamome-clinic.net',
-  logo: 'https://www.kamome-clinic.net/images/common/header/logo.png',
-  image: 'https://www.kamome-clinic.net/images/common/header/logo.png',
+  logo: 'https://kamome-clinic.net/images/common/header/logo.png',
+  image: heroHomeTopAbsoluteUrl,
   foundingDate: '2017',
   description:
-    '大阪市の機能強化型在宅療養支援診療所（在支診1）。精神科専門医3名常勤（大阪市内唯一）。内科・精神科・小児科対応。グループ患者数1,000名・年間1.2万件の診察実績。年間看取り約100件・対応施設50以上。',
-  telephone: '06-4301-7871',
+    '大阪市の機能強化型在宅療養支援診療所（在支診1）認定。精神科専門医3名常勤（精神保健指定医在籍）。内科・精神科・小児科対応。グループ患者数1,000名超・年間1.2万件の診察実績（2025年1月〜12月）。年間看取り約100件（同年実績）・対応施設50以上。',
+  telephone: CLINIC_CONTACT.telDisplay,
   faxNumber: '06-4301-7872',
-  email: 'kamome@kamome-clinic.net',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: '夕凪2丁目16-9 icrossAMポートビル 4F-B',
-    addressLocality: '大阪市港区',
-    addressRegion: '大阪府',
-    postalCode: '552-0004',
-    addressCountry: 'JP',
-  },
+  email: CLINIC_CONTACT.email,
+  address: clinicPostalAddressJsonLd(),
   geo: { '@type': 'GeoCoordinates', latitude: 34.6623, longitude: 135.4474 },
   openingHoursSpecification: [
     {
@@ -75,15 +90,15 @@ const jsonLdClinic = {
   availableService: [
     { '@type': 'MedicalTherapy', name: '訪問診療（月2回定期）' },
     { '@type': 'MedicalTherapy', name: '24時間緊急往診' },
-    { '@type': 'MedicalTherapy', name: '精神科訪問診療（専門医3名常勤・大阪市内唯一）' },
+    { '@type': 'MedicalTherapy', name: '精神科訪問診療（専門医3名常勤・精神保健指定医在籍）' },
     { '@type': 'MedicalTherapy', name: '医療ケア児訪問診療・NICU退院後支援' },
-    { '@type': 'MedicalTherapy', name: '機能強化型在宅療養支援診療所（在支診1）としての24時間体制' },
+    { '@type': 'MedicalTherapy', name: '機能強化型在宅療養支援診療所（在支診1）認定による夜間・休日の緊急往診対応' },
     { '@type': 'MedicalTherapy', name: '在宅看取り・ターミナルケア（年間約100件実績）' },
   ],
   contactPoint: [
     {
       '@type': 'ContactPoint',
-      telephone: '06-4301-7871',
+      telephone: CLINIC_CONTACT.telDisplay,
       contactType: 'customer service',
       availableLanguage: 'Japanese',
       hoursAvailable: {
@@ -114,9 +129,8 @@ const jsonLdClinic = {
   numberOfEmployees: buildNumberOfEmployees(),
   ...(buildAggregateRating() ? { aggregateRating: buildAggregateRating() } : {}),
   sameAs: [
-    'https://line.me/R/ti/p/%40512ysmzx',
     'https://www.instagram.com/kamomeclinic/',
-    'https://www.kamome-clinic.net',
+    'https://kamome-clinic.net',
     'https://kamome-clinic5.net/',
     'https://kamome-clinic7.net/',
   ],
@@ -133,49 +147,67 @@ const jsonLdClinic = {
     '大阪市浪速区',
     '大阪市此花区',
     '大阪市淀川区',
+    '大阪市北区',
+    '大阪市都島区',
+    '大阪市福島区',
+    '大阪市中央区',
+    '大阪市天王寺区',
+    '大阪市阿倍野区',
+    '大阪市東住吉区',
+    '大阪市平野区',
+    '大阪市住吉区',
+    '大阪市東成区',
+    '大阪市生野区',
+    '大阪市旭区',
+    '大阪市城東区',
+    '大阪市鶴見区',
+    '大阪市東淀川区',
+    '大阪市西成区',
   ],
 };
 
-// ===== JSON-LD: 各支院 LocalBusiness =====
-const jsonLdBranches = [
-  { name: 'かもめクリニック第2', street: '夕凪2丁目17-14', tel: '+81-6-6556-9571', fax: null, bid: 'branch2' as const },
-  {
-    name: 'かもめクリニック第3',
-    street: '東住吉区駒川3丁目29-14',
-    tel: '+81-6-6115-6045',
-    fax: '+81-6-6115-6046',
-    bid: 'branch3' as const,
-  },
-  { name: 'かもめクリニック第4', street: '西淀川区柏里1丁目16-15', tel: '+81-6-7506-9565', fax: null, bid: 'branch4' as const },
-  { name: 'かもめクリニック第5', street: '住之江区北加賀屋2-12-6', tel: '+81-6-6115-7018', fax: null, bid: 'branch5' as const },
-  {
-    name: 'かもめクリニック第8',
-    street: '住吉区千躰2-2-39 ホリビル3階',
-    tel: '+81-6-6629-8852',
-    fax: null,
-    bid: 'branch8' as const,
-  },
-].map((b) => ({
-  '@context': 'https://schema.org',
-  '@id': `https://kamome-clinic.net/#${b.bid}`,
-  '@type': 'MedicalClinic',
-  name: b.name,
-  parentOrganization: {
+// ===== JSON-LD: 各支院（データは branches.ts から生成）=====
+function stripPostalPrefix(addr: string): string {
+  return addr.replace(/^〒[\d-]+\s*/, '');
+}
+
+function branchStreetForSchema(b: KamomeBranch): string {
+  const a = b.address.trim();
+  if (/^〒/.test(a) || a.includes('大阪市')) {
+    return stripPostalPrefix(a);
+  }
+  return `${b.area}${b.address}`;
+}
+
+function telToSchemaOrg(jp: string): string {
+  return '+81-' + jp.replace(/^0/, '');
+}
+
+const jsonLdBranches = KAMOME_BRANCHES.filter((b) => b.schemaBranchKey !== null).map((b) => {
+  const key = b.schemaBranchKey!;
+  const foundingDate = getBranchFoundingDate(key);
+  return {
+    '@context': 'https://schema.org',
+    '@id': `https://kamome-clinic.net/#${key}`,
     '@type': 'MedicalClinic',
-    '@id': 'https://kamome-clinic.net/#clinic',
-    name: 'かもめクリニック',
-  },
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: b.street,
-    addressLocality: '大阪市',
-    addressRegion: '大阪府',
-    addressCountry: 'JP',
-  },
-  telephone: b.tel,
-  ...(b.fax ? { faxNumber: b.fax } : {}),
-  ...(getBranchFoundingDate(b.bid) ? { foundingDate: getBranchFoundingDate(b.bid) } : {}),
-}));
+    name: b.name,
+    parentOrganization: {
+      '@type': 'MedicalClinic',
+      '@id': 'https://kamome-clinic.net/#clinic',
+      name: 'かもめクリニック',
+    },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: branchStreetForSchema(b),
+      addressLocality: b.area,
+      addressRegion: '大阪府',
+      addressCountry: 'JP',
+    },
+    telephone: telToSchemaOrg(b.tel),
+    ...(b.fax ? { faxNumber: telToSchemaOrg(b.fax) } : {}),
+    ...(foundingDate ? { foundingDate } : {}),
+  };
+});
 
 // ===== JSON-LD: 医師情報（Physician） =====
 const jsonLdPhysicians = [
@@ -184,21 +216,24 @@ const jsonLdPhysicians = [
     jobTitle: '院長',
     spec: ['https://schema.org/InternalMedicine'],
     cert: '日本内科学会認定医・腎臓学会専門医・透析医学会専門医',
+    slug: 'kinoshita',
   },
   {
     name: '石本 英之',
     jobTitle: '精神科専門医',
     spec: ['https://schema.org/Psychiatry'],
     cert: '精神保健指定医・医学博士・日本神経精神学会専門医',
+    slug: 'ishimoto',
   },
   {
     name: '菅近 優',
     jobTitle: '精神科専門医・指導医',
     spec: ['https://schema.org/Psychiatry'],
     cert: '精神保健指定医・医学博士・指導医',
+    slug: 'kanchika',
   },
-  { name: '西田 宜代', jobTitle: '精神科専門医', spec: ['https://schema.org/Psychiatry'], cert: '精神保健指定医' },
-  { name: '河内 要', jobTitle: '第4院院長', spec: ['https://schema.org/Pediatrics'], cert: '小児科専門医' },
+  { name: '西田 宜代', jobTitle: '精神科専門医', spec: ['https://schema.org/Psychiatry'], cert: '精神保健指定医', slug: 'nishida' },
+  { name: '河内 要', jobTitle: '第4院院長', spec: ['https://schema.org/Pediatrics'], cert: '小児科専門医・小児循環器専門医', slug: 'kawachi' },
 ].map((d) => ({
   '@context': 'https://schema.org',
   '@type': 'Physician',
@@ -207,10 +242,13 @@ const jsonLdPhysicians = [
   medicalSpecialty: d.spec,
   description: d.cert,
   worksFor: { '@type': 'MedicalClinic', '@id': 'https://kamome-clinic.net/#clinic', name: 'かもめクリニック' },
-  url: 'https://kamome-clinic.net/about#doctors',
+  url:
+    d.slug === 'kinoshita'
+      ? 'https://kamome-clinic.net/about/kinoshita'
+      : 'https://kamome-clinic.net/doctors',
 }));
 
-// ===== JSON-LD: WebSite（サイト検索ボックス対応） =====
+// ===== JSON-LD: WebSite =====
 const jsonLdWebSite = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -218,11 +256,6 @@ const jsonLdWebSite = {
   name: 'かもめクリニック',
   url: 'https://kamome-clinic.net',
   publisher: { '@type': 'MedicalClinic', '@id': 'https://kamome-clinic.net/#clinic' },
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: 'https://kamome-clinic.net/faq',
-    'query-input': 'required name=search_term_string',
-  },
 };
 
 // ===== JSON-LD: BreadcrumbList =====
@@ -250,250 +283,192 @@ const jsonLdSpeakable = {
 
 <Layout metadata={metadata}>
   <Fragment slot="head">
-    <!-- ヒーロー画像（LCP要素）のpreload -->
-    <link rel="preload" as="image" href="/images/hero-group.jpg" fetchpriority="high" />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdClinic)} />
-    {jsonLdBranches.map((b) => <script type="application/ld+json" set:html={JSON.stringify(b)} />)}
-    {jsonLdPhysicians.map((p) => <script type="application/ld+json" set:html={JSON.stringify(p)} />)}
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdSpeakable)} />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdWebSite)} />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdClinic)} />
+    {jsonLdBranches.map((b) => <script type="application/ld+json" set:html={serializeJsonLdForScript(b)} />)}
+    {jsonLdPhysicians.map((p) => <script type="application/ld+json" set:html={serializeJsonLdForScript(p)} />)}
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdSpeakable)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdWebSite)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdBreadcrumb)} />
   </Fragment>
 
-  <!-- ============================================================ Hero ================================================================ -->
+  <!-- ============================================================ Hero（画像先行・パノラマ／実績は常時表示） ================================================================ -->
   <Hero
-    tagline="大阪市の訪問診療専門｜24時間365日・大阪市内5院体制"
-    actions={[
-      { variant: 'primary', text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
-      {
-        variant: 'line',
-        text: 'LINEで無料相談',
-        href: 'https://line.me/R/ti/p/%40512ysmzx',
-        icon: 'tabler:brand-line',
-      },
-    ]}
+    imageFirst={true}
+    imageContainerClass="max-w-6xl"
+    tagline="大阪市の訪問診療｜24h体制"
+    titleClass="text-3xl md:text-4xl lg:text-[2.5rem] font-bold leading-snug tracking-tight mb-3 font-heading text-gray-900 dark:text-gray-100 intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
   >
     <Fragment slot="image">
-      <div class="w-full mt-8">
+      <div
+        class="overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 dark:ring-white/10 w-full aspect-[4/3] md:aspect-[1024/365]"
+      >
         <img
-          src="/images/hero-group.jpg"
-          alt="かもめクリニックのスタッフチーム"
-          class="w-full rounded-2xl object-cover shadow-xl"
-          width="1400"
-          height="500"
-          style="max-height: 480px; object-position: center top;"
+          src={heroHomeTopImg.src}
+          alt="かもめクリニックのスタッフ"
+          width={heroHomeTopImg.attributes.width}
+          height={heroHomeTopImg.attributes.height}
+          class="h-full w-full object-cover object-[50%_42%] max-sm:object-[50%_40%]"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
         />
       </div>
     </Fragment>
     <Fragment slot="title">
-      ご自宅・施設への<br />
-      <span class="text-accent dark:text-white highlight">訪問診療</span>で<br />
-      支えます
+      ご自宅・施設へ<br />
+      <span class="text-primary dark:text-blue-300">訪問診療</span>で支えます
     </Fragment>
-    <Fragment slot="subtitle">
-      大阪市内でご自宅・施設へ医師が定期訪問し、診察・処方・検査を行う<strong>訪問診療専門クリニック</strong>です。<br
-      /><br />
-      内科・精神科・小児科に対応し、急な変化のときは<strong>24時間365日の緊急往診</strong>も承ります。
+    <Fragment slot="actions">
+      <a href="tel:0643017871" class:list={[ctaHeroPrimaryClass, 'min-h-[44px]']}>
+        <Icon name="tabler:phone" class="w-5 h-5" aria-hidden="true" />
+        お電話でのご相談
+      </a>
+      <a href="/renkei" class:list={[ctaHeroSecondaryClass, 'min-h-[44px]']}>
+        <Icon name="tabler:mail" class="w-5 h-5" aria-hidden="true" />
+        フォームで相談
+      </a>
+    </Fragment>
+    <Fragment slot="content">
+      <div class="mt-5 max-w-lg mx-auto text-left rounded-2xl border border-gray-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 px-4 py-3 not-prose">
+        <p class="text-center text-sm font-semibold text-gray-700 dark:text-gray-200">実績・評価</p>
+        <div class="mt-4 space-y-4 border-t border-gray-100 dark:border-slate-700 pt-4">
+          <dl
+            class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center rounded-xl border border-gray-200 dark:border-slate-600 py-3 px-2 bg-gray-50/80 dark:bg-slate-900/50"
+          >
+            <div>
+              <dt class="text-sm text-gray-700 dark:text-gray-400">開院</dt>
+              <dd class="text-base font-black text-gray-900 dark:text-white">
+                2017<span class="text-sm font-semibold">年</span>
+              </dd>
+            </div>
+            <div>
+              <dt class="text-sm text-gray-700 dark:text-gray-400">年間患者数</dt>
+              <dd class="text-base font-black text-gray-900 dark:text-white tabular-nums">
+                {getCumulativePatientsDisplay()}
+              </dd>
+            </div>
+            <div>
+              <dt class="text-sm text-gray-700 dark:text-gray-400">年間診察</dt>
+              <dd class="text-base font-black text-gray-900 dark:text-white tabular-nums">
+                {getCumulativeVisitsDisplay()}
+              </dd>
+            </div>
+            <div>
+              <dt class="text-sm text-gray-700 dark:text-gray-400">大阪市内</dt>
+              <dd class="text-base font-black text-gray-900 dark:text-white">5<span class="text-sm font-semibold">院</span></dd>
+            </div>
+          </dl>
+          <p class="text-center text-sm text-gray-700 dark:text-gray-400">
+            厚生労働省 機能強化型在宅療養支援診療所（在支診1）認定
+          </p>
+          <p class="text-center text-xs text-gray-400 dark:text-gray-500 -mt-2">
+            ※患者数・診察件数は2025年1月〜12月の集計値です。
+          </p>
+          {
+            googleReview.ratingValue !== null && googleReview.reviewCount !== null && (
+              <div class="flex justify-center">
+                <div
+                  class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-900/50 px-4 py-2"
+                >
+                  <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                      fill="#4285F4"
+                    />
+                    <path
+                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                      fill="#34A853"
+                    />
+                    <path
+                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                      fill="#FBBC05"
+                    />
+                    <path
+                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                      fill="#EA4335"
+                    />
+                  </svg>
+                  <div class="text-left">
+                    <p class="flex flex-wrap items-center gap-1 font-black text-sm text-gray-900 dark:text-white">
+                      <span>{googleReview.ratingValue}</span>
+                      <span class="flex items-center gap-0.5" aria-label={`評価 ${googleReview.ratingValue} / 5`}>
+                        {Array.from({ length: Math.min(5, Math.round(googleReview.ratingValue ?? 0)) }).map(() => (
+                          <Icon name="tabler:star-filled" class="h-3.5 w-3.5 text-amber-400" />
+                        ))}
+                      </span>
+                    </p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Googleレビュー {googleReview.reviewCount}件</p>
+                  </div>
+                </div>
+              </div>
+            )
+          }
+        </div>
+      </div>
     </Fragment>
   </Hero>
 
-  <!-- 在支診1 + 受付時間 ノート -->
-  <!-- 受付・連絡先バー -->
-  <section class="bg-blue-50 dark:bg-slate-800 border-b border-blue-100 dark:border-slate-700 not-prose">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-4">
-      <!-- モバイル：縦並び / デスクトップ：横並び -->
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3 sm:gap-8 text-center">
-        <!-- 電話番号（大きく・タップで発信） -->
-        <a href="tel:0643017871" class="flex items-center justify-center gap-2 group">
-          <Icon name="tabler:phone" class="w-5 h-5 text-primary shrink-0" />
-          <span class="text-2xl font-black text-primary tracking-wide group-hover:underline">06-4301-7871</span>
-        </a>
+  <PageTocNav
+    items={[
+      { href: '#about-houmon', label: '訪問診療とは' },
+      { href: '#features', label: '当院の特徴' },
+      { href: '#departments', label: '診療内容' },
+      { href: '#trust', label: '信頼情報' },
+      { href: '#faq', label: 'よくある質問' },
+      { href: '/renkei', label: 'ご相談（患者・ご家族）' },
+    ]}
+  />
 
-        <!-- 区切り線（デスクトップのみ） -->
-        <span class="hidden sm:block w-px h-8 bg-blue-200 dark:bg-slate-600"></span>
-
-        <!-- 受付時間・緊急対応 -->
-        <div
-          class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-6 text-sm font-medium text-gray-700 dark:text-gray-300"
-        >
-          <span class="flex items-center justify-center gap-1.5">
-            <Icon name="tabler:clock" class="w-4 h-4 text-primary shrink-0" />
-            受付：<strong>平日・祝日 9:00〜17:00</strong>
-          </span>
-          <span class="flex items-center justify-center gap-1.5">
-            <Icon name="tabler:ambulance" class="w-4 h-4 text-primary shrink-0" />
-            緊急往診：<strong>24時間365日対応</strong>
-          </span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ページ内目次（追従：ヘッダー高さ分ずらして重なりを防止） -->
-  <nav
-    class="sticky z-30 top-[4.5rem] md:top-[4.75rem] border-b border-gray-200/80 dark:border-slate-700 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md not-prose shadow-sm"
-    aria-label="このページの目次"
-  >
-    <div class="max-w-5xl mx-auto px-3 sm:px-6 pt-2 pb-1.5">
-      <p
-        class="text-center text-[10px] sm:text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wide mb-1.5"
-      >
-        このページの目次
-      </p>
-      <ul class="flex flex-wrap justify-center gap-x-1 gap-y-1 sm:gap-x-2 text-xs sm:text-sm">
-        <li>
-          <a
-            href="#about-houmon"
-            class="inline-flex items-center rounded-full px-2.5 py-1 sm:px-3 font-medium text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-primary transition-colors"
-            >訪問診療とは</a
-          >
-        </li>
-        <li>
-          <a
-            href="#features"
-            class="inline-flex items-center rounded-full px-2.5 py-1 sm:px-3 font-medium text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-primary transition-colors"
-            >選ばれる理由</a
-          >
-        </li>
-        <li>
-          <a
-            href="#first-visit"
-            class="inline-flex items-center rounded-full px-2.5 py-1 sm:px-3 font-medium text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-primary transition-colors"
-            >流れ・費用・対象</a
-          >
-        </li>
-        <li>
-          <a
-            href="#departments"
-            class="inline-flex items-center rounded-full px-2.5 py-1 sm:px-3 font-medium text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-primary transition-colors"
-            >診療内容</a
-          >
-        </li>
-        <li>
-          <a
-            href="#faq"
-            class="inline-flex items-center rounded-full px-2.5 py-1 sm:px-3 font-medium text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-primary transition-colors"
-            >よくある質問</a
-          >
-        </li>
-        <li>
-          <a
-            href="#contact"
-            class="inline-flex items-center rounded-full px-2.5 py-1 sm:px-3 font-medium text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-primary transition-colors"
-            >相談窓口</a
-          >
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- 訪問診療とは（要約 → 詳細は専用ページ） -->
-  <section id="about-houmon" class="scroll-mt-32 py-6 md:py-10 bg-white dark:bg-slate-900">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-      <p class="text-sm font-semibold text-primary tracking-widest mb-1">訪問診療について</p>
-      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">訪問診療とは</h2>
-      <div
-        class="bg-blue-50 dark:bg-slate-800 rounded-2xl p-5 md:p-7 text-left space-y-3 text-gray-800 dark:text-gray-200 leading-relaxed"
-      >
-        <p>
-          <strong>訪問診療</strong
-          >とは、医師がご自宅や入居施設へ定期的に伺い、診察・処方・検査などを行う医療です。通院が難しい方が、住み慣れた場所で治療を続けられるようにするサービスで、<strong
-            >健康保険・介護保険が適用</strong
-          >されます。
-        </p>
-        <p class="text-sm text-gray-600 dark:text-gray-400">
-          往診（急変時の臨時訪問）とは違います。当院は計画的な訪問診療に加え、<strong>24時間365日の緊急往診</strong
-          >にも対応しています。
-        </p>
-      </div>
-      <div class="mt-5 flex flex-wrap justify-center gap-3">
-        <a
-          href="/houmon-shinryo"
-          class="inline-flex items-center gap-2 bg-primary text-white font-bold px-5 py-2.5 rounded-full text-sm hover:opacity-90"
-        >
-          <Icon name="tabler:arrow-right" class="w-4 h-4" /> くわしい説明・対象・流れを見る
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================ 実績数バナー ================================================================ -->
-  <section class="py-10 bg-primary dark:bg-slate-800">
+  <!-- 訪問診療とは（圧縮版・AEO定義維持） -->
+  <section id="about-houmon" class="scroll-mt-32 py-5 md:py-7 bg-page dark:bg-slate-900">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 text-center text-white">
-        <div>
-          <p class="text-3xl md:text-4xl font-black mb-1">2017<span class="text-lg">年</span></p>
-          <p class="text-sm font-semibold opacity-90">開院</p>
-        </div>
-        <div>
-          <p class="text-3xl md:text-4xl font-black mb-1">
-            {cumulativeStats.totalPatients ?? '1,000'}<span class="text-lg"
-              >{cumulativeStats.totalPatients ? '' : '名'}</span
-            >
-          </p>
-          <p class="text-sm font-semibold opacity-90">延べ患者数</p>
-        </div>
-        <div>
-          <p class="text-3xl md:text-4xl font-black mb-1">
-            {cumulativeStats.totalVisits ?? '1.2'}<span class="text-lg"
-              >{cumulativeStats.totalVisits ? '' : '万件'}</span
-            >
-          </p>
-          <p class="text-sm font-semibold opacity-90">年間診察件数</p>
-        </div>
-        <div>
-          <p class="text-3xl md:text-4xl font-black mb-1">5<span class="text-lg">院</span></p>
-          <p class="text-sm font-semibold opacity-90">大阪市内拠点</p>
-        </div>
-        <div class="col-span-2 sm:col-span-1">
-          <p class="text-xl md:text-2xl font-black mb-1 leading-tight">厚労省<br />最上位認定</p>
-          <p class="text-xs font-semibold opacity-90">24h体制の在宅医療</p>
+      <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-100 dark:border-slate-700 shadow-sm">
+        <div class="flex items-start gap-3">
+          <Icon name="tabler:home-heart" class="w-6 h-6 text-primary shrink-0 mt-0.5" />
+          <div class="flex-1 min-w-0">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">訪問診療とは</h2>
+            <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+              <strong>訪問診療</strong>とは、医師がご自宅・施設へ定期的に伺い、診察・処方・検査を行う医療です。<strong>健康保険・介護保険が適用</strong>されます。
+            </p>
+            <details class="mt-2">
+              <summary class="text-xs text-gray-700 dark:text-gray-400 font-semibold cursor-pointer hover:underline list-none flex items-center gap-1 min-h-[44px] px-1">
+                <Icon name="tabler:chevron-down" class="w-3.5 h-3.5" /> 往診との違いを見る
+              </summary>
+              <p class="mt-2 text-xs text-gray-700 dark:text-gray-400 leading-relaxed">
+                往診は急変時の臨時訪問ですが、訪問診療は計画的な定期訪問です。当院は定期訪問に加え、<strong>24時間365日の緊急往診</strong>にも対応しています。
+              </p>
+            </details>
+          </div>
+          <a
+            href="/houmon-shinryo"
+            class="shrink-0 inline-flex items-center gap-1 text-gray-700 dark:text-gray-300 underline text-sm font-bold hover:text-gray-900 whitespace-nowrap min-h-[44px] px-2"
+          >
+            詳しく <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
+          </a>
         </div>
       </div>
-      {/* Googleレビューバッジ（src/data/clinic-meta.ts に値が設定されたら自動表示） */}
-      {
-        googleReview.ratingValue !== null && googleReview.reviewCount !== null && (
-          <div class="mt-6 flex justify-center">
-            <div class="inline-flex items-center gap-3 bg-white/15 rounded-2xl px-6 py-3">
-              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor" class="text-white">
-                <path
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                  fill="#4285F4"
-                />
-                <path
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                  fill="#34A853"
-                />
-                <path
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                  fill="#FBBC05"
-                />
-                <path
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                  fill="#EA4335"
-                />
-              </svg>
-              <div class="text-white">
-                <div class="flex items-center gap-1">
-                  <span class="font-black text-xl">{googleReview.ratingValue}</span>
-                  <span class="text-yellow-300 text-lg">{'★'.repeat(Math.round(googleReview.ratingValue ?? 0))}</span>
-                </div>
-                <p class="text-xs opacity-80">Googleレビュー {googleReview.reviewCount}件</p>
-              </div>
-            </div>
-          </div>
-        )
-      }
     </div>
   </section>
+
 
   <!-- ============================================================ 4つの特徴 ================================================================ -->
   <Features
     id="features"
     scrollMarginClass="scroll-mt-32"
-    tagline="選ばれる理由"
-    title="かもめクリニックが選ばれる4つの理由"
+    tagline="当院の特徴"
+    title="かもめクリニックの4つの特徴"
     subtitle="2017年に開院しました。大阪市の下町に根ざし、患者さまお一人おひとりの暮らしに寄り添い続けています。"
+    columns={1}
+    classes={{
+      container: 'pb-4 md:pb-6 lg:pb-8',
+      items: {
+        panel:
+          'w-full max-w-none rounded-2xl border border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 shadow-sm gap-4',
+        title: 'text-base md:text-lg font-bold',
+        description: 'text-sm text-gray-700 dark:text-gray-400 mt-2 leading-relaxed',
+        icon: 'text-gray-700 dark:text-gray-300 bg-primary/10 rounded-full w-11 h-11 p-2.5 shrink-0 mr-0 md:mr-0 md:w-11 md:h-11 md:p-2.5',
+      },
+    }}
     items={[
       {
         title: '月2回の定期訪問診療',
@@ -508,139 +483,50 @@ const jsonLdSpeakable = {
         icon: 'tabler:clock-24',
       },
       {
-        title: '精神科専門医3名常勤（大阪市内唯一）',
+        title: '精神科専門医3名常勤（精神保健指定医在籍）',
         description:
-          '精神科専門医3名が常勤する体制は、大阪市内の訪問診療クリニックとして唯一です。うつ病・統合失調症・認知症・依存症にも専門的に対応します。',
+          '精神科専門医3名が常勤し、精神保健指定医も在籍しています。うつ病・統合失調症・認知症・依存症にも専門的に対応します。',
         icon: 'tabler:brain',
       },
       {
-        title: '大阪市内5拠点で広域対応',
+        title: `大阪市内${KAMOME_BRANCH_COUNT}拠点で市内全域対応`,
         description:
-          '港区・西淀川区・住之江区など、市内5院体制で広く対応します。担当エリアの確認は、地域医療連携部（06-4301-7883）が一括でお受けします。',
+          `港区・西淀川区・住之江区など、市内${KAMOME_BRANCH_COUNT}院体制で広く対応します。担当エリアの確認は、地域医療連携部（06-4301-7883）が一括でお受けします。`,
         icon: 'tabler:map-pin',
       },
     ]}
   />
 
-  <!-- 医療・介護関係者の方へ（強調セクション） -->
-  <section id="medical-pro" class="scroll-mt-32 py-8 md:py-10 bg-white dark:bg-slate-900">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-      <div
-        class="rounded-3xl bg-primary text-white p-6 md:p-8 shadow-[0_12px_36px_rgba(37,99,235,0.35)] border border-blue-400/40"
+  <!-- 医療・介護関係者 ── フルブリードバンド -->
+  <div class="not-prose bg-primary">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center shrink-0">
+          <Icon name="tabler:building-hospital" class="w-5 h-5 text-white" aria-hidden="true" />
+        </div>
+        <div>
+          <p class="text-xs font-semibold text-white/70 tracking-widest uppercase mb-0.5">ご家族・医療・介護関係者の方へ</p>
+          <p class="text-base font-bold text-white leading-snug">紹介の流れ・連携相談書・オンライン相談は専用ページへ</p>
+        </div>
+      </div>
+      <a
+        href="/renkei"
+        class="inline-flex items-center justify-center gap-2 w-full sm:w-auto shrink-0 min-h-[48px] rounded-xl bg-white text-primary font-bold px-6 py-2.5 text-sm hover:bg-blue-50 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary whitespace-nowrap"
       >
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5 md:gap-6">
-          <div class="flex-1">
-            <p class="text-xs sm:text-sm font-semibold tracking-[0.16em] text-blue-100 mb-2">医療・介護関係者の方へ</p>
-            <h2 class="text-xl sm:text-2xl md:text-3xl font-black leading-tight mb-3">紹介・連携のご相談はこちら</h2>
-            <p class="text-sm md:text-base text-blue-50 leading-relaxed">
-              紹介の流れ、訪問診療相談書（PDF）、オンライン相談の案内を専用ページにまとめています。地域医療連携部が迅速に対応します。
-            </p>
-          </div>
-          <div class="flex flex-col gap-3 md:shrink-0">
-            <a
-              href="https://docs.google.com/forms/d/e/1FAIpQLSdXxuP8iRtCW8fNrVf6zLnPI97tqk2StxX4n7Ix6HEwqSIJ_Q/viewform"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center gap-2 bg-white text-primary font-black px-5 py-3 rounded-full text-sm hover:opacity-90 transition-opacity"
-            >
-              <Icon name="tabler:clipboard-list" class="w-5 h-5 shrink-0" /> オンライン相談フォーム
-            </a>
-            <a
-              href="tel:0643017883"
-              class="inline-flex items-center justify-center gap-2 border-2 border-white text-white font-black px-5 py-3 rounded-full text-sm hover:bg-white/10 transition-colors"
-            >
-              <Icon name="tabler:phone" class="w-5 h-5 shrink-0" />
-              <span>地域医療連携部<br class="sm:hidden" /><span class="hidden sm:inline">：</span><span class="sm:hidden">　</span>06-4301-7883</span>
-            </a>
-            <a
-              href="/renkei"
-              class="inline-flex items-center justify-center gap-1.5 text-blue-100 text-sm font-semibold hover:text-white hover:underline transition-colors"
-            >
-              <Icon name="tabler:building-hospital" class="w-4 h-4 shrink-0" /> 専用ページを見る <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
-            </a>
-          </div>
-        </div>
-      </div>
+        紹介・連携専用ページへ
+        <Icon name="tabler:arrow-right" class="w-4 h-4 shrink-0" aria-hidden="true" />
+      </a>
     </div>
-  </section>
-
-  <!-- ご利用の流れ・保険と費用・ご利用対象（3列グリッド） -->
-  <section
-    id="first-visit"
-    class="scroll-mt-32 py-8 md:py-10 bg-blue-50/60 dark:bg-slate-800/40 border-y border-blue-100 dark:border-slate-700"
-  >
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-6 md:mb-8">
-        <p class="text-sm font-semibold text-primary tracking-widest mb-1">はじめての方へ</p>
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">ご利用の流れ・保険と費用・対象</h2>
-      </div>
-      <div class="grid md:grid-cols-3 gap-4 md:gap-5">
-        <div
-          id="flow"
-          class="scroll-mt-32 flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-blue-100 dark:border-slate-700 p-5 md:p-6 text-center shadow-sm"
-        >
-          <p class="text-xs font-semibold text-primary tracking-widest mb-1">はじめての方へ</p>
-          <h3 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-3">ご利用の流れ</h3>
-          <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4 flex-1">
-            <a href="tel:0643017871" class="text-primary font-bold hover:underline">お電話</a>またはLINEでご相談 →
-            担当エリア・医師の確認 → 初回訪問で計画のご説明 → <strong>月2回の定期訪問</strong
-            >が始まります。紹介状は不要です。訪問開始は<strong>最短当日</strong>を目指しています。
-          </p>
-          <a
-            href="/houmon-shinryo#flow"
-            class="inline-flex items-center justify-center gap-2 border-2 border-primary text-primary font-bold px-4 py-2.5 rounded-full text-sm hover:bg-blue-50 dark:hover:bg-slate-800 mt-auto"
-          >
-            <Icon name="tabler:list-numbers" class="w-4 h-4" /> 4ステップの詳細
-          </a>
-        </div>
-        <div
-          id="cost"
-          class="scroll-mt-32 flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-blue-100 dark:border-slate-700 p-5 md:p-6 text-center shadow-sm"
-        >
-          <p class="text-xs font-semibold text-primary tracking-widest mb-1">費用・保険</p>
-          <h3 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-3">保険と費用</h3>
-          <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4 flex-1">
-            <strong>健康保険・介護保険が適用</strong>されます。後期高齢者の方の目安は月2回の定期訪問で<strong
-              >月5,000〜8,000円前後</strong
-            >（負担割合・薬代等により変動）。生活保護の方は自己負担の扱いが異なります。
-          </p>
-          <a
-            href="/cost"
-            class="inline-flex items-center justify-center gap-2 bg-primary text-white font-bold px-5 py-2.5 rounded-full text-sm hover:opacity-90 mt-auto"
-          >
-            <Icon name="tabler:calculator" class="w-4 h-4" /> 詳細ページへ
-          </a>
-        </div>
-        <div
-          id="targets"
-          class="scroll-mt-32 flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-blue-100 dark:border-slate-700 p-5 md:p-6 text-center shadow-sm"
-        >
-          <p class="text-xs font-semibold text-primary tracking-widest mb-1">ご利用対象</p>
-          <h3 class="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-3">こんな方がご利用いただけます</h3>
-          <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4 flex-1">
-            通院が困難な<strong>高齢者・障がいのある方</strong>、<strong>精神疾患</strong>で外出が難しい方、<strong
-              >医療ケア児</strong
-            >、<strong>施設入居・在宅療養中</strong>の方など。上記以外でも、通院が困難であればまずご相談ください。
-          </p>
-          <a
-            href="/houmon-shinryo#targets"
-            class="inline-flex items-center justify-center gap-2 bg-primary text-white font-bold px-5 py-2.5 rounded-full text-sm hover:opacity-90 mt-auto"
-          >
-            <Icon name="tabler:arrow-right" class="w-4 h-4" /> 対象の詳細
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+  </div>
 
   <!-- ============================================================ 診療内容 ================================================================ -->
-  <section id="departments" class="scroll-mt-32 py-8 md:py-14 bg-white dark:bg-slate-900">
+  <section id="departments" class="scroll-mt-32 py-8 md:py-14 dark:bg-slate-900">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
       <div class="text-center mb-8">
-        <p class="text-sm font-semibold text-primary tracking-widest mb-1">診療メニュー</p>
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white">診療内容</h2>
+        <p class="text-sm font-semibold text-gray-700 dark:text-gray-400 tracking-widest mb-1">診療メニュー</p>
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">診療内容</h2>
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {
           [
             {
@@ -648,42 +534,38 @@ const jsonLdSpeakable = {
               title: '内科',
               desc: '慢性疾患の管理・処置・緩和ケア',
               href: '/naika',
-              color: 'bg-blue-50 dark:bg-slate-800',
             },
             {
               icon: 'tabler:brain',
               title: '精神科',
-              desc: '専門医3名常勤（大阪市内唯一）',
+              desc: '専門医3名常勤（精神保健指定医在籍）',
               href: '/seishinika',
-              color: 'bg-purple-50 dark:bg-slate-800',
             },
             {
               icon: 'tabler:baby-carriage',
               title: '小児科',
               desc: '医療ケア児の診療・NICU退院後支援',
               href: '/shoninka',
-              color: 'bg-green-50 dark:bg-slate-800',
             },
             {
               icon: 'tabler:bone',
               title: '整形外科',
               desc: '関節注射・骨粗しょう症・骨折後ケア',
               href: '/seikeigeka',
-              color: 'bg-orange-50 dark:bg-slate-800',
             },
-          ].map(({ icon, title, desc, href, color }) => (
+          ].map(({ icon, title, desc, href }) => (
             <div
-              class={`${color} rounded-2xl p-6 border border-gray-100 dark:border-slate-700 flex flex-col gap-3 ${href ? 'hover:shadow-md transition-shadow' : ''}`}
+              class={`rounded-2xl border border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 flex flex-col gap-3 ${href ? 'hover:shadow-md transition-shadow' : ''}`}
             >
               <Icon name={icon} class="w-9 h-9 text-primary" />
               <div>
                 <h3 class="font-bold text-gray-900 dark:text-white text-lg mb-1">{title}</h3>
-                <p class="text-sm text-gray-600 dark:text-gray-400">{desc}</p>
+                <p class="text-sm text-gray-700 dark:text-gray-400">{desc}</p>
               </div>
               {href && (
                 <a
                   href={href}
-                  class="mt-auto inline-flex items-center gap-1 text-primary text-sm font-bold hover:underline"
+                  class="mt-auto inline-flex items-center gap-1 text-gray-700 dark:text-gray-300 underline text-sm font-bold hover:text-gray-900 min-h-[44px] px-2"
                 >
                   詳しく見る <Icon name="tabler:arrow-right" class="w-4 h-4" />
                 </a>
@@ -692,30 +574,23 @@ const jsonLdSpeakable = {
           ))
         }
       </div>
-    </div>
-  </section>
-
-  <!-- ============================================================ 医師紹介 ================================================================ -->
-  <section class="py-8 bg-blue-50 dark:bg-slate-800 border-y border-blue-100 dark:border-slate-700">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
-      <div class="flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
+      <!-- 医師紹介（診療内容セクション末尾に統合） -->
+      <div class="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-4 shadow-sm">
+        <div class="flex items-center gap-3">
           <img
-            src="https://www.kamome-clinic.net/images/company/kinoshita.jpg"
+            src="https://kamome-clinic.net/images/company/kinoshita.jpg"
             alt="木下 啓太 院長"
-            class="w-14 h-14 rounded-full object-cover"
+            class="w-11 h-11 rounded-full object-cover shrink-0"
             style="object-position: center 15%;"
           />
           <div>
-            <p class="font-bold text-gray-900 dark:text-white">木下 啓太 院長ほか、常勤医師13名</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">
-              内科・精神科・小児科の専門医が連携して診療にあたります。非常勤として、内科4名・泌尿器科1名・精神科5名も参加しています。
-            </p>
+            <p class="font-bold text-gray-900 dark:text-white text-sm">木下 啓太 院長ほか、常勤医師13名</p>
+            <p class="text-sm text-gray-700 dark:text-gray-400">内科・精神科・小児科の専門医が連携。非常勤医師10名も参加しています。</p>
           </div>
         </div>
         <a
-          href="/about#doctors"
-          class="inline-flex items-center gap-2 border-2 border-primary text-primary font-bold px-5 py-2.5 rounded-full hover:bg-blue-50 transition-colors text-sm whitespace-nowrap"
+          href="/doctors"
+          class="shrink-0 inline-flex items-center justify-center gap-2 border-2 border-primary text-primary font-bold px-4 py-2 rounded-full text-sm hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors whitespace-nowrap"
         >
           医師紹介を見る <Icon name="tabler:arrow-right" class="w-4 h-4" />
         </a>
@@ -723,274 +598,140 @@ const jsonLdSpeakable = {
     </div>
   </section>
 
-  <!-- 診療時間・アクセス・対応エリア（横並びカード） -->
+  <!-- ⑦ 信頼情報・SNS・お知らせ（バッジ1種・縦積み） -->
   <section
-    class="py-8 md:py-12 bg-blue-50 dark:bg-slate-800 border-y border-blue-100 dark:border-slate-700"
-    aria-label="診療時間・アクセス・対応エリア"
+    id="trust"
+    class="scroll-mt-32 py-6 md:py-8 bg-white dark:bg-slate-900 not-prose"
+    aria-label="信頼情報・SNS・お知らせ"
   >
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 lg:gap-8 items-stretch">
-        <article
-          id="hours"
-          class="scroll-mt-32 flex flex-col rounded-2xl border border-gray-200/80 dark:border-slate-600 bg-white dark:bg-slate-900 p-5 md:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] dark:shadow-none text-center md:text-left"
-        >
-          <div class="mx-auto md:mx-0 mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <Icon name="tabler:calendar" class="w-6 h-6" />
-          </div>
-          <p class="text-sm font-semibold text-primary tracking-widest mb-1">診療時間</p>
-          <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
-            受付・緊急往診
-          </h2>
-          <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed flex-1 mb-5">
-            <strong>受付</strong>：平日・祝日 9:00〜17:00（土日は休診）／ <strong>緊急往診</strong>：365日24時間対応
-          </p>
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 space-y-5">
+      <div>
+        <h2 class="text-center text-xl font-bold text-gray-900 dark:text-white mb-1">信頼情報</h2>
+        <p class="text-center text-xs text-gray-500 dark:text-gray-400 mb-3">メディア掲載・認定・実績</p>
+        <div class="flex flex-col gap-3">
           <a
-            href="/about#hours"
-            class="mt-auto inline-flex w-full items-center justify-center gap-2 border-2 border-primary text-primary font-bold px-4 py-2.5 rounded-full text-sm hover:bg-blue-50 dark:hover:bg-slate-800 transition-colors"
+            href="https://www.kamome-clinic.net/blog/?p=157"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-start gap-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 hover:shadow-sm transition-shadow group w-full"
+            aria-label="毎日新聞掲載記事を読む"
           >
-            <Icon name="tabler:calendar" class="w-4 h-4 shrink-0" /> 週表・連絡先の詳細
+            <div
+              class="shrink-0 rounded-md border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 px-2 py-1.5 text-center min-w-[3.5rem]"
+            >
+              <span class="text-sm font-bold text-gray-900 dark:text-gray-100 leading-tight block">メディア</span>
+            </div>
+            <div class="min-w-0 flex-1">
+              <p class="font-bold text-gray-900 dark:text-white text-sm group-hover:text-primary transition-colors">
+                毎日新聞：院長インタビュー掲載
+              </p>
+              <p class="text-sm text-gray-700 dark:text-gray-400 mt-0.5">在宅医療の現場と訪問診療の実態がテーマです。</p>
+            </div>
+            <Icon name="tabler:external-link" class="w-3.5 h-3.5 text-gray-500 shrink-0 mt-0.5" aria-hidden="true" />
           </a>
-        </article>
-
-        <article
-          id="access"
-          class="scroll-mt-32 flex flex-col rounded-2xl border border-gray-200/80 dark:border-slate-600 bg-white dark:bg-slate-900 p-5 md:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] dark:shadow-none text-center md:text-left"
-        >
-          <div class="mx-auto md:mx-0 mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <Icon name="tabler:map" class="w-6 h-6" />
+          <div class="flex items-start gap-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 w-full">
+            <div
+              class="shrink-0 rounded-md border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 px-2 py-1.5 text-center min-w-[3.5rem]"
+            >
+              <span class="text-sm font-bold text-gray-900 dark:text-gray-100 leading-tight block">認定</span>
+            </div>
+            <div class="min-w-0">
+              <p class="font-bold text-gray-900 dark:text-white text-sm">機能強化型在宅療養支援診療所（在支診1）</p>
+              <p class="text-sm text-gray-700 dark:text-gray-400 mt-0.5">厚生労働省認定。2017年開院以来、在支診1として在宅医療を担っています。</p>
+            </div>
           </div>
-          <p class="text-sm font-semibold text-primary tracking-widest mb-1">アクセス</p>
-          <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
-            本院・各院の所在地
-          </h2>
-          <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed flex-1 mb-5">
-            本院：〒552-0004 大阪市港区夕凪2丁目16-9 TEL{' '}
-            <a href="tel:0643017871" class="text-primary font-black hover:underline whitespace-nowrap">06-4301-7871</a>
-          </p>
+          <div class="flex items-start gap-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 w-full">
+            <div
+              class="shrink-0 rounded-md border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 px-2 py-1.5 text-center min-w-[3.5rem]"
+            >
+              <span class="text-sm font-bold text-gray-900 dark:text-gray-100 leading-tight block">実績</span>
+            </div>
+            <div class="min-w-0">
+              <p class="font-bold text-gray-900 dark:text-white text-sm">グループ患者数 1,000名超・開院9年</p>
+              <p class="text-sm text-gray-700 dark:text-gray-400 mt-0.5">年間診察1.2万件、看取り年間約100件（いずれも2025年1月〜12月）。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-gray-200 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50 p-4 space-y-4">
+        <div>
+          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">お知らせ</p>
           <a
-            href="/about#access"
-            class="mt-auto inline-flex w-full items-center justify-center gap-2 bg-primary text-white font-bold px-4 py-2.5 rounded-full text-sm hover:opacity-90 transition-opacity"
+            href="/blog"
+            class="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline"
+            aria-label="お知らせ・ブログを読む"
           >
-            <Icon name="tabler:map" class="w-4 h-4 shrink-0" /> 地図・各院を見る
+            <Icon name="tabler:news" class="w-4 h-4 shrink-0" aria-hidden="true" />
+            院長コラム・お知らせを見る
+            <Icon name="tabler:arrow-right" class="w-4 h-4 shrink-0" aria-hidden="true" />
           </a>
-        </article>
-
-        <article
-          id="area"
-          class="scroll-mt-32 flex flex-col rounded-2xl border border-gray-200/80 dark:border-slate-600 bg-white dark:bg-slate-900 p-5 md:p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] dark:shadow-none text-center md:text-left"
-        >
-          <div class="mx-auto md:mx-0 mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <Icon name="tabler:map-pin" class="w-6 h-6" />
-          </div>
-          <p class="text-sm font-semibold text-primary tracking-widest mb-1">対応エリア</p>
-          <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
-            大阪市24区全域を5院でカバー
-          </h2>
-          <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed flex-1 mb-5">
-            訪問診療・緊急往診の対象は大阪市の24区すべてです。区ごとの案内・ご相談は下記からどうぞ。
-          </p>
-          <div class="mt-auto flex flex-col gap-2">
+        </div>
+        <div class="border-t border-gray-200 dark:border-slate-600 pt-4">
+          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3">SNS</p>
+          <div
+            class="flex flex-row items-center gap-4 rounded-xl border border-gray-200 dark:border-slate-600 bg-transparent px-4 py-3"
+          >
+            <div class="space-y-1.5 min-w-0 flex-1">
+              <p class="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
+                かもめクリニックは日常を<a
+                  href={instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="font-semibold text-primary hover:underline"
+                  aria-label="Instagram @kamomeclinic を開く">Instagram</a>で公開しています。
+              </p>
+              <p class="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
+                よかったらお友達登録お願いします。
+              </p>
+            </div>
             <a
-              href="/area-osaka"
-              class="inline-flex w-full items-center justify-center gap-2 border-2 border-primary text-primary font-bold px-4 py-2.5 rounded-full text-sm hover:bg-blue-50 dark:hover:bg-slate-800 transition-colors"
+              href={instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="shrink-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-800 transition-opacity hover:opacity-90 active:opacity-80"
+              aria-label="Instagram @kamomeclinic を開く（QRコード）"
             >
-              <Icon name="tabler:map-pin" class="w-4 h-4 shrink-0" /> 対応エリア一覧
-            </a>
-            <a
-              href="tel:0643017883"
-              class="inline-flex w-full items-center justify-center gap-2 bg-primary text-white font-bold px-4 py-2.5 rounded-full text-sm hover:opacity-90 transition-opacity"
-            >
-              <Icon name="tabler:phone" class="w-4 h-4 shrink-0" /> 06-4301-7883
+              <img
+                src={INSTAGRAM_QR_IMAGE_SRC}
+                alt=""
+                class="max-h-36 w-auto rounded-lg object-contain bg-transparent"
+                width="240"
+                height="276"
+                loading="lazy"
+                decoding="async"
+              />
             </a>
           </div>
-        </article>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- よくある質問（プレビュー・FAQPage は /faq） -->
-  <section id="faq" class="scroll-mt-32 py-8 md:py-12 bg-blue-50 dark:bg-slate-800">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
-      <div id="faq-preview" class="text-center mb-8">
-        <p class="text-sm font-semibold text-primary tracking-widest mb-1">よくあるご質問</p>
+  <!-- ⑧ よくある質問（プレビュー・FAQPage は /faq） -->
+  <section id="faq" class="scroll-mt-32 py-8 md:py-10 bg-page dark:bg-slate-800">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div id="faq-preview" class="text-center mb-6">
+        <p class="text-sm font-semibold text-gray-700 dark:text-gray-400 tracking-widest mb-1">Q&amp;A</p>
         <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">よくあるご質問</h2>
-        <p class="mt-3 text-gray-600 dark:text-gray-300 text-sm md:text-base leading-relaxed">
-          代表的な質問を一部掲載しています。すべてのQ＆Aは専用ページをご覧ください。
+        <p class="mt-2 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+          代表的な質問を掲載しています。すべてのQ&Aは専用ページをご覧ください。
         </p>
       </div>
-
       <FaqAccordionList
         items={CLINIC_GENERAL_FAQ.slice(0, CLINIC_GENERAL_FAQ_PREVIEW_COUNT).map(({ q, answerHtml }) => ({
           title: q,
           description: answerHtml,
         }))}
       />
-
-      <div class="mt-6 text-center">
+      <div class="mt-5 text-center">
         <a
           href="/faq"
-          class="inline-flex items-center gap-2 bg-primary text-white font-bold px-6 py-3 rounded-full hover:opacity-90 text-sm md:text-base"
+          class="inline-flex items-center gap-2 bg-primary text-white font-bold px-6 py-3 rounded-full hover:opacity-90 text-sm"
         >
           <Icon name="tabler:messages" class="w-5 h-5" /> よくあるご質問をすべて見る
         </a>
       </div>
-
-      <div
-        class="mt-8 bg-white dark:bg-slate-900 rounded-2xl p-6 text-center border border-gray-200 dark:border-slate-700"
-      >
-        <p class="text-gray-700 dark:text-gray-300 mb-4 text-lg font-medium leading-relaxed">
-          ご不明な点は、どうぞお気軽にご連絡ください。
-        </p>
-        <div class="flex flex-wrap justify-center gap-3">
-          <a
-            href="tel:0643017871"
-            class="inline-flex items-center gap-2 bg-primary text-white font-bold px-6 py-3 rounded-full hover:opacity-90 transition-opacity text-lg"
-          >
-            <Icon name="tabler:phone" class="w-5 h-5" /> 06-4301-7871
-          </a>
-          <a
-            href="https://line.me/R/ti/p/%40512ysmzx"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 font-bold px-6 py-3 rounded-full hover:opacity-90 transition-opacity text-lg text-white"
-            style="background-color:var(--aw-color-line);"
-          >
-            <Icon name="tabler:brand-line" class="w-5 h-5" /> LINEで無料相談
-          </a>
-          <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSdXxuP8iRtCW8fNrVf6zLnPI97tqk2StxX4n7Ix6HEwqSIJ_Q/viewform"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border-2 border-primary text-primary font-bold px-6 py-3 rounded-full hover:bg-blue-50 transition-colors text-lg"
-          >
-            <Icon name="tabler:clipboard-list" class="w-5 h-5" /> フォームで相談
-          </a>
-        </div>
-      </div>
     </div>
   </section>
-
-  <!-- メディア・信頼実績 / SNS / 医療・介護関係者（1ブロックに集約） -->
-  <section
-    class="py-6 md:py-8 bg-[#fdf8f1] dark:bg-slate-900 border-y border-gray-100 dark:border-slate-800 not-prose"
-    aria-label="信頼情報・SNS・医療関係者向け情報"
-  >
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 space-y-6 md:space-y-8">
-      <div>
-        <p class="text-center text-sm font-semibold text-gray-400 dark:text-gray-500 tracking-widest mb-4">
-          メディア掲載・信頼実績
-        </p>
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 sm:gap-6">
-          <a
-            href="https://www.kamome-clinic.net/blog/?p=157"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center gap-4 bg-gray-50 dark:bg-slate-800 rounded-2xl px-5 py-4 border border-gray-100 dark:border-slate-700 hover:shadow-md transition-shadow group w-full sm:w-auto sm:flex-1 sm:min-w-0"
-            aria-label="毎日新聞掲載記事を読む"
-          >
-            <div
-              class="shrink-0 bg-red-600 text-white text-xs font-black px-3 py-1.5 rounded-lg leading-tight text-center"
-            >
-              毎日<br />新聞
-            </div>
-            <div class="min-w-0">
-              <p class="font-bold text-gray-900 dark:text-white text-sm group-hover:text-primary transition-colors">
-                院長インタビュー掲載
-              </p>
-              <p class="text-sm text-gray-500 mt-0.5">在宅医療の現場と、訪問診療の実態がテーマです。</p>
-            </div>
-            <Icon name="tabler:external-link" class="w-4 h-4 text-gray-400 shrink-0 ml-auto" />
-          </a>
-          <div
-            class="flex items-center gap-4 bg-blue-50 dark:bg-slate-800 rounded-2xl px-5 py-4 border border-blue-100 dark:border-slate-700 w-full sm:w-auto sm:flex-1 sm:min-w-0"
-          >
-            <div
-              class="shrink-0 bg-primary text-white text-xs font-black px-3 py-1.5 rounded-lg leading-tight text-center"
-            >
-              厚労省<br />認定
-            </div>
-            <div class="min-w-0">
-              <p class="font-bold text-gray-900 dark:text-white text-sm">機能強化型在宅療養支援診療所（在支診1）</p>
-              <p class="text-sm text-gray-500 mt-0.5">2017年開院以来、最上位区分を維持しています。</p>
-            </div>
-          </div>
-          <div
-            class="flex items-center gap-4 bg-gray-50 dark:bg-slate-800 rounded-2xl px-5 py-4 border border-gray-100 dark:border-slate-700 w-full sm:w-auto sm:flex-1 sm:min-w-0"
-          >
-            <div
-              class="shrink-0 bg-gray-700 text-white text-xs font-black px-3 py-1.5 rounded-lg leading-tight text-center"
-            >
-              9年<br />実績
-            </div>
-            <div class="min-w-0">
-              <p class="font-bold text-gray-900 dark:text-white text-sm">グループ患者数 1,000名超</p>
-              <p class="text-sm text-gray-500 mt-0.5">年間診察1.2万件、看取り年間約100件の実績です。</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-2 border-t border-gray-200/80 dark:border-slate-700 text-sm text-gray-600 dark:text-gray-400"
-      >
-        <a
-          href="https://www.instagram.com/kamomeclinic/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-1.5 font-bold text-gray-900 dark:text-white hover:text-primary"
-        >
-          <Icon name="tabler:brand-instagram" class="w-4 h-4" /> @kamomeclinic
-        </a>
-        <span class="hidden sm:inline text-gray-300 dark:text-gray-600">|</span>
-        <a href="/testimonials" class="font-bold text-primary hover:underline">患者さまの声・体験談</a>
-      </div>
-
-      <div
-        class="flex flex-col sm:flex-row items-start sm:items-center gap-4 rounded-2xl border border-amber-200 dark:border-amber-800/50 bg-amber-50 dark:bg-amber-900/20 px-5 py-4"
-        role="complementary"
-        aria-label="お知らせ・ブログのご案内"
-      >
-        <div
-          class="shrink-0 bg-amber-500 text-white text-xs font-black px-3 py-1.5 rounded-lg leading-tight text-center"
-        >
-          お知らせ<br />ブログ
-        </div>
-        <div class="flex-1 min-w-0">
-          <p class="font-bold text-gray-900 dark:text-white text-sm mb-0.5">院長コラム・お知らせ・スタッフ記事を発信中</p>
-          <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-            診療体制・休診・採用情報や、院長・スタッフによるコラム、地域の医療情報などを随時発信しています。
-          </p>
-        </div>
-        <a
-          href={NEW_BLOG_URL}
-          class="shrink-0 inline-flex items-center gap-1.5 border-2 border-amber-500 text-amber-700 dark:text-amber-400 font-bold px-4 py-2 rounded-full text-sm hover:bg-amber-100 dark:hover:bg-amber-800/40 transition-colors whitespace-nowrap"
-          aria-label="お知らせ・ブログを読む"
-        >
-          <Icon name="tabler:news" class="w-4 h-4" /> ブログを見る
-        </a>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ============================================================ CTA ================================================================ -->
-  <CallToAction
-    id="contact"
-    scrollMarginClass="scroll-mt-32"
-    actions={[
-      { variant: 'primary', text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
-      {
-        variant: 'line',
-        text: 'LINEで無料相談',
-        href: 'https://line.me/R/ti/p/%40512ysmzx',
-        icon: 'tabler:brand-line',
-      },
-    ]}
-  >
-    <Fragment slot="title">訪問診療のご相談は、どうぞお気軽にご連絡ください</Fragment>
-    <Fragment slot="subtitle">
-      受付は平日・祝日9:00〜17:00です。緊急往診は24時間365日対応。LINE（@512ysmzx）は24時間受付です。<br /><br />
-      患者さまご本人・ご家族・医療・介護の関係者の方からのお問い合わせも歓迎します。
-    </Fragment>
-  </CallToAction>
 </Layout>

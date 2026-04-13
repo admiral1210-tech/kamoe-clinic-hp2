@@ -1,0 +1,16 @@
+---
+/**
+ * 固定ヘッダー下でアンカー先見出しが隠れないよう、WidgetWrapper と同じ scroll-margin を付与する。
+ */
+export interface Props {
+  id?: string;
+  class?: string;
+  scrollMarginClass?: string;
+}
+
+const { id, class: className, scrollMarginClass = 'scroll-mt-[72px]' } = Astro.props;
+---
+
+<section id={id} class:list={[scrollMarginClass, className]}>
+  <slot />
+</section>

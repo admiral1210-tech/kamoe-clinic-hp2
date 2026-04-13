@@ -1,18 +1,29 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
+import Hero from '~/components/widgets/Hero.astro';
 import FaqAccordionList from '~/components/ui/FaqAccordionList.astro';
 import { Icon } from 'astro-icon/components';
 import { CLINIC_GENERAL_FAQ, buildClinicGeneralFaqJsonLd } from '~/data/faq-general';
+import {
+  clinicalHeroSubtitleClass,
+  clinicalHeroTaglineClass,
+  clinicalHeroTitleClass,
+  ctaHeroPrimaryClass,
+  ctaHeroSecondaryClass,
+} from '~/constants/clinical-page-ui';
+import { serializeJsonLdForScript } from '~/utils/json-ld-script';
+import { getPermalink } from '~/utils/permalinks';
+
+const contactHref = getPermalink('/renkei');
 
 const metadata = {
   title: 'よくあるご質問（FAQ）｜訪問診療・かもめクリニック（大阪市）',
   description:
-    '訪問診療の対象・費用・エリア・精神科・在支診1・施設入居など、よくあるご質問にお答えします。お電話06-4301-7871・LINEでもご相談いただけます。',
+    '訪問診療の対象・費用・エリア・精神科・在支診1・施設入居など、よくあるご質問にお答えします。お電話06-4301-7871でもご相談いただけます。',
   ignoreTitleTemplate: true,
   openGraph: {
     type: 'website',
-    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+    images: [{ url: 'https://kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
   },
 };
 
@@ -40,75 +51,48 @@ const jsonLdWebPage = {
 
 <Layout metadata={metadata}>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdFaq)} />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdWebPage)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdFaq)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdWebPage)} />
   </Fragment>
 
-  <section class="py-10 md:py-14 bg-white dark:bg-slate-900">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-10">
-        <p class="text-sm font-semibold text-primary tracking-widest mb-1">よくあるご質問</p>
-        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">よくあるご質問（FAQ）</h1>
-        <p class="mt-4 text-gray-600 dark:text-gray-300 text-sm md:text-base leading-relaxed">
-          訪問診療・費用・対応エリア・精神科・在支診1 などについてまとめました。ご不明点は
-          <a href="tel:0643017871" class="text-primary font-bold hover:underline">06-4301-7871</a>
-          または <a href="/#contact" class="text-primary font-bold hover:underline">LINE・フォーム</a> からお気軽にどうぞ。
-        </p>
+  <Hero
+    tagline="よくあるご質問"
+    taglineClass={clinicalHeroTaglineClass}
+    titleClass={clinicalHeroTitleClass}
+    subtitleClass={clinicalHeroSubtitleClass}
+  >
+    <Fragment slot="title">
+      訪問診療について<br />気になることを<br />まとめました
+    </Fragment>
+    <Fragment slot="subtitle">
+      費用・対応エリア・精神科・在支診1など、よくいただくご質問にお答えします。解決しない場合はお気軽にご連絡ください。
+    </Fragment>
+  </Hero>
+
+  <section class="py-10 md:py-14 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="max-w-3xl mx-auto">
+        <FaqAccordionList
+          items={CLINIC_GENERAL_FAQ.map(({ q, answerHtml }) => ({ title: q, description: answerHtml }))}
+        />
       </div>
 
-      <FaqAccordionList
-        items={CLINIC_GENERAL_FAQ.map(({ q, answerHtml }) => ({ title: q, description: answerHtml }))}
-      />
-
       <div
-        class="mt-10 bg-blue-50 dark:bg-slate-800 rounded-2xl p-6 text-center border border-blue-100 dark:border-slate-700"
+        class="max-w-3xl mx-auto mt-10 bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100"
       >
-        <p class="text-gray-700 dark:text-gray-300 mb-4 font-medium">
-          解決しない場合は、お電話・LINE・フォームでご相談ください。
+        <p class="text-gray-700 mb-4 font-medium text-sm md:text-base">
+          解決しない場合は、お電話・フォームでご相談ください。
         </p>
         <div class="flex flex-wrap justify-center gap-3">
-          <a
-            href="tel:0643017871"
-            class="inline-flex items-center gap-2 bg-primary text-white font-bold px-6 py-3 rounded-full hover:opacity-90 text-sm md:text-base"
-          >
+          <a href="tel:0643017871" class:list={[ctaHeroPrimaryClass, 'inline-flex']}>
             <Icon name="tabler:phone" class="w-5 h-5" /> 06-4301-7871
           </a>
-          <a
-            href="https://line.me/R/ti/p/%40512ysmzx"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 font-bold px-6 py-3 rounded-full hover:opacity-90 text-sm md:text-base text-white"
-            style="background-color:var(--aw-color-line);"
-          >
-            <Icon name="tabler:brand-line" class="w-5 h-5" /> LINE
-          </a>
-          <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSdXxuP8iRtCW8fNrVf6zLnPI97tqk2StxX4n7Ix6HEwqSIJ_Q/viewform"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 bg-white dark:bg-slate-900 border-2 border-primary text-primary font-bold px-6 py-3 rounded-full hover:bg-blue-50 text-sm md:text-base"
-          >
-            <Icon name="tabler:clipboard-list" class="w-5 h-5" /> フォーム
+          <a href={contactHref} class:list={[ctaHeroSecondaryClass, 'inline-flex']}>
+            <Icon name="tabler:mail" class="w-5 h-5" /> フォームで相談
           </a>
         </div>
       </div>
     </div>
   </section>
-
-  <CallToAction
-    id="contact"
-    actions={[
-      { variant: 'primary', text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
-      {
-        variant: 'line',
-        text: 'LINEで無料相談',
-        href: 'https://line.me/R/ti/p/%40512ysmzx',
-        icon: 'tabler:brand-line',
-      },
-    ]}
-  >
-    <Fragment slot="title">その他のご質問もお気軽に</Fragment>
-    <Fragment slot="subtitle"> 受付は平日・祝日9:00〜17:00。緊急往診は24時間365日対応です。 </Fragment>
-  </CallToAction>
 </Layout>

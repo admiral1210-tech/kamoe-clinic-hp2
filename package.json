@@ -17,6 +17,9 @@
     "check:astro": "astro check",
     "check:eslint": "eslint .",
     "check:prettier": "prettier --check .",
+    "check:inline-jp": "node scripts/lint-astro-inline-japanese.mjs --check-baseline",
+    "check:inline-jp:report": "node scripts/lint-astro-inline-japanese.mjs --warn",
+    "check:inline-jp:update": "node scripts/lint-astro-inline-japanese.mjs --update-baseline",
     "fix": "npm run fix:eslint && npm run fix:prettier",
     "fix:eslint": "eslint --fix .",
     "fix:prettier": "prettier -w ."

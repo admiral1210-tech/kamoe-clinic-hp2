@@ -4,10 +4,20 @@ export const formatter: Intl.DateTimeFormat = new Intl.DateTimeFormat(I18N?.lang
   year: 'numeric',
   month: 'short',
   day: 'numeric',
-  timeZone: 'UTC',
+  timeZone: 'Asia/Tokyo',
 });
 
 export const getFormattedDate = (date: Date): string => (date ? formatter.format(date) : '');
+
+/** ブログ一覧など「2024年4月1日」形式。表示は Asia/Tokyo（`formatter` と同一 TZ）。 */
+const blogListingFormatter = new Intl.DateTimeFormat('ja-JP', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'Asia/Tokyo',
+});
+
+export const formatBlogListingDate = (date: Date): string => (date ? blogListingFormatter.format(date) : '');
 
 export const trim = (str = '', ch?: string) => {
   let start = 0,

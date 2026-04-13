@@ -2,22 +2,40 @@
 import Layout from '~/layouts/Layout.astro';
 import { getHomePermalink } from '~/utils/permalinks';
 
-const title = `Error 404`;
+const title = 'ページが見つかりません（404）｜かもめクリニック';
+
+const links = [
+  { href: '/', label: 'トップページ' },
+  { href: '/houmon-shinryo', label: '訪問診療について' },
+  { href: '/cost', label: '費用・保険' },
+  { href: '/renkei', label: 'ご相談・お問い合わせ' },
+  { href: '/faq', label: 'よくあるご質問' },
+];
 ---
 
-<Layout metadata={{ title }}>
+<Layout metadata={{ title, robots: { index: false, follow: true } }}>
   <section class="flex items-center h-full p-16">
     <div class="container flex flex-col items-center justify-center px-5 mx-auto my-8">
-      <div class="max-w-md text-center">
-        <h2 class="mb-8 font-bold text-9xl">
-          <span class="sr-only">Error</span>
+      <div class="max-w-lg text-center">
+        <h1 class="mb-6 font-bold text-9xl">
+          <span class="sr-only">エラー</span>
           <span class="text-primary">404</span>
-        </h2>
-        <p class="text-3xl font-semibold md:text-3xl">Sorry, we couldn't find this page.</p>
-        <p class="mt-4 mb-8 text-lg text-muted dark:text-slate-400">
-          But dont worry, you can find plenty of other things on our homepage.
+        </h1>
+        <p class="text-2xl font-semibold md:text-3xl mb-3">お探しのページが見つかりません</p>
+        <p class="mt-2 mb-8 text-base text-muted dark:text-slate-400">
+          URLが変更または削除された可能性があります。<br />
+          以下のリンクからご希望のページをお探しください。
         </p>
-        <a rel="noopener noreferrer" href={getHomePermalink()} class="btn ml-4">Back to homepage</a>
+        <ul class="mb-8 space-y-2 text-left max-w-xs mx-auto">
+          {links.map(({ href, label }) => (
+            <li>
+              <a href={href} class="text-primary underline hover:opacity-80 text-sm font-medium">
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a href={getHomePermalink()} class="btn">トップページへ戻る</a>
       </div>
     </div>
   </section>

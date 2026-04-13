@@ -1,0 +1,56 @@
+---
+/**
+ * 診療系ランディング末尾の連絡導線（フローティングCTAと役割分担）
+ */
+import { Icon } from 'astro-icon/components';
+import { CLINIC_CONTACT } from '~/data/clinic-contact';
+import { ctaHeroPrimaryClass, ctaHeroSecondaryClass } from '~/constants/clinical-page-ui';
+import { getPermalink } from '~/utils/permalinks';
+
+export interface Props {
+  /** ページ内目次からのジャンプ用（例: contact） */
+  id?: string;
+}
+
+const { id: sectionId } = Astro.props;
+
+const contactHref = getPermalink('/renkei');
+const costHref = getPermalink('/cost');
+---
+
+<section
+  {...(sectionId ? { id: sectionId } : {})}
+  class:list={[
+    'relative py-14 md:py-16 not-prose border-t border-gray-200 dark:border-slate-700',
+    sectionId && 'scroll-mt-32',
+  ]}
+  aria-labelledby="clinical-closing-heading"
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+    <p class="text-xs font-semibold text-primary tracking-widest uppercase mb-1">ご相談・お問い合わせ</p>
+    <h2
+      id="clinical-closing-heading"
+      class="text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 mb-3"
+    >
+      お気軽にご連絡ください
+    </h2>
+    <p class="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+      訪問診療のご相談は、お電話・フォームから承っています。費用・保険については費用ページもあわせてご確認ください。
+    </p>
+    <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
+      <a href={CLINIC_CONTACT.telHref} class={ctaHeroPrimaryClass}>
+        <Icon name="tabler:phone" class="w-5 h-5 shrink-0" aria-hidden="true" />
+        {CLINIC_CONTACT.telDisplay}
+      </a>
+      <a href={contactHref} class={ctaHeroSecondaryClass}>
+        <Icon name="tabler:clipboard-list" class="w-5 h-5 shrink-0" aria-hidden="true" />
+        問い合わせフォーム
+      </a>
+      <a href={costHref} class={ctaHeroSecondaryClass}>費用・保険</a>
+    </div>
+    <p class="mt-8 text-xs text-gray-400 dark:text-gray-500 leading-relaxed">
+      ※本ページに記載の情報は一般的な医療知識の提供を目的としており、個別の症状に対する診断・治療を保証するものではありません。
+      具体的な診療については担当医師にご相談ください。
+    </p>
+  </div>
+</section>

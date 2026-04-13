@@ -1,20 +1,33 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
+import PageSectionHeading from '~/components/ui/PageSectionHeading.astro';
+import PageTocNav from '~/components/ui/PageTocNav.astro';
 import Features2 from '~/components/widgets/Features2.astro';
 import Steps from '~/components/widgets/Steps.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
+import RenkeiStaffStrip from '~/components/pages/renkei/RenkeiStaffStrip.astro';
+import RenkeiContactDetailSection from '~/components/pages/renkei/RenkeiContactDetailSection.astro';
 import { Icon } from 'astro-icon/components';
+import { twMerge } from 'tailwind-merge';
+import {
+  clinicalHeroSubtitleClass,
+  clinicalHeroTaglineClass,
+  clinicalHeroTitleClass,
+  clinicalSectionHeadline,
+} from '~/constants/clinical-page-ui';
+import { KAMOME_BRANCH_COUNT } from '~/data/branches';
+import { serializeJsonLdForScript } from '~/utils/json-ld-script';
+import { renkeiFaqEntries } from '~/data/faq-renkei';
+import { buildFaqPageJsonLd, faqEntriesToWidgetItems } from '~/utils/seo-faq';
 
 const metadata = {
-  title: '医療・介護関係者の方へ｜地域医療連携｜かもめクリニック（大阪市）',
-  description:
-    'ケアマネジャー・MSW・病院スタッフの方へ。かもめクリニックの地域医療連携部（06-4301-7883）が窓口を一括対応。精神科専門医3名常勤・在支診1認定・最短当日で訪問開始。大阪市内5院体制で広域対応します。',
+  title: 'ご家族・医療・介護関係者の方へ｜地域医療連携｜かもめクリニック（大阪市）',
+  description: `ケアマネジャー・MSW・病院スタッフの方へ。かもめクリニックの地域医療連携部（06-4301-7883）が窓口を一括対応。精神科専門医3名常勤・在支診1認定。状況により当日〜早期の訪問開始を目指します。大阪市内${KAMOME_BRANCH_COUNT}院体制で市内全域対応します。`,
   ignoreTitleTemplate: true,
   openGraph: {
     type: 'website',
-    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+    images: [{ url: 'https://kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
   },
 };
 
@@ -23,14 +36,14 @@ const jsonLdBreadcrumb = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
-    { '@type': 'ListItem', position: 2, name: '医療・介護関係者の方へ', item: 'https://kamome-clinic.net/renkei' },
+    { '@type': 'ListItem', position: 2, name: 'ご家族・医療・介護関係者の方へ', item: 'https://kamome-clinic.net/renkei' },
   ],
 };
 
 const strengths = [
   {
     icon: 'tabler:brain',
-    title: '精神科専門医3名常勤（大阪市内唯一）',
+    title: '精神科専門医3名常勤（精神保健指定医在籍）',
     description:
       'うつ病・統合失調症・双極性障害・認知症・依存症など精神疾患を抱える患者さまも専門医が対応。外来通院が困難なケースに強みがあります。',
   },
@@ -42,9 +55,8 @@ const strengths = [
   },
   {
     icon: 'tabler:map-pin',
-    title: '大阪市内5院・広域対応',
-    description:
-      '港区・西淀川区・住之江区ほか市内に5拠点。対応エリアの確認は地域医療連携部が一括で行います。エリア外でもまずご相談ください。',
+    title: `大阪市内${KAMOME_BRANCH_COUNT}院・市内全域対応`,
+    description: `港区・西淀川区・住之江区ほか市内に${KAMOME_BRANCH_COUNT}拠点。対応エリアの確認は地域医療連携部が一括で行います。エリア外でもまずご相談ください。`,
   },
   {
     icon: 'tabler:building-hospital',
@@ -75,123 +87,82 @@ const targets = [
   { icon: 'tabler:stethoscope', text: '緩和ケア・看取りを希望される方とそのご家族' },
 ];
 
-const faqs = [
-  {
-    title: '紹介状は必要ですか？',
-    description:
-      '紹介状がなくてもご相談いただけます。お電話またはFAX・フォームでご連絡いただければ、地域医療連携部が患者さまの状況を確認し、担当拠点・担当医を調整します。',
-  },
-  {
-    title: '訪問開始までどれくらいかかりますか？',
-    description:
-      'ご連絡後、最短当日の訪問開始を目指しています。患者さまの状態・エリアを確認次第、速やかにご連絡します。',
-  },
-  {
-    title: '精神科疾患の患者さまも受け入れ可能ですか？',
-    description:
-      'はい。精神科専門医3名が常勤しており、大阪市内の訪問診療クリニックとして唯一の体制です。通院困難な精神疾患の患者さまはぜひご相談ください。',
-  },
-  {
-    title: '施設に定期的に来てもらうことはできますか？',
-    description:
-      'はい。有料老人ホーム・グループホームなどに施設担当医として定期訪問することが可能です。施設スタッフとの連携を大切にしています。',
-  },
-  {
-    title: '急変時・夜間の対応はどうなっていますか？',
-    description:
-      '在支診1として24時間365日の緊急往診に対応しています。急変時は担当医への直接連絡体制があり、翌日を待たずに対応します。訪問開始時に緊急連絡先・対応手順を詳しくご説明します。',
-  },
-  {
-    title: '大阪市外のエリアも対応可能ですか？',
-    description:
-      '訪問診療・緊急往診の対象エリアは大阪市24区全域です。市外のご相談も地域医療連携部（06-4301-7883）が柔軟に対応しますので、まずはお問い合わせください。',
-  },
-  {
-    title: '医療ケア児の在宅移行支援は可能ですか？',
-    description:
-      '対応しています。小児科専門医・小児循環器専門医が在籍し、退院前からのご相談も可能です。NICU退院後の在宅移行支援実績もあります。',
-  },
-];
+const jsonLdFAQ = buildFaqPageJsonLd(renkeiFaqEntries);
+const renkeiFaqWidgetItems = faqEntriesToWidgetItems(renkeiFaqEntries);
 ---
 
 <Layout metadata={metadata}>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdFAQ)} />
   </Fragment>
 
   <!-- ===== Hero ===== -->
   <Hero
-    tagline="医療・介護関係者の方へ"
-    image={{
-      src: 'https://www.kamome-clinic.net/images/top/slider02.jpg',
-      alt: 'かもめクリニック 地域医療連携',
-    }}
+    tagline="ご家族・医療・介護関係者の方へ"
+    taglineClass={clinicalHeroTaglineClass}
+    titleClass={clinicalHeroTitleClass}
+    subtitleClass={twMerge(clinicalHeroSubtitleClass, 'mb-3 md:mb-4')}
+    imageContainerClass="max-w-7xl w-full"
+    textBlockPaddingClass="pb-4 md:pb-6"
   >
     <Fragment slot="title">
       安心して紹介できる<br />
-      <span class="text-accent dark:text-white highlight">在宅医療パートナー</span>
+      <span class="text-primary dark:text-blue-300">在宅医療パートナー</span>
     </Fragment>
     <Fragment slot="subtitle">
-      ケアマネジャー・MSW・病院スタッフの方からのご紹介・ご連絡をお待ちしています。<br class="hidden sm:inline" />
-      地域医療連携部が窓口を一括対応し、最短当日の訪問開始を目指します。
+      ご家族・ケアマネジャー・MSW・病院スタッフの方からのご紹介・ご連絡をお待ちしています。<br class="hidden sm:inline" />
+      地域医療連携部が窓口を一括対応し、状況に応じて早期の訪問開始を目指します。
+    </Fragment>
+    <Fragment slot="image">
+      <div class="relative left-1/2 w-screen max-w-[100vw] -ml-[50vw] mt-2 md:mt-3 pointer-events-auto">
+        <PageTocNav
+          heading="このページのセクション"
+          ariaLabel="医療・介護関係者向けページの目次"
+          items={[
+            { href: '#renkei-staff', label: '連携部スタッフ' },
+            { href: '#renkei-contact-detail', label: '連絡先詳細' },
+            { href: '#renkei-strengths', label: '在宅医療体制' },
+            { href: '#renkei-targets', label: '受け入れ対象' },
+            { href: '#renkei-flow', label: '紹介の流れ' },
+            { href: '#renkei-faq', label: 'FAQ' },
+          ]}
+        />
+      </div>
+      <div class="mt-4 md:mt-6 space-y-0 text-left overflow-x-clip">
+        <RenkeiStaffStrip />
+        <RenkeiContactDetailSection />
+      </div>
     </Fragment>
   </Hero>
 
-  <!-- ===== 連携窓口（目立つバナー） ===== -->
-  <section class="py-10 bg-primary dark:bg-slate-800">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
-        <div class="text-white text-center sm:text-left">
-          <p class="text-sm font-semibold opacity-80 mb-1">医療・介護関係者専用窓口</p>
-          <p class="text-2xl md:text-3xl font-black mb-1">地域医療連携部</p>
-          <p class="text-sm opacity-80">平日・祝日 9:00〜17:00 ／ FAX・フォームは随時受付</p>
-        </div>
-        <div class="flex flex-col sm:flex-row gap-3 shrink-0">
-          <a
-            href="tel:0643017883"
-            class="inline-flex items-center gap-2 bg-white text-primary font-black px-6 py-3 rounded-full text-lg hover:opacity-90 transition-opacity"
-          >
-            <Icon name="tabler:phone" class="w-5 h-5" />
-            06-4301-7883
-          </a>
-          <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSdXxuP8iRtCW8fNrVf6zLnPI97tqk2StxX4n7Ix6HEwqSIJ_Q/viewform"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 bg-white/20 text-white font-bold px-6 py-3 rounded-full hover:bg-white/30 transition-colors"
-          >
-            <Icon name="tabler:clipboard-list" class="w-5 h-5" />
-            フォームで相談
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ===== かもめクリニックの強み ===== -->
   <Features2
+    id="renkei-strengths"
     tagline="連携のポイント"
-    title="紹介先として選ばれる6つの理由"
+    title="かもめクリニックの在宅医療体制"
     subtitle="精神科・小児科・看取りまで対応する在宅医療グループです。難しいケースもまずはご相談ください。"
+    classes={{ headline: { ...clinicalSectionHeadline }, container: 'max-w-7xl mx-auto' }}
     items={strengths}
     columns={3}
   />
 
   <!-- ===== 受け入れ対象 ===== -->
-  <section class="py-14 bg-blue-50 dark:bg-slate-800 border-y border-blue-100 dark:border-slate-700">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-8">
-        <p class="text-sm font-semibold text-primary uppercase tracking-widest mb-1">Targets</p>
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white">受け入れ可能な患者さまの例</h2>
-        <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
-          他院・他事業所で断られたケースもお気軽にご相談ください。
-        </p>
-      </div>
+  <section
+    id="renkei-targets"
+    class="py-14 bg-blue-50 dark:bg-slate-800 border-y border-blue-100 dark:border-slate-700 scroll-mt-32"
+  >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <PageSectionHeading
+        tagline="対象"
+        title="受け入れ可能な患者さまの例"
+        subtitle="複数疾患をお持ちの方・難しい状態の方も、まずはお気軽にご相談ください。"
+      />
       <div class="grid sm:grid-cols-2 gap-3">
         {
           targets.map(({ icon, text }) => (
             <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 px-5 py-4 flex items-center gap-3">
-              <Icon name={icon} class="w-6 h-6 text-primary shrink-0" />
+              <Icon name={icon} class="w-6 h-6 text-primary shrink-0" aria-hidden="true" />
               <p class="text-gray-800 dark:text-gray-200 text-sm font-medium">{text}</p>
             </div>
           ))
@@ -202,8 +173,10 @@ const faqs = [
 
   <!-- ===== 紹介の流れ ===== -->
   <Steps
+    id="renkei-flow"
+    scrollMarginClass="scroll-mt-32"
     tagline="ご紹介の流れ"
-    title="最短当日で訪問開始できます"
+    title="スムーズな訪問開始に向けた紹介の流れ"
     items={[
       {
         title: 'STEP 1　地域医療連携部へご連絡',
@@ -213,8 +186,7 @@ const faqs = [
       },
       {
         title: 'STEP 2　担当エリア・拠点の確認',
-        description:
-          '患者さまのご住所・状態を確認し、5院のうち最適な拠点と担当医を決定します。対応可否を速やかにご連絡します。',
+        description: `患者さまのご住所・状態を確認し、${KAMOME_BRANCH_COUNT}院のうち最適な拠点と担当医を決定します。対応可否を速やかにご連絡します。`,
         icon: 'tabler:map-search',
       },
       {
@@ -230,161 +202,24 @@ const faqs = [
         icon: 'tabler:home-heart',
       },
     ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80',
-      alt: '訪問診療のご紹介の流れ',
+    classes={{
+      container: 'max-w-7xl mx-auto',
+      headline: {
+        ...clinicalSectionHeadline,
+        container: twMerge(clinicalSectionHeadline.container, 'text-left rtl:text-right md:mx-0'),
+      },
     }}
   />
 
   <!-- ===== よくある質問 ===== -->
-  <FAQs title="よくある質問（医療・介護関係者の方へ）" tagline="FAQ" items={faqs} columns={1} />
+  <FAQs
+    id="renkei-faq"
+    scrollMarginClass="scroll-mt-32"
+    title="よくある質問（ご家族・医療・介護関係者の方へ）"
+    tagline="FAQ"
+    classes={{ container: 'max-w-7xl', headline: { ...clinicalSectionHeadline } }}
+    items={renkeiFaqWidgetItems}
+    columns={1}
+  />
 
-  <!-- ===== 地域医療連携部 連絡先 ===== -->
-  <section class="py-14 bg-blue-50 dark:bg-slate-800 border-t border-blue-100 dark:border-slate-700">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-8">
-        <p class="text-sm font-semibold text-primary uppercase tracking-widest mb-1">Contact</p>
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">地域医療連携部 連絡先・担当スタッフ</h2>
-        <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
-          すべてのエリアを一括して承ります。新規のご相談やご不明な点はお気軽にご連絡ください。
-        </p>
-      </div>
-
-      <!-- 相談書フォーム（メインCTA） -->
-      <a
-        href="https://docs.google.com/forms/d/e/1FAIpQLSdXxuP8iRtCW8fNrVf6zLnPI97tqk2StxX4n7Ix6HEwqSIJ_Q/viewform"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-primary dark:bg-blue-700 hover:opacity-95 transition-opacity rounded-2xl px-8 py-6 mb-6 group"
-      >
-        <div class="flex items-center gap-4 text-white">
-          <Icon name="tabler:clipboard-list" class="w-10 h-10 shrink-0" />
-          <div>
-            <p class="text-xs font-semibold opacity-80 mb-0.5">オンライン相談書（Googleフォーム）</p>
-            <p class="text-xl font-black leading-tight">かもめクリニック 訪問診療相談書</p>
-            <p class="text-sm opacity-80 mt-1">患者さまの基本情報・状態・ご要望を記入して送信できます。24時間受付。</p>
-          </div>
-        </div>
-        <div class="shrink-0">
-          <span
-            class="inline-flex items-center gap-2 bg-white text-primary font-bold px-6 py-3 rounded-full text-sm group-hover:shadow-md transition-shadow"
-          >
-            <Icon name="tabler:external-link" class="w-4 h-4" />
-            フォームを開く
-          </span>
-        </div>
-      </a>
-
-      <!-- 連絡先カード -->
-      <div class="grid sm:grid-cols-3 gap-4 mb-8">
-        <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 p-6 text-center">
-          <Icon name="tabler:phone" class="w-8 h-8 text-primary mx-auto mb-3" />
-          <p class="font-bold text-gray-900 dark:text-white mb-1">地域医療連携部（専用）</p>
-          <a href="tel:0643017883" class="text-2xl font-black text-primary hover:underline block">06-4301-7883</a>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">平日・祝日 9:00〜17:00</p>
-        </div>
-        <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 p-6 text-center">
-          <Icon name="tabler:phone" class="w-8 h-8 text-gray-400 mx-auto mb-3" />
-          <p class="font-bold text-gray-900 dark:text-white mb-1">一般受付</p>
-          <a href="tel:0643017871" class="text-2xl font-black text-gray-700 dark:text-gray-300 hover:underline block"
-            >06-4301-7871</a
-          >
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">平日・祝日 9:00〜17:00</p>
-        </div>
-        <div class="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-700 p-6 text-center">
-          <Icon name="tabler:clipboard-list" class="w-8 h-8 text-primary mx-auto mb-3" />
-          <p class="font-bold text-gray-900 dark:text-white mb-1">オンラインフォーム</p>
-          <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSdXxuP8iRtCW8fNrVf6zLnPI97tqk2StxX4n7Ix6HEwqSIJ_Q/viewform"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-sm font-bold text-primary hover:underline block mt-2">フォームを開く →</a
-          >
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">24時間受付</p>
-        </div>
-      </div>
-
-      <!-- 担当スタッフ -->
-      <div>
-        <div class="flex items-center gap-2 mb-5">
-          <Icon name="tabler:users" class="w-5 h-5 text-primary" />
-          <h3 class="font-bold text-gray-900 dark:text-white">担当スタッフ</h3>
-        </div>
-        <div class="grid sm:grid-cols-3 gap-5">
-          <!-- スタッフカード：今井 淳也 -->
-          <div
-            class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 flex flex-col items-center text-center gap-3"
-          >
-            <!-- 顔写真プレースホルダー -->
-            <div
-              class="w-24 h-24 rounded-full bg-gray-100 dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-600 flex items-center justify-center overflow-hidden shrink-0"
-            >
-              <Icon name="tabler:user" class="w-12 h-12 text-gray-400 dark:text-slate-500" />
-            </div>
-            <div>
-              <p class="font-bold text-lg text-gray-900 dark:text-white leading-tight">今井 淳也</p>
-              <p class="text-xs text-primary font-semibold mt-0.5">医療経営士</p>
-            </div>
-            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">（コメントを準備中です）</p>
-          </div>
-
-          <!-- スタッフカード：藤原 淳子 -->
-          <div
-            class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 flex flex-col items-center text-center gap-3"
-          >
-            <div
-              class="w-24 h-24 rounded-full bg-gray-100 dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-600 flex items-center justify-center overflow-hidden shrink-0"
-            >
-              <Icon name="tabler:user" class="w-12 h-12 text-gray-400 dark:text-slate-500" />
-            </div>
-            <div>
-              <p class="font-bold text-lg text-gray-900 dark:text-white leading-tight">藤原 淳子</p>
-              <p class="text-xs text-primary font-semibold mt-0.5">精神保健福祉士</p>
-            </div>
-            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">（コメントを準備中です）</p>
-          </div>
-
-          <!-- スタッフカード：武富 涼馬 -->
-          <div
-            class="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 flex flex-col items-center text-center gap-3"
-          >
-            <div
-              class="w-24 h-24 rounded-full bg-gray-100 dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-600 flex items-center justify-center overflow-hidden shrink-0"
-            >
-              <Icon name="tabler:user" class="w-12 h-12 text-gray-400 dark:text-slate-500" />
-            </div>
-            <div>
-              <p class="font-bold text-lg text-gray-900 dark:text-white leading-tight">武富 涼馬</p>
-              <p class="text-xs text-primary font-semibold mt-0.5">連携担当</p>
-            </div>
-            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">（コメントを準備中です）</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== CTA ===== -->
-  <CallToAction
-    actions={[
-      {
-        variant: 'primary',
-        text: '地域医療連携部に電話する（06-4301-7883）',
-        href: 'tel:0643017883',
-        icon: 'tabler:phone',
-      },
-      {
-        variant: 'secondary',
-        text: 'フォームでお問い合わせ',
-        href: 'https://docs.google.com/forms/d/e/1FAIpQLSdXxuP8iRtCW8fNrVf6zLnPI97tqk2StxX4n7Ix6HEwqSIJ_Q/viewform',
-        icon: 'tabler:clipboard-list',
-      },
-    ]}
-  >
-    <Fragment slot="title">まずはお気軽にご相談ください</Fragment>
-    <Fragment slot="subtitle">
-      「このケース、在宅で診てもらえる？」という段階のご相談も大歓迎です。<br />
-      地域医療連携部（06-4301-7883）が丁寧にお答えします。
-    </Fragment>
-  </CallToAction>
 </Layout>

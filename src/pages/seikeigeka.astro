@@ -1,25 +1,42 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
+import PageTocNav from '~/components/ui/PageTocNav.astro';
+import PageSectionHeading from '~/components/ui/PageSectionHeading.astro';
 import Features from '~/components/widgets/Features.astro';
 import Features2 from '~/components/widgets/Features2.astro';
 import Content from '~/components/widgets/Content.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
+import ClinicalPageClosing from '~/components/widgets/ClinicalPageClosing.astro';
 import { Icon } from 'astro-icon/components';
+import { twMerge } from 'tailwind-merge';
+import {
+  clinicalAnchorScrollMargin,
+  clinicalHeroSubtitleClass,
+  clinicalHeroTaglineClass,
+  clinicalHeroTitleClass,
+  clinicalSectionHeadline,
+  ctaHeroPrimaryClass,
+  ctaHeroSecondaryClass,
+} from '~/constants/clinical-page-ui';
+import { CLINIC_CONTACT } from '~/data/clinic-contact';
+import { seikeigekaMedicalConditionsJsonLd } from '~/data/medical-conditions-seikeigeka';
+import { seikeigekaFaqEntries } from '~/data/faq-seikeigeka';
+import { getPermalink } from '~/utils/permalinks';
+import { buildFaqPageJsonLd, faqEntriesToWidgetItems } from '~/utils/seo-faq';
+import { serializeJsonLdForScript } from '~/utils/json-ld-script';
 
 const metadata = {
   title: '整形外科の訪問診療｜関節注射・骨粗しょう症・身体障害者手帳｜大阪市｜かもめクリニック',
   description:
-    '大阪市かもめクリニックの整形外科訪問診療。関節注射（膝・肩・ヒアルロン酸・ステロイド）・骨粗しょう症管理・骨折後フォロー・リハビリ指示書・補装具処方・転倒予防指導。身体障害者手帳（肢体不自由）の診断書発行も対応。',
+    '整形外科の訪問診療（大阪市）。かもめクリニックがご自宅・施設へ。関節注射（膝・肩・ヒアルロン酸・ステロイド）・骨粗しょう症管理・骨折後フォロー・リハビリ指示書・補装具・転倒予防。身体障害者手帳（肢体不自由）の診断書も。',
   ignoreTitleTemplate: true,
   openGraph: {
     type: 'website',
-    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+    images: [{ url: 'https://kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
   },
 };
 
-// JSON-LD: BreadcrumbList
 const jsonLdBreadcrumb = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -29,130 +46,156 @@ const jsonLdBreadcrumb = {
   ],
 };
 
-// JSON-LD: FAQPage
-const jsonLdFAQ = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: '整形外科の訪問診療で関節注射は受けられますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'はい。かもめクリニックではご自宅・施設への訪問時に膝・肩・手指などの関節へのヒアルロン酸注射・ステロイド注射を行っています。通院が困難な方も定期的な関節注射を継続できます。まずはお電話（06-4301-7871）またはLINEでご相談ください。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '身体障害者手帳（肢体不自由）の診断書は整形外科で書いてもらえますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'はい。当院は身体障害者手帳（肢体不自由）の診断書を作成できる指定医が在籍しています。訪問診療の中で診察し、診断書を作成します。手帳取得により医療費助成・福祉サービス・税の減免などが受けられます。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '骨粗しょう症の注射治療は訪問診療で受けられますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'はい。デノスマブ（プラリア）・テリパラチドなどの骨粗しょう症治療薬の注射を訪問診療で継続できます。骨折後の再骨折予防や、通院が困難な方の骨密度管理に対応しています。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '骨折・手術後に退院してから訪問診療を頼めますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'はい。大腿骨頸部骨折・脊椎圧迫骨折・人工関節置換術などの術後、退院してご自宅に戻られた方を継続フォローします。再骨折予防・服薬管理・次の受診判断・リハビリ指示まで一括して対応します。入院中からの事前相談も可能です。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '訪問リハビリを使いたいのですが、指示書を書いてもらえますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'はい。訪問リハビリ（理学療法士・作業療法士・言語聴覚士）の利用には医師の指示書が必要です。整形外科の知識をもとに、病態・目標・注意事項を明記した精度の高い指示書を作成します。ケアマネジャーや訪問リハビリ事業所との連携も積極的に行います。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '転倒が心配です。訪問診療でどのようなサポートができますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: '訪問時に転倒リスクを評価し、原因となる薬の調整・筋力・バランス能力の評価・住環境改善の提言（手すり・段差解消・照明）・歩行補助具の選択指導などを行います。整形外科的な視点から在宅での安全な生活を守ります。',
-      },
-    },
-  ],
-};
+const jsonLdFAQ = buildFaqPageJsonLd(seikeigekaFaqEntries);
+const seikeigekaFaqWidgetItems = faqEntriesToWidgetItems(seikeigekaFaqEntries);
+const jsonLdConditions = seikeigekaMedicalConditionsJsonLd();
 
-// JSON-LD: MedicalCondition
-const jsonLdConditions = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'MedicalCondition',
-    name: '変形性膝関節症',
-    relevantSpecialty: 'https://schema.org/Orthopedic',
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'MedicalCondition',
-    name: '骨粗しょう症',
-    alternateName: '大腿骨頸部骨折・脊椎圧迫骨折',
-    relevantSpecialty: 'https://schema.org/Orthopedic',
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'MedicalCondition',
-    name: '腰部脊柱管狭窄症',
-    relevantSpecialty: 'https://schema.org/Orthopedic',
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'MedicalCondition',
-    name: '変形性股関節症',
-    relevantSpecialty: 'https://schema.org/Orthopedic',
-  },
-];
-
-// JSON-LD: Speakable
+/** Speakable はファーストビューの主見出しのみ（セクション h2 の列挙によるノイズを避ける） */
 const jsonLdSpeakable = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
   '@id': 'https://kamome-clinic.net/seikeigeka',
   name: '整形外科の訪問診療｜大阪市｜かもめクリニック',
-  speakable: { '@type': 'SpeakableSpecification', cssSelector: ['h1', 'h2'] },
+  speakable: { '@type': 'SpeakableSpecification', cssSelector: ['h1'] },
   url: 'https://kamome-clinic.net/seikeigeka',
 };
+
+const heroActions = [
+  { variant: 'primary' as const, href: CLINIC_CONTACT.telHref, text: '電話する', icon: 'tabler:phone' },
+  {
+    variant: 'secondary' as const,
+    href: getPermalink('/renkei'),
+    text: '問い合わせ',
+    icon: 'tabler:clipboard-list',
+  },
+];
+
+const contactHref = getPermalink('/renkei');
+
+const diseaseItems = [
+  {
+    title: '変形性膝関節症',
+    descriptionSummary: '膝の痛みや腫れを、ご自宅で注射・薬・装具指導まで継続できます。',
+    description:
+      '膝の軟骨がすり減り、痛みや腫れが生じる疾患。定期的なヒアルロン酸注射・鎮痛薬の調整・装具指導をご自宅で継続できます。通院が困難な方でも訪問診療で治療を継続しやすくなります。',
+    icon: 'tabler:run',
+  },
+  {
+    title: '変形性股関節症・変形性腰椎症',
+    descriptionSummary: '股関節・腰の慢性の痛みを、在宅で薬とリハ指示などまとめて管理します。',
+    description:
+      '股関節・腰椎の変形による慢性疼痛。薬物療法の継続管理・日常生活動作のアドバイス・リハビリ指示書の発行により、自宅での生活の質を維持します。',
+    icon: 'tabler:body-scan',
+  },
+  {
+    title: '骨粗しょう症・圧迫骨折・大腿骨頸部骨折',
+    descriptionSummary: '骨がもろくなる病気とその骨折。在宅でも薬・注射で骨密度管理に取り組みます。',
+    description:
+      '骨密度の低下による骨折は在宅患者に非常に多い疾患です。骨粗しょう症治療薬の内服・注射（デノスマブ・テリパラチド等）による骨密度管理と、再骨折リスク低減を目標とした継続的な治療管理を行います。',
+    icon: 'tabler:bone',
+  },
+  {
+    title: '腰部脊柱管狭窄症・腰椎椎間板ヘルニア',
+    descriptionSummary: '腰・足のしびれや痛み。通院が難しくても、薬の調整を訪問で続けられます。',
+    description:
+      '間欠性跛行・下肢しびれ・腰痛など。通院が困難な方を対象に、薬物療法（鎮痛薬・神経障害性疼痛薬）の継続調整を訪問で行い、歩行能力の維持をサポートします。',
+    icon: 'tabler:activity',
+  },
+  {
+    title: '人工関節置換術後（膝・股関節）',
+    descriptionSummary: '手術後の痛み・リハ・感染の兆候などを、自宅でフォローします。',
+    description:
+      '疼痛管理・リハビリ進捗の確認・感染徴候の早期発見・次の受診タイミングの判断をご自宅で行います。術後も安心して在宅生活を続けられるよう支えます。',
+    icon: 'tabler:heart-handshake',
+  },
+  {
+    title: '肢体不自由（脳卒中後遺症・外傷後遺症）',
+    descriptionSummary: '手帳の診断書、訪問リハの指示、装具の処方などを訪問の流れで対応します。',
+    description:
+      '脳卒中後の麻痺・骨折後の機能障害など肢体に不自由のある方。身体障害者手帳の取得に必要な診断書発行から、訪問リハビリの指示・補装具の処方まで対応します。',
+    icon: 'tabler:accessible',
+  },
+];
+
+const servicesItems = [
+  {
+    title: '関節注射（ヒアルロン酸・ステロイド）',
+    descriptionSummary: '膝・肩・手指などの注射を自宅・施設で。痛みのコントロールを途切れさせません。',
+    description:
+      '膝・肩・手指・足首などへの関節注射をご自宅で実施。痛みのコントロールを切らさず継続できます。注射の頻度・種類は状態に合わせて調整します。',
+    icon: 'tabler:needle',
+  },
+  {
+    title: '骨粗しょう症の薬物治療・注射管理',
+    descriptionSummary: 'ビスホスホネート・デノスマブ・テリパラチドなど、訪問で継続管理します。',
+    description:
+      'ビスホスホネート内服・デノスマブ（6か月ごと皮下注射）・テリパラチドなど、骨粗しょう症治療薬の継続管理を訪問で行います。骨折予防に直結する重要な治療です。',
+    icon: 'tabler:bone',
+  },
+  {
+    title: '骨折後・術後の在宅フォロー',
+    descriptionSummary: '退院後の痛み・創部・服薬・次の受診のタイミングまで、在宅で支えます。',
+    description:
+      '退院後の疼痛管理・創部確認・服薬調整・次の受診タイミングの判断まで担います。再骨折リスク低減を目的とした生活指導も行い、ご家族の不安もともに考えます。',
+    icon: 'tabler:home-heart',
+  },
+  {
+    title: 'リハビリ指示書の作成',
+    descriptionSummary: '訪問PT・OT・STに必要な指示書を、病態に合わせて詳しく書きます。',
+    description:
+      '訪問リハビリ（PT・OT・ST）を利用するには医師の指示書が必要です。整形外科の専門知識をもとに、リハビリの目標・方法・禁忌事項を詳細に記載します。',
+    icon: 'tabler:clipboard-list',
+  },
+  {
+    title: '補装具・介護用品の処方・意見書作成',
+    descriptionSummary: '装具・車いす・杖などの処方と意見書で、福祉申請の書類もサポートします。',
+    description:
+      '短下肢装具・車椅子・コルセット・歩行補助具などの処方・意見書を作成。区役所の福祉用具申請をスムーズに進められるよう書類面でサポートします。',
+    icon: 'tabler:wheelchair',
+  },
+  {
+    title: '転倒リスク評価と予防指導',
+    descriptionSummary: '薬・筋力・住環境・補助具まで、転びにくい工夫をまとめて提案します。',
+    description:
+      '転倒リスクの高い薬（降圧薬・睡眠薬など）の見直し、筋力・バランス評価、住環境改善の提言（手すり・段差・照明）、歩行器・杖の選択指導を行います。',
+    icon: 'tabler:shield-check',
+  },
+  {
+    title: '腰痛・神経障害性疼痛の薬物管理',
+    descriptionSummary: '狭窄症・ヘルニアなどによる痛み・しびれに、飲み薬を訪問で調整します。',
+    description:
+      '脊柱管狭窄症・椎間板ヘルニアによる下肢しびれ・疼痛に対し、プレガバリン・デュロキセチン・NSAIDsなどを継続処方・調整。QOLの維持をサポートします。',
+    icon: 'tabler:pill',
+  },
+  {
+    title: '身体障害者手帳（肢体不自由）の診断書発行',
+    descriptionSummary: '指定医が訪問の診察で診断書を作成。手続きの案内も行います。',
+    description:
+      '指定医が訪問診察の中で診断書を作成。手帳取得により医療費助成（マル障）・福祉サービス・税の減免が受けられます。申請手続きのご案内も行います。',
+    icon: 'tabler:file-certificate',
+  },
+];
 ---
 
 <Layout metadata={metadata}>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdFAQ)} />
-    {jsonLdConditions.map((c) => <script type="application/ld+json" set:html={JSON.stringify(c)} />)}
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdSpeakable)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdBreadcrumb)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdFAQ)} />
+    {jsonLdConditions.map((c) => <script type="application/ld+json" set:html={serializeJsonLdForScript(c)} />)}
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdSpeakable)} />
   </Fragment>
 
   <!-- ===== Hero ===== -->
   <Hero
     tagline="整形外科 訪問診療｜大阪市"
-    actions={[
-      { variant: 'primary', text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
-      {
-        variant: 'line',
-        text: 'LINEで無料相談',
-        href: 'https://line.me/R/ti/p/%40512ysmzx',
-        icon: 'tabler:brand-line',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1530497610245-94d3c16cda28?auto=format&fit=crop&w=2070&q=80',
-      alt: '整形外科訪問診療のイメージ',
-    }}
+    taglineClass={clinicalHeroTaglineClass}
+    titleClass={clinicalHeroTitleClass}
+    subtitleClass={clinicalHeroSubtitleClass}
+    actions={heroActions}
   >
     <Fragment slot="title">
       膝・腰・骨折のお悩みを<br />
-      <span class="text-accent dark:text-white highlight">ご自宅で</span>診ます
+      <span class="text-primary dark:text-blue-300">ご自宅で</span>診ます
     </Fragment>
     <Fragment slot="subtitle">
       <strong>関節注射・骨粗しょう症治療・骨折後フォロー</strong>をご自宅・施設で行います。<br
@@ -163,16 +206,25 @@ const jsonLdSpeakable = {
     </Fragment>
   </Hero>
 
+  <PageTocNav
+    ariaLabel="このページの主な内容"
+    items={[
+      { href: '#taisho', label: '対象' },
+      { href: '#diseases', label: '対応疾患' },
+      { href: '#services', label: 'できること' },
+      { href: '#fracture-prevention', label: '骨折予防' },
+      { href: '#faq', label: 'よくある質問' },
+    ]}
+  />
+
   <!-- ===== こんな方が対象です ===== -->
-  <section class="py-14 bg-white dark:bg-slate-900">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-8">
-        <p class="text-sm font-semibold text-primary uppercase tracking-widest mb-1">Target</p>
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white">こんな方にご利用いただいています</h2>
-        <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
-          「整形外科には通えないけれど、治療は続けたい」というご希望にお応えします。
-        </p>
-      </div>
+  <section id="taisho" class="scroll-mt-32 py-14 bg-white dark:bg-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <PageSectionHeading
+        tagline="対象"
+        title="こんな方にご利用いただいています"
+        subtitle="「整形外科には通えないけれど、治療は続けたい」というご希望にお応えします。"
+      />
       <div class="grid sm:grid-cols-2 gap-3">
         {
           [
@@ -183,9 +235,9 @@ const jsonLdSpeakable = {
             { icon: 'tabler:accessible', text: '肢体不自由で身体障害者手帳の取得を考えている方' },
             { icon: 'tabler:walk', text: '転倒が怖い・転倒後にリハビリをしたい方' },
           ].map(({ icon, text }) => (
-            <div class="bg-orange-50 dark:bg-slate-800 rounded-xl border border-orange-100 dark:border-slate-700 px-5 py-4 flex items-center gap-3">
-              <Icon name={icon} class="w-6 h-6 text-orange-500 shrink-0" />
-              <p class="text-gray-800 dark:text-gray-200 text-sm font-medium">{text}</p>
+            <div class="bg-gray-50 dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 px-5 py-4 flex items-center gap-3">
+              <Icon name={icon} class="w-6 h-6 text-primary shrink-0" />
+              <p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-snug">{text}</p>
             </div>
           ))
         }
@@ -196,112 +248,68 @@ const jsonLdSpeakable = {
   <!-- ===== 対応疾患 ===== -->
   <Features
     id="diseases"
+    scrollMarginClass={clinicalAnchorScrollMargin}
     tagline="対応疾患"
     title="整形外科訪問診療で対応できる主な疾患"
     subtitle="慢性疾患の継続管理から骨折後の在宅フォローまで、整形外科専門医が訪問します。"
-    items={[
-      {
-        title: '変形性膝関節症',
-        description:
-          '膝の軟骨がすり減り、痛みや腫れが生じる疾患。定期的なヒアルロン酸注射・鎮痛薬の調整・装具指導をご自宅で継続できます。通院の負担なく治療を続けられます。',
-        icon: 'tabler:run',
-      },
-      {
-        title: '変形性股関節症・変形性腰椎症',
-        description:
-          '股関節・腰椎の変形による慢性疼痛。薬物療法の継続管理・日常生活動作のアドバイス・リハビリ指示書の発行により、自宅での生活の質を維持します。',
-        icon: 'tabler:body-scan',
-      },
-      {
-        title: '骨粗しょう症・圧迫骨折・大腿骨頸部骨折',
-        description:
-          '骨密度の低下による骨折は在宅患者に非常に多い疾患です。骨粗しょう症治療薬の内服・注射（デノスマブ・テリパラチド等）管理、再骨折予防まで一貫して対応します。',
-        icon: 'tabler:bone',
-      },
-      {
-        title: '腰部脊柱管狭窄症・腰椎椎間板ヘルニア',
-        description:
-          '間欠性跛行・下肢しびれ・腰痛など。通院が困難な方を対象に、薬物療法（鎮痛薬・神経障害性疼痛薬）の継続調整を訪問で行い、歩行能力の維持をサポートします。',
-        icon: 'tabler:activity',
-      },
-      {
-        title: '人工関節置換術後（膝・股関節）',
-        description:
-          '疼痛管理・リハビリ進捗の確認・感染徴候の早期発見・次の受診タイミングの判断をご自宅で行います。術後も安心して在宅生活を続けられるよう支えます。',
-        icon: 'tabler:heart-handshake',
-      },
-      {
-        title: '肢体不自由（脳卒中後遺症・外傷後遺症）',
-        description:
-          '脳卒中後の麻痺・骨折後の機能障害など肢体に不自由のある方。身体障害者手帳の取得に必要な診断書発行から、訪問リハビリの指示・補装具の処方まで対応します。',
-        icon: 'tabler:accessible',
-      },
-    ]}
+    classes={{ headline: { ...clinicalSectionHeadline } }}
+    items={diseaseItems}
   />
+
+  <!-- ===== 中盤 CTA ===== -->
+  <section
+    class="py-12 bg-primary/[0.06] dark:bg-slate-800/80 border-y border-primary/10 dark:border-slate-600 not-prose"
+    aria-labelledby="seikeigeka-mid-cta-heading"
+  >
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+      <h2
+        id="seikeigeka-mid-cta-heading"
+        class="text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2"
+      >
+        ご相談はお電話・フォームから
+      </h2>
+      <p class="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+        関節注射や骨粗しょう症、手帳の診断書など、まずはお気軽にお問い合わせください。
+      </p>
+      <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
+        <a href={CLINIC_CONTACT.telHref} class={ctaHeroPrimaryClass}>
+          <Icon name="tabler:phone" class="w-5 h-5 shrink-0" aria-hidden="true" />
+          {CLINIC_CONTACT.telDisplay}
+        </a>
+        <a href={contactHref} class={ctaHeroSecondaryClass}>
+          <Icon name="tabler:clipboard-list" class="w-5 h-5 shrink-0" aria-hidden="true" />
+          問い合わせフォーム
+        </a>
+      </div>
+    </div>
+  </section>
 
   <!-- ===== 訪問整形外科でできること ===== -->
   <Features2
+    id="services"
+    scrollMarginClass={clinicalAnchorScrollMargin}
     tagline="できること"
     title="訪問整形外科だからできる8つのこと"
-    subtitle="通院整形外科では難しい「継続性」と「生活環境に即した対応」がかもめクリニックの強みです。"
+    subtitle="訪問整形外科では「継続性」と「生活環境に即した対応」に取り組んでいます。"
+    classes={{ headline: { ...clinicalSectionHeadline }, container: 'max-w-7xl mx-auto' }}
     columns={2}
-    items={[
-      {
-        title: '① 関節注射（ヒアルロン酸・ステロイド）',
-        description:
-          '膝・肩・手指・足首などへの関節注射をご自宅で実施。痛みのコントロールを切らさず継続できます。注射の頻度・種類は状態に合わせて調整します。',
-        icon: 'tabler:needle',
-      },
-      {
-        title: '② 骨粗しょう症の薬物治療・注射管理',
-        description:
-          'ビスホスホネート内服・デノスマブ（6か月ごと皮下注射）・テリパラチドなど、骨粗しょう症治療薬の継続管理を訪問で行います。骨折予防に直結する重要な治療です。',
-        icon: 'tabler:bone',
-      },
-      {
-        title: '③ 骨折後・術後の在宅フォロー',
-        description:
-          '退院後の疼痛管理・創部確認・服薬調整・次の受診タイミングの判断まで担います。再骨折予防の生活指導も行い、ご家族の不安も軽減します。',
-        icon: 'tabler:home-heart',
-      },
-      {
-        title: '④ リハビリ指示書の作成',
-        description:
-          '訪問リハビリ（PT・OT・ST）を利用するには医師の指示書が必要です。整形外科の専門知識をもとに、リハビリの目標・方法・禁忌事項を詳細に記載します。',
-        icon: 'tabler:clipboard-list',
-      },
-      {
-        title: '⑤ 補装具・介護用品の処方・意見書作成',
-        description:
-          '短下肢装具・車椅子・コルセット・歩行補助具などの処方・意見書を作成。区役所の福祉用具申請をスムーズに進められるよう書類面でサポートします。',
-        icon: 'tabler:wheelchair',
-      },
-      {
-        title: '⑥ 転倒リスク評価と予防指導',
-        description:
-          '転倒リスクの高い薬（降圧薬・睡眠薬など）の見直し、筋力・バランス評価、住環境改善の提言（手すり・段差・照明）、歩行器・杖の選択指導を行います。',
-        icon: 'tabler:shield-check',
-      },
-      {
-        title: '⑦ 腰痛・神経障害性疼痛の薬物管理',
-        description:
-          '脊柱管狭窄症・椎間板ヘルニアによる下肢しびれ・疼痛に対し、プレガバリン・デュロキセチン・NSAIDsなどを継続処方・調整。QOLの維持をサポートします。',
-        icon: 'tabler:pill',
-      },
-      {
-        title: '⑧ 身体障害者手帳（肢体不自由）の診断書発行',
-        description:
-          '指定医が訪問診察の中で診断書を作成。手帳取得により医療費助成（マル障）・福祉サービス・税の減免が受けられます。申請手続きのご案内も行います。',
-        icon: 'tabler:file-certificate',
-      },
-    ]}
+    numberedTitles={true}
+    items={servicesItems}
   />
 
   <!-- ===== 骨粗しょう症・骨折予防 ===== -->
   <Content
+    id="fracture-prevention"
+    scrollMarginClass={clinicalAnchorScrollMargin}
     tagline="骨折予防"
     title="骨粗しょう症治療と骨折予防こそ、訪問整形外科の使命"
     isReversed
+    classes={{
+      headline: {
+        ...clinicalSectionHeadline,
+        container: twMerge('max-w-xl sm:mx-auto lg:max-w-2xl text-left sm:text-center', clinicalSectionHeadline.container),
+      },
+    }}
     items={[
       {
         title: '在宅患者の多くが骨粗しょう症を抱えている',
@@ -316,7 +324,7 @@ const jsonLdSpeakable = {
       {
         title: '骨折後の再骨折リスクを下げる',
         description:
-          '一度骨折すると次の骨折リスクが2〜3倍になります。退院後の早期から骨粗しょう症治療を再開・継続することで再骨折を防ぎ、在宅生活を守ります。',
+          '一度骨折すると次の骨折リスクが高まることが知られています（参考：骨粗鬆症診療ガイドライン）。退院後の早期から骨粗しょう症治療の再開・継続を支援し、在宅生活の維持をめざします。',
       },
       {
         title: 'ご家族・ケアマネジャーとの連携',
@@ -324,10 +332,6 @@ const jsonLdSpeakable = {
           '転倒・骨折のリスクを在宅チームと共有し、住環境整備・リハビリ・薬の見直しを連携して進めます。骨折予防は一人ではできない、チームの取り組みです。',
       },
     ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1559757175-0eb30cd8c063?auto=format&fit=crop&w=1200&q=80',
-      alt: '骨粗しょう症・骨折予防のイメージ',
-    }}
   >
     <Fragment slot="content">
       <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
@@ -335,66 +339,19 @@ const jsonLdSpeakable = {
       </h3>
     </Fragment>
     <Fragment slot="bg">
-      <div class="absolute inset-0 bg-orange-50 dark:bg-transparent"></div>
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
     </Fragment>
   </Content>
 
   <!-- ===== FAQ ===== -->
   <FAQs
     id="faq"
+    scrollMarginClass={clinicalAnchorScrollMargin}
     title="整形外科訪問診療に関するよくある質問"
     tagline="FAQ"
-    classes={{ container: 'max-w-4xl' }}
-    items={[
-      {
-        title: '整形外科の訪問診療で関節注射は受けられますか？',
-        description:
-          'はい。ご自宅・施設への訪問時に膝・肩・手指などの関節へのヒアルロン酸注射・ステロイド注射を行っています。定期的な注射を通院なしで継続できます。まずはお電話（06-4301-7871）またはLINEでご相談ください。',
-      },
-      {
-        title: '身体障害者手帳（肢体不自由）の診断書を書いてもらえますか？',
-        description:
-          '当院には肢体不自由の指定医が在籍しています。訪問診療の中で診察し、診断書を作成します。手帳取得により医療費助成・各種福祉サービス・税の減免が受けられます。',
-      },
-      {
-        title: '骨粗しょう症の注射治療は訪問診療で受けられますか？',
-        description:
-          'はい。デノスマブ（プラリア）・テリパラチドなどの骨粗しょう症治療薬の注射を訪問診療で継続できます。骨折後の再骨折予防・通院困難な方の骨密度管理に対応しています。',
-      },
-      {
-        title: '骨折・手術後に退院してから訪問診療を頼めますか？',
-        description:
-          '大腿骨頸部骨折・脊椎圧迫骨折・人工関節置換術後など、退院してご自宅に戻られた方を継続フォローします。再骨折予防・服薬管理・リハビリ指示まで一括対応します。入院中からの事前相談も可能です。',
-      },
-      {
-        title: '訪問リハビリを使いたいのですが、指示書を書いてもらえますか？',
-        description:
-          '訪問リハビリ（理学療法士・作業療法士）の利用には医師の指示書が必要です。整形外科の専門知識をもとに、病態・目標・注意事項を明記した精度の高い指示書を作成します。',
-      },
-      {
-        title: '転倒が心配です。訪問診療でどんなサポートができますか？',
-        description:
-          '転倒リスクを評価し、薬の見直し・筋力評価・住環境改善の提言（手すり・段差解消）・歩行器や杖の選択指導を行います。整形外科医の視点から在宅での安全な生活を守ります。',
-      },
-    ]}
+    classes={{ container: 'max-w-7xl', headline: { ...clinicalSectionHeadline } }}
+    items={seikeigekaFaqWidgetItems}
   />
 
-  <!-- ===== CTA ===== -->
-  <CallToAction
-    actions={[
-      { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
-      {
-        variant: 'line',
-        text: 'LINEで無料相談（@512ysmzx）',
-        href: 'https://line.me/R/ti/p/%40512ysmzx',
-        icon: 'tabler:brand-line',
-      },
-    ]}
-  >
-    <Fragment slot="title">整形外科の訪問診療、まずはご相談ください</Fragment>
-    <Fragment slot="subtitle">
-      「膝の注射を続けたい」「骨粗しょう症の薬が切れそう」「骨折後の退院準備をしたい」——<br />
-      どの段階のご相談もお気軽にどうぞ。受付：平日・祝日 9:00〜17:00 | LINE は24時間受付
-    </Fragment>
-  </CallToAction>
+  <ClinicalPageClosing />
 </Layout>

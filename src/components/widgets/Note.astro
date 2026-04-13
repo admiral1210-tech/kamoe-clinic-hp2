@@ -3,21 +3,25 @@ import { Icon } from 'astro-icon/components';
 
 export interface Props {
   icon?: string;
+  /** プレーンテキスト見出し（h2）。未指定なら slot="title" を使用 */
   title?: string;
-  description?: string;
 }
 
-const {
-  icon = 'tabler:info-square',
-  title = await Astro.slots.render('title'),
-  description = await Astro.slots.render('description'),
-} = Astro.props;
+const { icon = 'tabler:info-square', title } = Astro.props;
 ---
 
-<section class="bg-blue-50 dark:bg-slate-800 not-prose">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 text-md text-center font-medium">
-    <Icon name={icon} class="w-5 h-5 inline-block align-text-bottom font-bold" />
-    <span class="font-bold" set:html={title} />
-    <Fragment set:html={description} />
+<section class="bg-blue-50 not-prose" aria-labelledby="widget-note-heading">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 text-center font-medium text-base text-slate-800">
+    <div class="flex flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-3">
+      <div class="flex items-center justify-center gap-2">
+        <Icon name={icon} class="w-5 h-5 shrink-0 text-primary" aria-hidden="true" />
+        <h2 id="widget-note-heading" class="text-base sm:text-lg font-bold m-0 leading-snug">
+          {title ? title : <slot name="title" />}
+        </h2>
+      </div>
+      <div class="text-slate-700 max-w-3xl leading-relaxed">
+        <slot name="description" />
+      </div>
+    </div>
   </div>
 </section>

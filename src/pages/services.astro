@@ -1,44 +1,42 @@
 ---
-import CallToAction from '~/components/widgets/CallToAction.astro';
 import Content from '~/components/widgets/Content.astro';
 import Features2 from '~/components/widgets/Features2.astro';
 import Hero from '~/components/widgets/Hero.astro';
 import Layout from '~/layouts/PageLayout.astro';
-
+import {
+  clinicalHeroSubtitleClass,
+  clinicalHeroTaglineClass,
+  clinicalHeroTitleClass,
+  clinicalSectionHeadline,
+} from '~/constants/clinical-page-ui';
 const metadata = {
   title: '診療内容｜内科・精神科・小児科・ターミナルケア｜かもめクリニック',
   description:
-    'かもめクリニックの診療内容。内科・精神科・小児科の訪問診療、ターミナルケア、24時間365日の緊急往診に対応。精神科専門医3名常勤は大阪市内の訪問診療クリニックとして唯一。',
+    'かもめクリニックの診療内容。内科・精神科・小児科の訪問診療、ターミナルケア、24時間365日の緊急往診に対応。精神科専門医3名常勤・精神保健指定医在籍。',
+  robots: { index: false, follow: false },
 };
 ---
 
 <Layout metadata={metadata}>
-  <!-- Hero Widget ******************* -->
-
   <Hero
     tagline="診療内容"
-    title="内科・精神科・小児科の<br/>訪問診療に対応"
-    subtitle="ご自宅・施設へ医師が定期的に伺い、診察・処方・各種検査を行う<strong>訪問診療専門クリニック</strong>です。内科・精神科・小児科に対応し、<strong>24時間365日の緊急往診</strong>で在宅生活をしっかり支えます。"
-    actions={[
-      { variant: 'primary', text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
-      {
-        variant: 'line',
-        text: 'LINEで無料相談',
-        href: 'https://line.me/R/ti/p/%40512ysmzx',
-        icon: 'tabler:brand-line',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1740&q=80',
-      alt: '訪問診療イメージ',
-    }}
-  />
-
-  <!-- Features2 Widget ************** -->
+    taglineClass={clinicalHeroTaglineClass}
+    titleClass={clinicalHeroTitleClass}
+    subtitleClass={clinicalHeroSubtitleClass}
+  >
+    <Fragment slot="title">内科・精神科・小児科の<br />訪問診療に対応</Fragment>
+    <Fragment slot="subtitle">
+      ご自宅・施設へ医師が定期的に伺い、診察・処方・各種検査を行う<strong>訪問診療専門クリニック</strong>です。内科・精神科・小児科に対応し、<strong
+        >24時間365日の緊急往診</strong
+      >で在宅生活をしっかり支えます。
+    </Fragment>
+  </Hero>
 
   <Features2
+    tagline="診療の特徴"
     title="主な診療内容"
     subtitle="通院が困難な方のご自宅・施設へ、専門の医師が定期的に伺います。"
+    classes={{ headline: { ...clinicalSectionHeadline }, container: 'max-w-7xl mx-auto' }}
     columns={3}
     items={[
       {
@@ -48,9 +46,9 @@ const metadata = {
         icon: 'tabler:stethoscope',
       },
       {
-        title: '精神科（大阪市内唯一）',
+        title: '精神科（専門医3名常勤）',
         description:
-          '精神科専門医3名が常勤する、大阪市内唯一の体制です。うつ病・統合失調症・認知症・依存症・発達障がいなど、幅広い精神科疾患に対応します。',
+          '精神科専門医3名が常勤し、精神保健指定医も在籍しています。うつ病・統合失調症・認知症・依存症・発達障がいなど、幅広い精神科疾患に対応します。',
         icon: 'tabler:brain',
       },
       {
@@ -68,7 +66,7 @@ const metadata = {
       {
         title: '緊急往診（24時間365日）',
         description:
-          '機能強化型在宅療養支援診療所（在支診1）として、夜間・休日・年末年始を問わず急変時に迅速対応。安心して任せられるかかりつけ医として寄り添います。',
+          '機能強化型在宅療養支援診療所（在支診1）として、夜間・休日・年末年始を問わず急変時に対応できる体制を整えています。地域のかかりつけ医として継続的に寄り添います。',
         icon: 'tabler:ambulance',
       },
       {
@@ -80,14 +78,18 @@ const metadata = {
     ]}
   />
 
-  <!-- Content Widget（精神科）-->
-
   <Content
     isReversed
+    classes={{
+      headline: {
+        ...clinicalSectionHeadline,
+        container: 'max-w-3xl mx-auto text-left sm:text-center',
+      },
+    }}
     items={[
       {
         title: '精神科専門医3名常勤',
-        description: '精神科専門医が3名常勤する、大阪市内唯一の体制です。',
+        description: '精神科専門医が3名常勤し、精神保健指定医も在籍しています。',
         icon: 'tabler:certificate',
       },
       {
@@ -113,23 +115,27 @@ const metadata = {
   >
     <Fragment slot="content">
       <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">精神科の訪問診療</h3>
-      <p class="text-muted">精神科専門医3名が常勤する大阪市内唯一の体制で、精神疾患を抱える方の在宅療養を支えます。</p>
+      <p class="text-muted">精神科専門医3名が常勤し、精神保健指定医も在籍。精神疾患を抱える方の在宅療養を支えます。</p>
     </Fragment>
   </Content>
 
-  <!-- Content Widget（ターミナルケア）-->
-
   <Content
     isAfterContent
+    classes={{
+      headline: {
+        ...clinicalSectionHeadline,
+        container: 'max-w-3xl mx-auto text-left sm:text-center',
+      },
+    }}
     items={[
       {
         title: 'ご本人の想いを最優先に',
-        description: '「自宅で最期を迎えたい」「住み慣れた場所にいたい」というご本人の意向を最も大切にします。',
+        description: '「自宅で最期を迎えたい」「住み慣れた場所にいたい」というご本人・ご家族の意向を丁寧に確認しながら進めます。',
         icon: 'tabler:heart',
       },
       {
         title: '年間約100件の在宅看取り実績',
-        description: 'グループ全体で年間約100件の在宅看取りを実施。豊富な経験と体制で最期の時間を支えます。',
+        description: 'グループ全体で年間約100件の在宅看取りを実施。多職種連携の体制で最期の時間を継続的に支えます。',
         icon: 'tabler:home-heart',
       },
       {
@@ -155,25 +161,4 @@ const metadata = {
       </p>
     </Fragment>
   </Content>
-
-  <!-- CallToAction Widget *********** -->
-
-  <CallToAction
-    actions={[
-      {
-        variant: 'primary',
-        text: 'お電話でのご相談',
-        href: 'tel:06-4301-7871',
-        icon: 'tabler:phone',
-      },
-      {
-        variant: 'line',
-        text: 'LINEで無料相談',
-        href: 'https://line.me/R/ti/p/%40512ysmzx',
-        icon: 'tabler:brand-line',
-      },
-    ]}
-    title="まずはお気軽にご相談ください"
-    subtitle="紹介状がなくてもご相談いただけます。受付：平日・祝日 9:00〜17:00 | 緊急往診は24時間365日対応"
-  />
 </Layout>

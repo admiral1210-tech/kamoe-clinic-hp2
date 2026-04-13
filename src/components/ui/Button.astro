@@ -19,14 +19,25 @@ const variants = {
   tertiary: 'btn btn-tertiary',
   link: 'cursor-pointer hover:text-primary',
   line: 'btn-line',
+  /** PageLayout 固定CTA（電話）と同形状（.floating-cta-inline 系は CustomStyles） */
+  floatingCtaTel: 'floating-cta-inline floating-cta-inline-tel',
+  /** PageLayout 固定CTA（問い合わせフォーム）と同形状 */
+  floatingCtaForm: 'floating-cta-inline floating-cta-inline-form',
 };
+
+const isFloatingCtaStyle = variant === 'floatingCtaTel' || variant === 'floatingCtaForm';
 ---
 
 {
   type === 'button' || type === 'submit' || type === 'reset' ? (
     <button type={type} class={twMerge(variants[variant] || '', className)} {...rest}>
+      {isFloatingCtaStyle && icon ? (
+        <Icon name={icon} class="w-4 h-4 shrink-0" aria-hidden="true" />
+      ) : null}
       <Fragment set:html={text} />
-      {icon && <Icon name={icon} class="w-5 h-5 ml-1 -mr-1.5 rtl:mr-1 rtl:-ml-1.5 inline-block" />}
+      {!isFloatingCtaStyle && icon ? (
+        <Icon name={icon} class="w-5 h-5 ml-1 -mr-1.5 rtl:mr-1 rtl:-ml-1.5 inline-block" />
+      ) : null}
     </button>
   ) : (
     <a
@@ -34,8 +45,13 @@ const variants = {
       {...(target ? { target: target, rel: 'noopener noreferrer' } : {})}
       {...rest}
     >
+      {isFloatingCtaStyle && icon ? (
+        <Icon name={icon} class="w-4 h-4 shrink-0" aria-hidden="true" />
+      ) : null}
       <Fragment set:html={text} />
-      {icon && <Icon name={icon} class="w-5 h-5 ml-1 -mr-1.5 rtl:mr-1 rtl:-ml-1.5 inline-block" />}
+      {!isFloatingCtaStyle && icon ? (
+        <Icon name={icon} class="w-5 h-5 ml-1 -mr-1.5 rtl:mr-1 rtl:-ml-1.5 inline-block" />
+      ) : null}
     </a>
   )
 }

@@ -10,6 +10,16 @@
   NODE_VERSION = "20"
 [build.processing.html]
   pretty_urls = false
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+    X-XSS-Protection = "0"
+
 [[headers]]
   for = "/_astro/*"
   [headers.values]

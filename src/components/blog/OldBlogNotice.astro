@@ -1,0 +1,39 @@
+---
+import Note from '~/components/widgets/Note.astro';
+import { OLD_BLOG_URL, MIGRATION_START } from '~/data/site-policy';
+
+export interface Props {
+  variant: 'note' | 'empty';
+}
+
+const { variant } = Astro.props;
+
+const linkClass =
+  'text-primary underline font-semibold hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 rounded';
+---
+
+{
+  variant === 'note' && (
+    <Note icon="tabler:archive" title={`${MIGRATION_START}以前の過去記事について`}>
+      <p slot="description" class="m-0 sm:inline sm:ml-1">
+        過去の記事は
+        <a href={OLD_BLOG_URL} class={linkClass} target="_blank" rel="noopener noreferrer">
+          旧サイトのブログ（アーカイブ）
+        </a>
+        でご覧いただけます。新しいお知らせ・情報発信はこのページで掲載しています。
+      </p>
+    </Note>
+  )
+}
+
+{
+  variant === 'empty' && (
+    <p class="text-gray-400 text-sm mt-2 m-0">
+      過去の記事は
+      <a href={OLD_BLOG_URL} class={linkClass} target="_blank" rel="noopener noreferrer">
+        旧サイトのブログ
+      </a>
+      でご覧いただけます。
+    </p>
+  )
+}

@@ -22,7 +22,11 @@ const {
   isDark = false,
   classes = {},
   bg = await Astro.slots.render('bg'),
+  scrollMarginClass,
 } = Astro.props;
+
+const hasImage =
+  typeof image === 'string' ? image.trim().length > 0 : Boolean(image);
 ---
 
 <WidgetWrapper
@@ -30,6 +34,7 @@ const {
   isDark={isDark}
   containerClass={`max-w-7xl mx-auto ${isAfterContent ? 'pt-0 md:pt-0 lg:pt-0' : ''} ${classes?.container ?? ''}`}
   bg={bg}
+  scrollMarginClass={scrollMarginClass}
 >
   <Headline
     title={title}
@@ -39,11 +44,12 @@ const {
       container: 'max-w-xl sm:mx-auto lg:max-w-2xl',
       title: 'text-4xl md:text-5xl font-bold tracking-tighter mb-4 font-heading',
       subtitle: 'max-w-3xl mx-auto sm:text-center text-xl text-muted dark:text-slate-400',
+      ...((classes?.headline as Record<string, string>) ?? {}),
     }}
   />
   <div class="mx-auto max-w-7xl p-4 md:px-8">
     <div class={`md:flex ${isReversed ? 'md:flex-row-reverse' : ''} md:gap-16`}>
-      <div class="md:basis-1/2 self-center">
+      <div class={hasImage ? 'md:basis-1/2 self-center' : 'w-full'}>
         {content && <div class="mb-12 text-lg dark:text-slate-400" set:html={content} />}
 
         {
@@ -68,9 +74,9 @@ const {
           }}
         />
       </div>
-      <div aria-hidden="true" class="mt-10 md:mt-0 md:basis-1/2">
-        {
-          image && (
+      {
+        hasImage && (
+          <div aria-hidden="true" class="mt-10 md:mt-0 md:basis-1/2">
             <div class="relative m-auto max-w-4xl">
               {typeof image === 'string' ? (
                 <Fragment set:html={image} />
@@ -86,9 +92,9 @@ const {
                 />
               )}
             </div>
-          )
-        }
-      </div>
+          </div>
+        )
+      }
     </div>
   </div>
 </WidgetWrapper>

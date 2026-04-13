@@ -17,10 +17,17 @@ const {
   isDark = false,
   classes = {},
   bg = await Astro.slots.render('bg'),
+  scrollMarginClass,
 } = Astro.props;
 ---
 
-<WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-5xl ${classes?.container ?? ''}`} bg={bg}>
+<WidgetWrapper
+  id={id}
+  isDark={isDark}
+  containerClass={`max-w-5xl ${classes?.container ?? ''}`}
+  bg={bg}
+  scrollMarginClass={scrollMarginClass}
+>
   <div class:list={['flex flex-col gap-8 md:gap-12', { 'md:flex-row-reverse': isReversed }, { 'md:flex-row': image }]}>
     <div class:list={['md:py-4 md:self-center', { 'md:basis-1/2': image }, { 'w-full': !image }]}>
       <Headline
@@ -33,7 +40,9 @@ const {
           ...((classes?.headline as object) ?? {}),
         }}
       />
-      <Timeline items={items} classes={classes?.items as Record<string, never>} />
+      <div role="region" aria-label="応募の流れの各ステップ">
+        <Timeline items={items} classes={classes?.items as Record<string, never>} />
+      </div>
     </div>
     {
       image && (

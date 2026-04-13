@@ -1,11 +1,26 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
+import PageTocNav from '~/components/ui/PageTocNav.astro';
 import Features from '~/components/widgets/Features.astro';
 import Features2 from '~/components/widgets/Features2.astro';
 import Content from '~/components/widgets/Content.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
+import ClinicalPageClosing from '~/components/widgets/ClinicalPageClosing.astro';
+import { CLINIC_CONTACT, clinicPostalAddressJsonLd } from '~/data/clinic-contact';
+import { shoninkaFaqEntries } from '~/data/faq-shoninka';
+import {
+  clinicalAnchorScrollMargin,
+  clinicalHeroSpeakableLeadClass,
+  clinicalHeroSubtitleClass,
+  clinicalHeroTaglineClass,
+  clinicalHeroTitleClass,
+  clinicalSectionHeadline,
+} from '~/constants/clinical-page-ui';
+import { getPermalink } from '~/utils/permalinks';
+import { buildFaqPageJsonLd, faqEntriesToWidgetItems } from '~/utils/seo-faq';
+import { twMerge } from 'tailwind-merge';
+import { serializeJsonLdForScript } from '~/utils/json-ld-script';
 
 const metadata = {
   title: '小児科の訪問診療・医療ケア児対応｜大阪市｜かもめクリニック',
@@ -14,13 +29,14 @@ const metadata = {
   ignoreTitleTemplate: true,
   openGraph: {
     type: 'website',
-    images: [{ url: 'https://www.kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
+    images: [{ url: 'https://kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 }],
   },
 };
 
-// JSON-LD: BreadcrumbList
-const jsonLdBreadcrumb = {
-  '@context': 'https://schema.org',
+const shoninkaFaqWidgetItems = faqEntriesToWidgetItems(shoninkaFaqEntries);
+const faqPageLd = buildFaqPageJsonLd(shoninkaFaqEntries);
+
+const jsonLdBreadcrumbList = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
@@ -33,65 +49,7 @@ const jsonLdBreadcrumb = {
   ],
 };
 
-// JSON-LD: FAQPage
-const jsonLdFAQ = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: '子どもでも訪問診療は受けられますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'はい。かもめクリニックは小児科専門医が在籍し、医療的ケアが必要なお子さまを中心に小児訪問診療を行っています。人工呼吸器・経管栄養・気管切開・吸引など在宅で医療ケアが必要なお子さまをご自宅で診察します。大阪市全域に対応しており、まずはお電話（06-4301-7871）またはLINEでご相談ください。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '医療ケア児の訪問診療とはどのような診療ですか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: '人工呼吸器・経管栄養・気管切開・吸引・酸素療法など、継続的な医療処置が必要なお子さまを対象に、小児科専門医が定期訪問します。状態評価・処方・機器管理のサポート・ご家族への介護指導まで一体的に支援します。訪問看護・リハビリ・栄養士など多職種と連携してお子さまの在宅生活を支えます。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'NICUから退院後すぐに訪問診療を開始できますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'はい。NICU退院前からの事前相談・退院後の在宅移行支援の実績があります（グループ全体で約10件）。退院に向けた準備段階からご相談いただけます。病院の地域医療連携部・NICU担当者様からのご連絡も地域医療連携部（06-4301-7883）でお待ちしています。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '発達障害・成長の遅れも訪問診療で診てもらえますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: '定期訪問の中で体重・身長・発達の評価を継続的に行います。必要に応じて専門機関への紹介・連携も行います。外来への通院が困難なお子さまにも対応できます。精神科専門医も在籍しているため、発達障害に関連する精神科的サポートも一体的に提供できます。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: '夜間に急変した場合はどうすればよいですか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'かもめクリニックは機能強化型在宅療養支援診療所（在支診1）として24時間365日の緊急往診に対応しています。医療ケア児は急変リスクが高いため、夜間・休日も担当医へ直接連絡できる体制を整えています。緊急時の対応方法は事前にご説明します。',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'ご家族のケア負担を減らすサポートはありますか？',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'はい。医師の訪問診療に加え、訪問看護・リハビリ・栄養士など多職種が連携してご家族の介護負担を軽減します。医療機器の管理方法の指導・福祉サービスの活用支援・ご家族のメンタルサポートも含めて対応します。ひとりで抱え込まず、まずはご相談ください。',
-      },
-    },
-  ],
-};
-
-// JSON-LD: MedicalClinic（小児科特化）
 const jsonLdPediatric = {
-  '@context': 'https://schema.org',
   '@type': 'MedicalClinic',
   '@id': 'https://kamome-clinic.net/#clinic',
   name: 'かもめクリニック',
@@ -105,19 +63,11 @@ const jsonLdPediatric = {
     { '@type': 'MedicalTherapy', name: '発達評価・成長管理（定期訪問）' },
     { '@type': 'MedicalTherapy', name: '24時間緊急往診（在支診1認定）' },
   ],
-  telephone: '06-4301-7871',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: '夕凪2丁目16-9 icrossAMポートビル 4F-B',
-    addressLocality: '大阪市港区',
-    addressRegion: '大阪府',
-    postalCode: '552-0004',
-    addressCountry: 'JP',
-  },
+  telephone: CLINIC_CONTACT.telDisplay,
+  address: clinicPostalAddressJsonLd(),
 };
 
-// JSON-LD: MedicalCondition（対応疾患・状態）
-const jsonLdConditions = [
+const jsonLdConditionsRaw = [
   {
     '@context': 'https://schema.org',
     '@type': 'MedicalCondition',
@@ -159,9 +109,9 @@ const jsonLdConditions = [
   },
 ];
 
-// JSON-LD: Speakable
+const jsonLdConditionNodes = jsonLdConditionsRaw.map(({ '@context': _c, ...node }) => node);
+
 const jsonLdSpeakable = {
-  '@context': 'https://schema.org',
   '@type': 'WebPage',
   '@id': 'https://kamome-clinic.net/shoninka',
   name: '小児科の訪問診療・医療ケア児対応｜大阪市｜かもめクリニック',
@@ -171,52 +121,74 @@ const jsonLdSpeakable = {
   },
   url: 'https://kamome-clinic.net/shoninka',
 };
+
+const jsonLdGraph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    jsonLdBreadcrumbList,
+    { '@type': 'FAQPage', mainEntity: faqPageLd.mainEntity },
+    jsonLdPediatric,
+    ...jsonLdConditionNodes,
+    jsonLdSpeakable,
+  ],
+};
+
+const heroActions = [
+  { variant: 'primary' as const, href: CLINIC_CONTACT.telHref, text: '電話する', icon: 'tabler:phone' },
+  {
+    variant: 'secondary' as const,
+    href: getPermalink('/renkei'),
+    text: '問い合わせ',
+    icon: 'tabler:clipboard-list',
+  },
+];
 ---
 
 <Layout metadata={metadata}>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdBreadcrumb)} />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdFAQ)} />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdPediatric)} />
-    {jsonLdConditions.map((c) => <script type="application/ld+json" set:html={JSON.stringify(c)} />)}
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLdSpeakable)} />
+    <script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLdGraph)} />
   </Fragment>
 
   <!-- Hero -->
   <Hero
     tagline="小児科 訪問診療｜大阪市"
-    actions={[
-      { variant: 'primary', text: 'お電話でのご相談', href: 'tel:0643017871', icon: 'tabler:phone' },
-      {
-        variant: 'line',
-        text: 'LINEで無料相談',
-        href: 'https://line.me/R/ti/p/%40512ysmzx',
-        icon: 'tabler:brand-line',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=2070&q=80',
-      alt: '小児科訪問診療イメージ',
-    }}
+    taglineClass={clinicalHeroTaglineClass}
+    titleClass={clinicalHeroTitleClass}
+    subtitleClass={clinicalHeroSubtitleClass}
+    actions={heroActions}
   >
     <Fragment slot="title">
       医療ケアが必要な<br />
-      <span class="text-accent dark:text-white highlight">お子さま</span>を<br />
+      <span class="text-primary dark:text-blue-300">お子さま</span>を<br />
       ご自宅で支えます
     </Fragment>
     <Fragment slot="subtitle">
-      <strong>小児科専門医が在籍</strong>し、人工呼吸器・経管栄養・気管切開など<br class="hidden sm:inline" />
-      <strong>医療的ケアが必要なお子さまの在宅診療</strong>を行います。<br class="hidden sm:inline" />
+      <span class={clinicalHeroSpeakableLeadClass}>
+        <strong>小児科専門医が在籍</strong>し、人工呼吸器・経管栄養・気管切開など<br class="hidden sm:inline" />
+        <strong>医療的ケアが必要なお子さまの在宅診療</strong>を行います。
+      </span><br />
       NICU退院後の在宅移行支援にも積極的に取り組んでいます。
     </Fragment>
   </Hero>
 
+  <PageTocNav
+    ariaLabel="このページの主な内容"
+    items={[
+      { href: '#features', label: '特徴' },
+      { href: '#taiou', label: '対応できる医療ケア' },
+      { href: '#target', label: 'こんな方へ' },
+      { href: '#faq', label: 'よくある質問' },
+    ]}
+  />
+
   <!-- 強み4つ -->
   <Features
     id="features"
+    scrollMarginClass={clinicalAnchorScrollMargin}
     tagline="小児科訪問診療の特徴"
     title="かもめクリニックの小児科訪問診療"
     subtitle="医療的ケアが必要なお子さまとご家族を、ご自宅でしっかり支える体制を整えています。ご不安なことはお気軽にご相談ください。"
+    classes={{ headline: { ...clinicalSectionHeadline } }}
     items={[
       {
         title: '小児科専門医が在宅訪問',
@@ -247,9 +219,17 @@ const jsonLdSpeakable = {
 
   <!-- 対応できる医療ケアの詳細 -->
   <Content
+    id="taiou"
+    scrollMarginClass={clinicalAnchorScrollMargin}
     isReversed
     tagline="対応内容"
     title="在宅で対応できる医療ケア"
+    classes={{
+      headline: {
+        ...clinicalSectionHeadline,
+        container: twMerge('max-w-xl sm:mx-auto lg:max-w-2xl text-left sm:text-center', clinicalSectionHeadline.container),
+      },
+    }}
     items={[
       {
         title: '人工呼吸器管理',
@@ -270,10 +250,6 @@ const jsonLdSpeakable = {
         description: '在宅酸素療法（HOT）の管理・酸素流量の調整・SpO₂モニタリングの評価。',
       },
     ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1200&q=80',
-      alt: '医療ケア対応イメージ',
-    }}
   >
     <Fragment slot="content"
       >小児科専門医とともに看護師・リハビリ・栄養士など多職種が連携し、在宅での医療ケアを支えます。</Fragment
@@ -284,8 +260,10 @@ const jsonLdSpeakable = {
   <!-- こんな方へ -->
   <Features2
     id="target"
+    scrollMarginClass={clinicalAnchorScrollMargin}
     tagline="こんな方へ"
     title="小児科の訪問診療をご検討ください"
+    classes={{ headline: { ...clinicalSectionHeadline }, container: 'max-w-7xl mx-auto' }}
     items={[
       {
         title: 'NICUから退院が近いお子さまがいる',
@@ -331,60 +309,13 @@ const jsonLdSpeakable = {
   <!-- よくある質問 -->
   <FAQs
     id="faq"
+    scrollMarginClass={clinicalAnchorScrollMargin}
     tagline="FAQ"
     title="よくあるご質問"
     subtitle="小児科の訪問診療についてよく寄せられるご質問にお答えします。"
-    items={[
-      {
-        title: '子どもでも訪問診療は受けられますか？',
-        description:
-          'はい。かもめクリニックは小児科専門医が在籍し、医療的ケアが必要なお子さまを中心に小児訪問診療を行っています。人工呼吸器・経管栄養・気管切開・吸引など在宅で医療ケアが必要なお子さまをご自宅で診察します。大阪市全域に対応しています。',
-      },
-      {
-        title: '医療ケア児の訪問診療とはどのような診療ですか？',
-        description:
-          '人工呼吸器・経管栄養・気管切開・吸引・酸素療法など、継続的な医療処置が必要なお子さまを対象に、小児科専門医が定期訪問します。状態評価・処方・機器管理のサポート・ご家族への介護指導まで一体的に支援し、多職種が連携してお子さまの在宅生活を支えます。',
-      },
-      {
-        title: 'NICUから退院後すぐに訪問診療を開始できますか？',
-        description:
-          'はい。NICU退院前からの事前相談・退院後の在宅移行支援の実績があります（グループ全体で約10件）。退院に向けた準備段階からご相談ください。病院の地域医療連携部・NICU担当者様からのご連絡もお待ちしています。地域医療連携部直通：06-4301-7883。',
-      },
-      {
-        title: '発達障害・成長の遅れも訪問診療で診てもらえますか？',
-        description:
-          '定期訪問の中で体重・身長・発達の評価を継続的に行います。外来への通院が困難なお子さまにも対応できます。必要に応じて専門機関への紹介・連携も行います。精神科専門医も在籍しているため、発達障害に関連する精神科的サポートも提供できます。',
-      },
-      {
-        title: '夜間に急変した場合はどうすればよいですか？',
-        description:
-          'かもめクリニックは機能強化型在宅療養支援診療所（在支診1）として24時間365日の緊急往診に対応しています。医療ケア児は急変リスクが高いため、夜間・休日も担当医へ直接連絡できる体制を整えています。緊急時の連絡方法は事前に詳しくご説明します。',
-      },
-      {
-        title: 'ご家族のケア負担を減らすサポートはありますか？',
-        description:
-          'はい。医師の訪問診療に加え、訪問看護・リハビリ・栄養士など多職種と連携してご家族の介護負担を軽減します。医療機器管理の指導・福祉サービスの活用支援・ご家族のメンタルサポートも含めて対応します。ひとりで抱え込まず、まずはご相談ください。',
-      },
-    ]}
+    classes={{ container: 'max-w-6xl', headline: { ...clinicalSectionHeadline } }}
+    items={shoninkaFaqWidgetItems}
   />
 
-  <!-- CTA -->
-  <CallToAction
-    actions={[
-      { variant: 'primary', text: 'お電話でのご相談（06-4301-7871）', href: 'tel:0643017871', icon: 'tabler:phone' },
-      {
-        variant: 'line',
-        text: 'LINEで無料相談（@512ysmzx）',
-        href: 'https://line.me/R/ti/p/%40512ysmzx',
-        icon: 'tabler:brand-line',
-      },
-    ]}
-  >
-    <Fragment slot="title">医療ケア児の訪問診療、まずはご相談ください</Fragment>
-    <Fragment slot="subtitle">
-      受付：平日・祝日 9:00〜17:00 | LINE（@512ysmzx）は24時間受付<br />
-      病院のNICU担当者・地域医療連携部の方からのご連絡もお待ちしています。<br class="hidden sm:inline" />
-      地域医療連携部 直通：<a href="tel:0643017883" class="underline font-bold">06-4301-7883</a>（平日・祝日 9:00〜17:00）
-    </Fragment>
-  </CallToAction>
+  <ClinicalPageClosing />
 </Layout>

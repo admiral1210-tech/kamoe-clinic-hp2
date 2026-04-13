@@ -9,6 +9,7 @@ const {
   subtitle = await Astro.slots.render('subtitle'),
   tagline,
   stats = [],
+  footnote,
 
   id,
   isDark = false,
@@ -43,4 +44,9 @@ const {
         ))
     }
   </div>
+  {footnote && (
+    <p class="mt-4 text-center text-xs text-gray-400 dark:text-gray-500 leading-relaxed">
+      {footnote}
+    </p>
+  )}
 </WidgetWrapper>

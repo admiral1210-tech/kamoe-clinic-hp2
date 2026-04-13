@@ -1,0 +1,38 @@
+---
+import { twMerge } from 'tailwind-merge';
+import { clinicalSectionHeadline } from '~/constants/clinical-page-ui';
+
+interface Props {
+  tagline?: string;
+  title: string;
+  subtitle?: string;
+  class?: string;
+  /** true のとき英字 tagline をスクリーンリーダー向けにマスク（装飾ラベル用） */
+  taglineDecorative?: boolean;
+}
+
+const {
+  tagline,
+  title,
+  subtitle,
+  class: className,
+  taglineDecorative = false,
+} = Astro.props;
+
+const h = clinicalSectionHeadline;
+---
+
+<div class={twMerge('text-center mb-8 md:mb-10', h.container, className)}>
+  {
+    tagline && (
+      <p
+        class={h.tagline}
+        {...taglineDecorative ? { 'aria-hidden': 'true' } : {}}
+      >
+        {tagline}
+      </p>
+    )
+  }
+  <h2 class={twMerge(h.title, 'font-heading')} set:html={title} />
+  {subtitle && <p class={h.subtitle} set:html={subtitle} />}
+</div>

@@ -1,0 +1,24 @@
+---
+/**
+ * 旧 Astrowind 一覧（/blog/2 …）からの恒久的リダイレクト。
+ * 公式のブログ一覧は src/pages/blog/index.astro の /blog のみ。
+ */
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import { blogPostsPerPage } from '~/utils/blog';
+
+export const prerender = true;
+
+export const getStaticPaths = (async () => {
+  const entries = await getCollection('post');
+  const count = entries.filter((e) => !e.data.draft).length;
+  const perPage = blogPostsPerPage ?? 6;
+  const totalPages = Math.max(1, Math.ceil(count / perPage));
+  if (totalPages <= 1) return [];
+  return Array.from({ length: totalPages - 1 }, (_, i) => ({
+    params: { page: String(i + 2) },
+  }));
+}) satisfies GetStaticPaths;
+
+return Astro.redirect('/blog', 301);
+---

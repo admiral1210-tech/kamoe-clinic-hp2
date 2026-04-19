@@ -46,15 +46,10 @@ export const recruitWhyFeaturesItems: Item[] = [
   },
 ];
 
-export type RecruitPositionCta =
-  | { type: 'anchor'; href: string; label: string }
-  /** 詳細を同一カード内の details で開閉 */
-  | { type: 'details'; label: string; detailsId: string };
-
 export interface RecruitPositionCard {
   title: string;
   rows: { label: string; value: string }[];
-  cta: RecruitPositionCta;
+  cta: { href: string; label: string };
 }
 
 export const recruitPositionCards: RecruitPositionCard[] = [
@@ -67,29 +62,30 @@ export const recruitPositionCards: RecruitPositionCard[] = [
       { label: '必須資格', value: '医師免許（経験・年次不問、訪問診療未経験可）' },
       { label: '給与', value: '経験・スキルに応じて応相談' },
     ],
-    cta: { type: 'anchor', href: '#apply', label: '応募・お問い合わせ' },
+    cta: { href: '#apply', label: '応募・お問い合わせ' },
   },
   {
     title: '看護師',
     rows: [
       { label: '雇用形態', value: '正社員・パート（相談可）' },
       { label: '勤務地', value: '大阪市内各院・訪問先（車で移動）' },
-      { label: '勤務時間', value: '平日 9:00〜17:00（曜日・時間相談可）' },
+      { label: '勤務時間', value: '8:45〜17:30（休憩45分・実働8時間）' },
       { label: '必須資格', value: '看護師免許（訪問看護経験不問）' },
       { label: '給与', value: '経験・スキルに応じて応相談' },
     ],
-    cta: { type: 'details', detailsId: 'nurse-fulltime', label: '詳細募集要項を見る' },
+    /** 本文はカード外の全幅セクション（#nurse-fulltime）へ。カード幅に長文を入れ子にしない */
+    cta: { href: '#nurse-fulltime', label: '詳細募集要項を見る' },
   },
   {
     title: '医療事務',
     rows: [
       { label: '雇用形態', value: '正社員・パート' },
       { label: '勤務地', value: '大阪市港区（本院）' },
-      { label: '勤務時間', value: '平日 9:00〜17:00' },
+      { label: '勤務時間', value: '8:45〜17:30（休憩45分・実働8時間）' },
       { label: '必須資格', value: '不問（医療事務経験者優遇）' },
       { label: '給与', value: '経験・スキルに応じて応相談' },
     ],
-    cta: { type: 'anchor', href: '#apply', label: '応募・お問い合わせ' },
+    cta: { href: '#apply', label: '応募・お問い合わせ' },
   },
 ];
 
@@ -100,6 +96,20 @@ export interface RecruitNurseDetailRow {
 
 export const recruitNurseFulltime = {
   title: '【看護師・正社員】詳細募集要項',
+  /** 詳細パネル先頭に表示する要約（下欄の詳細と整合させる） */
+  keyFactsHeading: '募集条件の概要',
+  keyFacts: [
+    { label: '雇用形態', valueHtml: '正社員（常勤）' },
+    { label: '勤務時間', valueHtml: '8:45〜17:30（休憩45分・実働8時間）' },
+    {
+      label: '休日',
+      valueHtml:
+        '土日祝・設定休暇・有給（入社6ヶ月後10日）<span class="text-gray-500 dark:text-gray-400 text-xs"> ※年間休日120日程度</span>',
+    },
+    { label: '必須資格', valueHtml: '看護師免許／普通自動車免許（AT限定可）' },
+    { label: '勤務先', valueHtml: 'かもめクリニック本院・各分院（大阪市内）' },
+    { label: '選考', valueHtml: '書類選考 → 面接（1回） → 内定' },
+  ] satisfies RecruitNurseDetailRow[],
   introHtml: [
     '「訪問看護」ではありません。<strong>常に医師とともに行動する「診療同行看護師」</strong>として、患者さまの生活を医師の「目」となって守る役割をお任せします。',
     'スピードより「丁寧さ・確実さ」を大切にできる方を歓迎します。訪問診療の経験は不問。ブランクのある方も丁寧に指導します。',

@@ -91,22 +91,16 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
     <nav
       id="main-nav"
       class:list={[
-        'items-center w-full hidden md:flex text-default overflow-y-auto overflow-x-hidden md:overflow-y-visible md:overflow-x-auto',
+        'items-center w-full hidden md:flex text-default overflow-y-auto overflow-x-hidden md:overflow-visible',
         {
           'md:flex-1 md:min-w-0 md:mx-1 md:justify-center': position === 'center',
-          'md:w-auto md:mx-2 md:justify-self-center': position !== 'center',
+          'md:flex-1 md:min-w-0 md:mx-2': position !== 'center',
         },
       ]}
       aria-label="主要ナビゲーション"
     >
       <ul
-        class:list={[
-          'flex flex-col md:flex-row md:self-center w-full text-xl md:text-sm tracking-[0.01rem] font-medium',
-          {
-            'md:w-max md:max-w-none md:shrink-0 md:justify-center': position === 'center',
-            'md:w-auto md:justify-center': position !== 'center',
-          },
-        ]}
+        class="flex flex-col md:flex-row md:flex-wrap md:items-center w-full min-w-0 max-w-full text-xl md:text-sm tracking-[0.01rem] font-medium md:justify-center md:gap-x-1 md:gap-y-1"
       >
         {
           links.map(({ text, href, links }, index) => (

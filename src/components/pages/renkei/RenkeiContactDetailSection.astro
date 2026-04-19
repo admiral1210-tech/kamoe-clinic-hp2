@@ -27,7 +27,7 @@ import { RENKEI_VISIT_CONSULT_FORM_URL } from '~/constants/renkei';
         class="mt-0.5 h-5 w-5 shrink-0 accent-primary cursor-pointer"
         required
         aria-required="true"
-        onchange="document.getElementById('renkei-form-link').classList.toggle('opacity-40 pointer-events-none', !this.checked)"
+        onchange="(function (c) { var a = document.getElementById('renkei-form-link'); var off = !c.checked; a.classList.toggle('opacity-40', off); a.classList.toggle('pointer-events-none', off); if (off) { a.setAttribute('aria-disabled', 'true'); a.setAttribute('tabindex', '-1'); } else { a.removeAttribute('aria-disabled'); a.removeAttribute('tabindex'); } })(this)"
       />
       <span class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
         <a href="/privacy" class="underline text-primary hover:opacity-80" target="_blank" rel="noopener">個人情報保護方針</a>
@@ -43,6 +43,7 @@ import { RENKEI_VISIT_CONSULT_FORM_URL } from '~/constants/renkei';
       rel="noopener noreferrer"
       class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-primary dark:bg-blue-700 hover:opacity-95 transition-opacity rounded-2xl px-8 py-6 group opacity-40 pointer-events-none"
       aria-disabled="true"
+      tabindex="-1"
     >
       <div class="flex items-center gap-4 text-white">
         <Icon name="tabler:clipboard-list" class="w-10 h-10 shrink-0" aria-hidden="true" />

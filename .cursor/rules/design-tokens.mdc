@@ -1,0 +1,274 @@
+---
+description: カラートークン・スペーシング・タイポグラフィ・角丸の定義と使用規約。新規コンポーネント・ページ実装時に常に参照すること。
+globs: ["src/**/*.astro", "src/**/*.ts", "src/**/*.tsx", "tailwind.config.js", "src/assets/styles/**", "src/components/CustomStyles.astro"]
+alwaysApply: true
+---
+
+# デザイントークン規約
+
+SSOT（唯一の真実）: `src/components/CustomStyles.astro` の `:root` で CSS変数を定義し、`tailwind.config.js` でTailwindクラス名に橋渡しする。
+
+---
+
+## カラートークン
+
+### ブランドカラー
+
+| CSS変数 | Tailwindクラス | hex相当 | 用途 |
+|---|---|---|---|
+| `--aw-color-primary` | `primary` | `#1850A3` (rgb 24 80 163) | メインCTA、リンク、強調ボーダー |
+| `--aw-color-primary-tint` | — | `#1850A3` / 6% | 背景の淡いハイライト (`bg-primary/10` 等) |
+| `--aw-color-secondary` | `secondary` | `#0A2864` (rgb 10 40 100) | ホバー時の深み、tagline |
+| `--aw-color-accent` | `accent` | `#B44A26` (rgb 180 74 38) | ベージュ背景上で 5.07:1 のコントラスト。装飾的アクセント（非CTAテキストのみ） |
+
+### テキストカラー
+
+| CSS変数 | Tailwindクラス | 用途 | コントラスト（ベージュ背景） |
+|---|---|---|---|
+| `--aw-color-text-heading` | `text-heading` | h1〜h6、見出し全般 | ≥ 11:1 |
+| `--aw-color-text-default` | `text-default` | 本文・説明文 | ≥ 8:1 |
+| `--aw-color-text-muted` | `text-muted` | サブテキスト・補足 | ≥ 5.5:1 |
+
+### 背景カラー
+
+| CSS変数 | Tailwindクラス | 用途 |
+|---|---|---|
+| `--aw-color-bg-page` | `bg-page` / `bg-light` | ページ全体の背景（ウォームベージュ `rgb(253 248 241)`） |
+| `--aw-color-bg-page-dark` | `bg-dark` | dark用（light:only 運用のため実質未使用） |
+| `--aw-color-bg-header-dark` | — | ヘッダーのスクロール後ダーク背景（内部使用のみ） |
+
+### ブランド固定カラー
+
+| CSS変数 | 用途 |
+|---|---|
+| `--aw-color-line` (`#06c755`) | LINEブランドボタン |
+| `--aw-color-line-hover` (`#05a847`) | LINEボタンホバー |
+
+---
+
+## カラートークン配色原則
+
+### 1. 面積比率（60–30–10 ルール）
+
+| 役割 | 面積比 | 対応トークン | 具体的な使用箇所 |
+|---|---|---|---|
+| ベースカラー（背景） | **60%** | `bg-page` (`--aw-color-bg-page`) | ページ背景、広域セクション背景 |
+| セカンダリーカラー（カード等） | **30%** | `bg-white` / `bg-primary/5` / `bg-blue-50` | カード、パネル、交互セクション背景 |
+| アクセントカラー（ボタン等） | **10%** | `bg-primary` / `bg-accent` | CTAボタン、アイコン、バッジ、ボーダー強調 |
+
+- **新規セクションを追加するとき、この比率が崩れていないか確認する**
+- アクセントカラー（`bg-primary` / `bg-accent`）を広域背景に使わない
+- カード・パネルが全体の50%超を占める場合はベースカラー面積を広げて調整する
+
+### 2. コントラスト比（WCAG AA 準拠）
+
+すべてのテキスト・UIコンポーネントは **4.5:1 以上**のコントラスト比を維持する。
+
+| 組み合わせ | コントラスト比 | 判定 |
+|---|---|---|
+| `text-heading` on `bg-page` | ≥ 11:1 | ✅ |
+| `text-default` on `bg-page` | ≥ 8:1 | ✅ |
+| `text-muted` on `bg-page` | ≥ 5.5:1 | ✅ |
+| `text-primary` (#1850A3) on `bg-page` | ≥ 5.5:1 | ✅ |
+| `text-accent` (#B44A26) on `bg-page` | 5.07:1 | ✅ |
+| `text-white` on `bg-primary` | ≥ 5.5:1 | ✅ |
+
+- **新規カラーを追加する前に必ずコントラスト比を計算し、4.5:1 未満のものは採用しない**
+- `text-muted` はサブテキスト・補足にのみ使用。本文（`p`）には `text-default` 以上を使う
+
+### 3. 色の3属性（HSB）の整合性
+
+新規カラーを追加・変更する場合、以下の整合性を保つ。
+
+| 属性 | ガイドライン |
+|---|---|
+| **色相（Hue）** | ブランド主色（青系 H220〜H235）から離れる場合は意図を明記する |
+| **彩度（Saturation）** | 背景系 ≤ 10%、テキスト系 70〜90%、CTA系 70〜90% の範囲を維持 |
+| **明度（Brightness）** | テキストは暗め（B30〜B60）、背景は明るめ（B95〜B100）、CTAは中間（B40〜B65） |
+
+- 彩度・明度がトークン群から大きく外れる色は採用しない
+- 類似色（同色相±15°以内）での配色変更は許容。補色・トライアドは `accent` 枠のみ使用可
+
+### 4. 色相環に基づく配色パターン
+
+このプロジェクトでは**類似色配色**をメインに、ポイント使いで**補色アクセント**を採用している。
+
+| パターン | 使用箇所 | ルール |
+|---|---|---|
+| **類似色**（Analogous） | ページ背景〜カード〜ボーダー | `primary`（H225）と `secondary`（H225）の明度違いで統一感を保つ |
+| **補色アクセント**（Split-complementary） | CTA装飾・アイコン強調 | `accent`（H18 オレンジ系）は全体の 10% 以内に抑える |
+| **無彩色**（Neutral） | テキスト・余白 | `text-heading`〜`text-muted` のスケールで階調を作る |
+
+- 新規カラーを追加する際は上記3パターンのいずれかに分類できることを確認する
+- 新パターン（テトラードや分裂補色など）の追加はデザインレビューなしに行わない
+
+### 5. 色の意味の一貫性
+
+| カラー | 意味 | 使ってよい | 使ってはいけない |
+|---|---|---|---|
+| `primary`（青） | 信頼・行動・誘導 | CTAボタン、リンク、見出し強調 | エラー表示、警告、装飾背景 |
+| `secondary`（濃紺） | 権威・深度・ホバー | ホバー状態、tagline | プライマリCTAとの競合 |
+| `accent`（テラコッタ） | 注目・温かみ・補足強調 | アイコン装飾、バッジ、区切り | 大面積背景、エラー代替 |
+| `text-muted`（グレー） | 補足・二次情報 | キャプション、ヘルプテキスト | 本文テキスト、見出し |
+| `bg-page`（ベージュ） | 安心・清潔・医療感 | ページ背景、広域セクション | ボタン色、テキスト色 |
+
+- **同じカラーを異なる意味で使い回さない**（例: `primary` を警告アイコンに使わない）
+- 意味を追加したい場合は上記テーブルにエントリを追記してから実装する
+
+---
+
+## カラー使用ルール
+
+### 必須ルール（違反禁止）
+
+- **本文テキストに `text-gray-400` 以下のクラスを使わない**。`CustomStyles.astro` が gray-400/500/600 を強制上書きしているが、新規コードでは `text-muted` / `text-default` / `text-heading` トークンを使う
+- **`dark:` プレフィックスを新規コードで使わない**。`config.yaml` に `ui.theme: 'light:only'` を設定しているため `.dark` クラスは付与されない（実質デッドコード）
+- **`text-gray-900` / `text-slate-*` をメインテキストに使わない**。`text-heading` / `text-default` / `text-muted` を使う
+- **ブランドカラーの直書き禁止**。`rgb(24 80 163)` のようなリテラル値ではなく `var(--aw-color-primary)` または `text-primary` / `bg-primary` を使う
+
+### ハードコード例外
+
+`--aw-color-line: #06c755` はLINEブランドカラーのため固定値のまま維持する。
+
+### `hover:text-link` について
+
+`tailwind.config.js` に `colors.link` は定義されている（`--aw-color-primary` と同値）。ナビゲーションのホバー色に使用可能。
+
+---
+
+## スペーシングトークン
+
+詳細は `docs/design-system/spacing.md` を参照。ここではTailwindクラス名との対応のみ記載。
+
+| CSS変数 | Tailwindクラス | mobile | md | lg |
+|---|---|---|---|---|
+| `--aw-spacing-section-y` | `py-section-y` | 2rem | 3rem | 4rem |
+| `--aw-spacing-section-x` | `px-section-x` | 1rem | 1.5rem | 1.5rem |
+| `--aw-spacing-hero-content-pb` | `pb-hero-content-pb` | 1.5rem | 2rem | 2rem |
+
+### スペーシング使用ルール
+
+- セクションの上下余白には必ず `py-section-y` を使う（`py-5` `py-7` `py-1.5` は8ptグリッド外のため禁止）
+- 横余白には `px-section-x` を使う（`px-4 sm:px-6` のような直書きは `WidgetWrapper` 以外で禁止）
+- Hero の下余白は 0（`pb-*` 禁止）— 次セクションの `pt` で間隔を管理
+
+---
+
+## タイポグラフィスケール
+
+### ベースフォントサイズ（`CustomStyles.astro`）
+
+| ブレークポイント | サイズ |
+|---|---|
+| mobile (≤768px) | 17px |
+| tablet (≤1024px) | 19px |
+| desktop (>1024px) | 20px |
+
+### フォントファミリー
+
+| CSS変数 | Tailwindクラス | 用途 |
+|---|---|---|
+| `--aw-font-sans` | `font-sans` | 本文（Noto Sans JP + Inter Variable） |
+| `--aw-font-heading` | `font-heading` | 見出し（同系） |
+| `--aw-font-serif` | `font-serif` | 未使用（テンプレート残存） |
+
+### 見出し階層（グローバル定義）
+
+| 要素 | font-weight | 特記 |
+|---|---|---|
+| `h1` | 900 | Hero タイトル専用 |
+| `h2` | 700 | 左ボーダー 4px solid `--aw-color-primary` が自動付与 |
+| `h3` | 600 | — |
+| `h4`〜`h6` | 700 | — |
+
+全見出しに `color: var(--aw-color-text-heading)` と `line-height: 1.35` が適用される。
+
+### Prose テキストライン高さ
+
+| 要素 | line-height | letter-spacing |
+|---|---|---|
+| `body` | 1.75 | — |
+| `p` | 1.85 | 0.02em |
+| 見出し全般 | 1.35 | -0.01em |
+
+### タイプスケール（1.25倍スケール）
+
+ベースサイズを 1rem（デスクトップ 20px）とし、**公比 1.25 の等比数列**でサイズ階層を定義する。
+
+| ステップ | 計算式 | rem値 | px相当（desktop） | 対応要素／用途 |
+|---|---|---|---|---|
+| `xs` | base × 1.25⁻² | **0.64rem** | 12.8px | キャプション、法的注記 |
+| `sm` | base × 1.25⁻¹ | **0.8rem** | 16px | サブテキスト、ラベル |
+| `base` | 基準値 | **1rem** | 20px | 本文（`p`） |
+| `lg` | base × 1.25¹ | **1.25rem** | 25px | リード文、大きめ本文 |
+| `xl` | base × 1.25² | **1.5625rem** | 31.25px | `h4`、小見出し |
+| `2xl` | base × 1.25³ | **1.953rem** | 39px | `h3`、セクション小見出し |
+| `3xl` | base × 1.25⁴ | **2.441rem** | 48.8px | `h2`、セクション主見出し |
+| `4xl` | base × 1.25⁵ | **3.052rem** | 61px | `h1`、Heroタイトル |
+
+**Tailwindクラスとの対応**（既存トークンを優先し、不足分は `text-[値]` で指定）
+
+| ステップ | Tailwindクラス |
+|---|---|
+| `xs` | `text-xs` |
+| `sm` | `text-sm` |
+| `base` | `text-base` |
+| `lg` | `text-lg` |
+| `xl` | `text-xl` |
+| `2xl` | `text-2xl` |
+| `3xl` | `text-3xl` |
+| `4xl` | `text-4xl` / `text-[3rem]` |
+
+**タイプスケール使用ルール**
+
+- **スケール外のサイズを使わない**。`text-[22px]` `text-[28px]` などのアドホックな値は禁止し、上記ステップに丸める
+- 見出しの階層が視覚的に1ステップ以上異なるようにする（h2 と h3 が同サイズになってはいけない）
+- モバイルでは1ステップ下げを基本とする（例: デスクトップ `3xl` → モバイル `2xl`）
+- スケールを変更する場合は公比 1.25 を維持したまま全ステップを再計算し、テーブルを更新する
+
+---
+
+## 角丸トークン
+
+| CSS変数 | Tailwindクラス | 値 | 用途 |
+|---|---|---|---|
+| `--aw-radius-card` | `rounded-card` | 0.5rem (≒ rounded-lg) | カード・コンテンツブロック |
+| `--aw-radius-pill` | `rounded-pill` | 9999px | 浮動CTA、バッジ |
+
+- **ボタン（`.btn`）は `rounded-card` を使う**（`rounded-xl` 直書きは禁止）
+- フォームの入力欄は `rounded-card` 統一
+
+---
+
+## シャドウ・エレベーション
+
+| 用途 | クラス／値 |
+|---|---|
+| 浮動CTAボタン通常時 | `box-shadow: 0 4px 20px rgb(0 0 0 / 22%)` |
+| 浮動CTAボタンホバー時 | `box-shadow: 0 8px 28px rgb(0 0 0 / 30%)` |
+| カード（軽め） | `shadow-sm` |
+| CTAカード | `shadow-md` |
+
+---
+
+## セレクション・フォーカス
+
+- テキスト選択色: `rgb(24 80 163 / 15%)` + `rgb(10 25 55)` の文字色
+- **フォーカスリング統一**: `focus-visible:ring-2 focus-visible:ring-primary/60`（`ring-blue-500` 直書きは禁止）
+- 浮動CTAのフォーカス: `outline: 3px solid white; box-shadow: 0 0 0 5px var(--aw-color-primary)`
+
+---
+
+## 使用禁止リスト
+
+| 禁止クラス/値 | 代替 |
+|---|---|
+| `dark:*` （新規） | 記述しない |
+| `text-gray-900` （本文・見出し） | `text-heading` |
+| `text-gray-400` 以下（本文） | `text-muted` |
+| `text-slate-*` | `text-heading` / `text-default` / `text-muted` |
+| `rgb(24 80 163)` 直書き | `var(--aw-color-primary)` / `bg-primary` |
+| `rounded-xl`（ボタン） | `rounded-card` |
+| `focus:ring-blue-500` | `focus-visible:ring-primary/60` |
+| `px-4 sm:px-6`（セクション横余白） | `px-section-x` |
+| `py-5` / `py-7` / `py-1.5`（セクション縦余白） | `py-section-y` |

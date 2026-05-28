@@ -10,15 +10,15 @@ const { items, ariaLabel = 'このページの目次', heading } = Astro.props;
 ---
 
 <nav
-  class="sticky z-30 top-[4.5rem] md:top-[4.75rem] border-b border-gray-200/80 dark:border-slate-700 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md not-prose"
+  class="page-toc-nav sticky z-30 top-[4.5rem] md:top-[4.75rem] border-b border-gray-200/80 bg-white/95 backdrop-blur-md not-prose"
   aria-label={ariaLabel}
 >
-  <div class="max-w-5xl mx-auto px-3 sm:px-4 py-1.5">
+  <div class="max-w-5xl mx-auto px-3 sm:px-4">
     <div
-      class="flex items-center justify-start md:justify-center overflow-x-auto sm:overflow-x-visible gap-2 pb-1 sm:pb-0 scrollbar-none"
+      class="flex items-center justify-start md:justify-center overflow-x-auto scrollbar-none"
     >
       {heading && (
-        <span class="hidden sm:inline-flex shrink-0 items-center text-[0.65rem] font-semibold text-primary tracking-widest uppercase whitespace-nowrap pr-1 border-r border-gray-200 dark:border-slate-600 mr-1">
+        <span class="hidden sm:inline-flex shrink-0 items-center text-[0.65rem] font-semibold text-primary tracking-widest uppercase whitespace-nowrap pr-3 mr-1">
           {heading}
         </span>
       )}
@@ -26,7 +26,8 @@ const { items, ariaLabel = 'このページの目次', heading } = Astro.props;
         items.map(({ href, label }) => (
           <a
             href={href}
-            class="inline-flex shrink-0 items-center justify-center min-h-[2.75rem] rounded-full border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800/80 px-3 text-xs font-medium text-gray-700 dark:text-gray-200 hover:border-primary hover:text-primary dark:hover:text-blue-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+            data-toc-link
+            class="toc-tab inline-flex shrink-0 items-center justify-center min-h-[2.75rem] px-3 sm:px-4 text-xs sm:text-sm font-medium text-muted border-b-2 border-transparent -mb-px whitespace-nowrap transition-colors duration-150 hover:text-default focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-inset"
           >
             {label}
           </a>
@@ -43,4 +44,67 @@ const { items, ariaLabel = 'このページの目次', heading } = Astro.props;
   .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
+  .toc-tab.is-active {
+    color: var(--aw-color-primary);
+    border-color: var(--aw-color-primary);
+    font-weight: 600;
+  }
 </style>
+
+<script>
+  function initTocNav(nav: Element) {
+    const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
+    if (links.length === 0) return;
+
+    const sectionIds = links
+      .map((a) => {
+        const href = a.getAttribute('href') ?? '';
+        return href.startsWith('#') ? href.slice(1) : null;
+      })
+      .filter((id): id is string => id !== null);
+
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    if (sections.length === 0) return;
+
+    // sticky ヘッダー + TOC バー分のオフセット（上端 -140px で "画面上部付近" に入ったら active）
+    const observer = new IntersectionObserver(
+      () => {
+        // 現在ビューポートに最も近い（最上位の）セクションを特定
+        let activeSectionId: string | null = null;
+        for (const section of sections) {
+          const rect = section.getBoundingClientRect();
+          // sticky header 高さ相当（約 140px）より上に出ていなければアクティブ候補
+          if (rect.top <= 160) {
+            activeSectionId = section.id;
+          }
+        }
+        links.forEach((link) => {
+          const href = link.getAttribute('href') ?? '';
+          const isActive = href === `#${activeSectionId}`;
+          link.classList.toggle('is-active', isActive);
+        });
+      },
+      {
+        rootMargin: '-80px 0px -40% 0px',
+        threshold: [0, 0.1, 0.5, 1],
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    // ページ読み込み時に初期アクティブを設定
+    const initialHash = location.hash.slice(1);
+    if (initialHash) {
+      const initialLink = links.find((a) => a.getAttribute('href') === `#${initialHash}`);
+      if (initialLink) initialLink.classList.add('is-active');
+    } else if (links[0]) {
+      links[0].classList.add('is-active');
+    }
+  }
+
+  // ページ内に複数の PageTocNav がある場合にも対応
+  document.querySelectorAll('.page-toc-nav').forEach(initTocNav);
+</script>

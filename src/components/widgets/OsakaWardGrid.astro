@@ -1,0 +1,47 @@
+---
+/**
+ * 大阪市24区グリッド
+ * - 全24区を均等スタイルのバッジで表示（「詳細はお電話」差別化なし）
+ * - 専用ページのある区（slug あり）はリンク＋矢印アイコン
+ * - showCta=true のとき電話CTAボタンをグリッド下に表示
+ */
+import { Icon } from 'astro-icon/components';
+import { OSAKA_CITY_WARDS } from '~/data/osaka-wards';
+import { ctaHeroPrimaryClass } from '~/constants/clinical-page-ui';
+
+interface Props {
+  showCta?: boolean;
+}
+
+const { showCta = false } = Astro.props;
+---
+
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+  {
+    OSAKA_CITY_WARDS.map(({ name, slug }) =>
+      slug ? (
+        <a
+          href={`/area/${slug}`}
+          class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-slate-700 text-gray-800 dark:text-gray-200 hover:border-primary px-3 py-2.5 rounded-xl text-sm font-medium transition-colors inline-flex items-center justify-center gap-1 text-center"
+        >
+          {name}
+          <Icon name="tabler:arrow-right" class="w-3.5 h-3.5 shrink-0 text-primary" />
+        </a>
+      ) : (
+        <span class="bg-white dark:bg-slate-900 border border-blue-200 dark:border-slate-700 text-gray-800 dark:text-gray-200 px-3 py-2.5 rounded-xl text-sm font-medium inline-flex items-center justify-center text-center">
+          {name}
+        </span>
+      )
+    )
+  }
+</div>
+
+{
+  showCta && (
+    <div class="mt-6 text-center">
+      <a href="tel:0643017883" class:list={[ctaHeroPrimaryClass]}>
+        <Icon name="tabler:phone" class="w-4 h-4 shrink-0" /> エリア・担当院のご相談 06-4301-7883
+      </a>
+    </div>
+  )
+}

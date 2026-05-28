@@ -2,10 +2,9 @@
 import Stats from '~/components/widgets/Stats.astro';
 import Hero from '~/components/widgets/Hero.astro';
 import BranchLocations from '~/components/widgets/BranchLocations.astro';
+import OsakaWardGrid from '~/components/widgets/OsakaWardGrid.astro';
 import Layout from '~/layouts/PageLayout.astro';
-import { Icon } from 'astro-icon/components';
 import { KAMOME_BRANCH_COUNT } from '~/data/branches';
-import { OSAKA_CITY_WARDS } from '~/data/osaka-wards';
 import {
   clinicalHeroSubtitleClass,
   clinicalHeroTaglineClass,
@@ -145,7 +144,7 @@ const jsonLdBreadcrumb = {
                 [1, 2, 3, 4, 5].map(() => (
                   <td class="py-3 px-0.5 sm:py-4 sm:px-2">
                     <span
-                      class="text-[#a07840] dark:text-amber-500/90 text-base sm:text-xl leading-none"
+                      class="text-[#7A5518] dark:text-amber-500/90 text-base sm:text-xl leading-none"
                       aria-label="診療あり">●</span>
                   </td>
                 ))
@@ -168,7 +167,7 @@ const jsonLdBreadcrumb = {
                 [1, 2, 3, 4, 5].map(() => (
                   <td class="py-3 px-0.5 sm:py-4 sm:px-2">
                     <span
-                      class="text-[#a07840] dark:text-amber-500/90 text-base sm:text-xl leading-none"
+                      class="text-[#7A5518] dark:text-amber-500/90 text-base sm:text-xl leading-none"
                       aria-label="診療あり">●</span>
                   </td>
                 ))
@@ -198,31 +197,9 @@ const jsonLdBreadcrumb = {
       <p class="text-sm font-semibold text-primary tracking-widest mb-3">対応エリア</p>
       <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">大阪市24区（訪問診療・緊急往診）</h3>
       <p class="text-sm text-gray-600 dark:text-gray-400 mb-5 max-w-2xl mx-auto leading-relaxed">
-        対象エリアは大阪市全域です。紹介ページのある区はリンクからご覧ください。
+        大阪市24区全域で訪問診療・緊急往診に対応しています。担当院の調整などはお気軽にお電話ください。
       </p>
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-        {
-          OSAKA_CITY_WARDS.map(({ name, slug }) =>
-            slug ? (
-              <a
-                href={`/area/${slug}`}
-                class="bg-blue-50 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-slate-700 border border-blue-100 dark:border-slate-700 text-primary font-bold px-3 py-2.5 rounded-full text-sm transition-colors inline-flex items-center justify-center gap-1"
-              >
-                大阪市{name}
-                <Icon name="tabler:arrow-right" class="w-3.5 h-3.5 shrink-0" />
-              </a>
-            ) : (
-              <span class="bg-slate-50 dark:bg-slate-800/80 border border-dashed border-blue-100 dark:border-slate-600 text-gray-700 dark:text-gray-300 px-3 py-2.5 rounded-full text-sm inline-flex flex-col sm:flex-row items-center justify-center gap-0.5 leading-tight">
-                <span>大阪市{name}</span>
-                <span class="text-xs text-gray-500 dark:text-gray-500">（詳細はお電話）</span>
-              </span>
-            )
-          )
-        }
-      </div>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mt-4">
-        大阪市外のご相談も、地域医療連携部（06-4301-7883）へお問い合わせください。
-      </p>
+      <OsakaWardGrid showCta={true} />
     </div>
   </section>
 </Layout>

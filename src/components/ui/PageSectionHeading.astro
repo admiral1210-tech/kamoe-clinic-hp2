@@ -2,6 +2,13 @@
 import { twMerge } from 'tailwind-merge';
 import { clinicalSectionHeadline } from '~/constants/clinical-page-ui';
 
+/**
+ * 診療ページ専用のセクション見出し。
+ * clinicalSectionHeadline トークン（text-heading / text-muted）を適用し、
+ * 全診療ページで統一されたブランドトーンを維持する。
+ *
+ * 汎用ウィジェット見出しには Headline.astro を使用すること。
+ */
 interface Props {
   tagline?: string;
   title: string;

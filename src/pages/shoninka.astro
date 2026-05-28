@@ -3,7 +3,6 @@ import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
 import PageTocNav from '~/components/ui/PageTocNav.astro';
 import Features from '~/components/widgets/Features.astro';
-import Features2 from '~/components/widgets/Features2.astro';
 import Content from '~/components/widgets/Content.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import ClinicalPageClosing from '~/components/widgets/ClinicalPageClosing.astro';
@@ -11,9 +10,11 @@ import { CLINIC_CONTACT, clinicPostalAddressJsonLd } from '~/data/clinic-contact
 import { shoninkaFaqEntries } from '~/data/faq-shoninka';
 import {
   clinicalAnchorScrollMargin,
+  clinicalHeroSectionPadding,
   clinicalHeroSpeakableLeadClass,
   clinicalHeroSubtitleClass,
   clinicalHeroTaglineClass,
+  clinicalHeroTextBlockPadding,
   clinicalHeroTitleClass,
   clinicalSectionHeadline,
 } from '~/constants/clinical-page-ui';
@@ -155,6 +156,8 @@ const heroActions = [
     taglineClass={clinicalHeroTaglineClass}
     titleClass={clinicalHeroTitleClass}
     subtitleClass={clinicalHeroSubtitleClass}
+    sectionPaddingClass={clinicalHeroSectionPadding}
+    textBlockPaddingClass={clinicalHeroTextBlockPadding}
     actions={heroActions}
   >
     <Fragment slot="title">
@@ -172,7 +175,7 @@ const heroActions = [
   </Hero>
 
   <PageTocNav
-    ariaLabel="このページの主な内容"
+    ariaLabel="このページの目次"
     items={[
       { href: '#features', label: '特徴' },
       { href: '#taiou', label: '対応できる医療ケア' },
@@ -258,7 +261,7 @@ const heroActions = [
   </Content>
 
   <!-- こんな方へ -->
-  <Features2
+  <Features variant="cards"
     id="target"
     scrollMarginClass={clinicalAnchorScrollMargin}
     tagline="こんな方へ"
@@ -304,7 +307,7 @@ const heroActions = [
     <Fragment slot="bg">
       <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
     </Fragment>
-  </Features2>
+  </Features>
 
   <!-- よくある質問 -->
   <FAQs

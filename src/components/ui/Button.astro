@@ -8,16 +8,17 @@ const {
   target,
   text = Astro.slots.render('default'),
   icon = '',
+  iconBefore: iconBeforeProp,
   class: className = '',
   type,
   ...rest
 } = Astro.props;
 
-const variants = {
+const variants: Record<string, string> = {
   primary: 'btn-primary',
   secondary: 'btn-secondary',
   tertiary: 'btn btn-tertiary',
-  link: 'cursor-pointer hover:text-primary',
+  link: 'btn-link',
   line: 'btn-line',
   /** PageLayout 固定CTA（電話）と同形状（.floating-cta-inline 系は CustomStyles） */
   floatingCtaTel: 'floating-cta-inline floating-cta-inline-tel',
@@ -25,18 +26,19 @@ const variants = {
   floatingCtaForm: 'floating-cta-inline floating-cta-inline-form',
 };
 
-const isFloatingCtaStyle = variant === 'floatingCtaTel' || variant === 'floatingCtaForm';
+/** アイコンをテキスト前（左）に置くか。iconBefore Prop が明示された場合はそれを優先 */
+const iconBefore = iconBeforeProp ?? (variant === 'floatingCtaTel' || variant === 'floatingCtaForm');
 ---
 
 {
   type === 'button' || type === 'submit' || type === 'reset' ? (
     <button type={type} class={twMerge(variants[variant] || '', className)} {...rest}>
-      {isFloatingCtaStyle && icon ? (
+      {iconBefore && icon ? (
         <Icon name={icon} class="w-4 h-4 shrink-0" aria-hidden="true" />
       ) : null}
       <Fragment set:html={text} />
-      {!isFloatingCtaStyle && icon ? (
-        <Icon name={icon} class="w-5 h-5 ml-1 -mr-1.5 rtl:mr-1 rtl:-ml-1.5 inline-block" />
+      {!iconBefore && icon ? (
+        <Icon name={icon} class="w-5 h-5 ml-1 -mr-1.5 rtl:mr-1 rtl:-ml-1.5 inline-block" aria-hidden="true" />
       ) : null}
     </button>
   ) : (
@@ -45,12 +47,12 @@ const isFloatingCtaStyle = variant === 'floatingCtaTel' || variant === 'floating
       {...(target ? { target: target, rel: 'noopener noreferrer' } : {})}
       {...rest}
     >
-      {isFloatingCtaStyle && icon ? (
+      {iconBefore && icon ? (
         <Icon name={icon} class="w-4 h-4 shrink-0" aria-hidden="true" />
       ) : null}
       <Fragment set:html={text} />
-      {!isFloatingCtaStyle && icon ? (
-        <Icon name={icon} class="w-5 h-5 ml-1 -mr-1.5 rtl:mr-1 rtl:-ml-1.5 inline-block" />
+      {!iconBefore && icon ? (
+        <Icon name={icon} class="w-5 h-5 ml-1 -mr-1.5 rtl:mr-1 rtl:-ml-1.5 inline-block" aria-hidden="true" />
       ) : null}
     </a>
   )

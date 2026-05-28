@@ -1,7 +1,9 @@
 ---
+import { Icon } from 'astro-icon/components';
 import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
 import Timeline from '~/components/ui/Timeline.astro';
 import Headline from '~/components/ui/Headline.astro';
+import Button from '~/components/ui/Button.astro';
 import Image from '~/components/common/Image.astro';
 import type { Steps as Props } from '~/types';
 
@@ -9,9 +11,11 @@ const {
   title = await Astro.slots.render('title'),
   subtitle = await Astro.slots.render('subtitle'),
   tagline = await Astro.slots.render('tagline'),
+  callToAction = await Astro.slots.render('callToAction'),
   items = [],
   image = await Astro.slots.render('image'),
   isReversed = false,
+  variant = 'timeline',
 
   id,
   isDark = false,
@@ -21,48 +25,95 @@ const {
 } = Astro.props;
 ---
 
-<WidgetWrapper
-  id={id}
-  isDark={isDark}
-  containerClass={`max-w-5xl ${classes?.container ?? ''}`}
-  bg={bg}
-  scrollMarginClass={scrollMarginClass}
->
-  <div class:list={['flex flex-col gap-8 md:gap-12', { 'md:flex-row-reverse': isReversed }, { 'md:flex-row': image }]}>
-    <div class:list={['md:py-4 md:self-center', { 'md:basis-1/2': image }, { 'w-full': !image }]}>
-      <Headline
-        title={title}
-        subtitle={subtitle}
-        tagline={tagline}
-        classes={{
-          container: 'text-left rtl:text-right',
-          title: 'text-3xl lg:text-4xl',
-          ...((classes?.headline as object) ?? {}),
-        }}
-      />
-      <div role="region" aria-label="応募の流れの各ステップ">
-        <Timeline items={items} classes={classes?.items as Record<string, never>} />
+{variant === 'numbered' ? (
+  <WidgetWrapper id={id} isDark={isDark} containerClass={`max-w-6xl mx-auto ${classes?.container ?? ''}`} bg={bg}>
+    <div class={`flex flex-col gap-8 md:gap-12 md:flex-row ${isReversed ? 'md:flex-row-reverse' : ''}`}>
+      <div class={`w-full lg:w-1/2 gap-8 md:gap-12 ${isReversed ? 'lg:ml-16 md:ml-8 ml-0' : 'lg:mr-16 md:mr-8 mr-0'}`}>
+        <Headline
+          title={title}
+          subtitle={subtitle}
+          tagline={tagline}
+          classes={{
+            container: 'text-center md:text-left rtl:md:text-right mb-4 md:mb-8',
+            title: 'mb-4 text-3xl lg:text-4xl font-bold font-heading',
+            subtitle: 'mb-8 text-xl text-muted',
+          }}
+        />
+        <div class="w-full text-center md:text-left rtl:md:text-right">
+          {typeof callToAction === 'string' ? (
+            <Fragment set:html={callToAction} />
+          ) : (
+            callToAction &&
+            (callToAction as { text?: string; href?: string }).text &&
+            (callToAction as { text?: string; href?: string }).href && (
+              <Button variant="primary" {...(callToAction as object)} class="mb-12 w-auto" />
+            )
+          )}
+        </div>
+      </div>
+      <div class="w-full lg:w-1/2 px-0">
+        <ul class="space-y-10">
+          {items && items.length
+            ? items.map(({ title: title2, description, icon }, index) => (
+                <li class="flex md:-mx-4">
+                  <div class="pr-4 sm:pl-4 rtl:pr-0 rtl:pl-4 rtl:sm:pl-0 rtl:sm:pr-4">
+                    <span class="flex w-16 h-16 mx-auto items-center justify-center text-2xl font-bold rounded-pill bg-blue-100 text-primary">
+                      {icon ? <Icon name={icon} class="w-6 h-6 icon-bold" /> : index + 1}
+                    </span>
+                  </div>
+                  <div class="pl-4 rtl:pl-0 rtl:pr-4">
+                    <h3 class="mb-4 text-xl font-semibold font-heading" set:html={title2} />
+                    <p class="text-muted" set:html={description} />
+                  </div>
+                </li>
+              ))
+            : ''}
+        </ul>
       </div>
     </div>
-    {
-      image && (
+  </WidgetWrapper>
+) : (
+  <WidgetWrapper
+    id={id}
+    isDark={isDark}
+    containerClass={`max-w-5xl ${classes?.container ?? ''}`}
+    bg={bg}
+    scrollMarginClass={scrollMarginClass}
+  >
+    <div class:list={['flex flex-col gap-8 md:gap-12', { 'md:flex-row-reverse': isReversed }, { 'md:flex-row': image }]}>
+      <div class:list={['md:py-4 md:self-center', { 'md:basis-1/2': image }, { 'w-full': !image }]}>
+        <Headline
+          title={title}
+          subtitle={subtitle}
+          tagline={tagline}
+          classes={{
+            container: 'text-left rtl:text-right',
+            title: 'text-3xl lg:text-4xl',
+            ...((classes?.headline as object) ?? {}),
+          }}
+        />
+        <div role="region" aria-label="応募の流れの各ステップ">
+          <Timeline items={items} classes={classes?.items as Record<string, never>} />
+        </div>
+      </div>
+      {image && (
         <div class="relative md:basis-1/2">
           {typeof image === 'string' ? (
             <Fragment set:html={image} />
           ) : (
             <Image
-              class="inset-0 object-cover object-top w-full rounded-md shadow-lg md:absolute md:h-full bg-gray-400 dark:bg-slate-700"
+              class="inset-0 object-cover object-top w-full rounded-card shadow-lg md:absolute md:h-full bg-gray-400"
               widths={[400, 768]}
               sizes="(max-width: 768px) 100vw, 432px"
               width={432}
               height={768}
               layout="cover"
-              src={image?.src}
-              alt={image?.alt || ''}
+              src={(image as { src?: string })?.src}
+              alt={(image as { alt?: string })?.alt || ''}
             />
           )}
         </div>
-      )
-    }
-  </div>
-</WidgetWrapper>
+      )}
+    </div>
+  </WidgetWrapper>
+)}

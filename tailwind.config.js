@@ -12,6 +12,18 @@ export default {
         accent: 'var(--aw-color-accent)',
         default: 'var(--aw-color-text-default)',
         muted: 'var(--aw-color-text-muted)',
+        heading: 'var(--aw-color-text-heading)',
+        // ナビゲーションホバー色（hover:text-link で使用）
+        link: 'var(--aw-color-primary)',
+      },
+      spacing: {
+        'section-y':       'var(--aw-spacing-section-y)',
+        'section-x':       'var(--aw-spacing-section-x)',
+        'hero-content-pb': 'var(--aw-spacing-hero-content-pb)',
+      },
+      borderRadius: {
+        card: 'var(--aw-radius-card)',
+        pill: 'var(--aw-radius-pill)',
       },
       fontFamily: {
         sans: ['var(--aw-font-sans, ui-sans-serif)', ...defaultTheme.fontFamily.sans],

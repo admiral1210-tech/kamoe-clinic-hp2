@@ -2,7 +2,7 @@
 import { SITE } from 'astrowind:config';
 import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
-import Features2 from '~/components/widgets/Features2.astro';
+import Features from '~/components/widgets/Features.astro';
 import Steps from '~/components/widgets/Steps.astro';
 import Content from '~/components/widgets/Content.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
@@ -56,8 +56,7 @@ const jobPostingJson = serializeJsonLdForScript(jobPostingLd);
     taglineClass={clinicalHeroTaglineClass}
     titleClass={clinicalHeroTitleClass}
     subtitleClass={`${clinicalHeroSubtitleClass} !mb-0`}
-    sectionPaddingClass="py-6 md:py-10"
-    textBlockPaddingClass="pb-0"
+    sectionPaddingClass="pt-6 md:pt-10"
   >
     <Fragment slot="title">
       「お家に帰りたい」という<br />
@@ -73,7 +72,7 @@ const jobPostingJson = serializeJsonLdForScript(jobPostingLd);
   <!-- ============================================================
     かもめクリニックで働く魅力
   ================================================================ -->
-  <Features2
+  <Features variant="cards"
     id="why"
     tagline="働く環境"
     title="かもめクリニックで働く魅力"

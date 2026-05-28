@@ -2,11 +2,13 @@
 import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
 import PageSectionHeading from '~/components/ui/PageSectionHeading.astro';
-import Features2 from '~/components/widgets/Features2.astro';
+import Features from '~/components/widgets/Features.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import ClinicalPageClosing from '~/components/widgets/ClinicalPageClosing.astro';
 import { Icon } from 'astro-icon/components';
 import {
+  clinicalAnchorScrollMargin,
+  clinicalHeroSectionPadding,
   clinicalHeroSubtitleClass,
   clinicalHeroTaglineClass,
   clinicalHeroTitleClass,
@@ -84,6 +86,7 @@ const ldSpeakable = serializeJsonLdForScript(jsonLdSpeakable);
     taglineClass={clinicalHeroTaglineClass}
     titleClass={clinicalHeroTitleClass}
     subtitleClass={clinicalHeroSubtitleClass}
+    sectionPaddingClass={clinicalHeroSectionPadding}
     actions={heroActions}
   >
     <Fragment slot="title">
@@ -97,7 +100,7 @@ const ldSpeakable = serializeJsonLdForScript(jsonLdSpeakable);
       <span class="text-primary dark:text-blue-300">ずっと対応します。</span>
     </Fragment>
     <Fragment slot="subtitle">
-      在支診1とは、24時間緊急往診・入院手配体制・在宅看取り実績など、厚生労働省の施設基準（機能強化型）を満たしたクリニックのみが届出できる認定です。<strong class="text-gray-900 dark:text-gray-100"
+      在支診1とは、24時間緊急往診・入院手配体制・在宅看取り実績など、厚生労働省の施設基準（機能強化型）を満たしたクリニックのみが届出できる認定です。<strong class="text-heading"
         >「認定を持っている」ことよりも、それが患者さまに何をもたらすか</strong
       >をお伝えします。
     </Fragment>
@@ -121,8 +124,8 @@ const ldSpeakable = serializeJsonLdForScript(jsonLdSpeakable);
                   {badge}
                 </span>
               </div>
-              <h3 class="font-bold text-gray-900 dark:text-white text-base leading-snug">{title}</h3>
-              <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{description}</p>
+              <h3 class="font-bold font-heading text-heading text-base leading-snug">{title}</h3>
+              <p class="text-sm text-muted leading-relaxed">{description}</p>
             </div>
           ))
         }
@@ -180,7 +183,7 @@ const ldSpeakable = serializeJsonLdForScript(jsonLdSpeakable);
   </section>
 
   <!-- ===== 実績数字 ===== -->
-  <Features2
+  <Features variant="cards"
     tagline="かもめクリニックの実績"
     title="在支診1を支える、数字と体制"
     classes={{ headline: { ...clinicalSectionHeadline }, container: 'max-w-7xl mx-auto' }}
@@ -189,7 +192,7 @@ const ldSpeakable = serializeJsonLdForScript(jsonLdSpeakable);
     <Fragment slot="bg">
       <div class="absolute inset-0 bg-white dark:bg-transparent"></div>
     </Fragment>
-  </Features2>
+  </Features>
 
   <!-- ===== FAQ ===== -->
   <FAQs

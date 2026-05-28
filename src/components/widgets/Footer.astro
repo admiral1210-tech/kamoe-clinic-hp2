@@ -13,22 +13,22 @@ export interface Props extends FooterData {
 const { socialLinks = [], secondaryLinks = [], links = [], theme = 'light' } = Astro.props;
 ---
 
-<footer class:list={[{ dark: theme === 'dark' }, 'relative border-t border-gray-200 dark:border-slate-800 not-prose']}>
-  <div class="dark:bg-dark absolute inset-0 pointer-events-none" aria-hidden="true"></div>
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 dark:text-slate-300">
+<footer class:list={[{ dark: theme === 'dark' }, 'relative border-t border-gray-200 not-prose']}>
+  <div class="absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+  <div class="relative max-w-7xl mx-auto px-section-x">
     <!-- 上段：クリニック情報 + リンクグリッド -->
-    <div class="py-8 flex flex-col lg:flex-row gap-8 border-b border-gray-100 dark:border-slate-700">
+    <div class="py-8 flex flex-col lg:flex-row gap-8 border-b border-gray-100">
       <!-- クリニック情報ブロック（住所・TEL・診療時間） -->
       <div class="shrink-0 space-y-4 lg:w-64">
         <a
-          class="font-bold text-base text-gray-900 dark:text-white hover:text-primary transition-colors block"
+          class="font-bold text-base text-heading hover:text-primary transition-colors block"
           href={getHomePermalink()}
         >
           {SITE?.name}
         </a>
 
         <!-- 住所・診療時間 -->
-        <address class="not-italic space-y-2 text-sm text-muted dark:text-gray-400">
+        <address class="not-italic space-y-2 text-sm text-muted">
           <p class="flex items-start gap-2">
             <Icon name="tabler:map-pin" class="w-4 h-4 shrink-0 mt-0.5 text-primary" aria-hidden="true" />
             <span>
@@ -42,7 +42,7 @@ const { socialLinks = [], secondaryLinks = [], links = [], theme = 'light' } = A
           <p class="flex items-start gap-2">
             <Icon name="tabler:clock" class="w-4 h-4 shrink-0 mt-0.5 text-primary" aria-hidden="true" />
             <span>
-              <span class="text-gray-500 dark:text-gray-500 text-xs">通常受付：</span>{CLINIC_CONTACT.hoursPrimary}
+              <span class="text-caption">通常受付：</span>{CLINIC_CONTACT.hoursPrimary}
               <br />
               {CLINIC_CONTACT.hoursEmergency}
             </span>
@@ -52,11 +52,11 @@ const { socialLinks = [], secondaryLinks = [], links = [], theme = 'light' } = A
         <!-- 電話CTA カード -->
         <a
           href={CLINIC_CONTACT.telHref}
-          class="flex items-center gap-3 rounded-xl bg-primary/10 hover:bg-primary/15 dark:bg-primary/20 dark:hover:bg-primary/30 px-4 py-3 transition-colors"
+          class="flex items-center gap-3 rounded-xl bg-primary/10 hover:bg-primary/15 px-4 py-3 transition-colors"
         >
           <Icon name="tabler:phone" class="w-5 h-5 shrink-0 text-primary" aria-hidden="true" />
           <span>
-            <span class="block text-xs text-gray-500 dark:text-gray-400 mb-0.5">お電話でのご相談</span>
+            <span class="block text-xs text-caption mb-0.5">お電話でのご相談</span>
             <span class="font-bold text-lg text-primary tracking-wider leading-none"
               >{CLINIC_CONTACT.telDisplay}</span
             >
@@ -89,14 +89,14 @@ const { socialLinks = [], secondaryLinks = [], links = [], theme = 'light' } = A
                     alt="かもめクリニック Instagram QRコード"
                     width={240}
                     height={276}
-                    class="h-14 w-auto object-contain rounded-lg bg-white border border-gray-200 dark:border-slate-700"
+                    class="h-14 w-auto object-contain rounded-lg bg-white border border-gray-200"
                     loading="lazy"
                     decoding="async"
                   />
                 </a>
-                <p class="text-xs text-gray-500 dark:text-gray-400 leading-snug">
+                <p class="text-xs text-caption leading-snug">
                   Instagram<br />公式アカウント<br />
-                  <span class="text-[#E4405F]">@kamomeclinic</span>
+                  <span class="text-[#BE1745]">@kamomeclinic</span>
                 </p>
               </div>
             ) : !variant && icon ? (
@@ -105,7 +105,7 @@ const { socialLinks = [], secondaryLinks = [], links = [], theme = 'light' } = A
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={ariaLabel}
-                class="inline-flex items-center justify-center rounded-xl p-2.5 text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                class="inline-flex items-center justify-center rounded-xl p-2.5 text-muted hover:bg-gray-100 transition-colors"
               >
                 <Icon name={icon} class="w-6 h-6" />
               </a>
@@ -133,12 +133,12 @@ const { socialLinks = [], secondaryLinks = [], links = [], theme = 'light' } = A
     </div>
 
     <!-- 下段：セカンダリリンク + コピーライト -->
-    <div class="py-4 flex flex-wrap items-center justify-between gap-3 text-sm text-muted dark:text-muted">
+    <div class="py-4 flex flex-wrap items-center justify-between gap-3 text-sm text-muted">
       <div class="flex flex-wrap gap-4">
         {
           secondaryLinks.map(({ text, href }) => (
             <a
-              class="hover:text-gray-700 dark:text-gray-400 hover:underline transition duration-150 ease-in-out"
+              class="hover:text-default hover:underline transition duration-150 ease-in-out"
               href={href}
             >
               {text}
@@ -146,7 +146,7 @@ const { socialLinks = [], secondaryLinks = [], links = [], theme = 'light' } = A
           ))
         }
       </div>
-      <p class="text-xs text-muted dark:text-muted">
+      <p class="text-xs text-muted">
         © {new Date().getFullYear()} かもめクリニック
       </p>
     </div>

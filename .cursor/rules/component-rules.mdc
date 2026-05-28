@@ -1,0 +1,237 @@
+---
+description: Buttonバリアント・見出しコンポーネント・WidgetWrapper・CTAパターンの選択基準と使い分けルール。コンポーネント実装・ページ作成時に参照すること。
+globs: ["src/**/*.astro", "src/**/*.ts", "src/components/**", "src/pages/**"]
+alwaysApply: true
+---
+
+# コンポーネントルール
+
+---
+
+## 1. Button コンポーネント
+
+`src/components/ui/Button.astro` を使用する。
+
+### variants 一覧と使い分け
+
+| variant | クラス | 使用場面 |
+|---|---|---|
+| `primary` | `.btn-primary` | **メインCTA**。各ページに1〜2個まで。電話・予約のファーストアクション |
+| `secondary` | `.btn-secondary` | **サブCTA**。primaryの隣に置くアクション。外来案内リンクなど |
+| `tertiary` | `.btn.btn-tertiary` | **テキストに近いCTA**。「もっと見る」「一覧へ」など低優先度アクション |
+| `link` | カーソル + ホバープライマリ | **インラインリンク**。本文中のリンクテキスト |
+| `line` | `.btn-line` | **LINE公式アカウントへの誘導専用** |
+| `floatingCtaTel` | `.floating-cta-inline-tel` | ヒーロー内・セクション内で固定CTAと同形状の**電話ボタン** |
+| `floatingCtaForm` | `.floating-cta-inline-form` | ヒーロー内・セクション内で固定CTAと同形状の**フォームボタン** |
+
+### 使用規約
+
+- **`type` prop を省略すると `<a>` タグになる**。フォームの submit ボタンは `type="submit"` を必ず指定する
+- `icon` prop でアイコン名を渡す（astro-icon の名前形式）。装飾アイコンは `aria-hidden="true"` が自動付与される
+- `iconBefore` prop でアイコンを左に置く（デフォルト: `floatingCtaTel` / `floatingCtaForm` は自動で左）
+- **size prop は存在しない**。サイズ変更が必要なときは `class` prop で `py-2 px-4 text-sm` などを追加指定する
+- `target` prop を指定すると `rel="noopener noreferrer"` が自動付与される
+
+### 禁止事項
+
+- インラインの `<a>` タグに手動で `.btn-primary` 等を付与するのではなく、必ず `Button` コンポーネントを使う
+- `ctaHeroPrimaryClass` / `ctaHeroSecondaryClass`（`clinical-page-ui.ts`）を**新規ページで使わない**。これらは既存の診療ページヒーロー互換のため残存しているが、新規では `variant="primary"` / `variant="secondary"` を使う
+
+---
+
+## 2. 見出しコンポーネント
+
+見出しは3系統あり、ページタイプと用途で使い分ける。
+
+### 2-1. `Headline.astro` — ウィジェット・汎用ページ用
+
+`src/components/ui/Headline.astro`
+
+**使いどころ**: `Features`, `FAQs`, `Testimonials`, `Steps` など汎用ウィジェットの見出し
+
+```astro
+<Features
+  classes={{
+    headline: {
+      container: 'max-w-3xl',
+      title: 'text-3xl md:text-4xl',
+      tagline: 'text-base text-secondary font-bold tracking-wide uppercase',
+      subtitle: 'text-xl text-muted',
+    },
+  }}
+/>
+```
+
+デフォルト: tagline=`text-secondary`、title=`text-3xl md:text-4xl`、中央揃え
+
+### 2-2. `PageSectionHeading.astro` — 診療ページのインラインセクション用
+
+`src/components/ui/PageSectionHeading.astro`
+
+**使いどころ**: 診療ページ（naika, seikeigeka, joseikin 等）内のインラインセクション見出し
+
+```astro
+<PageSectionHeading
+  tagline="ご相談の流れ"
+  title="初回受診から治療開始まで"
+  subtitle="ご不安な点はお気軽にご相談ください"
+/>
+```
+
+内部で `clinicalSectionHeadline` トークンを使用:
+- tagline: `text-xs font-semibold text-primary tracking-widest uppercase mb-1`
+- title: `text-2xl md:text-3xl font-bold tracking-tight text-heading`
+- subtitle: `mt-3 text-sm md:text-base text-muted leading-relaxed`
+
+### 2-3. `clinicalSectionHeadline` — Features/FAQs の診療系見出し上書き
+
+`src/constants/clinical-page-ui.ts` からインポートして `classes.headline` に spread する
+
+**使いどころ**: 診療ページ内の `Features` / `FAQs` ウィジェット見出し
+
+```astro
+---
+import { clinicalSectionHeadline } from '~/constants/clinical-page-ui';
+---
+<Features
+  classes={{ headline: clinicalSectionHeadline }}
+  title="よくある症状"
+/>
+```
+
+### 選択フロー
+
+```
+新しい見出しを追加する
+    ↓
+診療ページ（naika/seikeigeka/joseikin 等）?
+  ├── はい: Features/FAQs ウィジェットの見出し? → clinicalSectionHeadline（spread）
+  │          インラインセクションの独立見出し? → PageSectionHeading
+  └── いいえ（汎用ページ/トップ等）: → Headline.astro（デフォルトまたは classes で上書き）
+```
+
+### 禁止事項
+
+- インラインでの `<h2 class="text-2xl font-bold text-heading">` の直書き（コンポーネントを使う）
+- `Headline.astro` と `PageSectionHeading.astro` を同一セクションで混用しない
+- tagline に `text-primary`（診療系）と `text-secondary`（汎用系）を混用しない
+
+---
+
+## 3. WidgetWrapper
+
+`src/components/ui/WidgetWrapper.astro`
+
+全セクション（`<section>`）の標準ラッパー。
+
+### Props
+
+| prop | 型 | デフォルト | 説明 |
+|---|---|---|---|
+| `id` | string | — | アンカーリンク用 ID |
+| `isDark` | boolean | false | 背景をダーク系に（`.dark` クラスを内部 div に付与） |
+| `containerClass` | string | `''` | 内側 div の追加クラス |
+| `bg` | string (HTML) | — | 背景HTMLを直接渡す |
+| `as` | HTMLTag | `'section'` | レンダリングするHTML要素 |
+| `scrollMarginClass` | string | `'scroll-mt-[72px]'` | アンカースクロールのオフセット |
+
+### 使用規約
+
+- スクロールアニメーション（intersect フェード）は自動付与される。無効にする必要があれば `containerClass` で `motion-safe:md:opacity-0` を打ち消す
+- 診療ページで `PageTocNav` がある場合は `scrollMarginClass` を `clinicalAnchorScrollMargin`（`scroll-mt-32`）に変更する
+- 内側の横幅は自動で `max-w-7xl` になる。全幅レイアウトが必要なら `containerClass="!max-w-full px-0"` を指定する
+
+```astro
+<!-- 診療ページのアンカー対応セクション -->
+<WidgetWrapper id="flow" scrollMarginClass={clinicalAnchorScrollMargin}>
+  ...
+</WidgetWrapper>
+```
+
+---
+
+## 4. CTA パターンの統一方針
+
+CTAは4つの文脈で使い分ける。**新規実装は必ずこの分類に従う。**
+
+### パターン A: ページ固定CTA（画面下/右下）
+
+`src/layouts/PageLayout.astro` の `<div id="floating-cta">` スロットで定義する。
+`CustomStyles.astro` の `.floating-cta` クラスが自動でスタイリング（モバイル:下部バー、デスクトップ:右下縦積み）。
+
+```astro
+<!-- PageLayout の slot に渡す -->
+<div id="floating-cta" slot="floating-cta">
+  <a href="tel:XXXXXX" class="floating-cta-tel">...</a>
+  <a href="/contact" class="floating-cta-form">...</a>
+</div>
+```
+
+### パターン B: ヒーロー内・セクション内のインラインCTA
+
+`Button` コンポーネントの `variant="floatingCtaTel"` / `variant="floatingCtaForm"` を使う。
+固定CTAと同じ見た目になる。
+
+```astro
+<Button variant="floatingCtaTel" icon="tabler:phone" text="電話で相談" href="tel:XXXXXX" />
+<Button variant="floatingCtaForm" icon="tabler:mail" text="フォームで相談" href="/contact" />
+```
+
+### パターン C: セクション末尾の標準CTAブロック
+
+`ConsultCTA.astro` ウィジェットまたは `ClinicalPageClosing.astro` を使う。
+診療ページには `ClinicalPageClosing` を末尾に必ず配置する。
+
+### パターン D: ナビ・ヘッダー内のアクション
+
+`Header.astro` の `actions` prop で `Button` を渡す（variant は `primary` のみ）。
+
+---
+
+## 5. アクセシビリティ必須実装
+
+WCAG 2.1 AA 準拠のため、以下は必ず実装する。
+
+### インタラクティブ要素
+
+- すべての `<a>`, `<button>`, `<input>`, `<select>`, `<textarea>` に `focus-visible:ring-2 focus-visible:ring-primary/60` を付与
+- `outline: none` / `outline: 0` を設定する場合は代替フォーカスを必ず実装
+
+### 画像・アイコン
+
+- `<img>` / `<Image>` には意味のある `alt` を付与。装飾は `alt=""`
+- 装飾目的の SVG・Icon コンポーネントには `aria-hidden="true"` を必ず付与
+
+### ナビゲーション
+
+- `<nav>` には `aria-label` でラベルを付与（例: `aria-label="メインナビゲーション"`）
+- 現在表示中のページのリンクに `aria-current="page"` を付与（`Header.astro` が自動付与）
+- ドロップダウンには `aria-expanded`, `aria-haspopup`, `aria-controls` を実装
+
+### フォーム
+
+- すべての `input`, `select`, `textarea` に対応する `<label>` を必須（`sr-only` 可）
+- プライバシーポリシー同意チェックボックスは `required` かつ `aria-label` を付与
+
+### スキップリンク
+
+`<body>` 直後に `.skip-link` を配置。`<main>` には `id="main-content"` を付与。
+（`Layout.astro` に既に実装済み）
+
+---
+
+## 6. コンポーネント選択早見表
+
+| 作りたいもの | 使うコンポーネント |
+|---|---|
+| メインCTAボタン | `<Button variant="primary">` |
+| サブCTAボタン | `<Button variant="secondary">` |
+| LINEボタン | `<Button variant="line">` |
+| ヒーロー内電話CTA | `<Button variant="floatingCtaTel">` |
+| セクションの見出し（汎用） | `<Headline>` または `classes.headline` |
+| 診療ページのインライン見出し | `<PageSectionHeading>` |
+| 診療ページウィジェットの見出し | `classes={{ headline: clinicalSectionHeadline }}` |
+| セクションラッパー | `<WidgetWrapper>` |
+| ページ末尾の受診案内 | `<ClinicalPageClosing>` |
+| Q&A一覧 | `<FAQs>` + `clinicalSectionHeadline` |
+| 機能・特徴一覧 | `<Features>` + `clinicalSectionHeadline` |

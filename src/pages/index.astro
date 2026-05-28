@@ -296,11 +296,11 @@ const jsonLdSpeakable = {
     imageFirst={true}
     imageContainerClass="max-w-6xl"
     tagline="大阪市の訪問診療｜24h体制"
-    titleClass="text-3xl md:text-4xl lg:text-[2.5rem] font-bold leading-snug tracking-tight mb-3 font-heading text-gray-900 dark:text-gray-100 intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
+    titleClass="text-3xl md:text-4xl lg:text-[2.5rem] font-bold leading-snug tracking-tight mb-3 font-heading text-heading intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
   >
     <Fragment slot="image">
       <div
-        class="overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 dark:ring-white/10 w-full aspect-[4/3] md:aspect-[1024/365]"
+        class="overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 w-full aspect-[4/3] md:aspect-[1024/365]"
       >
         <img
           src={heroHomeTopImg.src}
@@ -316,7 +316,7 @@ const jsonLdSpeakable = {
     </Fragment>
     <Fragment slot="title">
       ご自宅・施設へ<br />
-      <span class="text-primary dark:text-blue-300">訪問診療</span>で支えます
+      <span class="text-primary">訪問診療</span>で支えます
     </Fragment>
     <Fragment slot="actions">
       <a href="tel:0643017871" class:list={[ctaHeroPrimaryClass, 'min-h-[44px]']}>
@@ -329,46 +329,46 @@ const jsonLdSpeakable = {
       </a>
     </Fragment>
     <Fragment slot="content">
-      <div class="mt-5 max-w-lg mx-auto text-left rounded-2xl border border-gray-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 px-4 py-3 not-prose">
-        <p class="text-center text-sm font-semibold text-gray-700 dark:text-gray-200">実績・評価</p>
-        <div class="mt-4 space-y-4 border-t border-gray-100 dark:border-slate-700 pt-4">
+      <div class="mt-5 max-w-lg mx-auto text-left rounded-2xl border border-gray-200 bg-white/80 px-4 py-3 not-prose">
+        <p class="text-center text-sm font-semibold text-gray-700">実績・評価</p>
+        <div class="mt-4 space-y-4 border-t border-gray-100 pt-4">
           <dl
-            class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center rounded-xl border border-gray-200 dark:border-slate-600 py-3 px-2 bg-gray-50/80 dark:bg-slate-900/50"
+            class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center rounded-xl border border-gray-200 py-3 px-2 bg-gray-50/80"
           >
             <div>
-              <dt class="text-sm text-gray-700 dark:text-gray-400">開院</dt>
-              <dd class="text-base font-black text-gray-900 dark:text-white">
+              <dt class="text-sm text-gray-700">開院</dt>
+              <dd class="text-base font-black text-heading">
                 2017<span class="text-sm font-semibold">年</span>
               </dd>
             </div>
             <div>
-              <dt class="text-sm text-gray-700 dark:text-gray-400">年間患者数</dt>
-              <dd class="text-base font-black text-gray-900 dark:text-white tabular-nums">
+              <dt class="text-sm text-gray-700">年間患者数</dt>
+              <dd class="text-base font-black text-heading tabular-nums">
                 {getCumulativePatientsDisplay()}
               </dd>
             </div>
             <div>
-              <dt class="text-sm text-gray-700 dark:text-gray-400">年間診察</dt>
-              <dd class="text-base font-black text-gray-900 dark:text-white tabular-nums">
+              <dt class="text-sm text-gray-700">年間診察</dt>
+              <dd class="text-base font-black text-heading tabular-nums">
                 {getCumulativeVisitsDisplay()}
               </dd>
             </div>
             <div>
-              <dt class="text-sm text-gray-700 dark:text-gray-400">大阪市内</dt>
-              <dd class="text-base font-black text-gray-900 dark:text-white">5<span class="text-sm font-semibold">院</span></dd>
+              <dt class="text-sm text-gray-700">大阪市内</dt>
+              <dd class="text-base font-black text-heading">5<span class="text-sm font-semibold">院</span></dd>
             </div>
           </dl>
-          <p class="text-center text-sm text-gray-700 dark:text-gray-400">
+          <p class="text-center text-sm text-gray-700">
             厚生労働省 機能強化型在宅療養支援診療所（在支診1）認定
           </p>
-          <p class="text-center text-xs text-gray-400 dark:text-gray-500 -mt-2">
+          <p class="text-center text-xs text-gray-400 -mt-2">
             ※患者数・診察件数は2025年1月〜12月の集計値です。
           </p>
           {
             googleReview.ratingValue !== null && googleReview.reviewCount !== null && (
               <div class="flex justify-center">
                 <div
-                  class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-900/50 px-4 py-2"
+                  class="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2"
                 >
                   <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
                     <path
@@ -389,7 +389,7 @@ const jsonLdSpeakable = {
                     />
                   </svg>
                   <div class="text-left">
-                    <p class="flex flex-wrap items-center gap-1 font-black text-sm text-gray-900 dark:text-white">
+                    <p class="flex flex-wrap items-center gap-1 font-black text-sm text-heading">
                       <span>{googleReview.ratingValue}</span>
                       <span class="flex items-center gap-0.5" aria-label={`評価 ${googleReview.ratingValue} / 5`}>
                         {Array.from({ length: Math.min(5, Math.round(googleReview.ratingValue ?? 0)) }).map(() => (
@@ -397,7 +397,7 @@ const jsonLdSpeakable = {
                         ))}
                       </span>
                     </p>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Googleレビュー {googleReview.reviewCount}件</p>
+                    <p class="text-sm text-gray-500">Googleレビュー {googleReview.reviewCount}件</p>
                   </div>
                 </div>
               </div>
@@ -409,39 +409,40 @@ const jsonLdSpeakable = {
   </Hero>
 
   <PageTocNav
+    ariaLabel="このページの目次"
     items={[
       { href: '#about-houmon', label: '訪問診療とは' },
       { href: '#features', label: '当院の特徴' },
       { href: '#departments', label: '診療内容' },
       { href: '#trust', label: '信頼情報' },
       { href: '#faq', label: 'よくある質問' },
-      { href: '/renkei', label: 'ご相談（患者・ご家族）' },
+      { href: '/renkei', label: 'ご相談' },
     ]}
   />
 
   <!-- 訪問診療とは（圧縮版・AEO定義維持） -->
-  <section id="about-houmon" class="scroll-mt-32 py-5 md:py-7 bg-page dark:bg-slate-900">
+  <section id="about-houmon" class="scroll-mt-32 py-5 md:py-7 bg-page">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
-      <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-100 dark:border-slate-700 shadow-sm">
+      <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
         <div class="flex items-start gap-3">
           <Icon name="tabler:home-heart" class="w-6 h-6 text-primary shrink-0 mt-0.5" />
           <div class="flex-1 min-w-0">
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">訪問診療とは</h2>
-            <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+            <h2 class="text-xl font-bold text-heading mb-1">訪問診療とは</h2>
+            <p class="text-sm text-gray-700 leading-relaxed">
               <strong>訪問診療</strong>とは、医師がご自宅・施設へ定期的に伺い、診察・処方・検査を行う医療です。<strong>健康保険・介護保険が適用</strong>されます。
             </p>
             <details class="mt-2">
-              <summary class="text-xs text-gray-700 dark:text-gray-400 font-semibold cursor-pointer hover:underline list-none flex items-center gap-1 min-h-[44px] px-1">
+              <summary class="text-xs text-gray-700 font-semibold cursor-pointer hover:underline list-none flex items-center gap-1 min-h-[44px] px-1">
                 <Icon name="tabler:chevron-down" class="w-3.5 h-3.5" /> 往診との違いを見る
               </summary>
-              <p class="mt-2 text-xs text-gray-700 dark:text-gray-400 leading-relaxed">
+              <p class="mt-2 text-xs text-gray-700 leading-relaxed">
                 往診は急変時の臨時訪問ですが、訪問診療は計画的な定期訪問です。当院は定期訪問に加え、<strong>24時間365日の緊急往診</strong>にも対応しています。
               </p>
             </details>
           </div>
           <a
             href="/houmon-shinryo"
-            class="shrink-0 inline-flex items-center gap-1 text-gray-700 dark:text-gray-300 underline text-sm font-bold hover:text-gray-900 whitespace-nowrap min-h-[44px] px-2"
+            class="shrink-0 inline-flex items-center gap-1 text-gray-700 underline text-sm font-bold hover:text-heading whitespace-nowrap min-h-[44px] px-2"
           >
             詳しく <Icon name="tabler:arrow-right" class="w-3.5 h-3.5" />
           </a>
@@ -463,10 +464,10 @@ const jsonLdSpeakable = {
       container: 'pb-4 md:pb-6 lg:pb-8',
       items: {
         panel:
-          'w-full max-w-none rounded-2xl border border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 shadow-sm gap-4',
+          'w-full max-w-none rounded-2xl border border-gray-100 bg-white p-5 shadow-sm gap-4',
         title: 'text-base md:text-lg font-bold',
-        description: 'text-sm text-gray-700 dark:text-gray-400 mt-2 leading-relaxed',
-        icon: 'text-gray-700 dark:text-gray-300 bg-primary/10 rounded-full w-11 h-11 p-2.5 shrink-0 mr-0 md:mr-0 md:w-11 md:h-11 md:p-2.5',
+        description: 'text-sm text-gray-700 mt-2 leading-relaxed',
+        icon: 'text-gray-700 bg-primary/10 rounded-full w-11 h-11 p-2.5 shrink-0 mr-0 md:mr-0 md:w-11 md:h-11 md:p-2.5',
       },
     }}
     items={[
@@ -505,7 +506,7 @@ const jsonLdSpeakable = {
           <Icon name="tabler:building-hospital" class="w-5 h-5 text-white" aria-hidden="true" />
         </div>
         <div>
-          <p class="text-xs font-semibold text-white/70 tracking-widest uppercase mb-0.5">ご家族・医療・介護関係者の方へ</p>
+          <p class="text-xs font-semibold text-white/90 tracking-widest uppercase mb-0.5">ご家族・医療・介護関係者の方へ</p>
           <p class="text-base font-bold text-white leading-snug">紹介の流れ・連携相談書・オンライン相談は専用ページへ</p>
         </div>
       </div>
@@ -520,11 +521,11 @@ const jsonLdSpeakable = {
   </div>
 
   <!-- ============================================================ 診療内容 ================================================================ -->
-  <section id="departments" class="scroll-mt-32 py-8 md:py-14 dark:bg-slate-900">
+  <section id="departments" class="scroll-mt-32 py-8 md:py-14">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
       <div class="text-center mb-8">
-        <p class="text-sm font-semibold text-gray-700 dark:text-gray-400 tracking-widest mb-1">診療メニュー</p>
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">診療内容</h2>
+        <p class="text-sm font-semibold text-gray-700 tracking-widest mb-1">診療メニュー</p>
+        <h2 class="text-2xl md:text-3xl font-bold text-heading">診療内容</h2>
       </div>
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {
@@ -555,17 +556,17 @@ const jsonLdSpeakable = {
             },
           ].map(({ icon, title, desc, href }) => (
             <div
-              class={`rounded-2xl border border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 flex flex-col gap-3 ${href ? 'hover:shadow-md transition-shadow' : ''}`}
+              class={`rounded-2xl border border-gray-100 bg-white p-6 flex flex-col gap-3 ${href ? 'hover:shadow-md transition-shadow' : ''}`}
             >
               <Icon name={icon} class="w-9 h-9 text-primary" />
               <div>
-                <h3 class="font-bold text-gray-900 dark:text-white text-lg mb-1">{title}</h3>
-                <p class="text-sm text-gray-700 dark:text-gray-400">{desc}</p>
+                <h3 class="font-bold text-heading text-lg mb-1">{title}</h3>
+                <p class="text-sm text-gray-700">{desc}</p>
               </div>
               {href && (
                 <a
                   href={href}
-                  class="mt-auto inline-flex items-center gap-1 text-gray-700 dark:text-gray-300 underline text-sm font-bold hover:text-gray-900 min-h-[44px] px-2"
+                  class="mt-auto inline-flex items-center gap-1 text-gray-700 underline text-sm font-bold hover:text-heading min-h-[44px] px-2"
                 >
                   詳しく見る <Icon name="tabler:arrow-right" class="w-4 h-4" />
                 </a>
@@ -575,7 +576,7 @@ const jsonLdSpeakable = {
         }
       </div>
       <!-- 医師紹介（診療内容セクション末尾に統合） -->
-      <div class="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-4 shadow-sm">
+      <div class="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
         <div class="flex items-center gap-3">
           <img
             src="https://kamome-clinic.net/images/company/kinoshita.jpg"
@@ -584,13 +585,13 @@ const jsonLdSpeakable = {
             style="object-position: center 15%;"
           />
           <div>
-            <p class="font-bold text-gray-900 dark:text-white text-sm">木下 啓太 院長ほか、常勤医師13名</p>
-            <p class="text-sm text-gray-700 dark:text-gray-400">内科・精神科・小児科の専門医が連携。非常勤医師10名も参加しています。</p>
+            <p class="font-bold text-heading text-sm">木下 啓太 院長ほか、常勤医師13名</p>
+            <p class="text-sm text-gray-700">内科・精神科・小児科の専門医が連携。非常勤医師10名も参加しています。</p>
           </div>
         </div>
         <a
           href="/doctors"
-          class="shrink-0 inline-flex items-center justify-center gap-2 border-2 border-primary text-primary font-bold px-4 py-2 rounded-full text-sm hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors whitespace-nowrap"
+          class="shrink-0 inline-flex items-center justify-center gap-2 border-2 border-primary text-primary font-bold px-4 py-2 rounded-full text-sm hover:bg-blue-50 transition-colors whitespace-nowrap"
         >
           医師紹介を見る <Icon name="tabler:arrow-right" class="w-4 h-4" />
         </a>
@@ -601,62 +602,62 @@ const jsonLdSpeakable = {
   <!-- ⑦ 信頼情報・SNS・お知らせ（バッジ1種・縦積み） -->
   <section
     id="trust"
-    class="scroll-mt-32 py-6 md:py-8 bg-white dark:bg-slate-900 not-prose"
+    class="scroll-mt-32 py-6 md:py-8 bg-white not-prose"
     aria-label="信頼情報・SNS・お知らせ"
   >
     <div class="max-w-5xl mx-auto px-4 sm:px-6 space-y-5">
       <div>
-        <h2 class="text-center text-xl font-bold text-gray-900 dark:text-white mb-1">信頼情報</h2>
-        <p class="text-center text-xs text-gray-500 dark:text-gray-400 mb-3">メディア掲載・認定・実績</p>
+        <h2 class="text-center text-xl font-bold text-heading mb-1">信頼情報</h2>
+        <p class="text-center text-xs text-gray-500 mb-3">メディア掲載・認定・実績</p>
         <div class="flex flex-col gap-3">
           <a
             href="https://www.kamome-clinic.net/blog/?p=157"
             target="_blank"
             rel="noopener noreferrer"
-            class="flex items-start gap-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 hover:shadow-sm transition-shadow group w-full"
+            class="flex items-start gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 hover:shadow-sm transition-shadow group w-full"
             aria-label="毎日新聞掲載記事を読む"
           >
             <div
-              class="shrink-0 rounded-md border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 px-2 py-1.5 text-center min-w-[3.5rem]"
+              class="shrink-0 rounded-md border border-gray-300 bg-gray-50 px-2 py-1.5 text-center min-w-[3.5rem]"
             >
-              <span class="text-sm font-bold text-gray-900 dark:text-gray-100 leading-tight block">メディア</span>
+              <span class="text-sm font-bold text-heading leading-tight block">メディア</span>
             </div>
             <div class="min-w-0 flex-1">
-              <p class="font-bold text-gray-900 dark:text-white text-sm group-hover:text-primary transition-colors">
+              <p class="font-bold text-heading text-sm group-hover:text-primary transition-colors">
                 毎日新聞：院長インタビュー掲載
               </p>
-              <p class="text-sm text-gray-700 dark:text-gray-400 mt-0.5">在宅医療の現場と訪問診療の実態がテーマです。</p>
+              <p class="text-sm text-gray-700 mt-0.5">在宅医療の現場と訪問診療の実態がテーマです。</p>
             </div>
             <Icon name="tabler:external-link" class="w-3.5 h-3.5 text-gray-500 shrink-0 mt-0.5" aria-hidden="true" />
           </a>
-          <div class="flex items-start gap-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 w-full">
+          <div class="flex items-start gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 w-full">
             <div
-              class="shrink-0 rounded-md border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 px-2 py-1.5 text-center min-w-[3.5rem]"
+              class="shrink-0 rounded-md border border-gray-300 bg-gray-50 px-2 py-1.5 text-center min-w-[3.5rem]"
             >
-              <span class="text-sm font-bold text-gray-900 dark:text-gray-100 leading-tight block">認定</span>
+              <span class="text-sm font-bold text-heading leading-tight block">認定</span>
             </div>
             <div class="min-w-0">
-              <p class="font-bold text-gray-900 dark:text-white text-sm">機能強化型在宅療養支援診療所（在支診1）</p>
-              <p class="text-sm text-gray-700 dark:text-gray-400 mt-0.5">厚生労働省認定。2017年開院以来、在支診1として在宅医療を担っています。</p>
+              <p class="font-bold text-heading text-sm">機能強化型在宅療養支援診療所（在支診1）</p>
+              <p class="text-sm text-gray-700 mt-0.5">厚生労働省認定。2017年開院以来、在支診1として在宅医療を担っています。</p>
             </div>
           </div>
-          <div class="flex items-start gap-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 w-full">
+          <div class="flex items-start gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 w-full">
             <div
-              class="shrink-0 rounded-md border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 px-2 py-1.5 text-center min-w-[3.5rem]"
+              class="shrink-0 rounded-md border border-gray-300 bg-gray-50 px-2 py-1.5 text-center min-w-[3.5rem]"
             >
-              <span class="text-sm font-bold text-gray-900 dark:text-gray-100 leading-tight block">実績</span>
+              <span class="text-sm font-bold text-heading leading-tight block">実績</span>
             </div>
             <div class="min-w-0">
-              <p class="font-bold text-gray-900 dark:text-white text-sm">グループ患者数 1,000名超・開院9年</p>
-              <p class="text-sm text-gray-700 dark:text-gray-400 mt-0.5">年間診察1.2万件、看取り年間約100件（いずれも2025年1月〜12月）。</p>
+              <p class="font-bold text-heading text-sm">グループ患者数 1,000名超・開院9年</p>
+              <p class="text-sm text-gray-700 mt-0.5">年間診察1.2万件、看取り年間約100件（いずれも2025年1月〜12月）。</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="rounded-2xl border border-gray-200 dark:border-slate-700 bg-gray-50/50 dark:bg-slate-800/50 p-4 space-y-4">
+      <div class="rounded-2xl border border-gray-200 bg-gray-50/50/50 p-4 space-y-4">
         <div>
-          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">お知らせ</p>
+          <p class="text-xs font-semibold text-gray-500 mb-2">お知らせ</p>
           <a
             href="/blog"
             class="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline"
@@ -667,13 +668,13 @@ const jsonLdSpeakable = {
             <Icon name="tabler:arrow-right" class="w-4 h-4 shrink-0" aria-hidden="true" />
           </a>
         </div>
-        <div class="border-t border-gray-200 dark:border-slate-600 pt-4">
-          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3">SNS</p>
+        <div class="border-t border-gray-200 pt-4">
+          <p class="text-xs font-semibold text-gray-500 mb-3">SNS</p>
           <div
-            class="flex flex-row items-center gap-4 rounded-xl border border-gray-200 dark:border-slate-600 bg-transparent px-4 py-3"
+            class="flex flex-row items-center gap-4 rounded-xl border border-gray-200 bg-transparent px-4 py-3"
           >
             <div class="space-y-1.5 min-w-0 flex-1">
-              <p class="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
+              <p class="text-sm text-gray-700 leading-relaxed">
                 かもめクリニックは日常を<a
                   href={instagramUrl}
                   target="_blank"
@@ -681,7 +682,7 @@ const jsonLdSpeakable = {
                   class="font-semibold text-primary hover:underline"
                   aria-label="Instagram @kamomeclinic を開く">Instagram</a>で公開しています。
               </p>
-              <p class="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
+              <p class="text-sm text-gray-700 leading-relaxed">
                 よかったらお友達登録お願いします。
               </p>
             </div>
@@ -689,7 +690,7 @@ const jsonLdSpeakable = {
               href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              class="shrink-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-800 transition-opacity hover:opacity-90 active:opacity-80"
+              class="shrink-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-opacity hover:opacity-90 active:opacity-80"
               aria-label="Instagram @kamomeclinic を開く（QRコード）"
             >
               <img
@@ -709,12 +710,12 @@ const jsonLdSpeakable = {
   </section>
 
   <!-- ⑧ よくある質問（プレビュー・FAQPage は /faq） -->
-  <section id="faq" class="scroll-mt-32 py-8 md:py-10 bg-page dark:bg-slate-800">
+  <section id="faq" class="scroll-mt-32 py-8 md:py-10 bg-page">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
       <div id="faq-preview" class="text-center mb-6">
-        <p class="text-sm font-semibold text-gray-700 dark:text-gray-400 tracking-widest mb-1">Q&amp;A</p>
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">よくあるご質問</h2>
-        <p class="mt-2 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+        <p class="text-sm font-semibold text-gray-700 tracking-widest mb-1">Q&amp;A</p>
+        <h2 class="text-2xl md:text-3xl font-bold text-heading">よくあるご質問</h2>
+        <p class="mt-2 text-gray-700 text-sm leading-relaxed">
           代表的な質問を掲載しています。すべてのQ&Aは専用ページをご覧ください。
         </p>
       </div>

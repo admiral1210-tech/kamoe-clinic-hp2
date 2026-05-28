@@ -3,17 +3,17 @@ import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
 import PageTocNav from '~/components/ui/PageTocNav.astro';
 import Features from '~/components/widgets/Features.astro';
-import Features2 from '~/components/widgets/Features2.astro';
 import Content from '~/components/widgets/Content.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import {
   clinicalAnchorScrollMargin,
+  clinicalHeroSectionPadding,
   clinicalHeroSubtitleClass,
   clinicalHeroTaglineClass,
+  clinicalHeroTextBlockPadding,
   clinicalHeroTitleClass,
   clinicalSectionHeadline,
 } from '~/constants/clinical-page-ui';
-import { CLINIC_CONTACT } from '~/data/clinic-contact';
 import { seishinikaFaqEntries } from '~/data/faq-seishinika';
 import { seishinikaMedicalConditionGraph } from '~/data/seishinika-structured-data';
 import { getPermalink } from '~/utils/permalinks';
@@ -51,7 +51,6 @@ const jsonLdFAQ = buildFaqPageJsonLd(seishinikaFaqEntries);
 const seishinikaFaqWidgetItems = faqEntriesToWidgetItems(seishinikaFaqEntries);
 
 const doctorsHref = getPermalink('/doctors');
-const contactHref = getPermalink('/renkei');
 ---
 
 <Layout metadata={metadata}>
@@ -67,8 +66,8 @@ const contactHref = getPermalink('/renkei');
     taglineClass={clinicalHeroTaglineClass}
     titleClass={clinicalHeroTitleClass}
     subtitleClass={clinicalHeroSubtitleClass}
-    sectionPaddingClass="pt-8 md:pt-14 pb-3 md:pb-4"
-    textBlockPaddingClass="pb-2 md:pb-3"
+    sectionPaddingClass={clinicalHeroSectionPadding}
+    textBlockPaddingClass={clinicalHeroTextBlockPadding}
   >
     <Fragment slot="title">
       外に出られなくても<br />
@@ -82,11 +81,11 @@ const contactHref = getPermalink('/renkei');
       <span class="block mb-2">
         <span class="sm:hidden">
           外出困難な方・引きこもりの方・認知症の方のご自宅や施設へ専門医が伺います。<br />
-          厚生労働省の指針に基づき要件を満たす場合、<strong class="text-gray-900 dark:text-gray-100">初診からオンライン診療</strong>にも対応します。
+          厚生労働省の指針に基づき要件を満たす場合、<strong class="text-heading">初診からオンライン診療</strong>にも対応します。
         </span>
         <span class="hidden sm:inline">
           通院困難な方・引きこもりの方・認知症の方のご自宅や施設へ、専門医が直接伺います。<br />
-          厚生労働省の指針に基づき要件を満たす場合、<strong class="text-gray-900 dark:text-gray-100">精神疾患の初診からオンライン診療にも対応</strong>します。
+          厚生労働省の指針に基づき要件を満たす場合、<strong class="text-heading">精神疾患の初診からオンライン診療にも対応</strong>します。
         </span>
       </span>
       <span class="block text-xs text-gray-500 dark:text-gray-400">
@@ -99,52 +98,13 @@ const contactHref = getPermalink('/renkei');
   </Hero>
 
   <PageTocNav
-    ariaLabel="このページの主な内容"
+    ariaLabel="このページの目次"
     items={[
-      { href: '#first-step', label: 'まずはご相談' },
-      { href: '#visit-vs-online', label: '訪問・オンラインの違い' },
+      { href: '#visit-vs-online', label: '訪問とオンライン' },
       { href: '#diseases', label: '対応疾患' },
       { href: '#target', label: '対象' },
       { href: '#online', label: 'オンライン診療' },
       { href: '#faq', label: 'よくある質問' },
-    ]}
-  />
-
-  <!-- 次の一歩（相談導線） -->
-  <Features
-    id="first-step"
-    scrollMarginClass={clinicalAnchorScrollMargin}
-    tagline="ご利用の流れ"
-    title="まずはご相談から"
-    subtitle="診療の有無を決める前に、お電話・フォームでお困りごとをお聞かせください。画面下のボタンからもいつでも操作できます。"
-    columns={2}
-    classes={{
-      headline: { ...clinicalSectionHeadline },
-      container: 'max-w-7xl mx-auto pt-2 md:pt-3 pb-8 md:pb-14 lg:pb-16',
-    }}
-    items={[
-      {
-        title: 'お電話',
-        description: `平日・祝日 ${CLINIC_CONTACT.hoursPrimary}に、看護師・事務が初回のご相談をお受けします。`,
-        icon: 'tabler:phone',
-        callToAction: {
-          variant: 'floatingCtaTel' as const,
-          text: CLINIC_CONTACT.telDisplay,
-          href: CLINIC_CONTACT.telHref,
-          icon: 'tabler:phone',
-        },
-      },
-      {
-        title: 'お問い合わせフォーム',
-        description: 'ご都合のよい時間に、内容を整理して送信いただけます。',
-        icon: 'tabler:clipboard-list',
-        callToAction: {
-          variant: 'floatingCtaForm' as const,
-          text: '問い合わせフォーム',
-          href: contactHref,
-          icon: 'tabler:clipboard-list',
-        },
-      },
     ]}
   />
 
@@ -237,7 +197,7 @@ const contactHref = getPermalink('/renkei');
   />
 
   <!-- 対象者 -->
-  <Features2
+  <Features variant="cards"
     id="target"
     scrollMarginClass={clinicalAnchorScrollMargin}
     tagline="こんな方へ"
@@ -280,7 +240,7 @@ const contactHref = getPermalink('/renkei');
     <Fragment slot="bg">
       <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
     </Fragment>
-  </Features2>
+  </Features>
 
   <!-- オンライン診療（詳細） -->
   <Content

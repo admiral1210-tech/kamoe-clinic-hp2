@@ -68,7 +68,7 @@ export const naika: Doctor[] = [
   {
     name: '白川 裕一朗',
     role: '医師',
-    specialty: '運動器疾患・一般内科',
+    specialty: '整形外科疾患・一般内科',
     qualifications: null,
     education: null,
     career: null,
@@ -78,8 +78,8 @@ export const naika: Doctor[] = [
   },
   {
     name: '澁谷 裕樹',
-    role: '医師',
-    specialty: '循環器疾患・在宅心不全管理・一般内科',
+    role: 'かもめクリニック第5 院長',
+    specialty: '循環器疾患・一般内科',
     qualifications: null,
     education: null,
     career: null,
@@ -89,8 +89,8 @@ export const naika: Doctor[] = [
   },
   {
     name: '栗本 浩行',
-    role: '医師',
-    specialty: '循環器疾患・複雑心疾患管理・一般内科',
+    role: 'かもめクリニック第8 院長',
+    specialty: '循環器疾患・一般内科',
     qualifications: null,
     education: null,
     career: null,
@@ -101,7 +101,7 @@ export const naika: Doctor[] = [
   {
     name: '井上 祐真',
     role: '医師',
-    specialty: '消化器疾患・在宅療養支援・一般内科',
+    specialty: '消化器疾患・一般内科',
     qualifications: null,
     education: null,
     career: null,
@@ -112,8 +112,8 @@ export const naika: Doctor[] = [
   {
     name: '中村 真崇',
     role: '医師',
-    specialty: '救急・急変対応・一般内科',
-    qualifications: null,
+    specialty: '救急・一般内科',
+    qualifications: ['日本救急医学会専門医'],
     education: null,
     career: null,
     hobbies: null,
@@ -123,8 +123,8 @@ export const naika: Doctor[] = [
   {
     name: '立木 規与秀',
     role: '医師',
-    specialty: '救急・緊急対応・一般内科',
-    qualifications: null,
+    specialty: '救急・一般内科',
+    qualifications: ['日本救急医学会専門医'],
     education: null,
     career: null,
     hobbies: null,
@@ -136,7 +136,7 @@ export const naika: Doctor[] = [
 export const seishinika: Doctor[] = [
   {
     name: '石本 英之',
-    role: '精神科専門医',
+    role: '精神科専門医 / かもめクリニック第3 院長',
     specialty: '精神科・心療内科・一般内科',
     qualifications: ['精神保健指定医', '医学博士', '日本神経精神学会 専門医', '日本医師会認定 産業医'],
     education:

@@ -32,10 +32,12 @@ const titleClass = props.titleClass ?? defaultTitleClass;
 const subtitleClass = props.subtitleClass ?? defaultSubtitleClass;
 const imageOuterClass = ['relative', 'm-auto', imageContainerClass].filter(Boolean).join(' ');
 
+// Hero section は pb を持たない（docs/design-system/spacing.md 参照）
+// 下余白は次セクションの pt-section-y が担当する
 const sectionPad =
-  sectionPaddingClass ?? (imageFirst ? 'py-8 md:py-12' : 'py-12 md:py-20');
+  sectionPaddingClass ?? (imageFirst ? 'pt-8 md:pt-12' : 'pt-12 md:pt-20');
 const textBlockPad =
-  textBlockPaddingClass ?? (imageFirst ? 'pb-6 md:pb-8' : 'pb-10 md:pb-16');
+  textBlockPaddingClass ?? 'pb-hero-content-pb';
 ---
 
 <section class="relative md:-mt-[76px] not-prose" {...id ? { id } : {}}>

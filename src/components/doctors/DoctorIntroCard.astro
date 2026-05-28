@@ -11,12 +11,12 @@ interface Props {
 const { section, doc, imageLoading = 'lazy' } = Astro.props;
 ---
 
-<article class={`bg-white dark:bg-slate-900 rounded-2xl shadow-sm overflow-hidden border ${section.accentBorder}`}>
+<article class={`bg-white rounded-2xl shadow-sm overflow-hidden border ${section.accentBorder}`}>
   <div class={`${section.accent} h-1 w-full`}></div>
 
-  <div class="flex justify-center bg-gray-100 dark:bg-slate-800 py-4 sm:py-5">
+  <div class="flex justify-center bg-gray-100 py-4 sm:py-5">
     <figure
-      class="relative m-0 aspect-[3/4] w-[min(260px,70vw)] sm:w-[290px] overflow-hidden rounded-xl shadow-sm ring-1 ring-black/5 dark:ring-white/10 bg-gray-100 dark:bg-slate-800"
+      class="relative m-0 aspect-[3/4] w-[min(260px,70vw)] sm:w-[290px] overflow-hidden rounded-xl shadow-sm ring-1 ring-black/5 bg-gray-100"
     >
       {
         doc.image ? (
@@ -56,24 +56,24 @@ const { section, doc, imageLoading = 'lazy' } = Astro.props;
   </div>
 
   <div class="px-5 pt-6 pb-2 text-center sm:px-6">
-    <h3 class="text-2xl font-bold leading-snug text-gray-900 dark:text-white">{doc.name}</h3>
+    <h3 class="text-2xl font-bold font-heading leading-snug text-heading">{doc.name}</h3>
     <p class={`mt-2 text-sm font-semibold leading-snug text-balance ${section.accentText}`}>{doc.role}</p>
   </div>
 
   <dl class="mt-4 space-y-4 px-5 pb-2 sm:px-6">
     <div>
-      <dt class="mb-1 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">専門</dt>
-      <dd class="text-sm leading-relaxed text-gray-700 dark:text-gray-300">{doc.specialty}</dd>
+      <dt class="mb-1 text-xs font-bold uppercase tracking-wider text-muted">専門</dt>
+      <dd class="text-sm leading-relaxed text-default">{doc.specialty}</dd>
     </div>
 
     {
       doc.qualifications && (
         <div>
-          <dt class="mb-1 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">所属学会・資格</dt>
+          <dt class="mb-1 text-xs font-bold uppercase tracking-wider text-muted">所属学会・資格</dt>
           <dd>
             <ul class="space-y-1">
               {doc.qualifications.map((q) => (
-                <li class="flex items-start gap-2 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                <li class="flex items-start gap-2 text-sm leading-relaxed text-default">
                   <span class={`mt-2 h-1 w-1 shrink-0 rounded-full ${section.accent}`} aria-hidden="true" />
                   {q}
                 </li>
@@ -87,10 +87,10 @@ const { section, doc, imageLoading = 'lazy' } = Astro.props;
     {
       (doc.education || doc.career) && (
         <div>
-          <dt class="mb-1 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">略歴</dt>
-          <dd class="space-y-2 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+          <dt class="mb-1 text-xs font-bold uppercase tracking-wider text-muted">略歴</dt>
+          <dd class="space-y-2 text-sm leading-relaxed text-default">
             {doc.education && <p class="whitespace-pre-line">{doc.education}</p>}
-            {doc.career && <p class="whitespace-pre-line text-gray-600 dark:text-gray-400">{doc.career}</p>}
+            {doc.career && <p class="whitespace-pre-line text-muted">{doc.career}</p>}
           </dd>
         </div>
       )
@@ -99,8 +99,8 @@ const { section, doc, imageLoading = 'lazy' } = Astro.props;
     {
       doc.hobbies && (
         <div>
-          <dt class="mb-1 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">趣味</dt>
-          <dd class="text-sm leading-relaxed text-gray-700 dark:text-gray-300">{doc.hobbies}</dd>
+          <dt class="mb-1 text-xs font-bold uppercase tracking-wider text-muted">趣味</dt>
+          <dd class="text-sm leading-relaxed text-default">{doc.hobbies}</dd>
         </div>
       )
     }
@@ -108,6 +108,6 @@ const { section, doc, imageLoading = 'lazy' } = Astro.props;
 
   <div class={`mx-5 mb-6 mt-5 rounded-xl p-4 sm:mx-6 ${section.quoteBg}`}>
     <p class={`mb-2 text-xs font-bold ${section.quoteLabel}`}>ひとこと</p>
-    <p class="whitespace-pre-line text-sm leading-relaxed text-gray-700 dark:text-gray-300">{doc.message}</p>
+    <p class="whitespace-pre-line text-sm leading-relaxed text-default">{doc.message}</p>
   </div>
 </article>

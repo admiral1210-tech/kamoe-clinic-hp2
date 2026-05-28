@@ -1,0 +1,207 @@
+---
+description: ページ構成パターン・セクションスタイル規約・診療ページ vs 汎用ページの差分ルール。新規ページ作成・既存ページ修正時に参照すること。
+globs: ["src/pages/**/*.astro", "src/layouts/**/*.astro"]
+alwaysApply: true
+---
+
+# スタイルガイド
+
+---
+
+## 1. ページレイアウト
+
+すべてのページは `src/layouts/PageLayout.astro` を使用する。
+
+```astro
+<Layout metadata={metadata}>
+  <Fragment slot="head">
+    <!-- JSON-LD structured data -->
+  </Fragment>
+  <!-- コンテンツ -->
+</Layout>
+```
+
+- `metadata` prop には `title`, `description`, `ignoreTitleTemplate`（独自タイトルの場合 `true`）, `openGraph` を渡す
+- ランディングページのみ `src/layouts/LandingLayout.astro` を使用
+
+---
+
+## 2. ページ構成パターン
+
+### パターン A: 診療ページ（標準）
+
+内科・整形外科・精神科・小児科・在宅1等、診療科目のランディングページ。
+
+```
+PageLayout
+  ├── head: JSON-LD (BreadcrumbList + FAQPage)
+  ├── Hero（clinicalHeroSectionPadding + clinicalHeroTitleClass/SubtitleClass）
+  │     └── heroActions: [Button primary, Button secondary]
+  ├── PageTocNav（TOC アンカーリスト）
+  ├── [WidgetWrapper] Features（clinicalSectionHeadline）
+  ├── [WidgetWrapper] FAQs（clinicalSectionHeadline）
+  └── ClinicalPageClosing
+```
+
+**必須要素**:
+- `<Hero>` にヒーロー画像 + タイトル（`clinicalHeroTitleClass`）+ サブタイトル（`clinicalHeroSubtitleClass`）
+- `heroActions` に `variant="primary"`（電話）+ `variant="secondary"`（問い合わせ/詳細）
+- ページ末尾に `<ClinicalPageClosing>` を必ず配置
+- JSON-LD `BreadcrumbList` + 関連する `FAQPage` を `<Fragment slot="head">` に記述
+
+**任意要素**:
+- `<PageTocNav>` — 3セクション以上のコンテンツがある場合に追加
+- インラインセクション（`<PageSectionHeading>` + カスタムコンテンツ）
+
+### パターン B: 情報ページ（費用・FAQ・採用等）
+
+特定の診療科に紐づかない情報提供ページ。
+
+```
+PageLayout
+  ├── head: JSON-LD (必要に応じて)
+  ├── Hero（シンプルなテキストヒーロー）
+  ├── [WidgetWrapper] メインコンテンツ
+  └── ConsultCTA または ClinicalPageClosing
+```
+
+### パターン C: トップページ
+
+`src/pages/index.astro` — 独自のため個別管理。
+
+---
+
+## 3. Hero セクション
+
+### 診療ページの Hero
+
+```astro
+<Hero
+  tagline="精神科の訪問診療"
+  taglineClass={clinicalHeroTaglineClass}
+  title="自宅で受けられる精神科専門医の診察"
+  titleClass={clinicalHeroTitleClass}
+  subtitle="..."
+  subtitleClass={clinicalHeroSubtitleClass}
+  sectionPaddingClass={clinicalHeroSectionPadding}
+  actions={heroActions}
+  image={{ ... }}
+/>
+```
+
+**Hero タイトルの規約**:
+- `clinicalHeroTitleClass` = `text-3xl md:text-4xl lg:text-[2.5rem] font-bold leading-snug tracking-tight font-heading text-heading`
+- **`text-gray-900` は使わない**。必ず `text-heading` トークンを使う
+- H1 として扱われる（font-weight: 900 は `CustomStyles` のグローバルで適用）
+
+**Hero の余白規約**:
+- `sectionPaddingClass={clinicalHeroSectionPadding}` を指定（= `pt-10 md:pt-16`）
+- **Hero に `pb-*` は指定しない**（次セクションの `pt` が間隔を担当）
+
+### CTAボタンの配置
+
+Hero の `actions` には必ず `Button` variant を使う（`ctaHeroPrimaryClass` 直書きは既存ページのみ）:
+
+```ts
+const heroActions = [
+  { variant: 'primary' as const, href: CLINIC_CONTACT.telHref, text: '電話する', icon: 'tabler:phone' },
+  { variant: 'secondary' as const, href: '/renkei', text: '問い合わせ', icon: 'tabler:clipboard-list' },
+];
+```
+
+---
+
+## 4. セクションの背景色パターン
+
+背景色で視覚的なリズムをつける。連続するセクションは交互に使う。
+
+| 背景 | クラス/方法 | 用途 |
+|---|---|---|
+| ページ背景（ウォームベージュ） | デフォルト（`bg-page`） | メインコンテンツ |
+| 白背景 | `<WidgetWrapper><Background slot="bg" />` または `bg="<div class='bg-white'></div>"` | 強調セクション |
+| プライマリ淡め | `bg-primary/5` または `bg-blue-50` | 統計・実績セクション |
+| ダーク | `<WidgetWrapper isDark>` | フッター手前のCTAセクション（慎重に使う） |
+
+**ルール**:
+- 同じ背景が3セクション以上連続しないようにする
+- `isDark` は `ClinicalPageClosing` / `ConsultCTA` の終端CTAのみで使用する
+- インラインセクションはページ背景のまま（白背景インラインは避ける）
+
+---
+
+## 5. スクロールアニメーション
+
+`WidgetWrapper` は自動で intersect フェードアニメーション（`intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade`）を付与する。
+
+診療ページの Hero 内テキストには `clinicalHeroTitleClass` 等に motion クラスが含まれる。
+
+**禁止事項**:
+- インラインで `motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade` を直書きしない（`WidgetWrapper` に任せる）
+- アニメーションを無効にしたい場合は `containerClass` で `motion-safe:md:opacity-0` を `!opacity-100` で打ち消す
+
+---
+
+## 6. 診療ページ vs 汎用ページの差分許容範囲
+
+| 項目 | 診療ページ | 汎用ページ |
+|---|---|---|
+| 見出し tagline 色 | `text-primary`（`clinicalSectionHeadline`） | `text-secondary`（`Headline` デフォルト） |
+| 見出し title サイズ | `text-2xl md:text-3xl` | `text-3xl md:text-4xl` |
+| ページ末尾CTA | `ClinicalPageClosing` 必須 | `ConsultCTA` 推奨 |
+| JSON-LD | BreadcrumbList + FAQPage 必須 | ページに応じて任意 |
+| PageTocNav | 3セクション以上なら推奨 | 基本不要 |
+| アンカー scrollMarginClass | `clinicalAnchorScrollMargin`（scroll-mt-32） | `scroll-mt-[72px]`（デフォルト） |
+
+---
+
+## 7. アンカーリンク
+
+- セクションの `id` は日本語ではなくローマ字スラッグ（例: `id="flow"`, `id="faq"`, `id="symptoms"`）
+- `PageTocNav` があるページのセクションは `scrollMarginClass={clinicalAnchorScrollMargin}` を指定する
+- `PageTocNav` がないページのセクションはデフォルト `scroll-mt-[72px]` のまま
+
+---
+
+## 8. SEO・構造化データ規約
+
+### JSON-LD の必須・任意
+
+| ページタイプ | 必須 | 任意 |
+|---|---|---|
+| 診療ページ | BreadcrumbList, FAQPage | MedicalWebPage, Speakable |
+| トップページ | MedicalClinic (LocalBusiness), Organization | AggregateRating |
+| ブログ記事 | Article | — |
+| その他 | BreadcrumbList | — |
+
+- `<script type="application/ld+json" set:html={serializeJsonLdForScript(jsonLd)} />` を `<Fragment slot="head">` に記述
+- `serializeJsonLdForScript` は `~/utils/json-ld-script` からインポート
+
+### メタデータ
+
+- `title` は SEO キーワードを含む60文字以内
+- `description` は120〜160文字
+- 診療ページは `ignoreTitleTemplate: true` で独自タイトルにする
+- `openGraph.images` に適切なOGP画像を指定する
+
+---
+
+## 9. ファイル構成規約
+
+| ページ種別 | 配置場所 |
+|---|---|
+| 診療科目ランディング | `src/pages/[科目名].astro` |
+| 情報ページ | `src/pages/[ページ名].astro` |
+| エリアページ | `src/pages/area/[ward].astro` |
+| ブログ | `src/pages/[...blog]/` |
+
+- コンポーネントは `src/components/widgets/`（ページ単位）または `src/components/ui/`（再利用可能な小コンポーネント）
+- ページ固有のデータ定数は `src/data/` または `src/constants/` に分離する
+- FAQ データは `src/data/faq-[科目].ts` + `src/content/copy/ja/faq/[科目].json` のペア
+
+---
+
+## 10. 禁止事項（スタイル）
+
+- `<style>` タグをページファイル（`.astro`）に書かない。グローバルスタイルは `CustomStyles.astro`、コンポーネントローカルは `<style>` を限定使用
+- インラインの `style=""` 属性でカラー・スペーシングを指定しない（CSS変数の直書きも含む）
+- テンプレートページ（`src/pages/homes/`, `src/pages/landing/`）のスタイルを診療ページにコピーしない（Astrowind 由来の gray/slate 系が混入する）

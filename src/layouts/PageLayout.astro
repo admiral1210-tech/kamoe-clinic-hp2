@@ -29,16 +29,9 @@ const contactFormHref = getPermalink('/renkei#renkei-contact-detail');
   <slot name="header">
     <Header {...headerData} isSticky />
   </slot>
-  <main>
+  <main id="main-content">
     <slot />
   </main>
-  <!-- 全ページ共通：医療情報免責バナー -->
-  <aside aria-label="医療情報に関するご案内" class="bg-gray-100 dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 py-3 px-4">
-    <p class="max-w-5xl mx-auto text-xs text-gray-500 dark:text-gray-400 leading-relaxed text-center">
-      当サイトの情報は一般的な医療知識の提供を目的としており、個別の診断・治療を保証するものではありません。
-      症状や治療方針についてはかかりつけ医または担当医師にご相談ください。
-    </p>
-  </aside>
   <slot name="footer">
     <Footer {...footerData} />
   </slot>

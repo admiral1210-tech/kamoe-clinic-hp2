@@ -4,7 +4,6 @@ import Hero from '~/components/widgets/Hero.astro';
 import PageTocNav from '~/components/ui/PageTocNav.astro';
 import PageSectionHeading from '~/components/ui/PageSectionHeading.astro';
 import Features from '~/components/widgets/Features.astro';
-import Features2 from '~/components/widgets/Features2.astro';
 import Content from '~/components/widgets/Content.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import ClinicalPageClosing from '~/components/widgets/ClinicalPageClosing.astro';
@@ -12,12 +11,12 @@ import { Icon } from 'astro-icon/components';
 import { twMerge } from 'tailwind-merge';
 import {
   clinicalAnchorScrollMargin,
+  clinicalHeroSectionPadding,
   clinicalHeroSubtitleClass,
   clinicalHeroTaglineClass,
+  clinicalHeroTextBlockPadding,
   clinicalHeroTitleClass,
   clinicalSectionHeadline,
-  ctaHeroPrimaryClass,
-  ctaHeroSecondaryClass,
 } from '~/constants/clinical-page-ui';
 import { CLINIC_CONTACT } from '~/data/clinic-contact';
 import { seikeigekaMedicalConditionsJsonLd } from '~/data/medical-conditions-seikeigeka';
@@ -70,7 +69,6 @@ const heroActions = [
   },
 ];
 
-const contactHref = getPermalink('/renkei');
 
 const diseaseItems = [
   {
@@ -191,6 +189,8 @@ const servicesItems = [
     taglineClass={clinicalHeroTaglineClass}
     titleClass={clinicalHeroTitleClass}
     subtitleClass={clinicalHeroSubtitleClass}
+    sectionPaddingClass={clinicalHeroSectionPadding}
+    textBlockPaddingClass={clinicalHeroTextBlockPadding}
     actions={heroActions}
   >
     <Fragment slot="title">
@@ -207,7 +207,7 @@ const servicesItems = [
   </Hero>
 
   <PageTocNav
-    ariaLabel="このページの主な内容"
+    ariaLabel="このページの目次"
     items={[
       { href: '#taisho', label: '対象' },
       { href: '#diseases', label: '対応疾患' },
@@ -256,36 +256,8 @@ const servicesItems = [
     items={diseaseItems}
   />
 
-  <!-- ===== 中盤 CTA ===== -->
-  <section
-    class="py-12 bg-primary/[0.06] dark:bg-slate-800/80 border-y border-primary/10 dark:border-slate-600 not-prose"
-    aria-labelledby="seikeigeka-mid-cta-heading"
-  >
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-      <h2
-        id="seikeigeka-mid-cta-heading"
-        class="text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2"
-      >
-        ご相談はお電話・フォームから
-      </h2>
-      <p class="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-        関節注射や骨粗しょう症、手帳の診断書など、まずはお気軽にお問い合わせください。
-      </p>
-      <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
-        <a href={CLINIC_CONTACT.telHref} class={ctaHeroPrimaryClass}>
-          <Icon name="tabler:phone" class="w-5 h-5 shrink-0" aria-hidden="true" />
-          {CLINIC_CONTACT.telDisplay}
-        </a>
-        <a href={contactHref} class={ctaHeroSecondaryClass}>
-          <Icon name="tabler:clipboard-list" class="w-5 h-5 shrink-0" aria-hidden="true" />
-          問い合わせフォーム
-        </a>
-      </div>
-    </div>
-  </section>
-
   <!-- ===== 訪問整形外科でできること ===== -->
-  <Features2
+  <Features variant="cards"
     id="services"
     scrollMarginClass={clinicalAnchorScrollMargin}
     tagline="できること"
@@ -302,7 +274,7 @@ const servicesItems = [
     id="fracture-prevention"
     scrollMarginClass={clinicalAnchorScrollMargin}
     tagline="骨折予防"
-    title="骨粗しょう症治療と骨折予防こそ、訪問整形外科の使命"
+    title="骨粗しょう症治療と骨折リスク低減こそ、訪問整形外科の使命"
     isReversed
     classes={{
       headline: {
@@ -317,25 +289,15 @@ const servicesItems = [
           '75歳以上の女性の約半数が骨粗しょう症といわれています。特に大腿骨頸部骨折は「寝たきりの入口」となるため、在宅での継続治療が極めて重要です。',
       },
       {
-        title: '通院しなくても注射治療を継続できる',
+        title: '治療を続けることが、骨折リスクを減らすことにつながる',
         description:
-          'デノスマブ（6か月に1回の皮下注射）やテリパラチド（毎日または週1回の自己注射サポート）など、通院が難しくなっても訪問で対応します。',
-      },
-      {
-        title: '骨折後の再骨折リスクを下げる',
-        description:
-          '一度骨折すると次の骨折リスクが高まることが知られています（参考：骨粗鬆症診療ガイドライン）。退院後の早期から骨粗しょう症治療の再開・継続を支援し、在宅生活の維持をめざします。',
-      },
-      {
-        title: 'ご家族・ケアマネジャーとの連携',
-        description:
-          '転倒・骨折のリスクを在宅チームと共有し、住環境整備・リハビリ・薬の見直しを連携して進めます。骨折予防は一人ではできない、チームの取り組みです。',
+          '通院が難しくなっても、骨粗しょう症治療薬の注射・内服を訪問で継続できます。一度骨折すると次の骨折リスクが高まることが知られており、退院後の早期から治療を再開・継続することが、在宅生活を続けるうえで重要です。具体的な薬剤・治療内容は<a href="#services" class="text-primary underline underline-offset-2 hover:text-secondary">「できること」をご覧ください</a>。',
       },
     ]}
   >
     <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
-        骨折を防ぐことが、在宅生活を守ること
+      <h3 class="text-2xl font-bold tracking-tight sm:text-3xl mb-2">
+        骨折リスクを下げることが、在宅生活を守ること
       </h3>
     </Fragment>
     <Fragment slot="bg">

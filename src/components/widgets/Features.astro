@@ -1,7 +1,9 @@
 ---
 import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
 import ItemGrid from '~/components/ui/ItemGrid.astro';
+import ItemGrid2 from '~/components/ui/ItemGrid2.astro';
 import Headline from '~/components/ui/Headline.astro';
+import Image from '~/components/common/Image.astro';
 import type { Features as Props } from '~/types';
 
 const {
@@ -9,9 +11,13 @@ const {
   subtitle = await Astro.slots.render('subtitle'),
   tagline = await Astro.slots.render('tagline'),
   items = [],
-  columns = 2,
-
+  columns,
   defaultIcon,
+  isBeforeContent,
+  isAfterContent,
+  image,
+  variant = 'grid',
+  numberedTitles = false,
 
   id,
   isDark = false,
@@ -19,25 +25,87 @@ const {
   bg = await Astro.slots.render('bg'),
   scrollMarginClass,
 } = Astro.props;
+
+const defaultColumns = variant === 'cards' ? 3 : 2;
+const resolvedColumns = columns ?? defaultColumns;
+
+const containerClass = (() => {
+  if (variant === 'cards') return `max-w-7xl mx-auto ${classes?.container ?? ''}`;
+  if (variant === 'withImage') {
+    return `${isBeforeContent ? 'md:pb-8 lg:pb-12' : ''} ${isAfterContent ? 'pt-0 md:pt-0 lg:pt-0' : ''} ${classes?.container ?? ''}`;
+  }
+  return `max-w-5xl ${classes?.container ?? ''}`;
+})();
 ---
 
 <WidgetWrapper
   id={id}
   isDark={isDark}
-  containerClass={`max-w-5xl ${classes?.container ?? ''}`}
-  scrollMarginClass={scrollMarginClass}
+  containerClass={containerClass}
   bg={bg}
+  scrollMarginClass={scrollMarginClass}
 >
   <Headline title={title} subtitle={subtitle} tagline={tagline} classes={classes?.headline as Record<string, string>} />
-  <ItemGrid
-    items={items}
-    columns={columns}
-    defaultIcon={defaultIcon}
-    classes={{
-      container: '',
-      title: 'md:text-[1.3rem]',
-      icon: 'text-white bg-primary rounded-full w-10 h-10 p-2 md:w-12 md:h-12 md:p-3 mr-4 rtl:ml-4 rtl:mr-0',
-      ...((classes?.items as Record<string, never>) ?? {}),
-    }}
-  />
+
+  {variant === 'withImage' && (
+    <div aria-hidden="true" class="aspect-w-16 aspect-h-7">
+      {image && (
+        <div class="w-full h-80 object-cover rounded-card mx-auto bg-gray-500 shadow-lg">
+          {typeof image === 'string' ? (
+            <Fragment set:html={image} />
+          ) : (
+            <Image
+              class="w-full h-80 object-cover rounded-card mx-auto bg-gray-500 shadow-lg"
+              width="auto"
+              height={320}
+              widths={[400, 768]}
+              layout="fullWidth"
+              {...(image as object)}
+            />
+          )}
+        </div>
+      )}
+    </div>
+  )}
+
+  {variant === 'cards' ? (
+    <ItemGrid2
+      items={items}
+      columns={resolvedColumns}
+      defaultIcon={defaultIcon}
+      numberedTitles={numberedTitles}
+      classes={{
+        container: 'gap-4 md:gap-6',
+        panel:
+          'rounded-card shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur border border-[#ffffff29] bg-white p-6',
+        icon: 'w-12 h-12 mb-6 text-primary',
+        title: '',
+        description: '',
+        ...((classes?.items as Record<string, never>) ?? {}),
+      }}
+    />
+  ) : (
+    <ItemGrid
+      items={items}
+      columns={resolvedColumns}
+      defaultIcon={defaultIcon}
+      classes={
+        variant === 'withImage'
+          ? {
+              container: 'mt-12',
+              panel: 'max-w-full sm:max-w-md',
+              title: 'text-lg font-semibold',
+              description: 'mt-0.5',
+              icon: 'flex-shrink-0 mt-1 text-primary w-6 h-6',
+              ...((classes?.items as object) ?? {}),
+            }
+          : {
+              container: '',
+              title: 'md:text-[1.3rem]',
+              icon: 'text-white bg-primary rounded-pill w-10 h-10 p-2 md:w-12 md:h-12 md:p-3 mr-4 rtl:ml-4 rtl:mr-0',
+              ...((classes?.items as Record<string, never>) ?? {}),
+            }
+      }
+    />
+  )}
 </WidgetWrapper>

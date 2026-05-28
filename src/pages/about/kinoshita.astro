@@ -2,7 +2,7 @@
 import Layout from '~/layouts/PageLayout.astro';
 import DoctorIntroCard from '~/components/doctors/DoctorIntroCard.astro';
 import Content from '~/components/widgets/Content.astro';
-import Features2 from '~/components/widgets/Features2.astro';
+import Features from '~/components/widgets/Features.astro';
 import { clinicalSectionHeadline } from '~/constants/clinical-page-ui';
 import { KAMOME_BRANCH_COUNT } from '~/data/branches';
 import { doctorIntroSections, naika } from '~/data/doctors-intro';
@@ -110,7 +110,7 @@ const jsonLdPhysician = {
   </Content>
 
   <!-- クリニックの実績 -->
-  <Features2
+  <Features variant="cards"
     tagline="クリニックの実績"
     title="2017年の開院から積み上げた実績"
     classes={{ headline: { ...clinicalSectionHeadline }, container: 'max-w-7xl mx-auto' }}
@@ -154,5 +154,5 @@ const jsonLdPhysician = {
     <Fragment slot="bg">
       <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
     </Fragment>
-  </Features2>
+  </Features>
 </Layout>

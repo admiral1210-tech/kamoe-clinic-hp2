@@ -3,7 +3,7 @@ import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
 import PageSectionHeading from '~/components/ui/PageSectionHeading.astro';
 import PageTocNav from '~/components/ui/PageTocNav.astro';
-import Features2 from '~/components/widgets/Features2.astro';
+import Features from '~/components/widgets/Features.astro';
 import Steps from '~/components/widgets/Steps.astro';
 import FAQs from '~/components/widgets/FAQs.astro';
 import RenkeiStaffStrip from '~/components/pages/renkei/RenkeiStaffStrip.astro';
@@ -11,8 +11,10 @@ import RenkeiContactDetailSection from '~/components/pages/renkei/RenkeiContactD
 import { Icon } from 'astro-icon/components';
 import { twMerge } from 'tailwind-merge';
 import {
+  clinicalAnchorScrollMargin,
   clinicalHeroSubtitleClass,
   clinicalHeroTaglineClass,
+  clinicalHeroTextBlockPadding,
   clinicalHeroTitleClass,
   clinicalSectionHeadline,
 } from '~/constants/clinical-page-ui';
@@ -104,7 +106,7 @@ const renkeiFaqWidgetItems = faqEntriesToWidgetItems(renkeiFaqEntries);
     titleClass={clinicalHeroTitleClass}
     subtitleClass={twMerge(clinicalHeroSubtitleClass, 'mb-3 md:mb-4')}
     imageContainerClass="max-w-7xl w-full"
-    textBlockPaddingClass="pb-4 md:pb-6"
+    textBlockPaddingClass={clinicalHeroTextBlockPadding}
   >
     <Fragment slot="title">
       安心して紹介できる<br />
@@ -117,15 +119,14 @@ const renkeiFaqWidgetItems = faqEntriesToWidgetItems(renkeiFaqEntries);
     <Fragment slot="image">
       <div class="relative left-1/2 w-screen max-w-[100vw] -ml-[50vw] mt-2 md:mt-3 pointer-events-auto">
         <PageTocNav
-          heading="このページのセクション"
-          ariaLabel="医療・介護関係者向けページの目次"
+          ariaLabel="このページの目次"
           items={[
             { href: '#renkei-staff', label: '連携部スタッフ' },
             { href: '#renkei-contact-detail', label: '連絡先詳細' },
             { href: '#renkei-strengths', label: '在宅医療体制' },
             { href: '#renkei-targets', label: '受け入れ対象' },
             { href: '#renkei-flow', label: '紹介の流れ' },
-            { href: '#renkei-faq', label: 'FAQ' },
+            { href: '#renkei-faq', label: 'よくある質問' },
           ]}
         />
       </div>
@@ -137,7 +138,7 @@ const renkeiFaqWidgetItems = faqEntriesToWidgetItems(renkeiFaqEntries);
   </Hero>
 
   <!-- ===== かもめクリニックの強み ===== -->
-  <Features2
+  <Features variant="cards"
     id="renkei-strengths"
     tagline="連携のポイント"
     title="かもめクリニックの在宅医療体制"
@@ -150,7 +151,7 @@ const renkeiFaqWidgetItems = faqEntriesToWidgetItems(renkeiFaqEntries);
   <!-- ===== 受け入れ対象 ===== -->
   <section
     id="renkei-targets"
-    class="py-14 bg-blue-50 dark:bg-slate-800 border-y border-blue-100 dark:border-slate-700 scroll-mt-32"
+    class:list={["py-14 bg-blue-50 border-y border-blue-100", clinicalAnchorScrollMargin]}
   >
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
       <PageSectionHeading
@@ -174,7 +175,7 @@ const renkeiFaqWidgetItems = faqEntriesToWidgetItems(renkeiFaqEntries);
   <!-- ===== 紹介の流れ ===== -->
   <Steps
     id="renkei-flow"
-    scrollMarginClass="scroll-mt-32"
+    scrollMarginClass={clinicalAnchorScrollMargin}
     tagline="ご紹介の流れ"
     title="スムーズな訪問開始に向けた紹介の流れ"
     items={[
@@ -214,7 +215,7 @@ const renkeiFaqWidgetItems = faqEntriesToWidgetItems(renkeiFaqEntries);
   <!-- ===== よくある質問 ===== -->
   <FAQs
     id="renkei-faq"
-    scrollMarginClass="scroll-mt-32"
+    scrollMarginClass={clinicalAnchorScrollMargin}
     title="よくある質問（ご家族・医療・介護関係者の方へ）"
     tagline="FAQ"
     classes={{ container: 'max-w-7xl', headline: { ...clinicalSectionHeadline } }}

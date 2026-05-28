@@ -194,6 +194,8 @@ export interface CallToAction extends Omit<HTMLAttributes<'a'>, 'slot'> {
   variant?: 'primary' | 'secondary' | 'tertiary' | 'link' | 'line' | 'floatingCtaTel' | 'floatingCtaForm';
   text?: string;
   icon?: string;
+  /** アイコンをテキストの前（左）に配置。未指定時は variant から自動判定 */
+  iconBefore?: boolean;
   classes?: Record<string, string>;
   type?: 'button' | 'submit' | 'reset';
 }
@@ -290,6 +292,16 @@ export interface Features extends Omit<Headline, 'classes'>, Widget {
   isReversed?: boolean;
   isBeforeContent?: boolean;
   isAfterContent?: boolean;
+  /**
+   * 表示スタイル：
+   * - 'grid'      アイコン+テキスト横並び（旧 Features）
+   * - 'cards'     カード形式（旧 Features2）
+   * - 'withImage' 画像+アイテムリスト（旧 Features3）
+   * @default 'grid'
+   */
+  variant?: 'grid' | 'cards' | 'withImage';
+  /** 見出しに CSS 連番を付与（'cards' variant のみ有効） */
+  numberedTitles?: boolean;
 }
 
 export interface Faqs extends Omit<Headline, 'classes'>, Widget {
@@ -304,6 +316,13 @@ export interface Steps extends Omit<Headline, 'classes'>, Widget {
   callToAction?: string | CallToAction;
   image?: string | Image;
   isReversed?: boolean;
+  /**
+   * 表示スタイル：
+   * - 'timeline'  タイムライン＋任意画像（旧 Steps）
+   * - 'numbered'  2カラム・番号円＋callToAction（旧 Steps2）
+   * @default 'timeline'
+   */
+  variant?: 'timeline' | 'numbered';
 }
 
 export interface Content extends Omit<Headline, 'classes'>, Widget {

@@ -23,6 +23,8 @@ import {
   recruitFinalCtaActions,
   recruitFlowItems,
   recruitJobPostingNurseJsonLd,
+  recruitPersonaItems,
+  recruitPersonaNote,
   recruitWhyFeaturesItems,
 } from '~/data/recruit';
 import { serializeJsonLdForScript } from '~/utils/json-ld-script';
@@ -83,6 +85,25 @@ const jobPostingJson = serializeJsonLdForScript(jobPostingLd);
     }}
     items={recruitWhyFeaturesItems}
   />
+
+  <!-- ============================================================
+    求める人物像
+  ================================================================ -->
+  <Features
+    id="persona"
+    tagline="採用のお願い"
+    title="あなたの看護を、患者さまの自宅で発揮しませんか"
+    columns={1}
+    defaultIcon="tabler:circle-check"
+    classes={{
+      headline: { ...clinicalSectionHeadline },
+      container: 'max-w-2xl',
+    }}
+    items={recruitPersonaItems}
+  />
+  <div class="max-w-2xl mx-auto px-section-x text-center text-muted text-sm -mt-8 pb-section-y">
+    {recruitPersonaNote}
+  </div>
 
   <!-- ============================================================
     募集職種

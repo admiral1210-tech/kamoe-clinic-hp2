@@ -144,6 +144,16 @@ export const recruitNurseFulltime = {
   },
 };
 
+export const recruitPersonaItems: Item[] = [
+  { title: '「丁寧さ」と「確実さ」を大切にできる方', icon: 'tabler:circle-check' },
+  { title: '患者さまのお話にじっくり耳を傾けられる方', icon: 'tabler:circle-check' },
+  { title: 'チームで考え、チームで動くことを自然にできる方', icon: 'tabler:circle-check' },
+  { title: '病院・外来での経験を、患者さまの自宅で活かしたい方', icon: 'tabler:circle-check' },
+];
+
+export const recruitPersonaNote =
+  '診療同行看護師の経験は不要。ブランクのある方も丁寧に指導します。';
+
 export const recruitBenefitsItems: Item[] = [
   {
     title: '各種社会保険完備',

@@ -11,10 +11,9 @@ import {
   buildAggregateRating,
   buildNumberOfEmployees,
   getBranchFoundingDate,
-  getCumulativePatientsDisplay,
-  getCumulativeVisitsDisplay,
   googleReview,
 } from '~/data/clinic-meta';
+import { KAMOME1_STATS, GROUP_STATS } from '~/data/clinic-stats';
 import { CLINIC_GENERAL_FAQ, CLINIC_GENERAL_FAQ_PREVIEW_COUNT } from '~/data/faq-general';
 import { NEW_BLOG_URL } from '~/data/site-policy';
 import { INSTAGRAM_QR_IMAGE_SRC } from '~/navigation';
@@ -32,7 +31,7 @@ const heroHomeTopAbsoluteUrl = Astro.site
 const metadata = {
   title: 'かもめクリニック｜大阪市の訪問診療 内科・精神科・小児科｜2017年開院',
   description:
-    '大阪市の機能強化型在宅療養支援診療所（在支診1）認定。2017年開院9年の実績。グループ患者数1,000名超・年間診察1.2万件（2025年1月〜12月）。精神科専門医3名常勤（精神保健指定医在籍）。内科・精神科・小児科対応。夜間・休日の緊急往診も対応。健康保険・介護保険適用。',
+    `大阪市の機能強化型在宅療養支援診療所（在支診1）認定。2017年開院。グループ患者数${GROUP_STATS.patientCount}（2025年12月時点）・${GROUP_STATS.locationCount}。精神科専門医（常勤・非常勤含め${GROUP_STATS.psychiatristCount}名）在籍。内科・精神科・小児科対応。夜間・休日の緊急往診も対応。健康保険・介護保険適用。`,
   ignoreTitleTemplate: true,
   openGraph: {
     type: 'website',
@@ -61,7 +60,7 @@ const jsonLdClinic = {
   image: heroHomeTopAbsoluteUrl,
   foundingDate: '2017',
   description:
-    '大阪市の機能強化型在宅療養支援診療所（在支診1）認定。精神科専門医3名常勤（精神保健指定医在籍）。内科・精神科・小児科対応。グループ患者数1,000名超・年間1.2万件の診察実績（2025年1月〜12月）。年間看取り約100件（同年実績）・対応施設50以上。',
+    `大阪市の機能強化型在宅療養支援診療所（在支診1）認定。精神科専門医（常勤・非常勤含め${GROUP_STATS.psychiatristCount}名）在籍。内科・精神科・小児科対応。グループ患者数${GROUP_STATS.patientCount}（2025年12月時点）・${GROUP_STATS.locationCount}。グループ年間看取り${GROUP_STATS.annualDeathCount}（2025年実績）。`,
   telephone: CLINIC_CONTACT.telDisplay,
   faxNumber: '06-4301-7872',
   email: CLINIC_CONTACT.email,
@@ -93,7 +92,7 @@ const jsonLdClinic = {
     { '@type': 'MedicalTherapy', name: '精神科訪問診療（専門医3名常勤・精神保健指定医在籍）' },
     { '@type': 'MedicalTherapy', name: '医療ケア児訪問診療・NICU退院後支援' },
     { '@type': 'MedicalTherapy', name: '機能強化型在宅療養支援診療所（在支診1）認定による夜間・休日の緊急往診対応' },
-    { '@type': 'MedicalTherapy', name: '在宅看取り・ターミナルケア（年間約100件実績）' },
+    { '@type': 'MedicalTherapy', name: `在宅看取り・ターミナルケア（グループ年間${GROUP_STATS.annualDeathCount}実績）` },
   ],
   contactPoint: [
     {
@@ -323,46 +322,36 @@ const jsonLdSpeakable = {
         <Icon name="tabler:phone" class="w-5 h-5" aria-hidden="true" />
         お電話でのご相談
       </a>
-      <a href="/renkei" class:list={[ctaHeroSecondaryClass, 'min-h-[44px]']}>
+      <a href="/renkei#renkei-contact-detail" class:list={[ctaHeroSecondaryClass, 'min-h-[44px]']}>
         <Icon name="tabler:mail" class="w-5 h-5" aria-hidden="true" />
         フォームで相談
       </a>
     </Fragment>
     <Fragment slot="content">
       <div class="mt-5 max-w-lg mx-auto text-left rounded-2xl border border-gray-200 bg-white/80 px-4 py-3 not-prose">
-        <p class="text-center text-sm font-semibold text-gray-700">実績・評価</p>
+        <p class="text-center text-sm font-semibold text-gray-700">実績・評価（かもめクリニック本院）</p>
         <div class="mt-4 space-y-4 border-t border-gray-100 pt-4">
-          <dl
-            class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center rounded-xl border border-gray-200 py-3 px-2 bg-gray-50/80"
-          >
+          <!-- かもめ1の患者数推移 -->
+          <dl class="grid grid-cols-2 gap-2 text-center rounded-xl border border-gray-200 py-3 px-2 bg-gray-50/80">
             <div>
-              <dt class="text-sm text-gray-700">開院</dt>
-              <dd class="text-base font-black text-heading">
-                2017<span class="text-sm font-semibold">年</span>
-              </dd>
+              <dt class="text-xs text-gray-700">患者数（2025年1月）</dt>
+              <dd class="text-base font-black text-heading tabular-nums">{KAMOME1_STATS.patientCount2025Jan}</dd>
             </div>
             <div>
-              <dt class="text-sm text-gray-700">年間患者数</dt>
-              <dd class="text-base font-black text-heading tabular-nums">
-                {getCumulativePatientsDisplay()}
-              </dd>
-            </div>
-            <div>
-              <dt class="text-sm text-gray-700">年間診察</dt>
-              <dd class="text-base font-black text-heading tabular-nums">
-                {getCumulativeVisitsDisplay()}
-              </dd>
-            </div>
-            <div>
-              <dt class="text-sm text-gray-700">大阪市内</dt>
-              <dd class="text-base font-black text-heading">5<span class="text-sm font-semibold">院</span></dd>
+              <dt class="text-xs text-gray-700">患者数（2025年12月）</dt>
+              <dd class="text-base font-black text-heading tabular-nums">{KAMOME1_STATS.patientCount2025Dec}</dd>
             </div>
           </dl>
+          <!-- かもめ1の年間看取り数 -->
+          <div class="flex items-center justify-between rounded-xl border border-gray-200 py-3 px-4 bg-gray-50/80">
+            <dt class="text-sm text-gray-700">年間看取り数（本院）</dt>
+            <dd class="text-base font-black text-heading tabular-nums">{KAMOME1_STATS.annualDeathCount}</dd>
+          </div>
           <p class="text-center text-sm text-gray-700">
             厚生労働省 機能強化型在宅療養支援診療所（在支診1）認定
           </p>
           <p class="text-center text-xs text-gray-400 -mt-2">
-            ※患者数・診察件数は2025年1月〜12月の集計値です。
+            ※患者数・看取り数は2025年1〜12月の集計値です。
           </p>
           {
             googleReview.ratingValue !== null && googleReview.reviewCount !== null && (
@@ -648,8 +637,8 @@ const jsonLdSpeakable = {
               <span class="text-sm font-bold text-heading leading-tight block">実績</span>
             </div>
             <div class="min-w-0">
-              <p class="font-bold text-heading text-sm">グループ患者数 1,000名超・開院9年</p>
-              <p class="text-sm text-gray-700 mt-0.5">年間診察1.2万件、看取り年間約100件（いずれも2025年1月〜12月）。</p>
+              <p class="font-bold text-heading text-sm">グループ患者数 {GROUP_STATS.patientCount}（2025年12月時点）・{GROUP_STATS.locationCount}</p>
+              <p class="text-sm text-gray-700 mt-0.5">グループ年間看取り数 {GROUP_STATS.annualDeathCount}・常勤医師{GROUP_STATS.doctorCountFulltime}名（2025年実績）。</p>
             </div>
           </div>
         </div>

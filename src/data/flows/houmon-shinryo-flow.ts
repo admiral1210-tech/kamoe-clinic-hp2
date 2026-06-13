@@ -29,11 +29,11 @@ export const houmonShinryoFlowSteps: HoumonShinryoFlowStep[] = [
   },
   {
     icon: 'tabler:user-check',
-    headline: '担当エリア・担当医の確認',
+    headline: '診療エリア・担当医の確認',
     howToText:
-      'ご住所と病状を確認し、最寄り拠点の担当医を決めます。当日から翌営業日以内に、こちらからご連絡します。',
+      'ご住所と病状を確認し、担当医（主治医）が決まります。当日から翌営業日以内にご連絡します。',
     descriptionHtml:
-      'ご住所と病状を確認し、最寄り拠点の担当医を決めます。当日から翌営業日以内に、こちらからご連絡します。',
+      'ご住所と病状を確認し、担当医（主治医）が決まります。当日から翌営業日以内にご連絡します。',
   },
   {
     icon: 'tabler:home-heart',
@@ -46,9 +46,9 @@ export const houmonShinryoFlowSteps: HoumonShinryoFlowStep[] = [
   {
     icon: 'tabler:stethoscope',
     headline: '定期訪問診療スタート',
-    howToText: '月2回の定期訪問診療が始まります。急変時は24時間365日、担当医へ直接ご連絡いただけます。',
+    howToText: '定期訪問診療が始まります。診察のない日でも病状が悪化した際は、24時間365日、医師へご相談いただけます。',
     descriptionHtml:
-      '月2回の定期訪問診療が始まります。急変時は24時間365日、担当医へ直接ご連絡いただけます。',
+      '定期訪問診療が始まります。診察のない日でも病状が悪化した際は、24時間365日、医師へご相談いただけます。',
   },
 ];
 

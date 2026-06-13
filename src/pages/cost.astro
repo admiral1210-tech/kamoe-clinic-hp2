@@ -444,6 +444,46 @@ const jsonLdSpeakable = {
   </script>
 
   <!-- 費用の流れ -->
+  <!-- 介護保険について -->
+  <section class="py-10 md:py-14 bg-page">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <PageSectionHeading
+        tagline="介護保険との関係"
+        title="訪問診療と介護保険サービスは別建てで利用できます"
+        subtitle="介護保険の申請がまだの方や、ケアマネジャーが決まっていない方もご相談ください。"
+      />
+      <div class="space-y-4">
+        <div class="bg-white rounded-xl border border-gray-100 p-5 flex gap-4">
+          <Icon name="tabler:heart-handshake" class="w-8 h-8 text-primary shrink-0 mt-0.5" aria-hidden="true" />
+          <div>
+            <p class="font-bold font-heading text-heading mb-1">訪問診療は医療保険・介護保険は介護サービスに</p>
+            <p class="text-sm text-muted leading-relaxed">
+              医師による訪問診療は<strong>医療保険</strong>が適用されます。介護保険は訪問介護・訪問看護・デイサービスなどの介護サービスに使用します。訪問診療と介護保険サービスは別々の制度のため、<strong>両方を組み合わせてご利用いただけます</strong>。
+            </p>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-100 p-5 flex gap-4">
+          <Icon name="tabler:clipboard-list" class="w-8 h-8 text-primary shrink-0 mt-0.5" aria-hidden="true" />
+          <div>
+            <p class="font-bold font-heading text-heading mb-1">ケアプランとの関係</p>
+            <p class="text-sm text-muted leading-relaxed">
+              ケアマネジャーが作成するケアプランには、介護保険サービスが記載されます。訪問診療はケアプランとは別に、医師と患者さまの間で診療計画を作成します。ケアマネジャーと当院で情報を共有し、連携して支援します。
+            </p>
+          </div>
+        </div>
+        <div class="bg-blue-50 rounded-xl border border-blue-100 p-5 flex gap-4">
+          <Icon name="tabler:info-circle" class="w-8 h-8 text-primary shrink-0 mt-0.5" aria-hidden="true" />
+          <div>
+            <p class="font-bold font-heading text-heading mb-1">介護保険の申請がまだの方もご相談ください</p>
+            <p class="text-sm text-muted leading-relaxed">
+              介護保険の申請がまだの方や、ケアマネジャーがお決まりでない方も、当院でご相談いただけます。申請手続きについてのご案内も行っています。お電話またはお問い合わせフォームでお気軽にどうぞ。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <Content
     tagline="費用の流れ"
     title="訪問診療費用の支払い方法"
@@ -456,18 +496,14 @@ const jsonLdSpeakable = {
     }}
     items={[
       {
-        title: '毎月の請求書でお支払い',
-        description: '原則、医療費は月末締め翌月口座引き落とし払いをお願いしております。',
+        title: '毎月の請求書でお支払い（口座振替）',
+        description:
+          '医療費は1ヶ月ごとに月末締めで計算し、翌月にご登録口座より自動振替にてお支払いいただきます。お支払いのために来院いただく必要はなく、口座振替手数料も当院が負担します。',
       },
       {
-        title: '処方箋は保険薬局でお受け取り',
+        title: '処方薬は保険薬局でお受け取り',
         description:
-          '処方薬は保険薬局でお受け取りください。調剤費は別途薬局にお支払いいただきます。往診時に持参することも可能です。',
-      },
-      {
-        title: '急変時の往診費用',
-        description:
-          '緊急往診（臨時往診）は定期訪問とは別に費用が発生する場合があります。夜間・休日加算が加わることがあります。',
+          '処方薬は保険薬局でお受け取りください。お薬代は薬局へ直接お支払いいただきます。',
       },
       {
         title: '費用の不明点はご相談ください',

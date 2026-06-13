@@ -12,18 +12,9 @@ export const CLINIC_CONTACT = {
   /** 地域医療連携部（医療・介護関係者向け）直通 */
   telRenkeiDisplay: '06-4301-7883',
   telRenkeiHref: 'tel:0643017883',
-  /** 採用・一般問い合わせ共通の代表メール */
-  email: 'kamome@kamome-clinic.net',
   hoursPrimary: '平日・祝日 9:00〜17:00',
   hoursEmergency: '緊急往診 24時間365日',
 } as const;
-
-/** mailto: URL（任意で subject を付与） */
-export function clinicMailtoHref(subject?: string): string {
-  const addr = CLINIC_CONTACT.email;
-  if (!subject) return `mailto:${addr}`;
-  return `mailto:${addr}?subject=${encodeURIComponent(subject)}`;
-}
 
 /** schema.org 用の郵便番号（ハイフン付き）。表示用 postalCode から導出 */
 export function clinicPostalCodeForSchema(): string {

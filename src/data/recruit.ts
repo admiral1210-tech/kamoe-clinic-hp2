@@ -1,11 +1,6 @@
-import { CLINIC_CONTACT, clinicMailtoHref } from './clinic-contact';
+import { CLINIC_CONTACT } from './clinic-contact';
 import { KAMOME_BRANCH_COUNT } from './branches';
 import type { CallToAction, Item } from '~/types';
-
-/** 採用メールの件名（mailto の subject） */
-export const RECRUIT_MAIL_SUBJECT = '採用応募';
-
-export const recruitApplicationMailtoHref = () => clinicMailtoHref(RECRUIT_MAIL_SUBJECT);
 
 export const recruitWhyFeaturesItems: Item[] = [
   {
@@ -176,7 +171,7 @@ export const recruitBenefitsItems: Item[] = [
 export const recruitFlowItems: Item[] = [
   {
     title: 'Step 1: お問い合わせ・履歴書送付',
-    description: `メール（${CLINIC_CONTACT.email}）またはお電話（${CLINIC_CONTACT.telDisplay}）にてご連絡ください。履歴書・職務経歴書をお送りいただければ幸いです。`,
+    description: `お電話（${CLINIC_CONTACT.telDisplay}）にてご連絡ください。履歴書・職務経歴書をお送りいただければ幸いです。`,
     icon: 'tabler:send',
   },
   {
@@ -220,19 +215,13 @@ export const recruitFaqItems: Item[] = [
   {
     title: '転職活動中で在職中でも相談できますか？',
     description:
-      'もちろんです。在職中の転職活動でも、秘密厳守でご対応します。まずはお気軽にお電話またはメールでご相談ください。',
+      'もちろんです。在職中の転職活動でも、秘密厳守でご対応します。まずはお気軽にお電話でご相談ください。',
   },
 ];
 
 export const recruitFinalCtaActions: CallToAction[] = [
   {
     variant: 'primary',
-    text: 'メールで応募・お問い合わせ',
-    href: recruitApplicationMailtoHref(),
-    icon: 'tabler:mail',
-  },
-  {
-    variant: 'secondary',
     text: `お電話でのご相談（${CLINIC_CONTACT.telDisplay}）`,
     href: CLINIC_CONTACT.telHref,
     icon: 'tabler:phone',

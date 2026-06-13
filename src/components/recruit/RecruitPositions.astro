@@ -1,7 +1,5 @@
 ---
-import { recruitPositionCards, recruitNurseFulltime } from '~/data/recruit';
-
-const nf = recruitNurseFulltime;
+import { recruitPositionCards } from '~/data/recruit';
 ---
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6">
@@ -40,121 +38,10 @@ const nf = recruitNurseFulltime;
 
   <!--
     長文の募集要項はカード（≈1/3幅）に入れない。
-    一覧は比較用、本文は読字幅（max-w-4xl）の独立セクションへ。
+    看護師詳細は独立ページ /recruit/nurse へ。
   -->
-  <section
-    id="nurse-fulltime"
-    class="scroll-mt-[72px] mt-12 sm:mt-16 pt-10 sm:pt-12 border-t border-gray-200 dark:border-slate-700"
-    aria-labelledby="recruit-nurse-fulltime-heading"
-  >
-    <div class="max-w-4xl mx-auto">
-      <div class="rounded-xl border-2 border-primary/40 overflow-hidden bg-white dark:bg-slate-800 shadow-sm">
-        <div class="bg-primary px-4 py-3 sm:px-6 sm:py-4 flex items-center gap-3">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-6 h-6 text-white shrink-0"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            aria-hidden="true"
-            ><path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9 12h6m-3-3v6m5 4H7a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z"></path></svg
-          >
-          <h3
-            id="recruit-nurse-fulltime-heading"
-            class="text-white font-bold text-base sm:text-lg m-0"
-          >
-            {nf.title}
-          </h3>
-        </div>
-        <div class="p-4 sm:p-6">
-          <section
-            class="mb-6 rounded-xl border border-primary/25 bg-gradient-to-b from-primary/[0.07] to-transparent dark:from-primary/15 dark:to-transparent px-3 py-4 sm:px-4"
-            aria-labelledby="recruit-nurse-keyfacts-heading"
-          >
-            <h4
-              id="recruit-nurse-keyfacts-heading"
-              class="text-xs font-bold text-primary dark:text-blue-300 tracking-wide uppercase mb-3"
-            >
-              {nf.keyFactsHeading}
-            </h4>
-            <dl class="grid grid-cols-1 gap-2.5 text-sm sm:grid-cols-2 sm:gap-3">
-              {
-                nf.keyFacts.map((row) => (
-                  <div
-                    class="rounded-lg border border-gray-200/90 bg-white/95 px-3 py-2.5 shadow-sm dark:border-slate-600 dark:bg-slate-900/60"
-                  >
-                    <dt class="mb-1 text-[0.7rem] font-semibold text-gray-500 dark:text-gray-400 sm:text-xs">
-                      {row.label}
-                    </dt>
-                    <dd class="font-medium leading-snug text-gray-900 dark:text-gray-100" set:html={row.valueHtml} />
-                  </div>
-                ))
-              }
-            </dl>
-          </section>
-          {nf.introHtml.map((html) => (
-            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 last:mb-0 leading-relaxed" set:html={html} />
-          ))}
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-sm mt-6">
-            <div class="space-y-3 min-w-0">
-              {nf.leftColumn.map((row, i) => (
-                <div
-                  class:list={[
-                    'flex gap-3 items-start min-w-0',
-                    i < nf.leftColumn.length - 1 ? 'border-b border-gray-100 dark:border-slate-700 pb-3' : '',
-                  ]}
-                >
-                  <span class="font-semibold text-gray-500 w-24 shrink-0">{row.label}</span>
-                  <span class="min-w-0 flex-1 text-gray-800 dark:text-gray-200" set:html={row.valueHtml} />
-                </div>
-              ))}
-            </div>
-            <div class="space-y-3 min-w-0">
-              {nf.rightColumn.map((row, i) => (
-                <div
-                  class:list={[
-                    'flex gap-3 items-start min-w-0',
-                    i < nf.rightColumn.length - 1 ? 'border-b border-gray-100 dark:border-slate-700 pb-3' : '',
-                  ]}
-                >
-                  <span class="font-semibold text-gray-500 w-24 shrink-0">{row.label}</span>
-                  <span class="min-w-0 flex-1 text-gray-800 dark:text-gray-200" set:html={row.valueHtml} />
-                </div>
-              ))}
-            </div>
-          </div>
-          <div class="mt-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4">
-            <p class="text-sm font-semibold text-primary dark:text-blue-300 mb-2">{nf.desiredProfile.heading}</p>
-            <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
-              {nf.desiredProfile.items.map((text, idx) => {
-                const isLast = idx === nf.desiredProfile.items.length - 1;
-                const emphasized = nf.desiredProfile.emphasizedLast && isLast;
-                return (
-                  <li
-                    class:list={[
-                      emphasized ? 'text-primary dark:text-blue-400 font-medium' : '',
-                    ]}
-                  >
-                    ・{text}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </div>
-      </div>
-      <p class="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
-        <a href="#apply" class="text-primary font-semibold underline hover:opacity-90">応募・お問い合わせ</a>
-        はページ下部からもご利用いただけます。
-      </p>
-    </div>
-  </section>
 
-  <p class="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
+  <p class="mt-8 text-center text-sm text-muted">
     ※ 上記以外の職種でも随時ご相談を受け付けています。まずはお気軽にお問い合わせください。
   </p>
 </div>

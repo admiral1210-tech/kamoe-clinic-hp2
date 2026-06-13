@@ -68,8 +68,7 @@ export const recruitPositionCards: RecruitPositionCard[] = [
       { label: '必須資格', value: '看護師免許（訪問看護経験不問）' },
       { label: '給与', value: '経験・スキルに応じて応相談' },
     ],
-    /** 本文はカード外の全幅セクション（#nurse-fulltime）へ。カード幅に長文を入れ子にしない */
-    cta: { href: '#nurse-fulltime', label: '詳細募集要項を見る' },
+    cta: { href: '/recruit/nurse', label: '詳細募集要項を見る' },
   },
   {
     title: '医療事務',
@@ -95,11 +94,12 @@ export const recruitNurseFulltime = {
   keyFactsHeading: '募集条件の概要',
   keyFacts: [
     { label: '雇用形態', valueHtml: '正社員（常勤）' },
+    { label: '給与', valueHtml: '月給 30〜35万円（固定残業代含まず）' },
     { label: '勤務時間', valueHtml: '8:45〜17:30（休憩45分・実働8時間）' },
     {
       label: '休日',
       valueHtml:
-        '土日祝・設定休暇・有給（入社6ヶ月後10日）<span class="text-gray-500 dark:text-gray-400 text-xs"> ※年間休日120日程度</span>',
+        '土日祝・設定休暇・有給（入社6ヶ月後10日）<span class="text-muted text-xs"> ※年間休日120日程度</span>',
     },
     { label: '必須資格', valueHtml: '看護師免許／普通自動車免許（AT限定可）' },
     { label: '勤務先', valueHtml: 'かもめクリニック本院・各分院（大阪市内）' },
@@ -111,6 +111,8 @@ export const recruitNurseFulltime = {
   ],
   leftColumn: [
     { label: '雇用形態', valueHtml: '正社員（常勤）' },
+    { label: '給与', valueHtml: '月給 30〜35万円（固定残業代含まず）' },
+    { label: '試用期間', valueHtml: '3ヶ月（同条件）' },
     { label: '賞与', valueHtml: '年1.5〜2ヶ月分（昨年度実績）' },
     { label: '昇給・手当', valueHtml: 'ベースアップ加算 1〜3万円/年・役職手当あり' },
     { label: '待遇', valueHtml: '社会保険完備・交通費規定支給（月1万円まで）' },
@@ -120,7 +122,7 @@ export const recruitNurseFulltime = {
     {
       label: '休日',
       valueHtml:
-        '土日・設定休暇（1〜9日）・有給（入社6ヶ月後10日）<br /><span class="text-gray-500">※年間休日120日程度</span>',
+        '土日・設定休暇（1〜9日）・有給（入社6ヶ月後10日）<br /><span class="text-muted text-xs">※年間休日120日程度</span>',
     },
     { label: '必須資格', valueHtml: '看護師免許<br />普通自動車免許（AT限定可）' },
     { label: '勤務先', valueHtml: 'かもめクリニック本院・各分院（大阪市内）' },

@@ -16,7 +16,7 @@ export const doctorSpecialties = [
     title: '精神科（在宅精神科）',
     body: '統合失調症・うつ病・認知症の行動・心理症状（BPSD）など、外来通院が困難な精神科患者さまへの訪問診療。精神科専門医と連携し、チームで対応します。',
     icon: 'tabler:brain',
-    highlight: true,
+    highlight: false,
   },
   {
     number: '03',

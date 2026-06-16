@@ -1,0 +1,422 @@
+---
+import { SITE } from 'astrowind:config';
+import Layout from '~/layouts/PageLayout.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import RecruitSection from '~/components/recruit/RecruitSection.astro';
+import { Icon } from 'astro-icon/components';
+import {
+  clinicalHeroSubtitleClass,
+  clinicalHeroTaglineClass,
+  clinicalHeroTitleClass,
+} from '~/constants/clinical-page-ui';
+import { CLINIC_CONTACT } from '~/data/clinic-contact';
+import { recruitJobPostingDoctorJsonLd } from '~/data/recruit';
+import {
+  doctorSpecialties,
+  doctorWorkStyle,
+  doctorOnboarding,
+  doctorStaffMessage,
+} from '~/data/recruit-doctor';
+import { serializeJsonLdForScript } from '~/utils/json-ld-script';
+
+const metadata = {
+  title: '医師 募集要項｜かもめクリニック（大阪市・訪問診療）',
+  description:
+    '医師（常勤）の詳細募集要項。内科・精神科・小児科の訪問診療医を募集。週4日・9:00〜17:00・オンコール最小化。大阪市内の在宅診療クリニックで働きませんか。',
+  ignoreTitleTemplate: true,
+  openGraph: {
+    type: 'website',
+    images: [{ url: '~/assets/images/default.png', width: 1200, height: 628 }],
+  },
+};
+
+const jobPostingLd = {
+  ...recruitJobPostingDoctorJsonLd,
+  url: new URL('/recruit/doctor', SITE.site).href,
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: new URL('/', SITE.site).href },
+    { '@type': 'ListItem', position: 2, name: '採用情報', item: new URL('/recruit', SITE.site).href },
+    { '@type': 'ListItem', position: 3, name: '医師募集要項', item: new URL('/recruit/doctor', SITE.site).href },
+  ],
+};
+
+const jobPostingJson = serializeJsonLdForScript(jobPostingLd);
+const breadcrumbJson = serializeJsonLdForScript(breadcrumbLd);
+
+const doctorFulltimeDetails = {
+  title: '【医師・常勤】詳細募集要項',
+  keyFactsHeading: '募集条件の概要',
+  keyFacts: [
+    { label: '雇用形態', valueHtml: '常勤（週4日）' },
+    { label: '給与', valueHtml: '経験・スキルに応じて応相談' },
+    { label: '勤務時間', valueHtml: '9:00〜17:00（休憩1時間・実働7時間）' },
+    {
+      label: '休日',
+      valueHtml:
+        '設定休暇（1〜9日）・有給（入社6ヶ月後10日）<span class="text-muted text-xs"> ※最大9連休取得可</span>',
+    },
+    { label: '必須資格', valueHtml: '医師免許（専門・経験年次不問）' },
+    { label: '勤務先', valueHtml: 'かもめクリニック本院・各分院（大阪市内）' },
+    { label: '選考', valueHtml: '書類選考 → 面接（1回） → 内定' },
+  ] as { label: string; valueHtml: string }[],
+  introHtml: [
+    '外来・病棟とは異なり、<strong>患者さまの生活の場に赴く訪問診療</strong>。診察室では見えなかった患者さまの暮らしや人生観を知りながら、長期的な主治医として関わることができます。',
+    '訪問診療未経験の医師を歓迎します。入職後は段階的なサポートで、無理なく現場に慣れていただける体制を整えています。',
+  ],
+  leftColumn: [
+    { label: '雇用形態', valueHtml: '常勤（週4日・相談可）' },
+    { label: '給与', valueHtml: '経験・スキルに応じて応相談' },
+    { label: '試用期間', valueHtml: '3ヶ月（同条件）' },
+    { label: '賞与', valueHtml: '年1〜2ヶ月分（業績連動）' },
+    { label: '昇給・手当', valueHtml: 'ベースアップ加算・管理職手当あり' },
+    { label: '待遇', valueHtml: '社会保険完備・交通費規定支給（月1万円まで）' },
+  ] as { label: string; valueHtml: string }[],
+  rightColumn: [
+    { label: '勤務時間', valueHtml: '9:00〜17:00（休憩1時間・実働7時間）' },
+    {
+      label: '休日',
+      valueHtml:
+        '週3日休み・設定休暇（1〜9日）・有給（入社6ヶ月後10日）<br /><span class="text-muted text-xs">※最大9連休取得可</span>',
+    },
+    { label: 'オンコール', valueHtml: '平日 月2回程度・週末 2〜3ヶ月に1回程度' },
+    { label: '必須資格', valueHtml: '医師免許<br />（専門・経験年次・訪問診療経験 不問）' },
+    { label: '勤務先', valueHtml: 'かもめクリニック本院・各分院（大阪市内）' },
+    { label: '選考', valueHtml: '書類選考 → 面接（1回） → 内定' },
+  ] as { label: string; valueHtml: string }[],
+  desiredProfile: {
+    heading: '求める人物像',
+    items: [
+      '医師免許をお持ちの方',
+      '患者さまと長期的な信頼関係を築くことに関心がある方',
+      '多職種と協力して在宅医療を届けたい方',
+      '訪問診療未経験の方も丁寧に指導します。専門・経験年次は問いません。',
+    ],
+    emphasizedLast: true,
+  },
+};
+---
+
+<Layout metadata={metadata}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={jobPostingJson} />
+    <script type="application/ld+json" set:html={breadcrumbJson} />
+  </Fragment>
+
+  <!-- ============================================================
+    Hero
+  ================================================================ -->
+  <Hero
+    tagline="医師（常勤）募集"
+    taglineClass={clinicalHeroTaglineClass}
+    titleClass={clinicalHeroTitleClass}
+    subtitleClass={`${clinicalHeroSubtitleClass} !mb-0`}
+    sectionPaddingClass="pt-6 md:pt-10"
+  >
+    <Fragment slot="title">
+      あなたの専門性を、<br />
+      <span class="text-accent highlight">患者さまの自宅で</span>発揮しませんか
+    </Fragment>
+    <Fragment slot="subtitle">
+      内科・精神科・小児科の訪問診療医として、大阪市内の患者さまを長期的に支えます。<br class="hidden sm:inline" />
+      週4日・9:00〜17:00・オンコール最小化。
+    </Fragment>
+    <Fragment slot="actions">
+      <a
+        href={CLINIC_CONTACT.telHref}
+        class="btn btn-primary"
+      >
+        <Icon name="tabler:phone" class="w-5 h-5 mr-1.5" aria-hidden="true" />
+        電話で応募・相談する
+      </a>
+      <a
+        href="/recruit"
+        class="btn btn-secondary"
+      >
+        <Icon name="tabler:arrow-left" class="w-5 h-5 mr-1.5" aria-hidden="true" />
+        採用情報トップへ戻る
+      </a>
+    </Fragment>
+  </Hero>
+
+  <!-- ============================================================
+    担当診療科目
+  ================================================================ -->
+  <RecruitSection id="specialties" class="py-section-y bg-white">
+    <div class="max-w-7xl mx-auto px-section-x">
+      <div class="text-center mb-10 max-w-3xl mx-auto">
+        <p class="text-xs font-semibold text-primary tracking-widest uppercase mb-1">Specialties</p>
+        <h2 class="text-2xl md:text-3xl font-bold text-heading">担当する診療科目</h2>
+        <p class="mt-3 text-sm md:text-base text-muted leading-relaxed">
+          内科・精神科・小児科の<strong class="text-heading">3科が連携する訪問診療チーム</strong>。いずれかの専門を活かしながら、幅広い症例に携わることができます。
+        </p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        {doctorSpecialties.map((item) => (
+          <div
+            class:list={[
+              'rounded-card border overflow-hidden flex flex-col',
+              item.highlight
+                ? 'border-primary/40 shadow-md'
+                : 'border-gray-200 shadow-sm',
+            ]}
+          >
+            <div class:list={['px-5 py-4 flex items-center gap-3', item.highlight ? 'bg-primary' : 'bg-primary/10']}>
+              <span
+                class:list={[
+                  'text-2xl font-black tracking-tighter',
+                  item.highlight ? 'text-white/60' : 'text-primary/40',
+                ]}
+              >
+                {item.number}
+              </span>
+              <Icon
+                name={item.icon}
+                class:list={['w-6 h-6 shrink-0', item.highlight ? 'text-white' : 'text-primary']}
+                aria-hidden="true"
+              />
+              <h3
+                class:list={[
+                  'font-bold text-sm leading-snug m-0',
+                  item.highlight ? 'text-white' : 'text-heading',
+                ]}
+              >
+                {item.title}
+              </h3>
+            </div>
+            <div class="p-5 flex-1 bg-white">
+              <p class="text-sm text-default leading-relaxed">{item.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </RecruitSection>
+
+  <!-- ============================================================
+    働き方の魅力
+  ================================================================ -->
+  <RecruitSection id="work-style" class="py-section-y">
+    <div class="max-w-7xl mx-auto px-section-x">
+      <div class="text-center mb-10 max-w-3xl mx-auto">
+        <p class="text-xs font-semibold text-primary tracking-widest uppercase mb-1">Work Style</p>
+        <h2 class="text-2xl md:text-3xl font-bold text-heading">働き方の魅力</h2>
+        <p class="mt-3 text-sm md:text-base text-muted leading-relaxed">
+          医師のライフスタイルを守りながら、質の高い在宅医療を届けられる環境を整えています。
+        </p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        {doctorWorkStyle.map((item) => (
+          <div class="rounded-card border border-gray-200 bg-primary/5 p-6 flex flex-col items-center text-center shadow-sm">
+            <div class="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 mb-4">
+              <Icon name={item.icon} class="w-7 h-7 text-primary" aria-hidden="true" />
+            </div>
+            <h3 class="text-base font-bold text-heading mb-2">{item.title}</h3>
+            <p class="text-sm text-muted leading-relaxed">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </RecruitSection>
+
+  <!-- ============================================================
+    入職後サポート体制
+  ================================================================ -->
+  <RecruitSection id="onboarding" class="py-section-y bg-white">
+    <div class="max-w-3xl mx-auto px-section-x">
+      <div class="text-center mb-10">
+        <p class="text-xs font-semibold text-primary tracking-widest uppercase mb-1">Onboarding</p>
+        <h2 class="text-2xl md:text-3xl font-bold text-heading">入職後サポート体制</h2>
+        <p class="mt-3 text-sm md:text-base text-muted leading-relaxed">
+          訪問診療が初めてでも安心。段階的なサポートで現場に慣れていただけます。
+        </p>
+      </div>
+      <ol class="space-y-5" aria-label="入職後のサポートステップ">
+        {doctorOnboarding.map((item) => (
+          <li class="flex gap-4 items-start rounded-card border border-gray-200 bg-white p-5 shadow-sm">
+            <span
+              class="shrink-0 flex h-9 w-9 items-center justify-center rounded-full bg-primary text-white text-sm font-bold"
+              aria-label={`ステップ ${item.step}`}
+            >
+              {item.step}
+            </span>
+            <div>
+              <h3 class="text-base font-bold text-heading mb-1">{item.title}</h3>
+              <p class="text-sm text-muted leading-relaxed">{item.desc}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </RecruitSection>
+
+  <!-- ============================================================
+    詳細募集要項
+  ================================================================ -->
+  <RecruitSection id="requirements" class="py-section-y">
+    <div class="max-w-4xl mx-auto px-section-x">
+      <div class="text-center mb-10">
+        <p class="text-xs font-semibold text-primary tracking-widest uppercase mb-1">Requirements</p>
+        <h2 class="text-2xl md:text-3xl font-bold text-heading">詳細募集要項</h2>
+      </div>
+
+      <div class="rounded-card border-2 border-primary/40 overflow-hidden bg-white shadow-sm">
+        <div class="bg-primary px-5 py-4 flex items-center gap-3">
+          <Icon name="tabler:file-text" class="w-6 h-6 text-white shrink-0" aria-hidden="true" />
+          <h3 class="text-white font-bold text-base sm:text-lg m-0">{doctorFulltimeDetails.title}</h3>
+        </div>
+
+        <div class="p-5 sm:p-6">
+          <!-- 概要グリッド -->
+          <section
+            class="mb-6 rounded-xl border border-primary/25 bg-gradient-to-b from-primary/[0.07] to-transparent px-4 py-4"
+            aria-labelledby="doctor-keyfacts-heading"
+          >
+            <h4
+              id="doctor-keyfacts-heading"
+              class="text-xs font-bold text-primary tracking-wide uppercase mb-3"
+            >
+              {doctorFulltimeDetails.keyFactsHeading}
+            </h4>
+            <dl class="grid grid-cols-1 gap-2.5 text-sm sm:grid-cols-2 sm:gap-3">
+              {doctorFulltimeDetails.keyFacts.map((row) => (
+                <div class="rounded-lg border border-gray-200/90 bg-white/95 px-3 py-2.5 shadow-sm">
+                  <dt class="mb-1 text-[0.7rem] font-semibold text-muted sm:text-xs">
+                    {row.label}
+                  </dt>
+                  <dd class="font-medium leading-snug text-heading" set:html={row.valueHtml} />
+                </div>
+              ))}
+            </dl>
+          </section>
+
+          <!-- イントロ文 -->
+          {doctorFulltimeDetails.introHtml.map((html) => (
+            <p class="text-sm text-default mb-4 last:mb-0 leading-relaxed" set:html={html} />
+          ))}
+
+          <!-- 詳細2カラム -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-sm mt-6">
+            <div class="space-y-3 min-w-0">
+              {doctorFulltimeDetails.leftColumn.map((row, i) => (
+                <div
+                  class:list={[
+                    'flex gap-3 items-start min-w-0',
+                    i < doctorFulltimeDetails.leftColumn.length - 1 ? 'border-b border-gray-100 pb-3' : '',
+                  ]}
+                >
+                  <span class="font-semibold text-muted w-24 shrink-0">{row.label}</span>
+                  <span class="min-w-0 flex-1 text-default" set:html={row.valueHtml} />
+                </div>
+              ))}
+            </div>
+            <div class="space-y-3 min-w-0">
+              {doctorFulltimeDetails.rightColumn.map((row, i) => (
+                <div
+                  class:list={[
+                    'flex gap-3 items-start min-w-0',
+                    i < doctorFulltimeDetails.rightColumn.length - 1 ? 'border-b border-gray-100 pb-3' : '',
+                  ]}
+                >
+                  <span class="font-semibold text-muted w-24 shrink-0">{row.label}</span>
+                  <span class="min-w-0 flex-1 text-default" set:html={row.valueHtml} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- 勤務先情報 -->
+          <div class="mt-6 rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm space-y-1.5">
+            <p class="font-semibold text-heading">勤務先</p>
+            <p class="text-default">医療法人かもめ会 かもめクリニック</p>
+            <p class="text-muted">{CLINIC_CONTACT.postalCode} {CLINIC_CONTACT.addressLine1} {CLINIC_CONTACT.addressLine2}</p>
+            <p class="text-muted">最寄駅：大阪市営地下鉄中央線 朝潮橋駅から徒歩3分</p>
+          </div>
+
+          <!-- 求める人物像 -->
+          <div class="mt-6 bg-blue-50 rounded-xl p-4">
+            <p class="text-sm font-semibold text-primary mb-2">{doctorFulltimeDetails.desiredProfile.heading}</p>
+            <ul class="text-sm text-default space-y-1">
+              {doctorFulltimeDetails.desiredProfile.items.map((text, idx) => {
+                const isLast = idx === doctorFulltimeDetails.desiredProfile.items.length - 1;
+                const emphasized = doctorFulltimeDetails.desiredProfile.emphasizedLast && isLast;
+                return (
+                  <li class:list={[emphasized ? 'text-primary font-medium' : '']}>
+                    ・{text}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </RecruitSection>
+
+  <!-- ============================================================
+    在籍医師からのメッセージ
+    ※ 患者の声ではなくスタッフの声のため医療法上掲載可
+  ================================================================ -->
+  <RecruitSection id="staff-voice" class="py-section-y bg-white">
+    <div class="max-w-3xl mx-auto px-section-x">
+      <div class="text-center mb-10">
+        <p class="text-xs font-semibold text-primary tracking-widest uppercase mb-1">Staff Voice</p>
+        <h2 class="text-2xl md:text-3xl font-bold text-heading">在籍医師からのメッセージ</h2>
+      </div>
+      <figure class="rounded-card border border-primary/25 bg-primary/5 p-6 sm:p-8">
+        <blockquote>
+          <Icon name="tabler:quote" class="w-8 h-8 text-primary/30 mb-3" aria-hidden="true" />
+          <p class="text-base text-default leading-relaxed italic">{doctorStaffMessage.message}</p>
+        </blockquote>
+        <figcaption class="mt-5 flex items-center gap-3">
+          <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20">
+            <Icon name="tabler:user-md" class="w-5 h-5 text-primary" aria-hidden="true" />
+          </div>
+          <div>
+            <p class="text-sm font-bold text-heading">{doctorStaffMessage.name}</p>
+            <p class="text-xs text-muted">{doctorStaffMessage.role}</p>
+          </div>
+        </figcaption>
+      </figure>
+    </div>
+  </RecruitSection>
+
+  <!-- ============================================================
+    応募CTA
+  ================================================================ -->
+  <RecruitSection id="apply" class="py-section-y bg-primary">
+    <div class="max-w-3xl mx-auto px-section-x text-center">
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">
+        一緒に訪問診療を届けませんか
+      </h2>
+      <p class="text-white/85 text-sm md:text-base leading-relaxed mb-8">
+        ご質問・応募書類の送付はお気軽にどうぞ。<br />
+        受付：{CLINIC_CONTACT.hoursPrimary}　TEL：{CLINIC_CONTACT.telDisplay}
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={CLINIC_CONTACT.telHref}
+          class="inline-flex items-center justify-center gap-2 rounded-pill bg-white text-primary font-bold px-7 py-3.5 text-base hover:bg-white/90 transition-colors focus-visible:ring-2 focus-visible:ring-white"
+        >
+          <Icon name="tabler:phone" class="w-5 h-5 shrink-0" aria-hidden="true" />
+          {CLINIC_CONTACT.telDisplay}
+        </a>
+      </div>
+
+      <div class="mt-8 rounded-card bg-white/10 p-5 text-sm text-white/85 text-left space-y-1">
+        <p class="font-semibold text-white mb-2">応募書類のご案内</p>
+        <p>・履歴書（写真貼付）</p>
+        <p>・職務経歴書（お持ちの場合）</p>
+        <p>・医師免許証のコピー</p>
+        <p class="text-white/65 text-xs mt-2">
+          ※ お電話いただいた後、郵送またはメールにてお送りください。書類到着後1週間以内に結果をご連絡します。
+        </p>
+      </div>
+    </div>
+  </RecruitSection>
+</Layout>

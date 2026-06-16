@@ -57,7 +57,7 @@ export const recruitPositionCards: RecruitPositionCard[] = [
       { label: '必須資格', value: '医師免許（経験・年次不問、訪問診療未経験可）' },
       { label: '給与', value: '経験・スキルに応じて応相談' },
     ],
-    cta: { href: '#apply', label: '応募・お問い合わせ' },
+    cta: { href: '/recruit/doctor', label: '詳細募集要項を見る' },
   },
   {
     title: '看護師',
@@ -229,6 +229,37 @@ export const recruitFinalCtaActions: CallToAction[] = [
     icon: 'tabler:phone',
   },
 ];
+
+/** schema.org JobPosting（医師・常勤）用。表示内容と整合させる。 */
+export const recruitJobPostingDoctorJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'JobPosting',
+  title: '医師（常勤）内科・精神科・小児科',
+  description:
+    '訪問診療における常勤医師。内科・精神科・小児科いずれかの専門を活かし、大阪市内の患者さまへ在宅医療を届けます。訪問診療未経験可。',
+  datePosted: '2026-01-01',
+  validThrough: '2027-12-31',
+  employmentType: 'FULL_TIME',
+  hiringOrganization: {
+    '@type': 'Organization',
+    name: 'かもめクリニック',
+    sameAs: 'https://kamome-clinic.net',
+  },
+  jobLocation: {
+    '@type': 'Place',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: '大阪市',
+      addressRegion: '大阪府',
+      addressCountry: 'JP',
+    },
+  },
+  identifier: {
+    '@type': 'PropertyValue',
+    name: 'recruitPage',
+    value: 'doctor-fulltime',
+  },
+} as const;
 
 /** schema.org JobPosting（看護師正社員）用。表示内容と整合させる。 */
 export const recruitJobPostingNurseJsonLd = {

@@ -9,10 +9,12 @@
 
 /** グループ全体の統計（全院合計）*/
 export const GROUP_STATS = {
+  /** 年間診察件数（グループ・2025年1〜12月） */
+  annualVisitCount: '約1.6万件',
   /** 2025年12月時点のグループ患者数 */
-  patientCount: '約1500名',
-  /** グループ年間看取り数 */
-  annualDeathCount: '約120名',
+  patientCount: '450名',
+  /** グループ年間看取り数（2025年1〜12月） */
+  annualDeathCount: '約200名',
   /** 拠点数表記（「院」を採用） */
   locationCount: '大阪市内6院',
   /** 拠点数（数値） */

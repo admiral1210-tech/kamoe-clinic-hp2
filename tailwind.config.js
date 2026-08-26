@@ -1,9 +1,10 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 import plugin from 'tailwindcss/plugin';
 import typographyPlugin from '@tailwindcss/typography';
+import tailwindcssAnimate from 'tailwindcss-animate';
 
 export default {
-  content: ['./src/**/*.{astro,html,js,jsx,json,md,mdx,svelte,ts,tsx,vue}'],
+  content: ['./src/**/*.{js,jsx,ts,tsx}', './components/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -15,10 +16,28 @@ export default {
         heading: 'var(--aw-color-text-heading)',
         // ナビゲーションホバー色（hover:text-link で使用）
         link: 'var(--aw-color-primary)',
+        // shadcn/ui コンポーネントトークン
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
       },
       spacing: {
-        'section-y':       'var(--aw-spacing-section-y)',
-        'section-x':       'var(--aw-spacing-section-x)',
+        'section-y': 'var(--aw-spacing-section-y)',
+        'section-x': 'var(--aw-spacing-section-x)',
         'hero-content-pb': 'var(--aw-spacing-hero-content-pb)',
       },
       borderRadius: {
@@ -45,6 +64,7 @@ export default {
   },
   plugins: [
     typographyPlugin,
+    tailwindcssAnimate,
     plugin(({ addVariant }) => {
       addVariant('intersect', '&:not([no-intersect])');
     }),
@@ -52,16 +72,9 @@ export default {
   /**
    * dark: クラスポリシー（light:only モード運用）
    * ─────────────────────────────────────────────────────────
-   * config.yaml に ui.theme:'light:only' を設定しているため、BasicScripts.astro
-   * が document.documentElement.classList.remove('dark') を常に実行し、
-   * .dark クラスは決してページに付与されない。
-   *
-   * したがって dark: 変種 CSS は生成されるが一切マッチしない（実質的デッドコード）。
+   * .dark クラスを付与するロジックは存在しないため、dark: 変種 CSS は
+   * 生成されるが一切マッチしない（実質的デッドコード）。
    * 新規コードでは dark: クラスを使わないこと。
-   * 既存ページの dark: クラスは段階的に除去する（P2-3）。
-   *
-   * 'class' のまま残す理由: Astrowind テンプレートコンポーネントが
-   * .dark セレクタに依存するため、変更すると副作用がある。
    */
   darkMode: 'class',
 };

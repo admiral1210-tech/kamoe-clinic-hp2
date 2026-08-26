@@ -9,6 +9,8 @@
  *   2. ファイルを保存する（`npm run dev` 中であれば即時反映）
  */
 
+import { GROUP_STATS } from '~/data/clinic-stats';
+
 // ===========================================================================
 // 1. Googleビジネスプロフィール レビュー評価
 //    → MedicalClinic JSON-LD の aggregateRating に使用
@@ -147,15 +149,19 @@ export function getCumulativeText(): string | null {
   return null;
 }
 
-/** ヒーロー等の表示用。未設定・空文字のときは従来どおりの確定コピーを返す */
+/**
+ * ヒーロー等の表示用。累計値（開院以来）は未取得のため、
+ * 検証済みの GROUP_STATS（グループ全体・年間実績）を返す。
+ * 累計値を入力すればそちらを優先する。
+ */
 export function getCumulativePatientsDisplay(): string {
   const v = cumulativeStats.totalPatients;
   if (v != null && String(v).trim() !== '') return String(v).trim();
-  return '1,000名';
+  return GROUP_STATS.patientCount;
 }
 
 export function getCumulativeVisitsDisplay(): string {
   const v = cumulativeStats.totalVisits;
   if (v != null && String(v).trim() !== '') return String(v).trim();
-  return '1.2万件';
+  return GROUP_STATS.annualVisitCount;
 }

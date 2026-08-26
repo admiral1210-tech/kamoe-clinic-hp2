@@ -2,22 +2,21 @@
 /**
  * lint-astro-inline-japanese.mjs
  *
- * .astro ファイル内に日本語テキストが直書きされていないかチェックする。
+ * .tsx ファイル内に日本語テキストが直書きされていないかチェックする。
  * コンテンツは src/content/copy/ja/*.json に移動し、
- * .astro ファイルからは import 経由で参照するのが規約。
+ * .tsx ファイルからは import 経由で参照するのが規約。
  *
  * 検知対象:
- *   - フロントマター（---...---）内の const/let/var 宣言のうち、
- *     metadata / jsonLd* 以外のブロックに含まれる日本語文字列
- *   - テンプレート（HTML部分）の日本語テキスト（HTML属性値・本文）
+ *   - モジュールトップレベルの const/let/var 宣言・関数コンポーネント本体のうち、
+ *     metadata / jsonLd* / seoData 以外のブロックに含まれる日本語文字列
+ *     （JSX で返されるテンプレート内の直書きテキストもここに含まれる）
  *
  * 除外対象:
  *   - metadata / jsonLd* / seoData 変数ブロック（SEOメタデータ・構造化データ）
- *   - コメント行（// ... / HTML コメント <!-- ... -->）
+ *   - interface / type 宣言（型定義）
+ *   - コメント行（// ... / JSX コメント {/* ... *\/} ）
  *   - 行末インラインコメント // の日本語（コメント部分を除去して再判定）
- *   - Astro テンプレート式 {expr} の内側（インポート済みデータを参照）
- *   - style / script ブロック内（CSSコメント・JSコメントは対象外）
- *   - Astro.props 行（コンポーネントプロップ宣言のデフォルト値）
+ *   - 単一行の {expr} 式の内側（インポート済みデータを参照）
  *   - 行末コメント "// lint-jp-ignore" で個別行を抑制
  *
  * 使用方法:
@@ -96,15 +95,15 @@ function countBraces(line) {
   return { open, close };
 }
 
-/** ディレクトリを再帰的に走査して .astro ファイルを収集 */
-function collectAstroFiles(dir, result = []) {
+/** ディレクトリを再帰的に走査して .tsx ファイルを収集 */
+function collectTargetFiles(dir, result = []) {
   for (const entry of readdirSync(dir)) {
     if (EXCLUDE_DIRS.has(entry)) continue;
     const full = join(dir, entry);
     const stat = statSync(full);
     if (stat.isDirectory()) {
-      collectAstroFiles(full, result);
-    } else if (entry.endsWith('.astro')) {
+      collectTargetFiles(full, result);
+    } else if (entry.endsWith('.tsx')) {
       result.push(full);
     }
   }
@@ -112,63 +111,63 @@ function collectAstroFiles(dir, result = []) {
 }
 
 // ============================================================
-// フロントマター解析
+// ファイル解析
 // ============================================================
 
 /**
- * フロントマター（--- 〜 --- 間）の行を解析し、
- * 許可されていない変数ブロック内の日本語を検出する。
+ * .tsx ファイル全体（モジュールトップレベルの宣言・コンポーネント本体を含む）
+ * を解析し、許可されていないブロック内の日本語を検出する。
+ *
+ * .astro のフロントマター/テンプレートのような明確な区切りが .tsx には
+ * 存在しないため、モジュールトップレベルの宣言単位（depth 0 → depth>0 →
+ * depth 0 の往復）をブロックとして扱い、ブロック種別ごとに検査有無を決める。
  *
  * 検出方針:
- *   - const/let/var の通常宣言: ALLOWED_VAR_PREFIXES 以外をフラグ
- *   - const { ... } = Astro.* 形式の分割代入: ブロック全体を許可（プロップのデフォルト値）
- *   - interface / type / export interface: 型定義なので全体をスキップ
+ *   - interface / type 宣言: 型定義なので全体をスキップ
+ *   - const/let/var 宣言で ALLOWED_VAR_PREFIXES に一致: スキップ
+ *     （metadata / jsonLd* / seoData ブロック。SEOメタデータ・構造化データ）
+ *   - それ以外のトップレベル宣言（他の const、関数コンポーネント本体など）:
+ *     フラグ対象。JSX で返されるテンプレート内の直書きテキストもここに含まれる
  *   - ブロック内の違反は、ブロック種別が確定するまでバッファリングしてから emit
- *
- * @returns {{ violations: Violation[], frontmatterEndIdx: number }}
  */
-function checkFrontmatter(lines) {
+function checkTsxFile(lines) {
   const violations = [];
 
-  // --- の位置を特定
-  let fmStart = -1;
-  let fmEnd = -1;
-  let dashCount = 0;
-  for (let i = 0; i < lines.length; i++) {
-    if (lines[i].trim() === '---') {
-      dashCount++;
-      if (dashCount === 1) fmStart = i;
-      if (dashCount === 2) { fmEnd = i; break; }
-    }
-  }
-
-  if (fmStart === -1 || fmEnd === -1) {
-    return { violations, frontmatterEndIdx: 0 };
-  }
-
-  // フロントマター内部を解析
   let depth = 0;
-  /** @type {'allowed' | 'flagged' | 'destructuring' | 'typedef'} */
-  let blockKind = 'allowed'; // トップレベルは "allowed" 扱い（depth=0 の間は何も emit しない）
+  /** @type {'allowed' | 'flagged' | 'typedef'} */
+  let blockKind = 'allowed';
   let currentVarName = null;
   /** @type {Violation[]} 現ブロックの違反バッファ（ブロック種別確定後に emit） */
   let pending = [];
+  let inBlockComment = false;
 
-  for (let i = fmStart + 1; i < fmEnd; i++) {
+  for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const lineNum = i + 1; // 1-based
     const trimmed = line.trim();
 
-    // 行末の抑制コメントがあればスキップ
-    if (trimmed.includes('// lint-jp-ignore')) continue;
+    // ─── 複数行コメント /* ... */ の追跡 ───
+    if (inBlockComment) {
+      if (trimmed.includes('*/')) inBlockComment = false;
+      continue;
+    }
 
-    // コメント行はスキップ（日本語も許可）
+    // 行末の抑制コメントがあればスキップ
+    if (trimmed.includes('// lint-jp-ignore') || trimmed.includes('{/* lint-jp-ignore */}')) continue;
+
+    // コメント行・JSXコメント行はスキップ
     if (
       !trimmed ||
       trimmed.startsWith('//') ||
       trimmed.startsWith('*') ||
-      trimmed.startsWith('/*')
-    ) continue;
+      trimmed.startsWith('/*') ||
+      trimmed.startsWith('{/*')
+    ) {
+      if ((trimmed.startsWith('/*') || trimmed.startsWith('{/*')) && !trimmed.includes('*/')) {
+        inBlockComment = true;
+      }
+      continue;
+    }
 
     // ブレース数を計算
     const { open, close } = countBraces(line);
@@ -181,42 +180,45 @@ function checkFrontmatter(lines) {
         currentVarName = null;
         pending = [];
       }
-      // 通常の変数宣言: const foo = ...
+      // 変数宣言: const foo = ... / 分割代入 const { ... } = ...
       else {
         const varMatch = trimmed.match(/^(?:export\s+)?(?:const|let|var)\s+(\w+)\s*[=:]/);
-        // 分割代入: const { ... } = Astro.* （複数行の場合は depth > 0 になる前に判定できないので
-        // "destructuring" として保留し、ブロック末で確定する）
-        const isDestructuring = /^(?:export\s+)?(?:const|let|var)\s*\{/.test(trimmed);
 
-        if (isDestructuring) {
-          blockKind = 'destructuring';
-          currentVarName = '__destructuring__';
-          pending = [];
-        } else if (varMatch) {
+        if (varMatch) {
           currentVarName = varMatch[1];
-          const isAllowed = ALLOWED_VAR_PREFIXES.some(
-            (p) => currentVarName === p || currentVarName.startsWith(p)
-          );
+          const isAllowed = ALLOWED_VAR_PREFIXES.some((p) => currentVarName === p || currentVarName.startsWith(p));
           blockKind = isAllowed ? 'allowed' : 'flagged';
           pending = [];
+        } else if (/^import\b/.test(trimmed)) {
+          // import 文は許可（パスに日本語は含まれない前提）
+          blockKind = 'allowed';
+          currentVarName = null;
+          pending = [];
+        } else {
+          // 関数コンポーネント宣言・その他のトップレベル文
+          // （JSX を返す本体を含むため既定でフラグ対象とする）
+          blockKind = 'flagged';
+          currentVarName = null;
+          pending = [];
         }
-        // else: import 文・関数呼び出しなどは blockKind を変えない
       }
     }
 
     // ─── 違反チェック ───
     if (blockKind === 'flagged') {
       const withoutComment = stripInlineComment(line);
-      if (hasSignificantJapanese(withoutComment)) {
+      // 単一行の {expr} を除去してから日本語チェック（変数参照由来の誤検知を抑制）
+      const stripped = withoutComment.replace(/\{[^{}]*\}/g, '');
+      if (hasSignificantJapanese(stripped)) {
         pending.push({
           lineNum,
           content: trimmed.length > 120 ? trimmed.slice(0, 120) + '…' : trimmed,
-          section: 'frontmatter',
-          varName: currentVarName ?? '(トップレベル)',
+          section: currentVarName ? 'declaration' : 'jsx',
+          varName: currentVarName ?? null,
         });
       }
     }
-    // typedef / allowed / destructuring は違反チェックしない
+    // typedef / allowed は違反チェックしない
 
     // ─── depth 更新 ───
     const prevDepth = depth;
@@ -224,17 +226,7 @@ function checkFrontmatter(lines) {
 
     // ─── depth が 0 に戻ったとき: ブロック終了処理 ───
     if (prevDepth > 0 && depth === 0) {
-      if (blockKind === 'destructuring') {
-        // 分割代入の終端行に = Astro.* があれば props のデフォルト値 → 破棄
-        // それ以外（例: 通常のオブジェクト分割代入）→ pending を emit
-        if (/=\s*Astro\.\w+/.test(trimmed)) {
-          // プロップのデフォルト値: 許可
-          pending = [];
-        } else {
-          violations.push(...pending);
-          pending = [];
-        }
-      } else if (blockKind === 'flagged') {
+      if (blockKind === 'flagged') {
         violations.push(...pending);
         pending = [];
       }
@@ -242,107 +234,6 @@ function checkFrontmatter(lines) {
       // ブロック種別をリセット
       blockKind = 'allowed';
       currentVarName = null;
-    }
-  }
-
-  return { violations, frontmatterEndIdx: fmEnd + 1 };
-}
-
-// ============================================================
-// テンプレート解析
-// ============================================================
-
-/**
- * テンプレート部分（HTML/Astro JSX）を解析し、
- * 直書きされた日本語テキストを検出する。
- *
- * ルール:
- *   - HTML コメント <!-- ... --> はスキップ（複数行対応）
- *   - <style> / <script> ブロックはスキップ
- *   - Astro 式 {expr} の内側はスキップ（インポート済みデータ参照）
- *   - それ以外で日本語を含む行をフラグ
- */
-function checkTemplate(lines, startIdx) {
-  const violations = [];
-  let inHtmlComment = false;
-  let inStyleBlock = false;
-  let inScriptBlock = false;
-  let exprDepth = 0; // { } の深さ（Astroテンプレート式の追跡）
-
-  for (let i = startIdx; i < lines.length; i++) {
-    const line = lines[i];
-    const lineNum = i + 1;
-    const trimmed = line.trim();
-
-    // 行末の抑制コメントがあればスキップ
-    if (trimmed.includes('{/* lint-jp-ignore */}') || trimmed.includes('<!-- lint-jp-ignore -->')) continue;
-
-    // ─── <style> / </style> ブロック追跡 ───
-    if (!inStyleBlock && !inScriptBlock) {
-      if (/^<style[\s>]/.test(trimmed) || trimmed === '<style>') {
-        // 自己閉じ（<style ... />）は行をスキップするだけでブロックは開始しない
-        if (!trimmed.endsWith('/>')) inStyleBlock = true;
-        continue;
-      }
-    }
-    if (inStyleBlock) {
-      if (trimmed.includes('</style>')) inStyleBlock = false;
-      continue; // style ブロック内はスキップ（CSSコメントも含む）
-    }
-
-    // ─── <script> / </script> ブロック追跡 ───
-    if (!inScriptBlock) {
-      if (/^<script[\s>]/.test(trimmed) || trimmed === '<script>') {
-        // 自己閉じ（<script set:html={...} />）はスキップするだけでブロックは開始しない
-        if (!trimmed.endsWith('/>')) inScriptBlock = true;
-        continue;
-      }
-    }
-    if (inScriptBlock) {
-      if (trimmed.includes('</script>')) inScriptBlock = false;
-      continue; // script ブロック内はスキップ
-    }
-
-    // ─── HTMLコメント（複数行対応） ───
-    if (inHtmlComment) {
-      if (trimmed.includes('-->')) inHtmlComment = false;
-      continue;
-    }
-    if (trimmed.startsWith('<!--')) {
-      if (!trimmed.includes('-->')) inHtmlComment = true;
-      continue; // コメント行全体をスキップ
-    }
-
-    // JS/CSS コメント行（<script> 外でも稀に混在する場合）
-    if (trimmed.startsWith('//') || trimmed.startsWith('/*') || trimmed.startsWith('*')) continue;
-
-    // ─── Astro式 {expr} の開閉を追跡 ───
-    // exprDepth > 0 の行は式の内部 → 日本語はインポートデータ由来として許可
-    const { open, close } = countBraces(line);
-
-    if (exprDepth > 0) {
-      // この行は Astro 式の内部
-      exprDepth = Math.max(0, exprDepth + open - close);
-      continue;
-    }
-
-    // exprDepth === 0: テンプレートの直接テキスト部分
-    // 単一行の {expr} を除去してから日本語チェック
-    const stripped = line.replace(/\{[^{}]*\}/g, '');
-
-    if (hasSignificantJapanese(stripped)) {
-      violations.push({
-        lineNum,
-        content: trimmed.length > 120 ? trimmed.slice(0, 120) + '…' : trimmed,
-        section: 'template',
-        varName: null,
-      });
-    }
-
-    // この行で式が開いた場合は次の行から追跡
-    const netOpen = open - close;
-    if (netOpen > 0) {
-      exprDepth = netOpen;
     }
   }
 
@@ -364,14 +255,13 @@ const args = process.argv.slice(2);
 const WARN_ONLY = args.includes('--warn');
 const UPDATE_BASELINE = args.includes('--update-baseline');
 const CHECK_BASELINE = args.includes('--check-baseline');
-const STRICT = args.includes('--strict');
 const maxArg = args.find((a) => a.startsWith('--max='));
 const MAX_VIOLATIONS = maxArg ? parseInt(maxArg.slice(6), 10) : Infinity;
 
 const BASELINE_FILE = join(ROOT, 'scripts', '.jp-baseline.json');
 
 // ─── スキャン ───
-const files = collectAstroFiles(srcDir);
+const files = collectTargetFiles(srcDir);
 files.sort();
 
 /** @typedef {{ lineNum: number, content: string, section: string, varName: string|null }} Violation */
@@ -383,13 +273,11 @@ for (const file of files) {
   const content = readFileSync(file, 'utf-8');
   const lines = content.split('\n');
 
-  const { violations: fmViolations, frontmatterEndIdx } = checkFrontmatter(lines);
-  const tmViolations = checkTemplate(lines, frontmatterEndIdx);
+  const violations = checkTsxFile(lines);
 
-  const all = [...fmViolations, ...tmViolations];
-  if (all.length > 0) {
-    report.push({ file: relative(ROOT, file), violations: all });
-    totalViolations += all.length;
+  if (violations.length > 0) {
+    report.push({ file: relative(ROOT, file), violations });
+    totalViolations += violations.length;
   }
 }
 
@@ -421,7 +309,7 @@ if (CHECK_BASELINE && existsSync(BASELINE_FILE)) {
 // ============================================================
 
 if (totalViolations === 0) {
-  console.log('✅ .astro ファイルに日本語直書きは検出されませんでした。');
+  console.log('✅ .tsx ファイルに日本語直書きは検出されませんでした。');
   process.exit(0);
 }
 
@@ -430,7 +318,7 @@ const printReport = () => {
     console.error(`\n📄 ${file}  (${violations.length} 件)`);
     for (const v of violations) {
       const loc = `  ${String(v.lineNum).padStart(4)}`;
-      const section = v.section === 'frontmatter' ? `[FM:${v.varName}]` : '[HTML]';
+      const section = v.section === 'declaration' ? `[VAR:${v.varName}]` : '[JSX]';
       console.error(`${loc}  ${section.padEnd(24)}  ${v.content}`);
     }
   }
@@ -478,7 +366,7 @@ if (CHECK_BASELINE && baseline) {
 
 // ─── 通常モード / --max モード / --warn モード ───
 const prefix = WARN_ONLY ? '⚠️ ' : '❌';
-console.error(`\n${prefix} .astro ファイル内の日本語直書き: ${totalViolations} 件\n`);
+console.error(`\n${prefix} .tsx ファイル内の日本語直書き: ${totalViolations} 件\n`);
 console.error('   コンテンツは src/content/copy/ja/*.json に移動し、import で参照してください。');
 console.error('   個別行を抑制する場合: 行末に  // lint-jp-ignore  を追加\n');
 console.error('─'.repeat(80));

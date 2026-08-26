@@ -9,6 +9,9 @@
  *   {{BRANCH_COUNT}}     → KAMOME_BRANCH_COUNT
  *   {{COST_HREF}}        → /cost
  *   {{RENKEI_HREF}}      → /renkei
+ *   {{ANNUAL_DEATH_COUNT}} → GROUP_STATS.annualDeathCount（グループ年間看取り数）
+ *   {{STATS_PERIOD_NOTE}}  → STATS_PERIOD_NOTE（実績数値の期間・範囲注記）
+ *   {{FACILITY_COUNT}}     → GROUP_STATS.facilityCount（対応施設数）
  *
  * trailingSnippet フィールド:
  *   "phoneFormConsult"  → 末尾に「お電話またはフォームでご相談ください。」を付与
@@ -17,6 +20,7 @@
 
 import { CLINIC_CONTACT } from '~/data/clinic-contact';
 import { KAMOME_BRANCH_COUNT } from '~/data/branches';
+import { GROUP_STATS, STATS_PERIOD_NOTE } from '~/data/clinic-stats';
 import type { ClinicalFaqEntry } from '~/utils/seo-faq';
 
 export type TrailingSnippetKey = 'phoneFormConsult' | 'costPageAndPhone';
@@ -43,6 +47,10 @@ const PLACEHOLDERS: Record<string, string> = {
   '{{BRANCH_COUNT}}': String(KAMOME_BRANCH_COUNT),
   '{{COST_HREF}}': '/cost',
   '{{RENKEI_HREF}}': '/renkei',
+  '{{ANNUAL_DEATH_COUNT}}': GROUP_STATS.annualDeathCount,
+  '{{STATS_PERIOD_NOTE}}': STATS_PERIOD_NOTE,
+  '{{FACILITY_COUNT}}': GROUP_STATS.facilityCount,
+  '{{NICU_SUPPORT_COUNT}}': GROUP_STATS.nicuSupportCount,
 };
 
 function interpolate(text: string): string {

@@ -23,9 +23,9 @@ export const recruitWhyFeaturesItems: Item[] = [
     icon: 'tabler:building',
   },
   {
-    title: '24時間体制をチームで分担',
+    title: 'オンコール当番制で負担を分散',
     description:
-      '緊急対応はチームで分担し、一人に負担が偏らない体制を整えています。プライベートとの両立が可能です。',
+      '緊急対応はオンコール当番制でチームに分担し、一人に負担が偏らない体制を整えています。プライベートとの両立が可能です。',
     icon: 'tabler:clock-24',
   },
   {
@@ -113,7 +113,7 @@ export const recruitNurseFulltime = {
     { label: '雇用形態', valueHtml: '正社員（常勤）' },
     { label: '給与', valueHtml: '月給 30〜35万円（固定残業代含まず）' },
     { label: '試用期間', valueHtml: '3ヶ月（同条件）' },
-    { label: '賞与', valueHtml: '年1.5〜2ヶ月分（昨年度実績）' },
+    { label: '賞与', valueHtml: '年1.5〜2ヶ月分（昨年度実績・業績により変動あり）' },
     { label: '昇給・手当', valueHtml: 'ベースアップ加算 1〜3万円/年・役職手当あり' },
     { label: '待遇', valueHtml: '社会保険完備・交通費規定支給（月1万円まで）' },
   ] satisfies RecruitNurseDetailRow[],
@@ -212,7 +212,8 @@ export const recruitFaqItems: Item[] = [
   },
   {
     title: '夜間・休日対応はありますか？',
-    description: '医師の場合、夜間・休日対応は当番制を敷いております。月に２〜３回程度です。',
+    description:
+      '医師の場合、夜間・休日対応は当番制を敷いております。平日は月2回程度、週末は2〜3ヶ月に1回程度です。',
   },
   {
     title: '転職活動中で在職中でも相談できますか？',

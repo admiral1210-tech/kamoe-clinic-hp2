@@ -7,14 +7,21 @@
  * 最終更新: 2025年12月時点の数値
  */
 
+/** 実績数値の期間・範囲を示す注記（全ページ共通） */
+export const STATS_PERIOD_NOTE = '2025年1〜12月・グループ全体の実績';
+
 /** グループ全体の統計（全院合計）*/
 export const GROUP_STATS = {
   /** 年間診察件数（グループ・2025年1〜12月） */
   annualVisitCount: '約1.6万件',
   /** 2025年12月時点のグループ患者数 */
   patientCount: '450名',
-  /** グループ年間看取り数（2025年1〜12月） */
-  annualDeathCount: '約200名',
+  /** グループ年間看取り数（2025年1〜12月実績） */
+  annualDeathCount: '191名',
+  /** 対応施設数（時点注記付きで使用） */
+  facilityCount: '約50施設',
+  /** NICU退院後在宅移行支援の実績件数（グループ全体） */
+  nicuSupportCount: '約10件',
   /** 拠点数表記（「院」を採用） */
   locationCount: '大阪市内6院',
   /** 拠点数（数値） */
@@ -23,8 +30,10 @@ export const GROUP_STATS = {
   foundedYear: '2017年',
   /** 常勤医師数 */
   doctorCountFulltime: 13,
-  /** 常勤・非常勤含む精神科専門医数 */
+  /** 常勤・非常勤含む精神科医数 */
   psychiatristCount: 8,
+  /** 常勤の精神科専門医数 */
+  psychiatristFulltimeCount: 3,
 } as const;
 
 /** かもめ1（本院）の統計 */

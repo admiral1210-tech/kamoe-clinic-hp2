@@ -1,5 +1,4 @@
 import { CLINIC_CONTACT } from '~/data/clinic-contact';
-import { getPermalink } from '~/utils/permalinks';
 
 /** 訪問診療ページの「ご利用の流れ」— 画面の Steps と JSON-LD HowTo の単一ソース */
 export const HOMMON_SHINRYO_FLOW_HOW_TO = {
@@ -8,7 +7,7 @@ export const HOMMON_SHINRYO_FLOW_HOW_TO = {
   totalTime: 'P1D' as const,
 };
 
-const contactFormPath = getPermalink('/renkei');
+const contactFormPath = '/renkei';
 
 export interface HoumonShinryoFlowStep {
   icon: string;
@@ -46,9 +45,9 @@ export const houmonShinryoFlowSteps: HoumonShinryoFlowStep[] = [
   {
     icon: 'tabler:stethoscope',
     headline: '定期訪問診療スタート',
-    howToText: '定期訪問診療が始まります。診察のない日でも病状が悪化した際は、24時間365日、医師へご相談いただけます。',
+    howToText: '定期訪問診療が始まります。診察のない日でも病状が悪化した際は、24時間365日ご相談いただける体制を整えています。',
     descriptionHtml:
-      '定期訪問診療が始まります。診察のない日でも病状が悪化した際は、24時間365日、医師へご相談いただけます。',
+      '定期訪問診療が始まります。診察のない日でも病状が悪化した際は、24時間365日ご相談いただける体制を整えています。',
   },
 ];
 

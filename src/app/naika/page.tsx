@@ -1,0 +1,184 @@
+import type { Metadata } from 'next';
+
+import { Hero } from '@/components/widgets/hero';
+import { Features } from '@/components/widgets/features';
+import { FAQs } from '@/components/widgets/faqs';
+import { ClinicalPageClosing } from '@/components/widgets/clinical-page-closing';
+import { PageTocNav } from '@/components/ui/page-toc-nav';
+import { JsonLd } from '@/components/json-ld';
+import { buildMetadata } from '@/lib/seo';
+import { CLINIC_CONTACT } from '~/data/clinic-contact';
+import { GROUP_STATS, STATS_PERIOD_NOTE } from '~/data/clinic-stats';
+import { naikaFaqEntries } from '~/data/faq-naika';
+import {
+  clinicalAnchorScrollMargin,
+  clinicalHeroSectionPadding,
+  clinicalHeroSubtitleClass,
+  clinicalHeroTaglineClass,
+  clinicalHeroTextBlockPadding,
+  clinicalHeroTitleClass,
+  clinicalSectionHeadline,
+} from '~/constants/clinical-page-ui';
+import { buildFaqPageJsonLd, faqEntriesToWidgetItems } from '~/utils/seo-faq';
+
+export const metadata: Metadata = buildMetadata({
+  title: '内科の訪問診療｜大阪市｜かもめクリニック',
+  ignoreTitleTemplate: true,
+  description:
+    '大阪市の内科訪問診療。慢性疾患（高血圧・糖尿病・心不全・COPD）の継続管理から緩和ケア・看取りまで対応。通院が困難な方のご自宅・施設へ医師が定期訪問。健康保険・介護保険適用。24時間365日の緊急往診。',
+  path: '/naika',
+  ogImage: { url: 'https://kamome-clinic.net/images/top/slider02.jpg', width: 1200, height: 626 },
+});
+
+const jsonLdBreadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
+    { '@type': 'ListItem', position: 2, name: '内科の訪問診療', item: 'https://kamome-clinic.net/naika' },
+  ],
+};
+
+const jsonLdFAQ = buildFaqPageJsonLd(naikaFaqEntries);
+const naikaFaqWidgetItems = faqEntriesToWidgetItems(naikaFaqEntries);
+
+const heroActions = [
+  { variant: 'primary' as const, href: CLINIC_CONTACT.telHref, text: '電話する', icon: 'tabler:phone' },
+  { variant: 'secondary' as const, href: '/renkei', text: '問い合わせ', icon: 'tabler:clipboard-list' },
+];
+
+export default function NaikaPage() {
+  return (
+    <>
+      <JsonLd data={jsonLdBreadcrumb} />
+      <JsonLd data={jsonLdFAQ} />
+
+      <Hero
+        tagline="内科 訪問診療｜大阪市"
+        taglineClass={clinicalHeroTaglineClass}
+        titleClass={clinicalHeroTitleClass}
+        subtitleClass={clinicalHeroSubtitleClass}
+        sectionPaddingClass={clinicalHeroSectionPadding}
+        textBlockPaddingClass={clinicalHeroTextBlockPadding}
+        actions={heroActions}
+        title={
+          <>
+            持病の管理も
+            <br />
+            <span className="text-primary dark:text-blue-300">自宅</span>で
+            <br />
+            続けられます
+          </>
+        }
+        subtitle={
+          <>
+            <strong>高血圧・糖尿病・心不全・COPD</strong>などの慢性疾患を、ご自宅で継続管理します。
+            <br className="hidden sm:inline" />
+            採血・処方・処置もすべて訪問時に完結。<strong>24時間365日の緊急往診</strong>にも対応しています。
+          </>
+        }
+      />
+
+      <PageTocNav
+        ariaLabel="このページの目次"
+        items={[
+          { href: '#diseases', label: '対応疾患・処置' },
+          { href: '#target', label: '対象' },
+          { href: '#faq', label: 'よくある質問' },
+          { href: '#contact', label: 'ご相談' },
+        ]}
+      />
+
+      <Features
+        id="diseases"
+        scrollMarginClass={clinicalAnchorScrollMargin}
+        tagline="対応疾患・処置"
+        title="こんな疾患・状態に対応しています"
+        subtitle="内科専門医が定期訪問し、処方・採血・処置までご自宅で完結します。"
+        classes={{ headline: { ...clinicalSectionHeadline } }}
+        items={[
+          {
+            title: '高血圧・脂質異常症・糖尿病',
+            description: '定期的な採血・血圧測定・処方管理を訪問時に実施。合併症（腎臓・目・足）の早期発見にも努めます。',
+            icon: 'tabler:activity',
+          },
+          {
+            title: '心不全・不整脈・虚血性心疾患',
+            description:
+              '浮腫の管理・利尿剤調整・心電図測定など、心臓疾患の在宅管理を行います。急変時は24時間365日対応します。',
+            icon: 'tabler:heart-rate-monitor',
+          },
+          {
+            title: '慢性腎臓病・透析管理',
+            description:
+              '院長は腎臓学会専門医・透析医学会専門医。腎機能の低下を緩やかにすることを目標とした在宅管理と、透析患者さまの在宅フォローを行います。',
+            icon: 'tabler:droplet',
+          },
+          {
+            title: 'COPD・気管支喘息・呼吸器疾患',
+            description: '在宅酸素療法の管理・吸入薬の指導・急性増悪時の対応を訪問診療で行います。',
+            icon: 'tabler:lungs',
+          },
+          {
+            title: 'がん・緩和ケア・ターミナルケア',
+            description:
+              '末期がんの痛み・倦怠感・呼吸困難のコントロール。医療用麻薬の管理も行います。ご本人・ご家族のご意思を確認しながら、療養の方向性を一緒に考えます。',
+            icon: 'tabler:heart-handshake',
+          },
+          {
+            title: `在宅看取り（グループ全体で年間${GROUP_STATS.annualDeathCount}実績）`,
+            description: `住み慣れた場所での最期を希望する方とそのご家族を、グループ全体で年間${GROUP_STATS.annualDeathCount}の看取り実績でしっかり支えます（${STATS_PERIOD_NOTE}）。`,
+            icon: 'tabler:home-heart',
+          },
+        ]}
+      />
+
+      <Features
+        id="target"
+        variant="cards"
+        scrollMarginClass={clinicalAnchorScrollMargin}
+        tagline="こんな方へ"
+        title="内科の訪問診療をご検討ください"
+        classes={{ headline: { ...clinicalSectionHeadline }, container: 'max-w-7xl mx-auto' }}
+        columns={4}
+        bg={<div className="absolute inset-0 bg-blue-50 dark:bg-transparent" />}
+        items={[
+          {
+            title: '通院が体力的につらくなってきた方',
+            description:
+              '足腰が弱くなり電車・バスでの通院が難しくなった方。タクシーもご家族の送迎も毎回は厳しい、という方に適しています。',
+            icon: 'tabler:wheelchair',
+          },
+          {
+            title: '退院後に在宅療養を続けている方',
+            description: '入院治療を終えてご自宅に戻ったものの、定期受診が困難な方。退院後の継続管理をしっかり行います。',
+            icon: 'tabler:bed',
+          },
+          {
+            title: '老人ホーム・グループホームに入居中の方',
+            description:
+              '施設入居中でもかかりつけ医として定期訪問します。施設スタッフ・ケアマネジャーと連携して診療にあたります。',
+            icon: 'tabler:building',
+          },
+          {
+            title: '複数の慢性疾患を抱えている方',
+            description:
+              '高血圧・糖尿病・腎臓病など複数の病気を1つのクリニックでまとめて管理します。かかりつけ医として総合的にサポートします。',
+            icon: 'tabler:clipboard-list',
+          },
+        ]}
+      />
+
+      <FAQs
+        id="faq"
+        scrollMarginClass={clinicalAnchorScrollMargin}
+        title="内科訪問診療 よくある質問"
+        tagline="FAQ"
+        classes={{ container: 'max-w-6xl', headline: { ...clinicalSectionHeadline } }}
+        items={naikaFaqWidgetItems}
+      />
+
+      <ClinicalPageClosing id="contact" />
+    </>
+  );
+}

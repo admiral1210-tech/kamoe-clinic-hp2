@@ -1,0 +1,315 @@
+import type { Metadata } from 'next';
+
+import { Hero } from '@/components/widgets/hero';
+import { Features } from '@/components/widgets/features';
+import { Content } from '@/components/widgets/content';
+import { FAQs } from '@/components/widgets/faqs';
+import { ClinicalPageClosing } from '@/components/widgets/clinical-page-closing';
+import { PageTocNav } from '@/components/ui/page-toc-nav';
+import { JsonLd } from '@/components/json-ld';
+import { buildMetadata } from '@/lib/seo';
+import { CLINIC_CONTACT, clinicPostalAddressJsonLd } from '~/data/clinic-contact';
+import { shoninkaFaqEntries } from '~/data/faq-shoninka';
+import {
+  clinicalAnchorScrollMargin,
+  clinicalHeroSectionPadding,
+  clinicalHeroSpeakableLeadClass,
+  clinicalHeroSubtitleClass,
+  clinicalHeroTaglineClass,
+  clinicalHeroTextBlockPadding,
+  clinicalHeroTitleClass,
+  clinicalSectionHeadline,
+} from '~/constants/clinical-page-ui';
+import { buildFaqPageJsonLd, faqEntriesToWidgetItems } from '~/utils/seo-faq';
+
+export const metadata: Metadata = buildMetadata({
+  title: '小児科の訪問診療・医療ケア児対応｜大阪市｜かもめクリニック',
+  ignoreTitleTemplate: true,
+  description:
+    '大阪市かもめクリニックの小児科訪問診療。医療ケア児（人工呼吸器・経管栄養・気管切開など）・NICU退院後フォロー・発達管理に対応。小児科専門医が在籍。24時間365日緊急往診可能。',
+  path: '/shoninka',
+  ogImage: { url: 'https://kamome-clinic.net/images/top/slider02.jpg', width: 1400, height: 500 },
+});
+
+const shoninkaFaqWidgetItems = faqEntriesToWidgetItems(shoninkaFaqEntries);
+const faqPageLd = buildFaqPageJsonLd(shoninkaFaqEntries);
+
+const jsonLdBreadcrumbList = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'トップページ', item: 'https://kamome-clinic.net/' },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: '小児科の訪問診療・医療ケア児対応',
+      item: 'https://kamome-clinic.net/shoninka',
+    },
+  ],
+};
+
+const jsonLdPediatric = {
+  '@type': 'MedicalClinic',
+  '@id': 'https://kamome-clinic.net/#clinic',
+  name: 'かもめクリニック',
+  medicalSpecialty: 'https://schema.org/Pediatrics',
+  url: 'https://kamome-clinic.net/shoninka',
+  description:
+    '大阪市の小児科訪問診療。医療ケア児（人工呼吸器・経管栄養・気管切開）・NICU退院後支援・発達管理に対応。小児科専門医在籍・24時間365日緊急往診。',
+  availableService: [
+    { '@type': 'MedicalTherapy', name: '医療ケア児訪問診療（人工呼吸器・経管栄養・気管切開）' },
+    { '@type': 'MedicalTherapy', name: 'NICU退院後在宅移行支援' },
+    { '@type': 'MedicalTherapy', name: '発達評価・成長管理（定期訪問）' },
+    { '@type': 'MedicalTherapy', name: '24時間緊急往診（在支診1届出）' },
+  ],
+  telephone: CLINIC_CONTACT.telDisplay,
+  address: clinicPostalAddressJsonLd(),
+};
+
+const jsonLdConditionsRaw = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '医療的ケア児（医療ケア児）',
+    alternateName: '人工呼吸器・経管栄養・気管切開を要する小児',
+    relevantSpecialty: 'https://schema.org/Pediatrics',
+    description:
+      '人工呼吸器・経管栄養・気管切開・吸引・酸素療法など継続的な医療処置が必要な子どもの状態。在宅でのケアに対応。',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '早産・低出生体重児後遺症',
+    alternateName: 'NICU退院後管理が必要な状態',
+    relevantSpecialty: 'https://schema.org/Pediatrics',
+    description: 'NICU（新生児集中治療室）退院後に継続的な医療管理・発達フォローが必要な状態。',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '発達障害',
+    alternateName: '自閉スペクトラム症・注意欠如多動症（ADHD）・知的障害',
+    relevantSpecialty: 'https://schema.org/Pediatrics',
+    description: '発達の遅れや偏りがみられる状態。定期的な発達評価・成長管理・専門機関への連携に対応。',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '先天性心疾患',
+    relevantSpecialty: 'https://schema.org/Pediatrics',
+    description: '小児循環器専門医が在籍し、先天性心疾患を持つ子どもの在宅管理・定期評価に対応。',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MedicalCondition',
+    name: '慢性肺疾患（新生児慢性肺疾患・気管支肺異形成症）',
+    relevantSpecialty: 'https://schema.org/Pediatrics',
+    description: '在宅酸素療法・人工呼吸器管理が必要な小児慢性肺疾患に対応。酸素流量の調整・SpO₂モニタリングを実施。',
+  },
+];
+
+const jsonLdConditionNodes = jsonLdConditionsRaw.map(({ '@context': _c, ...node }) => node);
+
+const jsonLdSpeakable = {
+  '@type': 'WebPage',
+  '@id': 'https://kamome-clinic.net/shoninka',
+  name: '小児科の訪問診療・医療ケア児対応｜大阪市｜かもめクリニック',
+  speakable: {
+    '@type': 'SpeakableSpecification',
+    cssSelector: ['h1', 'h2', '.hero-subtitle'],
+  },
+  url: 'https://kamome-clinic.net/shoninka',
+};
+
+const jsonLdGraph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    jsonLdBreadcrumbList,
+    { '@type': 'FAQPage', mainEntity: faqPageLd.mainEntity },
+    jsonLdPediatric,
+    ...jsonLdConditionNodes,
+    jsonLdSpeakable,
+  ],
+};
+
+const heroActions = [
+  { variant: 'primary' as const, href: CLINIC_CONTACT.telHref, text: '電話する', icon: 'tabler:phone' },
+  { variant: 'secondary' as const, href: '/renkei', text: '問い合わせ', icon: 'tabler:clipboard-list' },
+];
+
+export default function ShoninkaPage() {
+  return (
+    <>
+      <JsonLd data={jsonLdGraph} />
+
+      <Hero
+        tagline="小児科 訪問診療｜大阪市"
+        taglineClass={clinicalHeroTaglineClass}
+        titleClass={clinicalHeroTitleClass}
+        subtitleClass={clinicalHeroSubtitleClass}
+        sectionPaddingClass={clinicalHeroSectionPadding}
+        textBlockPaddingClass={clinicalHeroTextBlockPadding}
+        actions={heroActions}
+        title={
+          <>
+            医療ケアが必要な
+            <br />
+            <span className="text-primary dark:text-blue-300">お子さま</span>を
+            <br />
+            ご自宅で支えます
+          </>
+        }
+        subtitle={
+          <>
+            <span className={clinicalHeroSpeakableLeadClass}>
+              <strong>小児科専門医が在籍</strong>し、人工呼吸器・経管栄養・気管切開など
+              <br className="hidden sm:inline" />
+              <strong>医療的ケアが必要なお子さまの在宅診療</strong>を行います。
+            </span>
+            <br />
+            NICU退院後の在宅移行支援にも積極的に取り組んでいます。
+          </>
+        }
+      />
+
+      <PageTocNav
+        ariaLabel="このページの目次"
+        items={[
+          { href: '#features', label: '特徴' },
+          { href: '#taiou', label: '対応できる医療ケア' },
+          { href: '#target', label: 'こんな方へ' },
+          { href: '#faq', label: 'よくある質問' },
+        ]}
+      />
+
+      <Features
+        id="features"
+        scrollMarginClass={clinicalAnchorScrollMargin}
+        tagline="小児科訪問診療の特徴"
+        title="かもめクリニックの小児科訪問診療"
+        subtitle="医療的ケアが必要なお子さまとご家族を、ご自宅でしっかり支える体制を整えています。ご不安なことはお気軽にご相談ください。"
+        classes={{ headline: { ...clinicalSectionHeadline } }}
+        items={[
+          {
+            title: '小児科専門医が在宅訪問',
+            description:
+              '小児科専門医・小児循環器専門医が在籍。定期的にご自宅へ訪問し、成長・発達・医療機器の管理・状態評価を継続的に行います。',
+            icon: 'tabler:stethoscope',
+          },
+          {
+            title: '医療ケア児に対応',
+            description:
+              '人工呼吸器・経管栄養・気管切開・吸引・酸素療法・中心静脈栄養など、高度な医療的ケアが必要なお子さまの在宅診療に対応しています。',
+            icon: 'tabler:heart-rate-monitor',
+          },
+          {
+            title: 'NICU退院後の在宅移行支援',
+            description:
+              'NICU退院前からの事前相談に応じ、退院後すみやかに在宅診療をスタートできます。グループ全体での支援実績は約10件。病院との連携もスムーズに行います。',
+            icon: 'tabler:baby-carriage',
+          },
+          {
+            title: '24時間365日の緊急往診',
+            description:
+              '医療ケア児は急変リスクが高く、夜間・休日の対応が不安というご家族も多くいらっしゃいます。在支診1として、緊急時も迅速に対応できる体制を整えています。',
+            icon: 'tabler:clock-24',
+          },
+        ]}
+      />
+
+      <Content
+        id="taiou"
+        scrollMarginClass={clinicalAnchorScrollMargin}
+        isReversed
+        tagline="対応内容"
+        title="在宅で対応できる医療ケア"
+        classes={{
+          headline: {
+            container: 'max-w-xl sm:mx-auto lg:max-w-2xl text-left sm:text-center',
+            title: 'text-4xl md:text-5xl font-bold tracking-tighter mb-4 font-heading',
+            subtitle: 'max-w-3xl mx-auto sm:text-center text-xl text-muted dark:text-slate-400',
+          },
+        }}
+        items={[
+          {
+            title: '人工呼吸器管理',
+            description:
+              '在宅人工呼吸器（TPPV・NPPV）の設定確認・状態評価・トラブル時の対応。機器メーカー・看護師と連携してサポートします。',
+          },
+          {
+            title: '経管栄養（胃ろう・鼻腔栄養）',
+            description:
+              '胃ろうボタン・チューブの管理・交換・状態確認を定期訪問で行います。栄養量の調整もあわせて実施します。',
+          },
+          {
+            title: '気管切開の管理',
+            description: '気管切開チューブの管理・吸引・緊急時の気道確保。ご家族への吸引指導も行います。',
+          },
+          {
+            title: '酸素療法・パルスオキシメーター管理',
+            description: '在宅酸素療法（HOT）の管理・酸素流量の調整・SpO₂モニタリングの評価。',
+          },
+        ]}
+        bg={<div className="absolute inset-0 bg-blue-50 dark:bg-transparent" />}
+        content="小児科専門医とともに看護師・リハビリ・栄養士など多職種が連携し、在宅での医療ケアを支えます。"
+      />
+
+      <Features
+        variant="cards"
+        id="target"
+        scrollMarginClass={clinicalAnchorScrollMargin}
+        tagline="こんな方へ"
+        title="小児科の訪問診療をご検討ください"
+        classes={{ headline: { ...clinicalSectionHeadline }, container: 'max-w-7xl mx-auto' }}
+        bg={<div className="absolute inset-0 bg-blue-50 dark:bg-transparent" />}
+        items={[
+          {
+            title: 'NICUから退院が近いお子さまがいる',
+            description:
+              '退院前から在宅診療の準備を始めることができます。病院の担当者様とも連携し、スムーズな在宅移行をサポートします。',
+            icon: 'tabler:baby-carriage',
+          },
+          {
+            title: '人工呼吸器・経管栄養など医療ケアが必要',
+            description: '在宅での医療機器管理・状態確認・緊急対応まで、小児科専門医が定期的に訪問して支えます。',
+            icon: 'tabler:heart-rate-monitor',
+          },
+          {
+            title: '外来通院が体への負担になっている',
+            description:
+              '移動・待ち時間がお子さまにとって大きな負担になっている場合、ご自宅での診療に切り替えることができます。',
+            icon: 'tabler:home-heart',
+          },
+          {
+            title: '発達・成長の定期フォローを続けたい',
+            description:
+              '発達評価・体重・身長など成長の経過を定期的に確認します。必要に応じて専門医療機関への紹介も行います。',
+            icon: 'tabler:chart-line',
+          },
+          {
+            title: 'ご家族の介護負担を減らしたい',
+            description: '医師訪問に加え、訪問看護・リハビリ・福祉サービスと連携してご家族の負担軽減をサポートします。',
+            icon: 'tabler:users',
+          },
+          {
+            title: '夜間の急変が心配で不安が続いている',
+            description:
+              '24時間365日の緊急往診体制で、夜間・休日の急変時もすぐに対応できます。在支診1として緊急時体制を整備しています。',
+            icon: 'tabler:clock-24',
+          },
+        ]}
+      />
+
+      <FAQs
+        id="faq"
+        scrollMarginClass={clinicalAnchorScrollMargin}
+        tagline="FAQ"
+        title="よくあるご質問"
+        subtitle="小児科の訪問診療についてよく寄せられるご質問にお答えします。"
+        classes={{ container: 'max-w-6xl', headline: { ...clinicalSectionHeadline } }}
+        items={shoninkaFaqWidgetItems}
+      />
+
+      <ClinicalPageClosing />
+    </>
+  );
+}

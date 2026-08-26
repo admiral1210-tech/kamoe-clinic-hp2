@@ -41,6 +41,11 @@ const nextConfig: NextConfig = {
         destination: '/renkei',
         permanent: true,
       },
+      {
+        source: '/testimonials',
+        destination: '/',
+        permanent: true,
+      },
     ];
   },
 };

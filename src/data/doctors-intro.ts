@@ -175,7 +175,7 @@ export const shoninka: Doctor[] = [
   {
     name: '河内 要',
     role: 'かもめクリニック第4 院長',
-    specialty: '小児科・小児循環器・一般内科',
+    specialty: '小児科（新生児・循環器）・一般内科',
     qualifications: null,
     education: '平成22年　大阪市立大学医学部卒',
     career: null,

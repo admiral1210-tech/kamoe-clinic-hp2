@@ -216,7 +216,7 @@ const jsonLdPhysicians = [
     slug: 'kanchika',
   },
   { name: '西田 宜代', jobTitle: '精神科専門医', spec: ['https://schema.org/Psychiatry'], cert: '精神保健指定医', slug: 'nishida' },
-  { name: '河内 要', jobTitle: '第4院院長', spec: ['https://schema.org/Pediatrics'], cert: '小児科専門医・小児循環器専門医', slug: 'kawachi' },
+  { name: '河内 要', jobTitle: '第4院院長', spec: ['https://schema.org/Pediatrics'], cert: '小児科専門医（主な専門領域：新生児・循環器）', slug: 'kawachi' },
 ].map((d) => ({
   '@context': 'https://schema.org',
   '@type': 'Physician',

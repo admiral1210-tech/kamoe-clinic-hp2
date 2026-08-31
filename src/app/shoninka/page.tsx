@@ -96,7 +96,7 @@ const jsonLdConditionsRaw = [
     '@type': 'MedicalCondition',
     name: '先天性心疾患',
     relevantSpecialty: 'https://schema.org/Pediatrics',
-    description: '小児循環器専門医が在籍し、先天性心疾患を持つ子どもの在宅管理・定期評価に対応。',
+    description: '小児科専門医（主な専門領域：新生児・循環器）が在籍し、先天性心疾患を持つ子どもの在宅管理・定期評価に対応。',
   },
   {
     '@context': 'https://schema.org',
@@ -192,7 +192,7 @@ export default function ShoninkaPage() {
           {
             title: '小児科専門医が在宅訪問',
             description:
-              '小児科専門医・小児循環器専門医が在籍。定期的にご自宅へ訪問し、成長・発達・医療機器の管理・状態評価を継続的に行います。',
+              '小児科専門医（主な専門領域：新生児・循環器）が在籍。定期的にご自宅へ訪問し、成長・発達・医療機器の管理・状態評価を継続的に行います。',
             icon: 'tabler:stethoscope',
           },
           {

@@ -109,6 +109,20 @@ const jsonLdClinic = {
     { '@type': 'PropertyValue', propertyID: '保険医療機関コード', value: '0402898' },
     { '@type': 'PropertyValue', propertyID: '介護サービス事業者番号', value: '2710402898' },
   ],
+  hasCredential: [
+    {
+      '@type': 'EducationalOccupationalCredential',
+      credentialCategory: '施設基準',
+      name: '機能強化型在宅療養支援診療所（在支診1）',
+      recognizedBy: { '@type': 'GovernmentOrganization', name: '厚生労働省' },
+    },
+    {
+      '@type': 'EducationalOccupationalCredential',
+      credentialCategory: '施設基準',
+      name: '在宅医療充実体制加算',
+      recognizedBy: { '@type': 'GovernmentOrganization', name: '厚生労働省' },
+    },
+  ],
   numberOfEmployees: buildNumberOfEmployees(),
   ...(buildAggregateRating() ? { aggregateRating: buildAggregateRating() } : {}),
   sameAs: [
@@ -582,7 +596,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-5xl space-y-5 px-4 sm:px-6">
           <div>
             <h2 className="mb-1 text-center text-xl font-bold text-heading">信頼情報</h2>
-            <p className="mb-3 text-center text-xs text-gray-500">メディア掲載・施設基準・実績</p>
+            <p className="mb-3 text-center text-xs text-gray-500">メディア掲載・施設基準・実績・教育活動</p>
             <div className="flex flex-col gap-3">
               <a
                 href="https://www.kamome-clinic.net/blog/?p=157"
@@ -611,6 +625,15 @@ export default function HomePage() {
               </div>
               <div className="flex w-full items-start gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3">
                 <div className="min-w-[3.5rem] shrink-0 rounded-md border border-gray-300 bg-gray-50 px-2 py-1.5 text-center">
+                  <span className="block text-sm font-bold leading-tight text-heading">認定</span>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-bold text-heading">在宅医療充実体制加算 算定医療機関</p>
+                  <p className="mt-0.5 text-sm text-gray-700">令和8年度診療報酬改定で新設された、重症・終末期の患者さまへの質の高い在宅医療を評価する仕組みです。算定には厳格な施設基準を満たす必要があります。</p>
+                </div>
+              </div>
+              <div className="flex w-full items-start gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3">
+                <div className="min-w-[3.5rem] shrink-0 rounded-md border border-gray-300 bg-gray-50 px-2 py-1.5 text-center">
                   <span className="block text-sm font-bold leading-tight text-heading">実績</span>
                 </div>
                 <div className="min-w-0">
@@ -620,6 +643,15 @@ export default function HomePage() {
                   <p className="mt-0.5 text-sm text-gray-700">
                     グループ年間看取り数 {GROUP_STATS.annualDeathCount}・常勤医師{GROUP_STATS.doctorCountFulltime}名（2025年実績）。
                   </p>
+                </div>
+              </div>
+              <div className="flex w-full items-start gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3">
+                <div className="min-w-[3.5rem] shrink-0 rounded-md border border-gray-300 bg-gray-50 px-2 py-1.5 text-center">
+                  <span className="block text-sm font-bold leading-tight text-heading">教育</span>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-bold text-heading">医療関係者の受け入れ・在宅診療の教育</p>
+                  <p className="mt-0.5 text-sm text-gray-700">在宅診療に関心のある学生・医師を毎年複数名受け入れ、在宅診療の教育と普及に取り組んでいます。</p>
                 </div>
               </div>
             </div>

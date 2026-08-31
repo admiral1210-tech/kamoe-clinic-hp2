@@ -32,6 +32,14 @@ export interface Zaishin1Comparison {
   rows: Zaishin1ComparisonRow[];
 }
 
+export interface Zaishin1JujitsuKasan {
+  tagline: string;
+  title: string;
+  lead: string;
+  body: string;
+}
+
 export const zaishin1BenefitCards: Zaishin1BenefitCard[] = rawData.benefitCards;
 export const zaishin1FeatureStats: Zaishin1FeatureStat[] = rawData.featureStats;
 export const zaishin1Comparison: Zaishin1Comparison = rawData.comparison;
+export const zaishin1JujitsuKasan: Zaishin1JujitsuKasan = rawData.jujitsuKasan;

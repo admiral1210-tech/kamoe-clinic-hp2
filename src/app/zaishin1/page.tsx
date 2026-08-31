@@ -16,7 +16,7 @@ import {
   clinicalSectionHeadline,
 } from '~/constants/clinical-page-ui';
 import { CLINIC_CONTACT } from '~/data/clinic-contact';
-import { zaishin1BenefitCards, zaishin1Comparison, zaishin1FeatureStats } from '~/data/zaishin1-content';
+import { zaishin1BenefitCards, zaishin1Comparison, zaishin1FeatureStats, zaishin1JujitsuKasan } from '~/data/zaishin1-content';
 import { zaishin1FaqEntries } from '~/data/faq-zaishin1';
 import { buildFaqPageJsonLd, faqEntriesToWidgetItems } from '~/utils/seo-faq';
 
@@ -94,7 +94,7 @@ export default function Zaishin1Page() {
           <>
             在支診1とは、24時間緊急往診・入院手配体制・在宅看取り実績など、厚生労働省の施設基準（機能強化型）を満たしたクリニックのみが届出できる施設基準です。
             <strong className="text-heading">「届出をしている」ことよりも、それが患者さまに何をもたらすか</strong>
-            をお伝えします。
+            をお伝えします。あわせて当院は「在宅医療充実体制加算」の算定医療機関です。
           </>
         }
       />
@@ -174,6 +174,16 @@ export default function Zaishin1Page() {
           <p className="mt-4 rounded-lg border border-blue-200 bg-white p-3 text-sm leading-relaxed text-gray-700 dark:border-slate-700 dark:bg-slate-900 dark:text-gray-300">
             {zaishin1Comparison.footnote}
           </p>
+        </div>
+      </section>
+
+      <section className="py-14 bg-white dark:bg-slate-900 scroll-mt-32">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <PageSectionHeading tagline={zaishin1JujitsuKasan.tagline} title={zaishin1JujitsuKasan.title} />
+          <div className="rounded-2xl border border-blue-100 bg-blue-50 p-6 md:p-8 dark:border-slate-700 dark:bg-slate-800">
+            <p className="text-base leading-relaxed text-gray-700 dark:text-gray-300">{zaishin1JujitsuKasan.lead}</p>
+            <p className="mt-4 text-base leading-relaxed text-gray-700 dark:text-gray-300">{zaishin1JujitsuKasan.body}</p>
+          </div>
         </div>
       </section>
 

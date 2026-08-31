@@ -98,6 +98,23 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <section className="py-16 bg-gray-50 dark:bg-slate-800">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10">
+            <p className="text-sm font-semibold text-primary tracking-widest mb-1">教育・普及活動</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">在宅診療の教育に取り組んでいます</h2>
+          </div>
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-8 md:p-10 border border-gray-200 dark:border-slate-700">
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+              在宅診療に関心のある医療関係者の受け入れを行っています。
+            </p>
+            <p className="mt-4 text-gray-700 dark:text-gray-300 leading-relaxed">
+              毎年、複数の学生・医師を受け入れ、在宅診療の教育と普及に取り組んでいます。
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section
         id="hours"
         className="py-16 bg-[#f7f3ec] dark:bg-slate-900 bg-[radial-gradient(circle_at_center,_rgba(100,80,60,0.07)_1px,_transparent_1px)] dark:bg-none bg-[length:18px_18px]"

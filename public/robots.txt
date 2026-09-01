@@ -5,4 +5,4 @@ Disallow: /landing/
 # /pricing は /cost へ誘導する薄いページのためクロール不要
 Disallow: /pricing
 
-Sitemap: https://kamome-clinic.net/sitemap-index.xml
+Sitemap: https://kamome-clinic.net/sitemap.xml

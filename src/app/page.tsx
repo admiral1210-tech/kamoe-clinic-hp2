@@ -569,7 +569,7 @@ export default function HomePage() {
           <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
               <Image
-                src="https://kamome-clinic.net/images/company/kinoshita.jpg"
+                src="/images/company/kinoshita.jpg"
                 alt="木下 啓太 院長"
                 width={44}
                 height={44}

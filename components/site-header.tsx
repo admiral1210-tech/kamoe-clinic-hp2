@@ -35,7 +35,7 @@ export function SiteHeader() {
       <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-3 py-2 md:px-6">
         <Link href="/" className="flex shrink-0 items-center">
           <Image
-            src="https://kamome-clinic.net/images/common/header/logo.png"
+            src="/images/common/header/logo.png"
             alt="かもめクリニック"
             width={224}
             height={56}

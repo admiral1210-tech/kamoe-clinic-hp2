@@ -30,3 +30,4 @@ pnpm-lock.yaml
 
 # Claude Code（ローカル権限・パスが入るため共有しない）
 .claude/settings.local.json
+.env*

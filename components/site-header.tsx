@@ -44,16 +44,16 @@ export function SiteHeader() {
           />
         </Link>
 
-        <NavigationMenu className="hidden min-w-0 max-w-none flex-1 justify-center md:flex">
+        <NavigationMenu viewport={false} className="hidden min-w-0 max-w-none flex-1 justify-center md:flex">
           <NavigationMenuList className="flex-wrap justify-center gap-x-0.5 gap-y-1 space-x-0">
             {headerData.links.map((link) => (
-              <NavigationMenuItem key={link.text}>
+              <NavigationMenuItem key={link.text} className="relative">
                 {link.links?.length ? (
                   <>
                     <NavigationMenuTrigger className="h-auto whitespace-nowrap bg-transparent px-2 py-2 text-sm font-medium lg:px-3">
                       {link.text}
                     </NavigationMenuTrigger>
-                    <NavigationMenuContent>
+                    <NavigationMenuContent className="z-50 rounded-md border bg-popover text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 md:absolute md:left-0 md:top-full md:w-auto">
                       <ul className="grid w-[280px] gap-1 p-2">
                         {link.links.map((sub) => (
                           <li key={sub.text}>

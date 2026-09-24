@@ -1,4 +1,11 @@
 {
   "framework": "nextjs",
-  "cleanUrls": true
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/q/:token",
+      "destination": "https://script.google.com/macros/s/AKfycbylCq5NULGPONc3XlHtZN-BgHfert7BwghYUxDWlZohIkuT3VMz-lCNQXM8hQ5cHmcnCg/exec?t=:token",
+      "permanent": false
+    }
+  ]
 }
